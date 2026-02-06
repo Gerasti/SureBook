@@ -8,7 +8,7 @@ Tag
 Topic A
 (
 Topic name
-Main table link
+Tag table link
 Soaround topics by tag links
 Fill topic
 )
@@ -28,8 +28,7 @@ Tag name
 Topic links of tag
 Fill tag table
 )
-add-topics.py
 
-(topics.md or topic-lists.md) and NAME-topic.md and (if topic-lists.md) source-table.md -> tag-update.md -> tag-stable.toml -> main-table.md and structure.md
+(topics.md or topic-lists.md) and NAME-topic.md and source-table.md -> tag-update.md -> tag-stable.toml -> tag-table.md and DIR topics
 
 
