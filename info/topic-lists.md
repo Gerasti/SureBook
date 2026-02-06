@@ -1,4 +1,4 @@
-## лист sysahelper list:
+## sysahelper list:
 ecorouter ssh
 
 ecorouter DHCP-retranslation
@@ -63,7 +63,7 @@ SQL install PostgreSQL
 
 IP-телефония SNG7
 
-## лист notesk list:
+## notesk list:
 Кибер Бэкап
 
 ansible ping
@@ -192,7 +192,7 @@ Zabbix web-interface
 
 Zabbix agent
 
-## лист сетевикон list:
+## сетевикон list:
 network mask table
 
 dnsmasq DNS
@@ -217,7 +217,7 @@ moodle
 
 nginx reverse proxy
 
-## лист SuroTools list:
+## SuroTools list:
 etcnet ip forward
 
 iptables NAT
@@ -300,7 +300,7 @@ auto mounting devices
 
 network mask table
 
-## лист DEMO-208-2 list:
+## DEMO-208-2 list:
 hostname
 
 resolve options
@@ -357,7 +357,7 @@ Zabbix agent
 
 nginx reverse proxy
 
-## лист DEMO-208 list:
+## DEMO-208 list:
 hostname
 
 debian ip
@@ -390,7 +390,7 @@ NFS
 
 ansible ping
 
-## лист AltLabs list:
+## AltLabs list:
 etcnet ip
 
 BIND9_DLZ samba
@@ -401,7 +401,7 @@ attach samba reserve domain controller
 
 samba share folder
 
-## лист DemoScreens list:
+## DemoScreens list:
  ansible ping
 
  ansible inventory
@@ -452,7 +452,7 @@ samba share folder
 
  Zabbix agent
 
-## лист setting_screens list:
+## setting_screens list:
  bind DNS
 
  cups-pdf
@@ -485,7 +485,7 @@ samba share folder
 
  sudo user
 
-## лист yesterday-it-worked list:
+## yesterday-it-worked list:
 ecorouter bgp
 
 ecorouter RADIUS

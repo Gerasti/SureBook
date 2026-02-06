@@ -1,4 +1,4 @@
-| № | Тема | Источники (листы + ссылки) |
+| № | Topic | Sources (lists + links) |
 |---|------|-------------------|
 | 1 | ecorouter ssh | sysahelper [ecorouter ssh](https://sysahelper.ru/mod/page/view.php?id=322)  |
 | 2 | ecorouter DHCP-retranslation | sysahelper [ecorouter DHCP-retranslation](https://sysahelper.ru/mod/page/view.php?id=325)  |
