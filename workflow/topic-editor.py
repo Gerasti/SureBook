@@ -67,16 +67,10 @@ def read_list_file(path: str) -> list[str]:
 # =======================
 
 def uniq_keep_order(items: list[str]) -> list[str]:
-    seen = set()
-    result = []
-    for i in items:
-        if i not in seen:
-            seen.add(i)
-            result.append(i)
-    return result
+    return list(dict.fromkeys(items))
 
 
-def write_file(path: str, items: list[str]):
+def write_files(path: str, items: list[str]):
     with open(path, "w", encoding="utf-8") as f:
         for i in items:
             f.write(i + "\n")
@@ -93,14 +87,11 @@ def main():
 
     parser.add_argument(
         "-i", "--input",
-        default=DEFAULT_INPUT,
-        dest="input",
         help=f"Topics file (default: {DEFAULT_INPUT})"
     )
 
     parser.add_argument(
         "-l", "--list",
-        default=DEFAULT_LIST,
         help=f"Topic-lists file (default: {DEFAULT_LIST})"
     )
 
@@ -108,6 +99,8 @@ def main():
         "--sh", "--show",
         dest="show",
         type=int,
+        nargs='?',
+        const=-1,
         help="Show first N topics (default: show all)"
     )
 
@@ -134,33 +127,48 @@ def main():
         action="store_true",
         help="English locale (default)"
     )
-
     args = parser.parse_args()
-#    if args.input:
-    topics_i = read_non_empty(args.input)
 
-#    if args.list:
-    topics_l = read_list_file(args.list)
+    topics = []
+    files_to_rewrite = []
 
-    if topics_i or topics_l:
-        if topics_i and topics_l: 
-            topics = uniq_keep_order(topics_i + topics_l)
+    current_input_path = DEFAULT_INPUT
+    current_list_path = DEFAULT_LIST
+
+    if args.input and args.list:
+        current_input_path = args.input
+        current_list_path = args.list
+    elif args.input:
+        current_input_path = args.input
+        current_list_path = None
+    elif args.list:
+        current_input_path = None
+        current_list_path = args.list
+
+    topics_i = read_non_empty(current_input_path) if current_input_path else []
+    topics_l = read_list_file(current_list_path) if current_list_path else []
+
+    topics = uniq_keep_order(topics_i + topics_l)
 
     if args.ab:
-        init_locale(use_ru=args.ru)
-        topics = sorted(topics, key=locale.strxfrm)
-        write_file(args.input, topics)
+        for path in (current_input_path, current_list_path):
+            if path:
+                write_files(path, topics)
+
 
     if args.count:
         print(len(topics))
         return
 
+
     if args.show is not None:
-        topics = topics[:args.show]
+        if args.show != -1:
+            topics = topics[:args.show]
+        for t in topics:
+            print(t)
 
-#    for t in topics:
-#        print(t)
-
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     main()
