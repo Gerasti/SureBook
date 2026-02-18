@@ -31,7 +31,7 @@ BIND9_DLZ samba
 base samba-command
 SQL install MySQL
 SQL install MariaDB
-SQL winstall PostgreSQL
+SQL install PostgreSQL
 IP-телефония SNG7
 Кибер Бэкап
 ansible ping

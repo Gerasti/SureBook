@@ -1,6 +1,4 @@
 ## sysahelper list:
-gg
-
 ecorouter ssh
 
 ecorouter DHCP-retranslation
@@ -264,7 +262,7 @@ SSL certificate center
 
 install SSL certificate RedHat-like
 
-nstall SSL certificate Debian-like
+install SSL certificate Debian-like
 
 FreeIPA with DNS
 
@@ -404,88 +402,88 @@ attach samba reserve domain controller
 samba share folder
 
 ## DemoScreens list:
- ansible ping
+ansible ping
 
- ansible inventory
+ansible inventory
 
- chrony
+chrony
 
- cups-pdf
+cups-pdf
 
- dhcpd
+dhcpd
 
- bind DNS
+bind DNS
 
- docker install
+docker install
 
- fail2ban
+fail2ban
 
- nftables firewall
+nftables firewall
 
- GOST OpenSSL
+GOST OpenSSL
 
-￼etcnet gre tunnel
+etcnet gre tunnel
 
- strongswan ipsec
+strongswan ipsec
 
- hostname
+hostname
 
- nftables NAT
+nftables NAT
 
- NFS
+NFS
 
- nginx reverse proxy
+nginx reverse proxy
 
- frr and quagga OSPF
+frr and quagga OSPF
 
-￼RAID 0
+RAID 0
 
- resolve options
+resolve options
 
- rsyslog
+rsyslog
 
- SAMBA_INTERNAL samba
+SAMBA_INTERNAL samba
 
- BIND9_DLZ samba
+BIND9_DLZ samba
 
- ssh options
+ssh options
 
- etcnet vlan
+etcnet vlan
 
- Zabbix agent
+Zabbix agent
 
 ## setting_screens list:
- bind DNS
+bind DNS
 
- cups-pdf
+cups-pdf
 
- dhcpd
+dhcpd
 
- etcnet ip
+etcnet ip
 
- debian ip
+debian ip
 
- nftables NAT
+nftables NAT
 
- NFS
+NFS
 
- frr and quagga OSPF
+frr and quagga OSPF
 
- apt
+apt
 
- resolve options
+resolve options
 
- BIND9_DLZ samba
+BIND9_DLZ samba
 
- console-debian samba
+console-debian samba
 
- ssh options
+ssh options
 
- ssh key-connection
+ssh key-connection
 
- etcnet gre tunnel
+etcnet gre tunnel
 
- sudo user
+sudo user
 
 ## yesterday-it-worked list:
 ecorouter bgp
