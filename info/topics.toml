@@ -1,3 +1,538 @@
 [paths]
 input = "/home/stip/surebook/info/topics.md"
 list = "/home/stip/surebook/info/topic-lists.md"
+topic_save = "/home/stip/surebook/topics"
+
+[topics]
+
+[topics."ecorouter_ssh"]
+title = "ecorouter ssh"
+path = "/home/stip/surebook/topics/ecorouter_ssh.md"
+
+[topics."ecorouter_DHCP-retranslation"]
+title = "ecorouter DHCP-retranslation"
+path = "/home/stip/surebook/topics/ecorouter_DHCP-retranslation.md"
+
+[topics."ecorouter_port_forwarding"]
+title = "ecorouter port forwarding"
+path = "/home/stip/surebook/topics/ecorouter_port_forwarding.md"
+
+[topics."install_PostgreSQL_Zabbix"]
+title = "install PostgreSQL Zabbix"
+path = "/home/stip/surebook/topics/install_PostgreSQL_Zabbix.md"
+
+[topics."install_MariaDB_Zabbix"]
+title = "install MariaDB Zabbix"
+path = "/home/stip/surebook/topics/install_MariaDB_Zabbix.md"
+
+[topics."Zabbix_web-interface"]
+title = "Zabbix web-interface"
+path = "/home/stip/surebook/topics/Zabbix_web-interface.md"
+
+[topics."Zabbix_agent"]
+title = "Zabbix agent"
+path = "/home/stip/surebook/topics/Zabbix_agent.md"
+
+[topics."docker_Zabbix"]
+title = "docker Zabbix"
+path = "/home/stip/surebook/topics/docker_Zabbix.md"
+
+[topics."OTRS"]
+title = "OTRS"
+path = "/home/stip/surebook/topics/OTRS.md"
+
+[topics."docker_OTRS"]
+title = "docker OTRS"
+path = "/home/stip/surebook/topics/docker_OTRS.md"
+
+[topics."ansible_OTRS"]
+title = "ansible OTRS"
+path = "/home/stip/surebook/topics/ansible_OTRS.md"
+
+[topics."OwnCloud"]
+title = "OwnCloud"
+path = "/home/stip/surebook/topics/OwnCloud.md"
+
+[topics."docker_OwnCloud"]
+title = "docker OwnCloud"
+path = "/home/stip/surebook/topics/docker_OwnCloud.md"
+
+[topics."ansible_OwnCloud"]
+title = "ansible OwnCloud"
+path = "/home/stip/surebook/topics/ansible_OwnCloud.md"
+
+[topics."NextCloud"]
+title = "NextCloud"
+path = "/home/stip/surebook/topics/NextCloud.md"
+
+[topics."ansible_NextCloud"]
+title = "ansible NextCloud"
+path = "/home/stip/surebook/topics/ansible_NextCloud.md"
+
+[topics."phpMyAdmin"]
+title = "phpMyAdmin"
+path = "/home/stip/surebook/topics/phpMyAdmin.md"
+
+[topics."docker_phpMyAdmin"]
+title = "docker phpMyAdmin"
+path = "/home/stip/surebook/topics/docker_phpMyAdmin.md"
+
+[topics."moodle"]
+title = "moodle"
+path = "/home/stip/surebook/topics/moodle.md"
+
+[topics."isc-dhcp-server_and_dhcpd_failover"]
+title = "isc-dhcp-server and dhcpd failover"
+path = "/home/stip/surebook/topics/isc-dhcp-server_and_dhcpd_failover.md"
+
+[topics."SSL_certificate_center"]
+title = "SSL certificate center"
+path = "/home/stip/surebook/topics/SSL_certificate_center.md"
+
+[topics."install_SSL_certificate_Debian-like"]
+title = "install SSL certificate Debian-like"
+path = "/home/stip/surebook/topics/install_SSL_certificate_Debian-like.md"
+
+[topics."install_SSL_certificate_RedHat-like"]
+title = "install SSL certificate RedHat-like"
+path = "/home/stip/surebook/topics/install_SSL_certificate_RedHat-like.md"
+
+[topics."wireguard"]
+title = "wireguard"
+path = "/home/stip/surebook/topics/wireguard.md"
+
+[topics."wireguard_OSPF"]
+title = "wireguard OSPF"
+path = "/home/stip/surebook/topics/wireguard_OSPF.md"
+
+[topics."iscsi"]
+title = "iscsi"
+path = "/home/stip/surebook/topics/iscsi.md"
+
+[topics."FreeIPA_with_DNS"]
+title = "FreeIPA with DNS"
+path = "/home/stip/surebook/topics/FreeIPA_with_DNS.md"
+
+[topics."FreeIPA_without_DNS"]
+title = "FreeIPA without DNS"
+path = "/home/stip/surebook/topics/FreeIPA_without_DNS.md"
+
+[topics."SAMBA_INTERNAL_samba"]
+title = "SAMBA_INTERNAL samba"
+path = "/home/stip/surebook/topics/SAMBA_INTERNAL_samba.md"
+
+[topics."BIND9_DLZ_samba"]
+title = "BIND9_DLZ samba"
+path = "/home/stip/surebook/topics/BIND9_DLZ_samba.md"
+
+[topics."base_samba-command"]
+title = "base samba-command"
+path = "/home/stip/surebook/topics/base_samba-command.md"
+
+[topics."SQL_install_MySQL"]
+title = "SQL install MySQL"
+path = "/home/stip/surebook/topics/SQL_install_MySQL.md"
+
+[topics."SQL_install_MariaDB"]
+title = "SQL install MariaDB"
+path = "/home/stip/surebook/topics/SQL_install_MariaDB.md"
+
+[topics."SQL_install_PostgreSQL"]
+title = "SQL install PostgreSQL"
+path = "/home/stip/surebook/topics/SQL_install_PostgreSQL.md"
+
+[topics."IP-телефония_SNG7"]
+title = "IP-телефония SNG7"
+path = "/home/stip/surebook/topics/IP-телефония_SNG7.md"
+
+[topics."Кибер_Бэкап"]
+title = "Кибер Бэкап"
+path = "/home/stip/surebook/topics/Кибер_Бэкап.md"
+
+[topics."ansible_ping"]
+title = "ansible ping"
+path = "/home/stip/surebook/topics/ansible_ping.md"
+
+[topics."ansible_inventory"]
+title = "ansible inventory"
+path = "/home/stip/surebook/topics/ansible_inventory.md"
+
+[topics."systemd_backup"]
+title = "systemd backup"
+path = "/home/stip/surebook/topics/systemd_backup.md"
+
+[topics."cups-pdf"]
+title = "cups-pdf"
+path = "/home/stip/surebook/topics/cups-pdf.md"
+
+[topics."docker_install"]
+title = "docker install"
+path = "/home/stip/surebook/topics/docker_install.md"
+
+[topics."docker_Local_Registry"]
+title = "docker Local Registry"
+path = "/home/stip/surebook/topics/docker_Local_Registry.md"
+
+[topics."docker_`Hello-app`"]
+title = "docker `Hello-app`"
+path = "/home/stip/surebook/topics/docker_`Hello-app`.md"
+
+[topics."docker_Grafana-Prometheus-NodeExporter"]
+title = "docker Grafana-Prometheus-NodeExporter"
+path = "/home/stip/surebook/topics/docker_Grafana-Prometheus-NodeExporter.md"
+
+[topics."docker_MediaWiki"]
+title = "docker MediaWiki"
+path = "/home/stip/surebook/topics/docker_MediaWiki.md"
+
+[topics."docker_WordPress"]
+title = "docker WordPress"
+path = "/home/stip/surebook/topics/docker_WordPress.md"
+
+[topics."docker_Elasticsearch_-_Logstash_-_Kibana_(ELK)"]
+title = "docker Elasticsearch - Logstash - Kibana (ELK)"
+path = "/home/stip/surebook/topics/docker_Elasticsearch_-_Logstash_-_Kibana_(ELK).md"
+
+[topics."GRUB_password_recovery"]
+title = "GRUB password recovery"
+path = "/home/stip/surebook/topics/GRUB_password_recovery.md"
+
+[topics."partitions_of_devices"]
+title = "partitions of devices"
+path = "/home/stip/surebook/topics/partitions_of_devices.md"
+
+[topics."mounting_devices"]
+title = "mounting devices"
+path = "/home/stip/surebook/topics/mounting_devices.md"
+
+[topics."auto_mounting_devices"]
+title = "auto mounting devices"
+path = "/home/stip/surebook/topics/auto_mounting_devices.md"
+
+[topics."encryption_devices"]
+title = "encryption devices"
+path = "/home/stip/surebook/topics/encryption_devices.md"
+
+[topics."RAID_0"]
+title = "RAID 0"
+path = "/home/stip/surebook/topics/RAID_0.md"
+
+[topics."RAID_1"]
+title = "RAID 1"
+path = "/home/stip/surebook/topics/RAID_1.md"
+
+[topics."etcnet_ip"]
+title = "etcnet ip"
+path = "/home/stip/surebook/topics/etcnet_ip.md"
+
+[topics."debian_ip"]
+title = "debian ip"
+path = "/home/stip/surebook/topics/debian_ip.md"
+
+[topics."dhcpd"]
+title = "dhcpd"
+path = "/home/stip/surebook/topics/dhcpd.md"
+
+[topics."isc-dhcp-server"]
+title = "isc-dhcp-server"
+path = "/home/stip/surebook/topics/isc-dhcp-server.md"
+
+[topics."dnsmasq_DHCP"]
+title = "dnsmasq DHCP"
+path = "/home/stip/surebook/topics/dnsmasq_DHCP.md"
+
+[topics."etcnet_vlan"]
+title = "etcnet vlan"
+path = "/home/stip/surebook/topics/etcnet_vlan.md"
+
+[topics."debian_vlan"]
+title = "debian vlan"
+path = "/home/stip/surebook/topics/debian_vlan.md"
+
+[topics."sudo_user"]
+title = "sudo user"
+path = "/home/stip/surebook/topics/sudo_user.md"
+
+[topics."ssh-connection_automate_to_servers"]
+title = "ssh-connection automate to servers"
+path = "/home/stip/surebook/topics/ssh-connection_automate_to_servers.md"
+
+[topics."ssh_options"]
+title = "ssh options"
+path = "/home/stip/surebook/topics/ssh_options.md"
+
+[topics."ssh_key-connection"]
+title = "ssh key-connection"
+path = "/home/stip/surebook/topics/ssh_key-connection.md"
+
+[topics."apt"]
+title = "apt"
+path = "/home/stip/surebook/topics/apt.md"
+
+[topics."resolve_options"]
+title = "resolve options"
+path = "/home/stip/surebook/topics/resolve_options.md"
+
+[topics."etcnet_ip_forward"]
+title = "etcnet ip forward"
+path = "/home/stip/surebook/topics/etcnet_ip_forward.md"
+
+[topics."etcnet_gre_tunnel"]
+title = "etcnet gre tunnel"
+path = "/home/stip/surebook/topics/etcnet_gre_tunnel.md"
+
+[topics."debian_ip_forward"]
+title = "debian ip forward"
+path = "/home/stip/surebook/topics/debian_ip_forward.md"
+
+[topics."debian_gre_tunnel"]
+title = "debian gre tunnel"
+path = "/home/stip/surebook/topics/debian_gre_tunnel.md"
+
+[topics."strongswan_ipsec"]
+title = "strongswan ipsec"
+path = "/home/stip/surebook/topics/strongswan_ipsec.md"
+
+[topics."nftables_NAT"]
+title = "nftables NAT"
+path = "/home/stip/surebook/topics/nftables_NAT.md"
+
+[topics."nftables_firewall"]
+title = "nftables firewall"
+path = "/home/stip/surebook/topics/nftables_firewall.md"
+
+[topics."iptables_NAT"]
+title = "iptables NAT"
+path = "/home/stip/surebook/topics/iptables_NAT.md"
+
+[topics."iptables_port_forwarding"]
+title = "iptables port forwarding"
+path = "/home/stip/surebook/topics/iptables_port_forwarding.md"
+
+[topics."install_quagga"]
+title = "install quagga"
+path = "/home/stip/surebook/topics/install_quagga.md"
+
+[topics."frr_and_quagga_OSPF"]
+title = "frr and quagga OSPF"
+path = "/home/stip/surebook/topics/frr_and_quagga_OSPF.md"
+
+[topics."bind_DNS"]
+title = "bind DNS"
+path = "/home/stip/surebook/topics/bind_DNS.md"
+
+[topics."bind_slave_DNS"]
+title = "bind slave DNS"
+path = "/home/stip/surebook/topics/bind_slave_DNS.md"
+
+[topics."dnsmasq_DNS"]
+title = "dnsmasq DNS"
+path = "/home/stip/surebook/topics/dnsmasq_DNS.md"
+
+[topics."chrony"]
+title = "chrony"
+path = "/home/stip/surebook/topics/chrony.md"
+
+[topics."systemd-timesyncd"]
+title = "systemd-timesyncd"
+path = "/home/stip/surebook/topics/systemd-timesyncd.md"
+
+[topics."nginx_reverse_proxy"]
+title = "nginx reverse proxy"
+path = "/home/stip/surebook/topics/nginx_reverse_proxy.md"
+
+[topics."nginx_SSL_reverse_proxy"]
+title = "nginx SSL reverse proxy"
+path = "/home/stip/surebook/topics/nginx_SSL_reverse_proxy.md"
+
+[topics."nginx_server_balance"]
+title = "nginx server balance"
+path = "/home/stip/surebook/topics/nginx_server_balance.md"
+
+[topics."nginx_Web-based_authentication"]
+title = "nginx Web-based authentication"
+path = "/home/stip/surebook/topics/nginx_Web-based_authentication.md"
+
+[topics."NFS"]
+title = "NFS"
+path = "/home/stip/surebook/topics/NFS.md"
+
+[topics."GOST_OpenSSL"]
+title = "GOST OpenSSL"
+path = "/home/stip/surebook/topics/GOST_OpenSSL.md"
+
+[topics."docker_single-mode_Open_WebUI"]
+title = "docker single-mode Open WebUI"
+path = "/home/stip/surebook/topics/docker_single-mode_Open_WebUI.md"
+
+[topics."console-debian_samba"]
+title = "console-debian samba"
+path = "/home/stip/surebook/topics/console-debian_samba.md"
+
+[topics."bash_script_for_samba"]
+title = "bash script for samba"
+path = "/home/stip/surebook/topics/bash_script_for_samba.md"
+
+[topics."attach_samba_reserve_domain_controller"]
+title = "attach samba reserve domain controller"
+path = "/home/stip/surebook/topics/attach_samba_reserve_domain_controller.md"
+
+[topics."samba_share_folder"]
+title = "samba share folder"
+path = "/home/stip/surebook/topics/samba_share_folder.md"
+
+[topics."PostgreSQL_base-command"]
+title = "PostgreSQL base-command"
+path = "/home/stip/surebook/topics/PostgreSQL_base-command.md"
+
+[topics."replication_postgresql-server"]
+title = "replication postgresql-server"
+path = "/home/stip/surebook/topics/replication_postgresql-server.md"
+
+[topics."HAProxy_balance_of_servers"]
+title = "HAProxy balance of servers"
+path = "/home/stip/surebook/topics/HAProxy_balance_of_servers.md"
+
+[topics."squid_base_options"]
+title = "squid base options"
+path = "/home/stip/surebook/topics/squid_base_options.md"
+
+[topics."network_mask_table"]
+title = "network mask table"
+path = "/home/stip/surebook/topics/network_mask_table.md"
+
+[topics."alt_samba_ADMC"]
+title = "alt samba ADMC"
+path = "/home/stip/surebook/topics/alt_samba_ADMC.md"
+
+[topics."vmware_open-vm-tools"]
+title = "vmware open-vm-tools"
+path = "/home/stip/surebook/topics/vmware_open-vm-tools.md"
+
+[topics."rsyslog"]
+title = "rsyslog"
+path = "/home/stip/surebook/topics/rsyslog.md"
+
+[topics."logrotate"]
+title = "logrotate"
+path = "/home/stip/surebook/topics/logrotate.md"
+
+[topics."mdadm_options"]
+title = "mdadm options"
+path = "/home/stip/surebook/topics/mdadm_options.md"
+
+[topics."alt_fail2ban"]
+title = "alt fail2ban"
+path = "/home/stip/surebook/topics/alt_fail2ban.md"
+
+[topics."hostname"]
+title = "hostname"
+path = "/home/stip/surebook/topics/hostname.md"
+
+[topics."ecorouter_bgp"]
+title = "ecorouter bgp"
+path = "/home/stip/surebook/topics/ecorouter_bgp.md"
+
+[topics."ecorouter_RADIUS"]
+title = "ecorouter RADIUS"
+path = "/home/stip/surebook/topics/ecorouter_RADIUS.md"
+
+[topics."ecorouter_Zabbix"]
+title = "ecorouter Zabbix"
+path = "/home/stip/surebook/topics/ecorouter_Zabbix.md"
+
+[topics."ecorouter_NTP"]
+title = "ecorouter NTP"
+path = "/home/stip/surebook/topics/ecorouter_NTP.md"
+
+[topics."ecorouter_ip"]
+title = "ecorouter ip"
+path = "/home/stip/surebook/topics/ecorouter_ip.md"
+
+[topics."ecorouter_vlan"]
+title = "ecorouter vlan"
+path = "/home/stip/surebook/topics/ecorouter_vlan.md"
+
+[topics."ecorouter_NAT"]
+title = "ecorouter NAT"
+path = "/home/stip/surebook/topics/ecorouter_NAT.md"
+
+[topics."ecorouter_DHCP-server"]
+title = "ecorouter DHCP-server"
+path = "/home/stip/surebook/topics/ecorouter_DHCP-server.md"
+
+[topics."ecorouter_gre_tunnel"]
+title = "ecorouter gre tunnel"
+path = "/home/stip/surebook/topics/ecorouter_gre_tunnel.md"
+
+[topics."ecorouter_OSPF"]
+title = "ecorouter OSPF"
+path = "/home/stip/surebook/topics/ecorouter_OSPF.md"
+
+[topics."Ideco_gateway"]
+title = "Ideco gateway"
+path = "/home/stip/surebook/topics/Ideco_gateway.md"
+
+[topics."Ideco_LAN_interface"]
+title = "Ideco LAN interface"
+path = "/home/stip/surebook/topics/Ideco_LAN_interface.md"
+
+[topics."Ideco_Zabbix_agent"]
+title = "Ideco Zabbix agent"
+path = "/home/stip/surebook/topics/Ideco_Zabbix_agent.md"
+
+[topics."etcnet_OVS_install"]
+title = "etcnet OVS install"
+path = "/home/stip/surebook/topics/etcnet_OVS_install.md"
+
+[topics."etcnet_OVS_settings"]
+title = "etcnet OVS settings"
+path = "/home/stip/surebook/topics/etcnet_OVS_settings.md"
+
+[topics."OVS_bond"]
+title = "OVS bond"
+path = "/home/stip/surebook/topics/OVS_bond.md"
+
+[topics."OVS_STP"]
+title = "OVS STP"
+path = "/home/stip/surebook/topics/OVS_STP.md"
+
+[topics."OVS_vlan"]
+title = "OVS vlan"
+path = "/home/stip/surebook/topics/OVS_vlan.md"
+
+[topics."etcnet_OVS_mgmt-interface"]
+title = "etcnet OVS mgmt-interface"
+path = "/home/stip/surebook/topics/etcnet_OVS_mgmt-interface.md"
+
+[topics."RADIUS_server"]
+title = "RADIUS server"
+path = "/home/stip/surebook/topics/RADIUS_server.md"
+
+[topics."RADIUS_client"]
+title = "RADIUS client"
+path = "/home/stip/surebook/topics/RADIUS_client.md"
+
+[topics."DBeaver"]
+title = "DBeaver"
+path = "/home/stip/surebook/topics/DBeaver.md"
+
+[topics."timedatectl"]
+title = "timedatectl"
+path = "/home/stip/surebook/topics/timedatectl.md"
+
+[topics."Ideco_admin"]
+title = "Ideco admin"
+path = "/home/stip/surebook/topics/Ideco_admin.md"
+
+[topics."Ideco_license"]
+title = "Ideco license"
+path = "/home/stip/surebook/topics/Ideco_license.md"
+
+[topics."iscsi_attach"]
+title = "iscsi attach"
+path = "/home/stip/surebook/topics/iscsi_attach.md"
+
+[topics."fail2ban"]
+title = "fail2ban"
+path = "/home/stip/surebook/topics/fail2ban.md"

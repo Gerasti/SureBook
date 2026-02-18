@@ -3,6 +3,8 @@
 import argparse
 import os
 import locale
+import re
+from pathlib import Path
 
 TOPICS_TOML_PATH = os.path.expanduser("~/surebook/info/topics.toml")
 
@@ -55,6 +57,9 @@ def uniq_keep_order(items: list[str]) -> list[str]:
 def diff_lists(list1: list[str], list2: list[str]) -> list[str]:
     return [x for x in list1 if x not in list2]
 
+def normalize_topic(name: str) -> str:
+    return re.sub(r"\s+", "_", name.strip())
+
 
 # =======================
 # TOML-like Defaults
@@ -62,7 +67,8 @@ def diff_lists(list1: list[str], list2: list[str]) -> list[str]:
 def load_defaults(toml_path: str) -> dict:
     defaults_to_write = {
         "input": os.path.expanduser("~/surebook/info/topics.md"),
-        "list": os.path.expanduser("~/surebook/info/topic-lists.md")
+        "list": os.path.expanduser("~/surebook/info/topic-lists.md"),
+        "topic_save": os.path.expanduser("~/surebook/topics"),
     }
     defaults = {}
     updated = False
@@ -105,6 +111,41 @@ def save_defaults(toml_path: str, defaults: dict):
 
 
 # =======================
+# Save Topics to TOML + MD
+# =======================
+def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
+    existing = set()
+    lines = []
+
+    if os.path.exists(toml_path):
+        with open(toml_path, encoding="utf-8") as f:
+            lines = f.read().splitlines()
+            for l in lines:
+                if l.startswith('[topics."'):
+                    existing.add(l.split('"')[1])
+
+    with open(toml_path, "a", encoding="utf-8") as f:
+        if "[topics]" not in "\n".join(lines):
+            f.write("\n[topics]\n")
+
+        os.makedirs(base_dir, exist_ok=True)
+
+        for topic in topics:
+            key = normalize_topic(topic)
+            if key in existing:
+                continue
+
+            md_path = os.path.join(base_dir, f"{key}.md")
+
+            f.write(f'\n[topics."{key}"]\n')
+            f.write(f'title = "{topic}"\n')
+            f.write(f'path = "{md_path}"\n')
+
+            if not os.path.exists(md_path):
+                Path(md_path).touch()
+
+
+# =======================
 # CLI
 # =======================
 def main():
@@ -122,6 +163,7 @@ def main():
     parser.add_argument("--edit", action="store_true", help="Edit default paths")
     parser.add_argument("--default-input", help="Set new default input path (used with --edit)")
     parser.add_argument("--default-list", help="Set new default list path (used with --edit)")
+    parser.add_argument("--default-topic-save", help="Set default directory for topic markdown files")
 
     args = parser.parse_args()
     init_locale(args.ru)
@@ -138,10 +180,15 @@ def main():
             defaults["list"] = os.path.expanduser(args.default_list)
             print(f"Default list set to: {defaults['list']}")
             changed = True
+        if args.default_topic_save:
+            defaults["default_topic_save"] = os.path.expanduser(args.default_topic_save)
+            print(f"Default topic save dir set to: {defaults['default_topic_save']}")
+            changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
         else:
-            print("Nothing to edit. Use --default-input or --default-list")
+            print("Nothing to edit. Use --default-input, --default-list or --default-topic-save")
+        return
 
     current_input_path = args.input or defaults.get("input")
     current_list_path = args.list or defaults.get("list")
@@ -176,18 +223,21 @@ def main():
         count_input = len(topics_i)
         count_list = len(topics_l)
         count_union_uniq = len(topics)
-
-#        print(topics_l)
-
         print(f"Union uniq topics: {count_union_uniq}")
         print(f"Input topics:  {count_input}")
         print(f"List topics:   {count_list}")
 
     if args.show is not None:
-        if args.show != -1:
-            topics = topics[:args.show]
-        for t in topics:
+        display = topics if args.show == -1 else topics[:args.show]
+        for t in display:
             print(t)
+
+    # =======================
+    # Save topics to TOML + create .md
+    # =======================
+    default_save = defaults.get("default_topic_save")
+    if default_save:
+        save_topics_to_toml(TOPICS_TOML_PATH, topics, default_save)
 
     if not (args.show or args.count or args.ab or args.compare or args.sources):
         parser.print_help()
