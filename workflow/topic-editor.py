@@ -144,6 +144,76 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
             if not os.path.exists(md_path):
                 Path(md_path).touch()
 
+# Adding and remove
+def add_topics(topics_to_add: list[str], toml_path: str, base_dir: str):
+    if not topics_to_add:
+        return
+
+    existing = {}
+    lines = []
+    if os.path.exists(toml_path):
+        with open(toml_path, "r", encoding="utf-8") as f:
+            lines = f.read().splitlines()
+            section = None
+            key = None
+            for l in lines:
+                if l.startswith("[") and l.endswith("]"):
+                    section = l[1:-1].strip()
+                    if section.startswith("topics."):
+                        key = section.split('"')[1]
+                elif section and section.startswith("topics.") and "=" in l:
+                    k, v = l.split("=", 1)
+                    existing[key] = v
+
+    os.makedirs(base_dir, exist_ok=True)
+
+    with open(toml_path, "a", encoding="utf-8") as f:
+        if "[topics]" not in "\n".join(lines):
+            f.write("\n[topics]\n")
+
+        for topic in topics_to_add:
+            topic = topic.strip('"')
+            key = normalize_topic(topic)
+            if key in existing:
+                continue
+            md_path = os.path.join(base_dir, f"{key}.md")
+            f.write(f'\n[topics."{key}"]\n')
+            f.write(f'title = "{topic}"\n')
+            f.write(f'path = "{md_path}"\n')
+            Path(md_path).touch()
+
+
+def del_topics(topics_to_del: list[str], toml_path: str):
+    if not topics_to_del or not os.path.exists(toml_path):
+        return
+
+    with open(toml_path, "r", encoding="utf-8") as f:
+        lines = f.read().splitlines()
+
+    new_lines = []
+    skip = 0
+    for i, line in enumerate(lines):
+        if line.startswith("[topics."):
+            key = line.split('"')[1]
+            title_line_index = i + 1
+            title_line = lines[title_line_index] if title_line_index < len(lines) else ""
+            title = title_line.split("=",1)[1].strip().strip('"') if "=" in title_line else ""
+            if key in [normalize_topic(t.strip('"')) for t in topics_to_del] or title in topics_to_del:
+                skip = 3
+                md_path_line = lines[i+2] if i+2 < len(lines) else ""
+                md_path = md_path_line.split("=",1)[1].strip().strip('"') if "=" in md_path_line else None
+                if md_path and os.path.exists(md_path):
+                    os.remove(md_path)
+                continue
+        if skip > 0:
+            skip -= 1
+            continue
+        new_lines.append(line)
+
+    with open(toml_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(new_lines) + "\n")
+
+
 
 # =======================
 # CLI
@@ -164,6 +234,8 @@ def main():
     parser.add_argument("--default-input", help="Set new default input path (used with --edit)")
     parser.add_argument("--default-list", help="Set new default list path (used with --edit)")
     parser.add_argument("--default-topic-save", help="Set default directory for topic markdown files")
+    parser.add_argument("--add-topic", nargs="+", help="Add topics to topics.toml")
+    parser.add_argument("--del-topic", nargs="+", help="Delete topics from topics.toml")
 
     args = parser.parse_args()
     init_locale(args.ru)
@@ -181,8 +253,8 @@ def main():
             print(f"Default list set to: {defaults['list']}")
             changed = True
         if args.default_topic_save:
-            defaults["default_topic_save"] = os.path.expanduser(args.default_topic_save)
-            print(f"Default topic save dir set to: {defaults['default_topic_save']}")
+            defaults["topic_save"] = os.path.expanduser(args.default_topic_save)
+            print(f"Default topic save dir set to: {defaults['topic_save']}")
             changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
@@ -192,10 +264,12 @@ def main():
 
     current_input_path = args.input or defaults.get("input")
     current_list_path = args.list or defaults.get("list")
+    current_topic_save_path = args.list or defaults.get("topic_save")
 
     if args.sources:
         print(f"Current input file: {current_input_path}")
         print(f"Current list file: {current_list_path}")
+        print(f"Current topic save dir: {current_topic_save_path}")
 
     topics_i = read_non_empty(current_input_path)
     topics_l = read_list_file(current_list_path)
@@ -235,11 +309,17 @@ def main():
     # =======================
     # Save topics to TOML + create .md
     # =======================
-    default_save = defaults.get("default_topic_save")
+    default_save = defaults.get("topic_save")
+    if args.add_topic:
+        add_topics(args.add_topic, TOPICS_TOML_PATH, default_save)
+
+    if args.del_topic:
+        del_topics(args.del_topic, TOPICS_TOML_PATH)
+
     if default_save:
         save_topics_to_toml(TOPICS_TOML_PATH, topics, default_save)
 
-    if not (args.show or args.count or args.ab or args.compare or args.sources):
+    if not (args.show or args.count or args.ab or args.compare or args.sources or args.add_topic or args.del_topic):
         parser.print_help()
 
 
