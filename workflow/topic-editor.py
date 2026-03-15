@@ -81,6 +81,7 @@ def load_defaults(toml_path: str) -> dict:
         "input": os.path.expanduser("~/surebook/info/topics.md"),
         "list": os.path.expanduser("~/surebook/info/topic-lists.md"),
         "topic_save": os.path.expanduser("~/surebook/topics"),
+        "auto_alphabetic_sort": "false",
     }
     defaults = {}
     updated = False
@@ -184,6 +185,8 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
 
             if not os.path.exists(md_path):
                 Path(md_path).touch()
+            print(f"Saved: {topic}")
+    print(f"Total saved: {len(new_topics)}")
 
 
 # =======================
@@ -372,6 +375,7 @@ def main():
     parser.add_argument("--del-topic", nargs="+", help="Delete topics from topics.toml")
     parser.add_argument("--save", action="store_true", help="Save topics to TOML and create .md files")
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete .md files)")
+    parser.add_argument("--auto-ab", choices=["true", "false"], help="Enable/disable auto alphabetic sort on every run")
     args = parser.parse_args()
 
     defaults = load_defaults(TOPICS_TOML_PATH)
@@ -389,6 +393,10 @@ def main():
         if args.default_topic_save:
             defaults["topic_save"] = os.path.expanduser(args.default_topic_save)
             print(f"Default topic save dir set to: {defaults['topic_save']}")
+            changed = True
+        if args.auto_ab:
+            defaults["auto_alphabetic_sort"] = args.auto_ab
+            print(f"Auto alphabetic sort set to: {args.auto_ab}")
             changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
@@ -429,6 +437,15 @@ def main():
 
     topics = uniq_keep_order(topics_i + topics_l)
 
+    auto_ab = defaults.get("auto_alphabetic_sort", "false") == "true"
+
+    if args.ab or auto_ab:
+        sorted_topics = sorted(topics, key=str.casefold)
+        if current_input_path:
+            write_files(current_input_path, sorted_topics)
+        sort_list_file(current_list_path)
+        topics = sorted_topics
+
     if args.ab:
         sorted_topics = sorted(topics, key=str.casefold)
         if current_input_path:
@@ -465,7 +482,6 @@ def main():
             add_topics_to_list(args.add_topic, current_list_path, args.list_name)
         else:
             add_topics_to_input(args.add_topic, current_input_path)
-        add_topics(args.add_topic, TOPICS_TOML_PATH, current_topic_save_path)
 
     if args.del_topic:
         del_topics(args.del_topic, TOPICS_TOML_PATH, current_input_path, current_list_path)
