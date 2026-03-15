@@ -1,132 +1,133 @@
-ecorouter ssh
-ecorouter DHCP-retranslation
-ecorouter port forwarding
-install PostgreSQL Zabbix
-install MariaDB Zabbix
-Zabbix web-interface
-Zabbix agent
-docker Zabbix
-OTRS
-docker OTRS
-ansible OTRS
-OwnCloud
-docker OwnCloud
-ansible OwnCloud
-NextCloud
-ansible NextCloud
-phpMyAdmin
-docker phpMyAdmin
-moodle
-isc-dhcp-server and dhcpd failover
-SSL certificate center
-install SSL certificate Debian-like
-install SSL certificate RedHat-like
-wireguard
-wireguard OSPF
-iscsi
-FreeIPA with DNS
-FreeIPA without DNS
-SAMBA_INTERNAL samba
-BIND9_DLZ samba
-base samba-command
-SQL install MySQL
-SQL install MariaDB
-SQL install PostgreSQL
-IP-телефония SNG7
-Кибер Бэкап
-ansible ping
+alt fail2ban
+alt samba ADMC
 ansible inventory
-systemd backup
-cups-pdf
-docker install
-docker Local Registry
-docker `Hello-app`
-docker Grafana-Prometheus-NodeExporter
-docker MediaWiki
-docker WordPress
-docker Elasticsearch - Logstash - Kibana (ELK)
-GRUB password recovery
-partitions of devices
-mounting devices
-auto mounting devices
-encryption devices
-RAID 0
-RAID 1
-etcnet ip
-debian ip
-dhcpd
-isc-dhcp-server
-dnsmasq DHCP
-etcnet vlan
-debian vlan
-sudo user
-ssh-connection automate to servers
-ssh options
-ssh key-connection
+ansible NextCloud
+ansible OTRS
+ansible OwnCloud
+ansible ping
 apt
-resolve options
-etcnet ip forward
-etcnet gre tunnel
-debian ip forward
-debian gre tunnel
-strongswan ipsec
-nftables NAT
-nftables firewall
-iptables NAT
-iptables port forwarding
-install quagga
-frr and quagga OSPF
+attach samba reserve domain controller
+auto mounting devices
+base samba-command
+bash script for samba
 bind DNS
 bind slave DNS
-dnsmasq DNS
+BIND9_DLZ samba
 chrony
-systemd-timesyncd
-nginx reverse proxy
-nginx SSL reverse proxy
-nginx server balance
-nginx Web-based authentication
-NFS
-GOST OpenSSL
-docker single-mode Open WebUI
 console-debian samba
-bash script for samba
-attach samba reserve domain controller
-samba share folder
-PostgreSQL base-command
-replication postgresql-server
-HAProxy balance of servers
-squid base options
-network mask table
-alt samba ADMC
-vmware open-vm-tools
-rsyslog
-logrotate
-mdadm options
-alt fail2ban
-hostname
+cups-pdf
+DBeaver
+debian gre tunnel
+debian ip
+debian ip forward
+debian vlan
+dhcpd
+dnsmasq DHCP
+dnsmasq DNS
+docker `Hello-app`
+docker Elasticsearch - Logstash - Kibana (ELK)
+docker Grafana-Prometheus-NodeExporter
+docker install
+docker Local Registry
+docker MediaWiki
+docker OTRS
+docker OwnCloud
+docker phpMyAdmin
+docker single-mode Open WebUI
+docker WordPress
+docker Zabbix
 ecorouter bgp
-ecorouter RADIUS
-ecorouter Zabbix
-ecorouter NTP
-ecorouter ip
-ecorouter vlan
-ecorouter NAT
+ecorouter DHCP-retranslation
 ecorouter DHCP-server
 ecorouter gre tunnel
+ecorouter ip
+ecorouter NAT
+ecorouter NTP
 ecorouter OSPF
+ecorouter port forwarding
+ecorouter RADIUS
+ecorouter ssh
+ecorouter vlan
+ecorouter Zabbix
+encryption devices
+etcnet gre tunnel
+etcnet ip
+etcnet ip forward
+etcnet OVS install
+etcnet OVS mgmt-interface
+etcnet OVS settings
+etcnet vlan
+fail2ban
+FreeIPA with DNS
+FreeIPA without DNS
+frr and quagga OSPF
+GOST OpenSSL
+GRUB password recovery
+HAProxy balance of servers
+hostname
+Ideco admin
 Ideco gateway
 Ideco LAN interface
+Ideco license
 Ideco Zabbix agent
-etcnet OVS install
-etcnet OVS settings
+install MariaDB Zabbix
+install PostgreSQL Zabbix
+install quagga
+install SSL certificate Debian-like
+install SSL certificate RedHat-like
+IP-телефония SNG7
+iptables NAT
+iptables port forwarding
+isc-dhcp-server
+isc-dhcp-server and dhcpd failover
+iscsi
+iscsi attach
+logrotate
+mdadm options
+moodle
+mounting devices
+network mask table
+NextCloud
+NFS
+nftables firewall
+nftables NAT
+nginx reverse proxy
+nginx server balance
+nginx SSL reverse proxy
+nginx Web-based authentication
+OTRS
 OVS bond
 OVS STP
 OVS vlan
-etcnet OVS mgmt-interface
-RADIUS server
+OwnCloud
+partitions of devices
+phpMyAdmin
+PostgreSQL base-command
 RADIUS client
-DBeaver
+RADIUS server
+RAID 0
+RAID 1
+replication postgresql-server
+resolve options
+rsyslog
+samba share folder
+SAMBA_INTERNAL samba
+SQL install MariaDB
+SQL install MySQL
+SQL install PostgreSQL
+squid base options
+ssh key-connection
+ssh options
+ssh-connection automate to servers
+SSL certificate center
+strongswan ipsec
+sudo user
+systemd backup
+systemd-timesyncd
 timedatectl
-Ideco admin
-Ideco license
-iscsi attach
+vmware open-vm-tools
+wireguard
+wireguard OSPF
+Zabbix agent
+Zabbix web-interface
+Кибер Бэкап
