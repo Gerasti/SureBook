@@ -1,6 +1,0 @@
-topic-editor(compare show, show and edit using path, save, create and remove topics(toml), update source-table, uniq topics_l, rename topic)
-
-editing markdown(use editor, topic search)
-
-tag-editor(compare show, create and remove tag(toml), update source-table, linking tag, rename tag)
-

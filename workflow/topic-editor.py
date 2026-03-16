@@ -219,7 +219,7 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
 
 
 # =======================
-# Add and Remove
+# Add, Remove, and Rename
 # =======================
 
 def add_topics_to_input(topics_to_add: list[str], input_path: str):
@@ -488,6 +488,88 @@ def read_list_headers(path: str) -> list[str]:
             result.append(section_name)
     return result
 
+def rename_topic(old_name: str, new_name: str, toml_path: str,
+                 input_paths: list[str], list_paths: list[str],
+                 list_names: list[str] | None = None):
+    # input files — всегда все
+    for p in input_paths:
+        topics = read_non_empty(p)
+        if old_name in topics:
+            write_files(p, [new_name if t == old_name else t for t in topics])
+            print(f"Renamed in input [{p}]: {old_name} -> {new_name}")
+
+    # list files — только указанные секции если есть --list-name, иначе все
+    for p in list_paths:
+            lines = read_list_lines(p)
+            new_lines = []
+            changed = False
+            in_target_section = list_names is None
+            current_section_topics = []
+            # сначала собрать темы каждой секции для проверки дублей
+            section_topics: dict[str, list[str]] = {}
+            sec = None
+            for line in lines:
+                sn = parse_section_name(line)
+                if sn is not None:
+                    sec = sn
+                elif line.strip() and sec is not None:
+                    section_topics.setdefault(sec, []).append(line.strip())
+
+            sec = None
+            for line in lines:
+                stripped = line.strip()
+                sn = parse_section_name(line)
+                if sn is not None:
+                    sec = sn
+                    in_target_section = list_names is None or sec in list_names
+                    new_lines.append(line)
+                    continue
+                if in_target_section and stripped == old_name:
+                    # если новое имя уже есть в этой секции — просто удалить старое
+                    if new_name in section_topics.get(sec, []):
+                        if new_lines and new_lines[-1].strip() == "":
+                            new_lines.pop()
+                        print(f"Removed duplicate in [{p}] section [{sec}]: {old_name}")
+                    else:
+                        new_lines.append(new_name + "\n")
+                        print(f"Renamed in list [{p}] section [{sec}]: {old_name} -> {new_name}")
+                    changed = True
+                    continue
+                new_lines.append(line)
+
+            if changed:
+                with open(p, "w", encoding="utf-8") as f:
+                    f.writelines(new_lines)
+
+    # toml — всегда
+    if not os.path.exists(toml_path):
+        return
+    old_key = normalize_topic(old_name)
+    new_key = normalize_topic(new_name)
+    with open(toml_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    new_content = content.replace(f'[topics."{old_key}"]', f'[topics."{new_key}"]')
+    new_content = new_content.replace(f'title = "{old_name}"', f'title = "{new_name}"')
+    new_content = new_content.replace(f'{old_key}.md', f'{new_key}.md')
+    if new_content != content:
+        with open(toml_path, "w", encoding="utf-8") as f:
+            f.write(new_content)
+        print(f"Renamed in TOML: {old_name} -> {new_name}")
+    else:
+        print(f"Not found in TOML: {old_name}")
+
+def rename_list(old_name: str, new_name: str, list_paths: list[str]):
+    old_header = f"## {old_name} list:"
+    new_header = f"## {new_name} list:"
+    for p in list_paths:
+        lines = read_list_lines(p)
+        if not any(line.strip() == old_header for line in lines):
+            continue
+        new_lines = [new_header + "\n" if line.strip() == old_header else line for line in lines]
+        with open(p, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+        print(f"Renamed list [{p}]: {old_name} -> {new_name}")
+
 def search_topic(query: str, topics_i: list[str], list_path: str, solid: bool = False) -> None:
     query_lower = query.casefold()
     matches_input = [t for t in topics_i if query_lower in t.casefold()]
@@ -547,6 +629,8 @@ def main():
     parser.add_argument("--show-lists", type=int, nargs='?', const=-1, help="Show all or first N list section names")
     parser.add_argument("--solid", action="store_true", help="Disable section name headers in output")
     parser.add_argument("--search", help="Search topic across input and lists")
+    parser.add_argument("--rename-topic", nargs=2, metavar=("OLD", "NEW"), help="Rename topic in input, list and TOML")
+    parser.add_argument("--rename-list", nargs=2, metavar=("OLD", "NEW"), help="Rename list section in list files")
     parser.add_argument("--save", action="store_true", help="Save topics to TOML and create .md files")
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete .md files)")
     parser.add_argument("--show-save", action="store_true", help="Show topics that would be saved on --save")
@@ -610,6 +694,14 @@ def main():
             print(f"Warning: list file missing: {p}")
     if not topics_i and not topics_l:
         print("Warning: both source files are empty or missing — nothing to save")
+
+    if args.rename_topic:
+        rename_topic(args.rename_topic[0], args.rename_topic[1],
+                     TOPICS_TOML_PATH, current_input_paths, current_list_paths,
+                     args.list_name)
+
+    if args.rename_list:
+        rename_list(args.rename_list[0], args.rename_list[1], current_list_paths)
 
     if args.compare:
             all_files = (
@@ -744,19 +836,41 @@ def main():
         del_topics(args.unsave, TOPICS_TOML_PATH, input_path=None, list_path=None)
 
     if args.show_save:
-        existing = load_existing_topic_keys(TOPICS_TOML_PATH)
-        new_topics = [t for t in topics if normalize_topic(t) not in existing]
-        if not new_topics:
-            print("Nothing to save — all topics already in TOML")
-        else:
-            print(f"Would be saved ({len(new_topics)}):")
-            for t in new_topics:
-                print(f"  {t}")
+            existing = load_existing_topic_keys(TOPICS_TOML_PATH)
+            input_set = set(topics_i)
+
+            # собрать какие темы в каких листах
+            topic_lists: dict[str, list[str]] = {}
+            for lp in current_list_paths:
+                lines = read_list_lines(lp)
+                current_section = None
+                for line in lines:
+                    section_name = parse_section_name(line)
+                    if section_name is not None:
+                        current_section = section_name
+                    elif line.strip() and current_section:
+                        topic_lists.setdefault(line.strip(), []).append(current_section)
+
+            new_topics = [t for t in topics if normalize_topic(t) not in existing]
+            if not new_topics:
+                print("Nothing to save — all topics already in TOML")
+            else:
+                print(f"Would be saved ({len(new_topics)}):")
+                for t in new_topics:
+                    parts = []
+                    if t in input_set:
+                        parts.append("input")
+                    if t in topic_lists:
+                        parts.extend(topic_lists[t])
+                    src = ", ".join(parts) if parts else "unknown"
+                    print(f"  {t}  [{src}]")
 
     any_action = any([
         args.show is not None,
         args.count,
         args.ab,
+        args.rename_topic,
+        args.rename_list,
         args.compare,
         args.settings,
         args.search,
