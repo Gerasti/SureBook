@@ -42,6 +42,12 @@ def diff_lists(list1: list[str], list2: list[str]) -> list[str]:
 def normalize_topic(name: str) -> str:
     return re.sub(r"\s+", "_", name.strip())
 
+def paths_to_list(val: str) -> list[str]:
+    return [os.path.expanduser(p.strip()) for p in val.split(":") if p.strip()]
+
+def paths_to_str(paths: list[str]) -> str:
+    return ":".join(paths)
+
 def read_list_lines(path: str) -> list[str]:
     if not path or not os.path.exists(path):
         return []
@@ -516,8 +522,8 @@ def search_topic(query: str, topics_i: list[str], list_path: str, solid: bool = 
 def main():
     parser = argparse.ArgumentParser(description="Topics tool")
 
-    parser.add_argument("-i", "--input", help="Topics file (overrides default)")
-    parser.add_argument("-l", "--list", help="Topic-lists file (overrides default)")
+    parser.add_argument("-i", "--input", nargs="+", help="Topics files (overrides default)")
+    parser.add_argument("-l", "--list", nargs="+", help="Topic-lists files (overrides default)")
     parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=-1,
                         help="Show first N topics (default: all)")
     parser.add_argument("--count", action="store_true", help="Show count of topics")
@@ -528,8 +534,8 @@ def main():
     parser.add_argument("--settings", action="store_true",
                         help="Show current input and list files")
     parser.add_argument("--edit", action="store_true", help="Edit default paths")
-    parser.add_argument("--default-input", help="Set new default input path (used with --edit)")
-    parser.add_argument("--default-list", help="Set new default list path (used with --edit)")
+    parser.add_argument("--default-input", nargs="+", help="Set default input paths (used with --edit)")
+    parser.add_argument("--default-list", nargs="+", help="Set default list paths (used with --edit)")
     parser.add_argument("--default-topic-save",
                         help="Set default directory for topic markdown files")
     parser.add_argument("--add-topic", nargs="+", help="Add topics to input file (or list with --list-name)")
@@ -553,11 +559,11 @@ def main():
     if args.edit:
         changed = False
         if args.default_input:
-            defaults["input"] = os.path.expanduser(args.default_input)
+            defaults["input"] = paths_to_str([os.path.expanduser(p) for p in args.default_input])
             print(f"Default input set to: {defaults['input']}")
             changed = True
         if args.default_list:
-            defaults["list"] = os.path.expanduser(args.default_list)
+            defaults["list"] = paths_to_str([os.path.expanduser(p) for p in args.default_list])
             print(f"Default list set to: {defaults['list']}")
             changed = True
         if args.default_topic_save:
@@ -578,38 +584,57 @@ def main():
             print("Nothing to edit. Use --default-input, --default-list or --default-topic-save")
         return
 
-    current_input_path = args.input or defaults.get("input")
-    current_list_path = args.list or defaults.get("list")
+    default_inputs = paths_to_list(defaults.get("input", ""))
+    default_lists = paths_to_list(defaults.get("list", ""))
+    current_input_paths = args.input or default_inputs
+    current_list_paths = args.list or default_lists
+    current_input_path = current_input_paths[0] if current_input_paths else None
+    current_list_path = current_list_paths[0] if current_list_paths else None
     current_topic_save_path = defaults.get("topic_save")
 
     if args.settings:
-        print(f"Current input file:     {current_input_path}")
-        print(f"Current list file:      {current_list_path}")
-        print(f"Current topic save dir: {current_topic_save_path}")
-        print(f"Auto alphabetic sort:   {defaults.get('auto_alphabetic_sort')}")
+        print(f"Input files:          {', '.join(current_input_paths)}")
+        print(f"List files:           {', '.join(current_list_paths)}")
+        print(f"Topic save dir:       {current_topic_save_path}")
+        print(f"Auto alphabetic sort: {defaults.get('auto_alphabetic_sort')}")
         print(f"Auto save:            {defaults.get('auto_save', 'false')}")
 
-    topics_i = read_non_empty(current_input_path)
-    topics_l = read_list_file(current_list_path)
+    topics_i = uniq_keep_order([t for p in current_input_paths for t in read_non_empty(p)])
+    topics_l = uniq_keep_order([t for p in current_list_paths for t in read_list_file(p)])
 
+    for p in current_input_paths:
+        if not os.path.isfile(p):
+            print(f"Warning: input file missing: {p}")
+    for p in current_list_paths:
+        if not os.path.isfile(p):
+            print(f"Warning: list file missing: {p}")
     if not topics_i and not topics_l:
         print("Warning: both source files are empty or missing — nothing to save")
-    elif not topics_i:
-        print(f"Warning: input file is empty or missing: {current_input_path}")
-    elif not topics_l:
-        print(f"Warning: list file is empty or missing: {current_list_path}")
 
     if args.compare:
-        diff_i = diff_lists(topics_i, topics_l)
-        diff_l = diff_lists(topics_l, topics_i)
-        if diff_i:
-            print(f"Items in input but not in list ({len(diff_i)}):")
-            print("\n".join(diff_i))
-        if diff_l:
-            print(f"Items in list but not in input ({len(diff_l)}):")
-            print("\n".join(diff_l))
-        if not diff_i and not diff_l:
-            print("No differences found")
+            all_files = (
+                [(p, "input", read_non_empty(p)) for p in current_input_paths] +
+                [(p, "list", read_list_file(p)) for p in current_list_paths]
+            )
+            for i, (p1, t1_type, t1) in enumerate(all_files):
+                for p2, t2_type, t2 in all_files[i+1:]:
+                    diff_1 = diff_lists(t1, t2)
+                    diff_2 = diff_lists(t2, t1)
+                    if not args.solid:
+                        print(f"\n[{p1} ({t1_type})] vs [{p2} ({t2_type})]")
+                    if diff_1:
+                        if not args.solid:
+                            print(f"  Only in {p1} ({len(diff_1)}):")
+                        for t in diff_1:
+                            print(f"    {t}" if not args.solid else t)
+                    if diff_2:
+                        if not args.solid:
+                            print(f"  Only in {p2} ({len(diff_2)}):")
+                        for t in diff_2:
+                            print(f"    {t}" if not args.solid else t)
+                    if not diff_1 and not diff_2:
+                        if not args.solid:
+                            print("  No differences found")
 
     topics = uniq_keep_order(topics_i + topics_l)
 
@@ -617,9 +642,11 @@ def main():
 
     if args.ab or auto_ab:
         sorted_topics = sorted(topics, key=str.casefold)
-        if current_input_path:
-            write_files(current_input_path, sorted_topics)
-        sort_list_file(current_list_path)
+        for p in current_input_paths:
+            file_topics = read_non_empty(p)
+            write_files(p, sorted(file_topics, key=str.casefold))
+        for p in current_list_paths:
+            sort_list_file(p)
         topics = sorted_topics
 
     if args.count:
@@ -651,7 +678,8 @@ def main():
                 print(t)
 
     if args.search:
-        search_topic(args.search, topics_i, current_list_path, args.solid)
+        for lp in current_list_paths:
+            search_topic(args.search, topics_i, lp, args.solid)
 
     if args.add_topic:
         if args.list_name:
@@ -665,9 +693,13 @@ def main():
             keys_to_del = {normalize_topic(t.strip('"')) for t in args.del_topic}
             titles_to_del = {t.strip('"') for t in args.del_topic}
             for section in args.list_name:
-                remove_from_list_section(current_list_path, section, keys_to_del, titles_to_del)
+                for lp in current_list_paths:
+                    remove_from_list_section(lp, section, keys_to_del, titles_to_del)
         else:
-            del_topics(args.del_topic, TOPICS_TOML_PATH, current_input_path, current_list_path)
+            for ip in current_input_paths:
+                del_topics(args.del_topic, TOPICS_TOML_PATH, ip, None)
+            for lp in current_list_paths:
+                del_topics(args.del_topic, TOPICS_TOML_PATH, None, lp)
 
     if args.show_input is not None:
         if not topics_i:
