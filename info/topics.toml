@@ -2,6 +2,8 @@
 input = "/home/stip/surebook/info/topics.md"
 list = "/home/stip/surebook/info/topic-lists.md"
 topic_save = "/home/stip/surebook/topics"
+auto_alphabetic_sort = "true"
+auto_save = "false"
 
 [topics]
 
@@ -536,3 +538,5 @@ path = "/home/stip/surebook/topics/iscsi_attach.md"
 [topics."fail2ban"]
 title = "fail2ban"
 path = "/home/stip/surebook/topics/fail2ban.md"
+
+

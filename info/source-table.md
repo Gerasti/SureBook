@@ -127,7 +127,7 @@
 |125 | etcnet OVS mgmt-interface | yesterday-it-worked |
 |126 | RADIUS server | yesterday-it-worked |
 |127 | RADIUS client | yesterday-it-worked |
-|128 | DBeaver | [SQL install PostgreSQL && DBeaver](https://sysahelper.ru/mod/page/view.php?id=772), yesterday-it-worked |
+|128 | DBeaver | sysahelper [SQL install PostgreSQL && DBeaver](https://sysahelper.ru/mod/page/view.php?id=772), yesterday-it-worked |
 |129 | timedatectl | yesterday-it-worked |
 |130 | Ideco admin | sysahelper [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724) |
 |131 | Ideco license | sysahelper [Ideco license](https://sysahelper.ru/mod/page/view.php?id=728) |

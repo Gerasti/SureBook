@@ -42,6 +42,22 @@ def diff_lists(list1: list[str], list2: list[str]) -> list[str]:
 def normalize_topic(name: str) -> str:
     return re.sub(r"\s+", "_", name.strip())
 
+def read_list_lines(path: str) -> list[str]:
+    if not path or not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        return f.readlines()
+
+def parse_section_name(line: str) -> str | None:
+    stripped = line.strip()
+    if stripped.startswith("##") and stripped.endswith("list:"):
+        return stripped[3:-6].strip()
+    return None
+
+def find_section_header(lines: list[str], section: str) -> bool:
+    header = f"## {section} list:"
+    return any(line.strip() == header for line in lines)
+
 def sort_list_file(path: str):
     if not path or not os.path.exists(path):
         return
@@ -60,18 +76,24 @@ def sort_list_file(path: str):
                 new_lines.append("\n")
 
     for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("##") and stripped.endswith("list:"):
+        section_name = parse_section_name(line)
+        if section_name is not None:
             flush_section()
             current_header = line
             current_section = []
-        elif stripped:
-            current_section.append(stripped)
+        elif line.strip():
+            current_section.append(line.strip())
 
     flush_section()
 
     with open(path, "w", encoding="utf-8") as f:
         f.writelines(new_lines)
+
+def print_section(name: str, items: list[str], solid: bool = False):
+    if not solid:
+        print(f"\n[{name}] ({len(items)}):")
+    for t in items:
+        print(f"  {t}" if not solid else t)
 
 # =======================
 # TOML-like Defaults
@@ -82,6 +104,7 @@ def load_defaults(toml_path: str) -> dict:
         "list": os.path.expanduser("~/surebook/info/topic-lists.md"),
         "topic_save": os.path.expanduser("~/surebook/topics"),
         "auto_alphabetic_sort": "false",
+        "auto_save": "false",
     }
     defaults = {}
     updated = False
@@ -206,17 +229,9 @@ def add_topics_to_input(topics_to_add: list[str], input_path: str):
 
 
 def add_topics_to_list(topics_to_add: list[str], list_path: str, section: str):
-    lines = []
-    if os.path.exists(list_path):
-        with open(list_path, encoding="utf-8") as f:
-            lines = f.readlines()
-
+    lines = read_list_lines(list_path)
     header = f"## {section} list:"
-    section_found = False
-    for line in lines:
-        if line.strip() == header:
-            section_found = True
-            break
+    section_found = find_section_header(lines, section)
 
     with open(list_path, "a" if not section_found else "r+", encoding="utf-8") as f:
         if not section_found:
@@ -347,6 +362,153 @@ def del_topics(topics_to_del: list[str], toml_path: str, input_path: str, list_p
 
     remove_from_list_file(list_path, keys_to_del, titles_to_del)
 
+def remove_from_list_section(list_path: str, section: str, keys_to_del: set[str], titles_to_del: set[str]):
+    lines = read_list_lines(list_path)
+    if not lines:
+        return
+
+    header = f"## {section} list:"
+    if not find_section_header(lines, section):
+        print(f"List not found: {section}")
+        return
+
+    new_lines = []
+    in_section = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped == header:
+            in_section = True
+            new_lines.append(line)
+            continue
+        if in_section and stripped.startswith("##"):
+            in_section = False
+        if in_section and (stripped in titles_to_del or normalize_topic(stripped) in keys_to_del):
+            if new_lines and new_lines[-1].strip() == "":
+                new_lines.pop()
+            print(f"Deleted from [{section}]: {stripped}")
+            continue
+        new_lines.append(line)
+
+    with open(list_path, "w", encoding="utf-8") as f:
+        f.writelines(new_lines)
+
+def add_list(section: str, list_path: str):
+    lines = []
+    if os.path.exists(list_path):
+        with open(list_path, encoding="utf-8") as f:
+            lines = f.readlines()
+
+    header = f"## {section} list:"
+    for line in lines:
+        if line.strip() == header:
+            print(f"List already exists: {section}")
+            return
+
+    with open(list_path, "a", encoding="utf-8") as f:
+        f.write(f"{header}\n")
+    print(f"Added list: {section}")
+
+
+def del_list(section: str, list_path: str):
+    lines = read_list_lines(list_path)
+    if not lines:
+        return
+
+    header = f"## {section} list:"
+    section_found = False
+    topics_in_section = []
+
+    i = 0
+    while i < len(lines):
+        if lines[i].strip() == header:
+            section_found = True
+            j = i + 1
+            while j < len(lines) and not lines[j].strip().startswith("##"):
+                if lines[j].strip():
+                    topics_in_section.append(lines[j].strip())
+                j += 1
+            break
+        i += 1
+
+    if not section_found:
+        print(f"List not found: {section}")
+        return
+
+    if topics_in_section:
+        print(f"List [{section}] contains {len(topics_in_section)} topics:")
+        for t in topics_in_section:
+            print(f"  {t}")
+        answer = input("Delete list with all topics? [y/N]: ").strip().lower()
+        if answer != "y":
+            print("Cancelled")
+            return
+
+    new_lines = []
+    skip = False
+    for line in lines:
+        if line.strip() == header:
+            skip = True
+            continue
+        if skip and line.strip().startswith("##"):
+            skip = False
+        if not skip:
+            new_lines.append(line)
+
+    with open(list_path, "w", encoding="utf-8") as f:
+        f.writelines(new_lines)
+    print(f"Deleted list: {section}")
+
+def read_list_sections(path: str, sections: list[str]) -> list[str]:
+    lines = read_list_lines(path)
+    result = []
+    in_section = False
+
+    for line in lines:
+        section_name = parse_section_name(line)
+        if section_name is not None:
+            in_section = section_name in sections
+            continue
+        if in_section and line.strip():
+            result.append(line.strip())
+
+    return result
+
+def read_list_headers(path: str) -> list[str]:
+    lines = read_list_lines(path)
+    result = []
+    for line in lines:
+        section_name = parse_section_name(line)
+        if section_name is not None:
+            result.append(section_name)
+    return result
+
+def search_topic(query: str, topics_i: list[str], list_path: str, solid: bool = False) -> None:
+    query_lower = query.casefold()
+    matches_input = [t for t in topics_i if query_lower in t.casefold()]
+
+    if matches_input:
+        print_section("input", matches_input, solid)
+
+    if not os.path.exists(list_path):
+        return
+
+    lines = read_list_lines(list_path)
+    current_section = None
+    section_matches = {}
+
+    for line in lines:
+        section_name = parse_section_name(line)
+        if section_name is not None:
+            current_section = section_name
+        elif line.strip() and current_section is not None:
+            if query_lower in line.strip().casefold():
+                section_matches.setdefault(current_section, []).append(line.strip())
+
+    for section, matches in section_matches.items():
+        print_section(section, matches, solid)
+
+    if not matches_input and not section_matches:
+        print(f"Not found: {query}")
 
 # =======================
 # CLI
@@ -363,7 +525,7 @@ def main():
                         help="Sort topics alphabetically AND rewrite input/list files")
     parser.add_argument("--compare", action="store_true",
                         help="Show differences between input and list")
-    parser.add_argument("--sources", action="store_true",
+    parser.add_argument("--settings", action="store_true",
                         help="Show current input and list files")
     parser.add_argument("--edit", action="store_true", help="Edit default paths")
     parser.add_argument("--default-input", help="Set new default input path (used with --edit)")
@@ -371,11 +533,19 @@ def main():
     parser.add_argument("--default-topic-save",
                         help="Set default directory for topic markdown files")
     parser.add_argument("--add-topic", nargs="+", help="Add topics to input file (or list with --list-name)")
-    parser.add_argument("--list-name", help="Section name in topic-lists.md to add topics to")
+    parser.add_argument("--list-name", nargs="+", help="Section names in topic-lists.md to add topics to")
     parser.add_argument("--del-topic", nargs="+", help="Delete topics from topics.toml")
+    parser.add_argument("--show-input", type=int, nargs='?', const=-1, help="Show all or first N topics from input file")
+    parser.add_argument("--add-list", nargs="+", help="Add new sections to topic-lists.md")
+    parser.add_argument("--del-list", nargs="+", help="Delete sections from topic-lists.md")
+    parser.add_argument("--show-lists", type=int, nargs='?', const=-1, help="Show all or first N list section names")
+    parser.add_argument("--solid", action="store_true", help="Disable section name headers in output")
+    parser.add_argument("--search", help="Search topic across input and lists")
     parser.add_argument("--save", action="store_true", help="Save topics to TOML and create .md files")
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete .md files)")
+    parser.add_argument("--show-save", action="store_true", help="Show topics that would be saved on --save")
     parser.add_argument("--auto-ab", choices=["true", "false"], help="Enable/disable auto alphabetic sort on every run")
+    parser.add_argument("--auto-save", choices=["true", "false"], help="Enable/disable auto save to TOML on every run")
     args = parser.parse_args()
 
     defaults = load_defaults(TOPICS_TOML_PATH)
@@ -398,6 +568,10 @@ def main():
             defaults["auto_alphabetic_sort"] = args.auto_ab
             print(f"Auto alphabetic sort set to: {args.auto_ab}")
             changed = True
+        if args.auto_save:
+            defaults["auto_save"] = args.auto_save
+            print(f"Auto save set to: {args.auto_save}")
+            changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
         else:
@@ -408,10 +582,12 @@ def main():
     current_list_path = args.list or defaults.get("list")
     current_topic_save_path = defaults.get("topic_save")
 
-    if args.sources:
+    if args.settings:
         print(f"Current input file:     {current_input_path}")
         print(f"Current list file:      {current_list_path}")
         print(f"Current topic save dir: {current_topic_save_path}")
+        print(f"Auto alphabetic sort:   {defaults.get('auto_alphabetic_sort')}")
+        print(f"Auto save:            {defaults.get('auto_save', 'false')}")
 
     topics_i = read_non_empty(current_input_path)
     topics_l = read_list_file(current_list_path)
@@ -446,13 +622,6 @@ def main():
         sort_list_file(current_list_path)
         topics = sorted_topics
 
-    if args.ab:
-        sorted_topics = sorted(topics, key=str.casefold)
-        if current_input_path:
-            write_files(current_input_path, sorted_topics)
-            sort_list_file(current_list_path)
-            topics = sorted_topics
-
     if args.count:
         count_input = len(topics_i)
         count_list = len(topics_l)
@@ -470,23 +639,70 @@ def main():
         print(f"List uniq topics:  {count_list_uniq}")
 
     if args.show is not None:
-        display = topics if args.show == -1 else topics[:args.show]
-        for t in display:
-            print(t)
+        if args.list_name:
+            for section in args.list_name:
+                section_topics = read_list_sections(current_list_path, [section])
+                if args.show != -1:
+                    section_topics = section_topics[:args.show]
+                print_section(section, section_topics, args.solid)
+        else:
+            display = topics if args.show == -1 else topics[:args.show]
+            for t in display:
+                print(t)
 
-    # =======================
-    # Save topics to TOML + create .md
-    # =======================
+    if args.search:
+        search_topic(args.search, topics_i, current_list_path, args.solid)
+
     if args.add_topic:
         if args.list_name:
-            add_topics_to_list(args.add_topic, current_list_path, args.list_name)
+            for section in args.list_name:
+                add_topics_to_list(args.add_topic, current_list_path, section)
         else:
             add_topics_to_input(args.add_topic, current_input_path)
 
     if args.del_topic:
-        del_topics(args.del_topic, TOPICS_TOML_PATH, current_input_path, current_list_path)
+        if args.list_name:
+            keys_to_del = {normalize_topic(t.strip('"')) for t in args.del_topic}
+            titles_to_del = {t.strip('"') for t in args.del_topic}
+            for section in args.list_name:
+                remove_from_list_section(current_list_path, section, keys_to_del, titles_to_del)
+        else:
+            del_topics(args.del_topic, TOPICS_TOML_PATH, current_input_path, current_list_path)
 
-    if args.save:
+    if args.show_input is not None:
+        if not topics_i:
+            print("Input file is empty or missing")
+        else:
+            display = topics_i if args.show_input == -1 else topics_i[:args.show_input]
+            print(f"Input topics ({len(display)}/{len(topics_i)}):")
+            for t in display:
+                print(f"  {t}")
+
+    if args.add_list:
+        for section in args.add_list:
+            add_list(section, current_list_path)
+
+    if args.del_list:
+        for section in args.del_list:
+            del_list(section, current_list_path)
+
+    if args.show_lists is not None:
+        headers = read_list_headers(current_list_path)
+        if not headers:
+            print("No lists found")
+        else:
+            display = headers if args.show_lists == -1 else headers[:args.show_lists]
+            if args.solid:
+                for h in display:
+                    print(h)
+            else:
+                print(f"Lists ({len(display)}/{len(headers)}):")
+                for h in display:
+                    print(f"  {h}")
+
+    auto_save = defaults.get("auto_save", "false") == "true"
+
+    if args.save or auto_save:
         if current_topic_save_path:
             save_topics_to_toml(TOPICS_TOML_PATH, topics, current_topic_save_path)
         else:
@@ -495,20 +711,35 @@ def main():
     if args.unsave:
         del_topics(args.unsave, TOPICS_TOML_PATH, input_path=None, list_path=None)
 
+    if args.show_save:
+        existing = load_existing_topic_keys(TOPICS_TOML_PATH)
+        new_topics = [t for t in topics if normalize_topic(t) not in existing]
+        if not new_topics:
+            print("Nothing to save — all topics already in TOML")
+        else:
+            print(f"Would be saved ({len(new_topics)}):")
+            for t in new_topics:
+                print(f"  {t}")
+
     any_action = any([
         args.show is not None,
         args.count,
         args.ab,
         args.compare,
-        args.sources,
+        args.settings,
+        args.search,
         args.add_topic,
         args.del_topic,
+        args.show_input is not None,
+        args.add_list,
+        args.del_list,
+        args.show_lists is not None,
         args.save,
         args.unsave,
+        args.show_save,
     ])
     if not any_action:
         parser.print_help()
-
 
 if __name__ == "__main__":
     main()
