@@ -7,14 +7,9 @@ auto_save = "false"
 
 [topics]
 
-
 [topics."alt_fail2ban"]
 title = "alt fail2ban"
 path = "/home/stip/surebook/topics/alt_fail2ban.md"
-
-[topics."alt_samba_ADMC"]
-title = "alt samba ADMC"
-path = "/home/stip/surebook/topics/alt_samba_ADMC.md"
 
 [topics."alt_samba_ADMC"]
 title = "alt samba ADMC"
@@ -29,24 +24,12 @@ path = "/home/stip/surebook/topics/ansible_inventory.md"
 [topics."ansible_NextCloud"]
 title = "ansible NextCloud"
 path = "/home/stip/surebook/topics/ansible_NextCloud.md"
-
-[topics."ansible_NextCloud"]
-title = "ansible NextCloud"
-path = "/home/stip/surebook/topics/ansible_NextCloud.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=28"
 
 [topics."ansible_OTRS"]
 title = "ansible OTRS"
 path = "/home/stip/surebook/topics/ansible_OTRS.md"
-
-[topics."ansible_OTRS"]
-title = "ansible OTRS"
-path = "/home/stip/surebook/topics/ansible_OTRS.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=25"
-
-[topics."ansible_OwnCloud"]
-title = "ansible OwnCloud"
-path = "/home/stip/surebook/topics/ansible_OwnCloud.md"
 
 [topics."ansible_OwnCloud"]
 title = "ansible OwnCloud"
@@ -80,19 +63,11 @@ path = "/home/stip/surebook/topics/bash_script_for_samba.md"
 [topics."bind_DNS"]
 title = "bind DNS"
 path = "/home/stip/surebook/topics/bind_DNS.md"
-
-[topics."bind_DNS"]
-title = "bind DNS"
-path = "/home/stip/surebook/topics/bind_DNS.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=734"
 
 [topics."bind_slave_DNS"]
 title = "bind slave DNS"
 path = "/home/stip/surebook/topics/bind_slave_DNS.md"
-
-[topics."BIND9_DLZ_samba"]
-title = "BIND9_DLZ samba"
-path = "/home/stip/surebook/topics/BIND9_DLZ_samba.md"
 
 [topics."BIND9_DLZ_samba"]
 title = "BIND9_DLZ samba"
@@ -111,10 +86,6 @@ path = "/home/stip/surebook/topics/console-debian_samba.md"
 [topics."cups-pdf"]
 title = "cups-pdf"
 path = "/home/stip/surebook/topics/cups-pdf.md"
-
-[topics."DBeaver"]
-title = "DBeaver"
-path = "/home/stip/surebook/topics/DBeaver.md"
 
 [topics."DBeaver"]
 title = "DBeaver"
@@ -177,24 +148,12 @@ path = "/home/stip/surebook/topics/docker_MediaWiki.md"
 [topics."docker_OTRS"]
 title = "docker OTRS"
 path = "/home/stip/surebook/topics/docker_OTRS.md"
-
-[topics."docker_OTRS"]
-title = "docker OTRS"
-path = "/home/stip/surebook/topics/docker_OTRS.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=22"
 
 [topics."docker_OwnCloud"]
 title = "docker OwnCloud"
 path = "/home/stip/surebook/topics/docker_OwnCloud.md"
-
-[topics."docker_OwnCloud"]
-title = "docker OwnCloud"
-path = "/home/stip/surebook/topics/docker_OwnCloud.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=24"
-
-[topics."docker_phpMyAdmin"]
-title = "docker phpMyAdmin"
-path = "/home/stip/surebook/topics/docker_phpMyAdmin.md"
 
 [topics."docker_phpMyAdmin"]
 title = "docker phpMyAdmin"
@@ -212,24 +171,12 @@ path = "/home/stip/surebook/topics/docker_WordPress.md"
 [topics."docker_Zabbix"]
 title = "docker Zabbix"
 path = "/home/stip/surebook/topics/docker_Zabbix.md"
-
-[topics."docker_Zabbix"]
-title = "docker Zabbix"
-path = "/home/stip/surebook/topics/docker_Zabbix.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=20"
 
 [topics."ecorouter_bgp"]
 title = "ecorouter bgp"
 path = "/home/stip/surebook/topics/ecorouter_bgp.md"
-
-[topics."ecorouter_bgp"]
-title = "ecorouter bgp"
-path = "/home/stip/surebook/topics/ecorouter_bgp.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=722"
-
-[topics."ecorouter_DHCP-retranslation"]
-title = "ecorouter DHCP-retranslation"
-path = "/home/stip/surebook/topics/ecorouter_DHCP-retranslation.md"
 
 [topics."ecorouter_DHCP-retranslation"]
 title = "ecorouter DHCP-retranslation"
@@ -251,10 +198,6 @@ path = "/home/stip/surebook/topics/ecorouter_ip.md"
 [topics."ecorouter_NAT"]
 title = "ecorouter NAT"
 path = "/home/stip/surebook/topics/ecorouter_NAT.md"
-
-[topics."ecorouter_NAT"]
-title = "ecorouter NAT"
-path = "/home/stip/surebook/topics/ecorouter_NAT.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=725"
 
 [topics."ecorouter_NTP"]
@@ -268,15 +211,7 @@ path = "/home/stip/surebook/topics/ecorouter_OSPF.md"
 [topics."ecorouter_port_forwarding"]
 title = "ecorouter port forwarding"
 path = "/home/stip/surebook/topics/ecorouter_port_forwarding.md"
-
-[topics."ecorouter_port_forwarding"]
-title = "ecorouter port forwarding"
-path = "/home/stip/surebook/topics/ecorouter_port_forwarding.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=327"
-
-[topics."ecorouter_RADIUS"]
-title = "ecorouter RADIUS"
-path = "/home/stip/surebook/topics/ecorouter_RADIUS.md"
 
 [topics."ecorouter_RADIUS"]
 title = "ecorouter RADIUS"
@@ -286,15 +221,7 @@ link = "https://sysahelper.ru/mod/page/view.php?id=732"
 [topics."ecorouter_ssh"]
 title = "ecorouter ssh"
 path = "/home/stip/surebook/topics/ecorouter_ssh.md"
-
-[topics."ecorouter_ssh"]
-title = "ecorouter ssh"
-path = "/home/stip/surebook/topics/ecorouter_ssh.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=322"
-
-[topics."ecorouter_vlan"]
-title = "ecorouter vlan"
-path = "/home/stip/surebook/topics/ecorouter_vlan.md"
 
 [topics."ecorouter_vlan"]
 title = "ecorouter vlan"
@@ -344,15 +271,7 @@ path = "/home/stip/surebook/topics/fail2ban.md"
 [topics."FreeIPA_with_DNS"]
 title = "FreeIPA with DNS"
 path = "/home/stip/surebook/topics/FreeIPA_with_DNS.md"
-
-[topics."FreeIPA_with_DNS"]
-title = "FreeIPA with DNS"
-path = "/home/stip/surebook/topics/FreeIPA_with_DNS.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=139"
-
-[topics."FreeIPA_without_DNS"]
-title = "FreeIPA without DNS"
-path = "/home/stip/surebook/topics/FreeIPA_without_DNS.md"
 
 [topics."FreeIPA_without_DNS"]
 title = "FreeIPA without DNS"
@@ -382,10 +301,6 @@ path = "/home/stip/surebook/topics/hostname.md"
 [topics."Ideco_admin"]
 title = "Ideco admin"
 path = "/home/stip/surebook/topics/Ideco_admin.md"
-
-[topics."Ideco_admin"]
-title = "Ideco admin"
-path = "/home/stip/surebook/topics/Ideco_admin.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=724"
 link-look = "Ideco admin && Ideco LAN interface"
 
@@ -396,16 +311,8 @@ path = "/home/stip/surebook/topics/Ideco_gateway.md"
 [topics."Ideco_LAN_interface"]
 title = "Ideco LAN interface"
 path = "/home/stip/surebook/topics/Ideco_LAN_interface.md"
-
-[topics."Ideco_LAN_interface"]
-title = "Ideco LAN interface"
-path = "/home/stip/surebook/topics/Ideco_LAN_interface.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=724"
 link-look = "Ideco admin && Ideco LAN interface"
-
-[topics."Ideco_license"]
-title = "Ideco license"
-path = "/home/stip/surebook/topics/Ideco_license.md"
 
 [topics."Ideco_license"]
 title = "Ideco license"
@@ -423,10 +330,6 @@ path = "/home/stip/surebook/topics/install_MariaDB_Zabbix.md"
 [topics."install_PostgreSQL_Zabbix"]
 title = "install PostgreSQL Zabbix"
 path = "/home/stip/surebook/topics/install_PostgreSQL_Zabbix.md"
-
-[topics."install_PostgreSQL_Zabbix"]
-title = "install PostgreSQL Zabbix"
-path = "/home/stip/surebook/topics/install_PostgreSQL_Zabbix.md"
 link = "https://sysahelper.ru/mod/book/view.php?id=18"
 link-look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"
 
@@ -437,20 +340,12 @@ path = "/home/stip/surebook/topics/install_quagga.md"
 [topics."install_SSL_certificate_Debian-like"]
 title = "install SSL certificate Debian-like"
 path = "/home/stip/surebook/topics/install_SSL_certificate_Debian-like.md"
-
-[topics."install_SSL_certificate_Debian-like"]
-title = "install SSL certificate Debian-like"
-path = "/home/stip/surebook/topics/install_SSL_certificate_Debian-like.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=134"
 link-look = "SSL certificate center && install SSL certificate Debian-like"
 
 [topics."install_SSL_certificate_RedHat-like"]
 title = "install SSL certificate RedHat-like"
 path = "/home/stip/surebook/topics/install_SSL_certificate_RedHat-like.md"
-
-[topics."IP-телефония_SNG7"]
-title = "IP-телефония SNG7"
-path = "/home/stip/surebook/topics/IP-телефония_SNG7.md"
 
 [topics."IP-телефония_SNG7"]
 title = "IP-телефония SNG7"
@@ -473,24 +368,12 @@ path = "/home/stip/surebook/topics/isc-dhcp-server.md"
 [topics."isc-dhcp-server_and_dhcpd_failover"]
 title = "isc-dhcp-server and dhcpd failover"
 path = "/home/stip/surebook/topics/isc-dhcp-server_and_dhcpd_failover.md"
-
-[topics."isc-dhcp-server_and_dhcpd_failover"]
-title = "isc-dhcp-server and dhcpd failover"
-path = "/home/stip/surebook/topics/isc-dhcp-server_and_dhcpd_failover.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=132"
 
 [topics."iscsi"]
 title = "iscsi"
 path = "/home/stip/surebook/topics/iscsi.md"
-
-[topics."iscsi"]
-title = "iscsi"
-path = "/home/stip/surebook/topics/iscsi.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=773"
-
-[topics."iscsi_attach"]
-title = "iscsi attach"
-path = "/home/stip/surebook/topics/iscsi_attach.md"
 
 [topics."iscsi_attach"]
 title = "iscsi attach"
@@ -508,10 +391,6 @@ path = "/home/stip/surebook/topics/mdadm_options.md"
 [topics."moodle"]
 title = "moodle"
 path = "/home/stip/surebook/topics/moodle.md"
-
-[topics."moodle"]
-title = "moodle"
-path = "/home/stip/surebook/topics/moodle.md"
 link = "https://sysahelper.ru/mod/book/view.php?id=34"
 
 [topics."mounting_devices"]
@@ -525,15 +404,7 @@ path = "/home/stip/surebook/topics/network_mask_table.md"
 [topics."NextCloud"]
 title = "NextCloud"
 path = "/home/stip/surebook/topics/NextCloud.md"
-
-[topics."NextCloud"]
-title = "NextCloud"
-path = "/home/stip/surebook/topics/NextCloud.md"
 link = "https://sysahelper.ru/mod/book/view.php?id=27"
-
-[topics."NFS"]
-title = "NFS"
-path = "/home/stip/surebook/topics/NFS.md"
 
 [topics."NFS"]
 title = "NFS"
@@ -567,10 +438,6 @@ path = "/home/stip/surebook/topics/nginx_Web-based_authentication.md"
 [topics."OTRS"]
 title = "OTRS"
 path = "/home/stip/surebook/topics/OTRS.md"
-
-[topics."OTRS"]
-title = "OTRS"
-path = "/home/stip/surebook/topics/OTRS.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=21"
 
 [topics."OVS_bond"]
@@ -588,19 +455,11 @@ path = "/home/stip/surebook/topics/OVS_vlan.md"
 [topics."OwnCloud"]
 title = "OwnCloud"
 path = "/home/stip/surebook/topics/OwnCloud.md"
-
-[topics."OwnCloud"]
-title = "OwnCloud"
-path = "/home/stip/surebook/topics/OwnCloud.md"
 link = "https://sysahelper.ru/mod/book/view.php?id=23"
 
 [topics."partitions_of_devices"]
 title = "partitions of devices"
 path = "/home/stip/surebook/topics/partitions_of_devices.md"
-
-[topics."phpMyAdmin"]
-title = "phpMyAdmin"
-path = "/home/stip/surebook/topics/phpMyAdmin.md"
 
 [topics."phpMyAdmin"]
 title = "phpMyAdmin"
@@ -646,24 +505,12 @@ path = "/home/stip/surebook/topics/samba_share_folder.md"
 [topics."SAMBA_INTERNAL_samba"]
 title = "SAMBA_INTERNAL samba"
 path = "/home/stip/surebook/topics/SAMBA_INTERNAL_samba.md"
-
-[topics."SAMBA_INTERNAL_samba"]
-title = "SAMBA_INTERNAL samba"
-path = "/home/stip/surebook/topics/SAMBA_INTERNAL_samba.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=164"
 
 [topics."SQL_install_MariaDB"]
 title = "SQL install MariaDB"
 path = "/home/stip/surebook/topics/SQL_install_MariaDB.md"
-
-[topics."SQL_install_MariaDB"]
-title = "SQL install MariaDB"
-path = "/home/stip/surebook/topics/SQL_install_MariaDB.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=191"
-
-[topics."SQL_install_MySQL"]
-title = "SQL install MySQL"
-path = "/home/stip/surebook/topics/SQL_install_MySQL.md"
 
 [topics."SQL_install_MySQL"]
 title = "SQL install MySQL"
@@ -689,10 +536,6 @@ path = "/home/stip/surebook/topics/ssh_options.md"
 [topics."ssh-connection_automate_to_servers"]
 title = "ssh-connection automate to servers"
 path = "/home/stip/surebook/topics/ssh-connection_automate_to_servers.md"
-
-[topics."SSL_certificate_center"]
-title = "SSL certificate center"
-path = "/home/stip/surebook/topics/SSL_certificate_center.md"
 
 [topics."SSL_certificate_center"]
 title = "SSL certificate center"
@@ -727,15 +570,7 @@ path = "/home/stip/surebook/topics/vmware_open-vm-tools.md"
 [topics."wireguard"]
 title = "wireguard"
 path = "/home/stip/surebook/topics/wireguard.md"
-
-[topics."wireguard"]
-title = "wireguard"
-path = "/home/stip/surebook/topics/wireguard.md"
 link = "https://sysahelper.ru/mod/page/view.php?id=128"
-
-[topics."wireguard_OSPF"]
-title = "wireguard OSPF"
-path = "/home/stip/surebook/topics/wireguard_OSPF.md"
 
 [topics."wireguard_OSPF"]
 title = "wireguard OSPF"
@@ -745,10 +580,6 @@ link = "https://sysahelper.ru/mod/page/view.php?id=127"
 [topics."Zabbix_agent"]
 title = "Zabbix agent"
 path = "/home/stip/surebook/topics/Zabbix_agent.md"
-
-[topics."Zabbix_web-interface"]
-title = "Zabbix web-interface"
-path = "/home/stip/surebook/topics/Zabbix_web-interface.md"
 
 [topics."Zabbix_web-interface"]
 title = "Zabbix web-interface"

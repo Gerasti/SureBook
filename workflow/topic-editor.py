@@ -112,6 +112,14 @@ def extract_link(topic: str) -> tuple[str | None, str | None]:
         return m.group(1), m.group(2)
     return None, None
 
+def is_topic_duplicate(line: str, existing_lines: list[str]) -> bool:
+    """True if plain topic already exists in lines (with or without link)."""
+    plain = strip_link(line.strip())
+    for l in existing_lines:
+        if strip_link(l.strip()) == plain:
+            return True
+    return False
+
 # =======================
 # TOML-like Defaults
 # =======================
@@ -205,8 +213,19 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
         with open(toml_path, encoding="utf-8") as f:
             lines = f.read().splitlines()
 
-    new_topics = [t for t in topics if normalize_topic(strip_link(t)) not in existing]
+    # дедуплицировать по clean key — предпочитать версию со ссылкой
+    seen_keys: dict[str, str] = {}
+    for t in topics:
+        key = normalize_topic(strip_link(t))
+        if key in existing:
+            continue
+        # если уже есть версия этой темы — предпочесть ту, что содержит ссылку
+        if key not in seen_keys or extract_link(t)[1] is not None:
+            seen_keys[key] = t
+
+    new_topics = list(seen_keys.values())
     if not new_topics:
+        print("Nothing to save — all topics already in TOML")
         return
 
     with open(toml_path, "a", encoding="utf-8") as f:
@@ -276,7 +295,7 @@ def add_topics_to_list(topics_to_add: list[str], list_path: str, section: str):
                     existing_in_section.append(lines[j].strip())
                 j += 1
             for t in topics_to_add:
-                if t not in existing_in_section:
+                if not is_topic_duplicate(t, existing_in_section):
                     new_lines.append(t + "\n")
                     new_lines.append("\n")
                     print(f"Added to list [{section}]: {t}")
@@ -661,7 +680,7 @@ def set_add_link(topic: str, list_paths: list[str], list_names: list[str] | None
                 in_target = list_names is None or sec in list_names
                 new_lines.append(line)
                 continue
-            if in_target and (stripped == topic or stripped.startswith(f"{topic} [")):
+            if in_target and strip_link(stripped) == topic:
                 new_lines.append(md_link + "\n")
                 print(f"Set link in [{p}] section [{sec}]: {md_link}")
                 changed = True
@@ -762,6 +781,109 @@ def search_topic(query: str, topics_i: list[str], list_path: str, solid: bool = 
     if not matches_input and not section_matches:
         print(f"Not found: {query}")
 
+
+def load_toml_topics(toml_path: str) -> list[dict]:
+    """Load all topics from TOML as list of dicts: key, title, path, link, link_look."""
+    topics = []
+    if not os.path.exists(toml_path):
+        return topics
+    with open(toml_path, encoding="utf-8") as f:
+        lines = f.read().splitlines()
+    current = None
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith('[topics."'):
+            if current is not None:
+                topics.append(current)
+            key = stripped.split('"')[1]
+            current = {"key": key, "title": "", "path": "", "link": None, "link_look": None}
+        elif current is not None and "=" in stripped:
+            k, v = stripped.split("=", 1)
+            k = k.strip()
+            v = v.strip().strip('"')
+            if k == "title":
+                current["title"] = v
+            elif k == "path":
+                current["path"] = v
+            elif k == "link":
+                current["link"] = v
+            elif k == "link-look":
+                current["link_look"] = v
+    if current is not None:
+        topics.append(current)
+    return topics
+
+
+def load_list_topics_with_sections(list_paths: list[str]) -> dict[str, list[str]]:
+    """Return dict: topic_title -> list of section names it appears in."""
+    topic_sections: dict[str, list[str]] = {}
+    for p in list_paths:
+        lines = read_list_lines(p)
+        current_section = None
+        for line in lines:
+            sn = parse_section_name(line)
+            if sn is not None:
+                current_section = sn
+                continue
+            stripped = line.strip()
+            if stripped and current_section:
+                plain = strip_link(stripped)
+                topic_sections.setdefault(plain, [])
+                if current_section not in topic_sections[plain]:
+                    topic_sections[plain].append(current_section)
+    return topic_sections
+
+
+def load_list_links_by_section(list_paths: list[str]) -> dict[tuple, tuple]:
+    """Return dict: (topic_title, section) -> (link_look, url)."""
+    result = {}
+    for p in list_paths:
+        lines = read_list_lines(p)
+        current_section = None
+        for line in lines:
+            sn = parse_section_name(line)
+            if sn is not None:
+                current_section = sn
+                continue
+            stripped = line.strip()
+            if stripped and current_section:
+                plain = strip_link(stripped)
+                link_look, url = extract_link(stripped)
+                if url:
+                    result[(plain, current_section)] = (link_look, url)
+    return result
+
+
+def generate_source_table(toml_path: str, list_paths: list[str], out_path: str):
+    topics = load_toml_topics(toml_path)
+    topic_sections = load_list_topics_with_sections(list_paths)
+    section_links = load_list_links_by_section(list_paths)
+
+    lines = []
+    lines.append("| № | Topic | Sources (lists + links) |")
+    lines.append("|---|-------|-------------------------|")
+
+    for i, t in enumerate(topics, 1):
+        title = t["title"]
+        sections = topic_sections.get(title, [])
+
+        sources_parts = []
+        for sec in sections:
+            link_data = section_links.get((title, sec))
+            if link_data:
+                look, url = link_data
+                sources_parts.append(f"{sec} [{look}]({url})")
+            else:
+                sources_parts.append(sec)
+
+        sources = ", ".join(sources_parts) if sources_parts else ""
+        lines.append(f"|{i:>3} | {title} | {sources} |")
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"Source table saved: {out_path} ({len(topics)} topics)")
+
 # =======================
 # CLI
 # =======================
@@ -804,6 +926,8 @@ def main():
     parser.add_argument("--show-save", action="store_true", help="Show topics that would be saved on --save")
     parser.add_argument("--auto-ab", choices=["true", "false"], help="Enable/disable auto alphabetic sort on every run")
     parser.add_argument("--auto-save", choices=["true", "false"], help="Enable/disable auto save to TOML on every run")
+    parser.add_argument("--source-table", "--src-table", dest="source_table",
+                        action="store_true", help="Generate markdown source table to ~/surebook/info/TEST-source-table.md")
     args = parser.parse_args()
 
     defaults = load_defaults(TOPICS_TOML_PATH)
@@ -932,20 +1056,33 @@ def main():
         topics = sorted_topics
 
     if args.count:
-        count_input = len(topics_i)
-        count_list = len(topics_l)
-        count_union_uniq = len(topics)
-        count_common = len(set(topics_i) & set(topics_l))
-        count_input_uniq = len(set(topics_i))
-        count_list_uniq = len(set(topics_l))
-        print(f"Union uniq topics: {count_union_uniq}")
-        print(f"Common topics:     {count_common}")
-        print()
-        print(f"All input topics:  {count_input}")
-        print(f"Input uniq topics: {count_input_uniq}")
-        print()
-        print(f"All list topics:   {count_list}")
-        print(f"List uniq topics:  {count_list_uniq}")
+            count_input = len(topics_i)
+            count_list = len(topics_l)
+            count_union_uniq = len(topics)
+            count_common = len(set(topics_i) & set(topics_l))
+            count_input_uniq = len(set(topics_i))
+            count_list_uniq = len(set(strip_link(t) for t in topics_l))
+
+            # темы со ссылками в листах
+            list_link_topics = set()
+            for lp in current_list_paths:
+                for line in read_list_lines(lp):
+                    stripped = line.strip()
+                    if stripped and extract_link(stripped)[1] is not None:
+                        list_link_topics.add(strip_link(stripped))
+
+            # уникальные темы с учётом дублей (тема и тема со ссылкой — одна)
+            union_clean = set(strip_link(t) for t in topics)
+
+            print(f"Union uniq topics: {len(union_clean)}")
+            print(f"Common topics:     {count_common}")
+            print()
+            print(f"All input topics:  {count_input}")
+            print(f"Input uniq topics: {count_input_uniq}")
+            print()
+            print(f"All list topics:   {count_list}")
+            print(f"List uniq topics:  {count_list_uniq}")
+            print(f"List link topics:  {len(list_link_topics)}")
 
     if args.show is not None:
         if args.list_name:
@@ -1029,31 +1166,51 @@ def main():
             existing = load_existing_topic_keys(TOPICS_TOML_PATH)
             input_set = set(topics_i)
 
-            # собрать какие темы в каких листах
             topic_lists: dict[str, list[str]] = {}
             for lp in current_list_paths:
                 lines = read_list_lines(lp)
                 current_section = None
+                seen_in_section: set[tuple] = set()
                 for line in lines:
                     section_name = parse_section_name(line)
                     if section_name is not None:
                         current_section = section_name
                     elif line.strip() and current_section:
-                        topic_lists.setdefault(line.strip(), []).append(current_section)
+                        plain = strip_link(line.strip())
+                        key = (plain, current_section)
+                        if key not in seen_in_section:
+                            seen_in_section.add(key)
+                            topic_lists.setdefault(plain, [])
+                            if current_section not in topic_lists[plain]:
+                                topic_lists[plain].append(current_section)
 
-            new_topics = [t for t in topics if normalize_topic(t) not in existing]
+            # дедуплицировать по clean key, предпочитать версию со ссылкой
+            seen_keys: dict[str, str] = {}
+            for t in topics:
+                key = normalize_topic(strip_link(t))
+                if key in existing:
+                    continue
+                if key not in seen_keys or extract_link(t)[1] is not None:
+                    seen_keys[key] = t
+            new_topics = list(seen_keys.values())
+
             if not new_topics:
                 print("Nothing to save — all topics already in TOML")
             else:
                 print(f"Would be saved ({len(new_topics)}):")
                 for t in new_topics:
+                    clean = strip_link(t)
                     parts = []
-                    if t in input_set:
+                    if clean in input_set:
                         parts.append("input")
-                    if t in topic_lists:
-                        parts.extend(topic_lists[t])
+                    if clean in topic_lists:
+                        parts.extend(topic_lists[clean])
                     src = ", ".join(parts) if parts else "unknown"
-                    print(f"  {t}  [{src}]")
+                    print(f"  {clean}  [{src}]")
+
+    if args.source_table:
+        out_path = os.path.expanduser("~/surebook/info/TEST-source-table.md")
+        generate_source_table(TOPICS_TOML_PATH, current_list_paths, out_path)
 
     any_action = any([
         args.show is not None,
@@ -1075,6 +1232,7 @@ def main():
         args.save,
         args.unsave,
         args.show_save,
+        args.source_table,
     ])
     if not any_action:
         parser.print_help()
