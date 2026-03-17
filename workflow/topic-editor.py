@@ -101,6 +101,17 @@ def print_section(name: str, items: list[str], solid: bool = False):
     for t in items:
         print(f"  {t}" if not solid else t)
 
+def strip_link(topic: str) -> str:
+    """Remove markdown link from topic, keeping only the topic name."""
+    return re.sub(r'\s+\[.*?\]\(.*?\)', '', topic).strip()
+
+def extract_link(topic: str) -> tuple[str | None, str | None]:
+    """Extract (link_look, url) from topic with markdown link, or (None, None)."""
+    m = re.search(r'\[([^\]]+)\]\(([^)]+)\)', topic)
+    if m:
+        return m.group(1), m.group(2)
+    return None, None
+
 # =======================
 # TOML-like Defaults
 # =======================
@@ -194,7 +205,7 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
         with open(toml_path, encoding="utf-8") as f:
             lines = f.read().splitlines()
 
-    new_topics = [t for t in topics if normalize_topic(t) not in existing]
+    new_topics = [t for t in topics if normalize_topic(strip_link(t)) not in existing]
     if not new_topics:
         return
 
@@ -205,21 +216,27 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
         os.makedirs(base_dir, exist_ok=True)
 
         for topic in new_topics:
-            key = normalize_topic(topic)
+            clean_topic = strip_link(topic)
+            link_look, link_url = extract_link(topic)
+            key = normalize_topic(clean_topic)
             md_path = os.path.join(base_dir, f"{key}.md")
 
             f.write(f'\n[topics."{key}"]\n')
-            f.write(f'title = "{topic}"\n')
+            f.write(f'title = "{clean_topic}"\n')
             f.write(f'path = "{md_path}"\n')
+            if link_url:
+                f.write(f'link = "{link_url}"\n')
+            if link_look and link_look != clean_topic:
+                f.write(f'link-look = "{link_look}"\n')
 
             if not os.path.exists(md_path):
                 Path(md_path).touch()
-            print(f"Saved: {topic}")
+            print(f"Saved: {clean_topic}")
     print(f"Total saved: {len(new_topics)}")
 
 
 # =======================
-# Add, Remove, and Rename
+# Add, Remove, Rename, and Linked
 # =======================
 
 def add_topics_to_input(topics_to_add: list[str], input_path: str):
@@ -561,14 +578,161 @@ def rename_topic(old_name: str, new_name: str, toml_path: str,
 def rename_list(old_name: str, new_name: str, list_paths: list[str]):
     old_header = f"## {old_name} list:"
     new_header = f"## {new_name} list:"
+
     for p in list_paths:
         lines = read_list_lines(p)
         if not any(line.strip() == old_header for line in lines):
             continue
-        new_lines = [new_header + "\n" if line.strip() == old_header else line for line in lines]
-        with open(p, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
-        print(f"Renamed list [{p}]: {old_name} -> {new_name}")
+
+        # check if new_name section already exists — need to merge
+        new_exists = any(line.strip() == new_header for line in lines)
+
+        if not new_exists:
+            # simple rename
+            new_lines = [new_header + "\n" if line.strip() == old_header else line for line in lines]
+            with open(p, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+            print(f"Renamed list [{p}]: {old_name} -> {new_name}")
+        else:
+            # collect topics from old section
+            old_topics = []
+            in_old = False
+            for line in lines:
+                if line.strip() == old_header:
+                    in_old = True
+                    continue
+                if in_old and parse_section_name(line) is not None:
+                    break
+                if in_old and line.strip():
+                    old_topics.append(line.strip())
+
+            # collect existing topics in new section to avoid dupes
+            new_topics_existing = []
+            in_new = False
+            for line in lines:
+                if line.strip() == new_header:
+                    in_new = True
+                    continue
+                if in_new and parse_section_name(line) is not None:
+                    break
+                if in_new and line.strip():
+                    new_topics_existing.append(line.strip())
+
+            to_add = [t for t in old_topics if t not in new_topics_existing]
+
+            # rebuild: remove old section, append to_add after new_header
+            new_lines = []
+            skip_old = False
+            for line in lines:
+                if line.strip() == old_header:
+                    skip_old = True
+                    continue
+                if skip_old and parse_section_name(line) is not None:
+                    skip_old = False
+                if skip_old:
+                    continue
+                new_lines.append(line)
+                if line.strip() == new_header:
+                    for t in to_add:
+                        new_lines.append(t + "\n")
+                        new_lines.append("\n")
+
+            with open(p, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+            print(f"Merged list [{p}]: {old_name} -> {new_name} ({len(to_add)} topics added)")
+
+def set_add_link(topic: str, list_paths: list[str], list_names: list[str] | None,
+                   link: str, link_look: str | None = None):
+    display = link_look if link_look else topic
+    md_link = f"{topic} [{display}]({link})"
+
+    for p in list_paths:
+        lines = read_list_lines(p)
+        new_lines = []
+        changed = False
+        sec = None
+        in_target = list_names is None
+
+        for line in lines:
+            stripped = line.strip()
+            sn = parse_section_name(line)
+            if sn is not None:
+                sec = sn
+                in_target = list_names is None or sec in list_names
+                new_lines.append(line)
+                continue
+            if in_target and (stripped == topic or stripped.startswith(f"{topic} [")):
+                new_lines.append(md_link + "\n")
+                print(f"Set link in [{p}] section [{sec}]: {md_link}")
+                changed = True
+            else:
+                new_lines.append(line)
+
+        if changed:
+            with open(p, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+
+    # проверить что указанные листы существуют
+        if list_names:
+            all_headers = [h for p in list_paths for h in read_list_headers(p)]
+            for name in list_names:
+                if name not in all_headers:
+                    print(f"List not found: {name}")
+
+        # проверить что тема найдена хотя бы в одном из целевых листов
+        found_in_any = False
+        for p in list_paths:
+            lines = read_list_lines(p)
+            sec = None
+            for line in lines:
+                sn = parse_section_name(line)
+                if sn is not None:
+                    sec = sn
+                    continue
+                stripped = line.strip()
+                in_target = list_names is None or sec in (list_names or [])
+                if in_target and (stripped == topic or stripped.startswith(f"{topic} [")):
+                    found_in_any = True
+                    break
+            if found_in_any:
+                break
+
+        if not found_in_any:
+            print(f"Topic not found: {topic}")
+
+def del_add_link(topic: str, list_paths: list[str], list_names: list[str] | None):
+    for p in list_paths:
+        lines = read_list_lines(p)
+        new_lines = []
+        changed = False
+        sec = None
+        in_target = list_names is None
+
+        for line in lines:
+            sn = parse_section_name(line)
+            if sn is not None:
+                sec = sn
+                in_target = list_names is None or sec in list_names
+                new_lines.append(line)
+                continue
+            stripped = line.strip()
+            if in_target and stripped.startswith(f"{topic} ["):
+                new_lines.append(topic + "\n")
+                print(f"Removed link in [{p}] section [{sec}]: {stripped} -> {topic}")
+                changed = True
+            else:
+                new_lines.append(line)
+
+        if changed:
+            with open(p, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+
+    # проверить что листы существуют
+    if list_names:
+        all_headers = [h for p in list_paths for h in read_list_headers(p)]
+        for name in list_names:
+            if name not in all_headers:
+                print(f"List not found: {name}")
 
 def search_topic(query: str, topics_i: list[str], list_path: str, solid: bool = False) -> None:
     query_lower = query.casefold()
@@ -631,6 +795,10 @@ def main():
     parser.add_argument("--search", help="Search topic across input and lists")
     parser.add_argument("--rename-topic", nargs=2, metavar=("OLD", "NEW"), help="Rename topic in input, list and TOML")
     parser.add_argument("--rename-list", nargs=2, metavar=("OLD", "NEW"), help="Rename list section in list files")
+    parser.add_argument("--add-link", help="Topic name to set a link for (requires --list-name, --link-look, --link)")
+    parser.add_argument("--del-link", help="Topic name to remove link from (requires --list-name)")
+    parser.add_argument("--link", help="URL for the topic link (used with --add-link)")
+    parser.add_argument("--link-look", help="Display text for the link (used with --add-link)")
     parser.add_argument("--save", action="store_true", help="Save topics to TOML and create .md files")
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete .md files)")
     parser.add_argument("--show-save", action="store_true", help="Show topics that would be saved on --save")
@@ -702,6 +870,28 @@ def main():
 
     if args.rename_list:
         rename_list(args.rename_list[0], args.rename_list[1], current_list_paths)
+
+    if args.add_link:
+        missing = []
+        if not args.list_name:
+            missing.append("--list-name")
+        if not args.link:
+            missing.append("--link-look")
+        if not args.link_look:
+            missing.append("--link")
+        if missing:
+            print(f"Error: --add-link requires: {', '.join(missing)}")
+        else:
+            set_add_link(args.add_link, current_list_paths,
+                           args.list_name, args.link, args.link_look)
+    if args.del_link:
+        missing = []
+        if not args.list_name:
+            missing.append("--list-name")
+        if missing:
+            print(f"Error: --del-link requires: {', '.join(missing)}")
+        else:
+            del_add_link(args.del_link, current_list_paths, args.list_name)
 
     if args.compare:
             all_files = (
@@ -871,6 +1061,8 @@ def main():
         args.ab,
         args.rename_topic,
         args.rename_list,
+        args.add_link,
+        args.del_link,
         args.compare,
         args.settings,
         args.search,

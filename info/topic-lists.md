@@ -1,67 +1,91 @@
 ## sysahelper list:
-ansible NextCloud
+alt samba ADMC [BIND9_DLZ samba && alt samba ADMC](https://sysahelper.ru/mod/page/view.php?id=735)
 
-ansible OTRS
+ansible NextCloud [ansible NextCloud](https://sysahelper.ru/mod/page/view.php?id=28)
 
-ansible OwnCloud
+ansible OTRS [ansible OTRS](https://sysahelper.ru/mod/page/view.php?id=25)
 
-BIND9_DLZ samba
+ansible OwnCloud [ansible OwnCloud](https://sysahelper.ru/mod/page/view.php?id=26)
 
-docker OTRS
+bind DNS [bind DNS](https://sysahelper.ru/mod/page/view.php?id=734)
 
-docker OwnCloud
+BIND9_DLZ samba [BIND9_DLZ samba && alt samba ADMC](https://sysahelper.ru/mod/page/view.php?id=735)
 
-docker phpMyAdmin
+DBeaver [SQL install PostgreSQL && DBeaver](https://sysahelper.ru/mod/page/view.php?id=772)
 
-docker Zabbix
+docker OTRS [docker OTRS](https://sysahelper.ru/mod/page/view.php?id=22)
 
-ecorouter DHCP-retranslation
+docker OwnCloud [docker OwnCloud](https://sysahelper.ru/mod/page/view.php?id=24)
 
-ecorouter port forwarding
+docker phpMyAdmin [docker phpMyAdmin](https://sysahelper.ru/mod/page/view.php?id=33)
 
-ecorouter ssh
+docker Zabbix [docker Zabbix](https://sysahelper.ru/mod/page/view.php?id=20)
 
-FreeIPA with DNS
+ecorouter bgp [ecorouter bgp](https://sysahelper.ru/mod/page/view.php?id=722)
 
-FreeIPA without DNS
+ecorouter DHCP-retranslation [ecorouter DHCP-retranslation](https://sysahelper.ru/mod/page/view.php?id=325)
 
-install PostgreSQL Zabbix
+ecorouter NAT [ecorouter NAT](https://sysahelper.ru/mod/page/view.php?id=725)
 
-install SSL certificate Debian-like
+ecorouter port forwarding [ecorouter port forwarding](https://sysahelper.ru/mod/page/view.php?id=327)
 
-IP-телефония SNG7
+ecorouter RADIUS [ecorouter RADIUS](https://sysahelper.ru/mod/page/view.php?id=732)
 
-isc-dhcp-server and dhcpd failover
+ecorouter ssh [ecorouter ssh](https://sysahelper.ru/mod/page/view.php?id=322)
 
-iscsi
+ecorouter vlan [ecorouter vlan](https://sysahelper.ru/mod/page/view.php?id=720)
 
-moodle
+FreeIPA with DNS [FreeIPA with DNS](https://sysahelper.ru/mod/page/view.php?id=139)
 
-NextCloud
+FreeIPA without DNS [FreeIPA without DNS](https://sysahelper.ru/mod/page/view.php?id=188)
 
-OTRS
+Ideco admin [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724)
 
-OwnCloud
+Ideco LAN interface [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724)
 
-phpMyAdmin
+Ideco license [Ideco license](https://sysahelper.ru/mod/page/view.php?id=728)
 
-SAMBA_INTERNAL samba
+install PostgreSQL Zabbix [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
 
-SQL install MariaDB
+install SSL certificate Debian-like [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134)
 
-SQL install MySQL
+IP-телефония SNG7 [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777)
+
+isc-dhcp-server and dhcpd failover [isc-dhcp-server and dhcpd failover](https://sysahelper.ru/mod/page/view.php?id=132)
+
+iscsi [iscsi](https://sysahelper.ru/mod/page/view.php?id=773)
+
+iscsi attach [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774)
+
+moodle [moodle](https://sysahelper.ru/mod/book/view.php?id=34)
+
+NextCloud [NextCloud](https://sysahelper.ru/mod/book/view.php?id=27)
+
+NFS [NFS](https://sysahelper.ru/mod/page/view.php?id=775)
+
+OTRS [OTRS](https://sysahelper.ru/mod/page/view.php?id=21)
+
+OwnCloud [OwnCloud](https://sysahelper.ru/mod/book/view.php?id=23)
+
+phpMyAdmin [phpMyAdmin](https://sysahelper.ru/mod/book/view.php?id=29)
+
+SAMBA_INTERNAL samba [SAMBA_INTERNAL samba](https://sysahelper.ru/mod/page/view.php?id=164)
+
+SQL install MariaDB [SQL install MariaDB](https://sysahelper.ru/mod/page/view.php?id=191)
+
+SQL install MySQL [SQL install MySQL](https://sysahelper.ru/mod/page/view.php?id=190)
 
 SQL install PostgreSQL
 
-SSL certificate center
+SSL certificate center [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134)
 
-wireguard
+wireguard [wireguard](https://sysahelper.ru/mod/page/view.php?id=128)
 
-wireguard OSPF
+wireguard OSPF [wireguard OSPF](https://sysahelper.ru/mod/page/view.php?id=127)
 
 Zabbix agent
 
-Zabbix web-interface
+Zabbix web-interface [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
 
 ## notesk list:
 ansible inventory
