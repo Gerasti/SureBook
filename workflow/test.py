@@ -213,13 +213,11 @@ def save_topics_to_toml(toml_path: str, topics: list[str], base_dir: str):
         with open(toml_path, encoding="utf-8") as f:
             lines = f.read().splitlines()
 
-    # дедуплицировать по clean key — предпочитать версию со ссылкой
     seen_keys: dict[str, str] = {}
     for t in topics:
         key = normalize_topic(strip_link(t))
         if key in existing:
             continue
-        # если уже есть версия этой темы — предпочесть ту, что содержит ссылку
         if key not in seen_keys or extract_link(t)[1] is not None:
             seen_keys[key] = t
 
@@ -527,21 +525,18 @@ def read_list_headers(path: str) -> list[str]:
 def rename_topic(old_name: str, new_name: str, toml_path: str,
                  input_paths: list[str], list_paths: list[str],
                  list_names: list[str] | None = None):
-    # input files — всегда все
     for p in input_paths:
         topics = read_non_empty(p)
         if old_name in topics:
             write_files(p, [new_name if t == old_name else t for t in topics])
             print(f"Renamed in input [{p}]: {old_name} -> {new_name}")
 
-    # list files — только указанные секции если есть --list-name, иначе все
     for p in list_paths:
             lines = read_list_lines(p)
             new_lines = []
             changed = False
             in_target_section = list_names is None
             current_section_topics = []
-            # сначала собрать темы каждой секции для проверки дублей
             section_topics: dict[str, list[str]] = {}
             sec = None
             for line in lines:
@@ -561,7 +556,6 @@ def rename_topic(old_name: str, new_name: str, toml_path: str,
                     new_lines.append(line)
                     continue
                 if in_target_section and stripped == old_name:
-                    # если новое имя уже есть в этой секции — просто удалить старое
                     if new_name in section_topics.get(sec, []):
                         if new_lines and new_lines[-1].strip() == "":
                             new_lines.pop()
@@ -577,7 +571,6 @@ def rename_topic(old_name: str, new_name: str, toml_path: str,
                 with open(p, "w", encoding="utf-8") as f:
                     f.writelines(new_lines)
 
-    # toml — всегда
     if not os.path.exists(toml_path):
         return
     old_key = normalize_topic(old_name)
@@ -603,17 +596,14 @@ def rename_list(old_name: str, new_name: str, list_paths: list[str]):
         if not any(line.strip() == old_header for line in lines):
             continue
 
-        # check if new_name section already exists — need to merge
         new_exists = any(line.strip() == new_header for line in lines)
 
         if not new_exists:
-            # simple rename
             new_lines = [new_header + "\n" if line.strip() == old_header else line for line in lines]
             with open(p, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
             print(f"Renamed list [{p}]: {old_name} -> {new_name}")
         else:
-            # collect topics from old section
             old_topics = []
             in_old = False
             for line in lines:
@@ -625,7 +615,6 @@ def rename_list(old_name: str, new_name: str, list_paths: list[str]):
                 if in_old and line.strip():
                     old_topics.append(line.strip())
 
-            # collect existing topics in new section to avoid dupes
             new_topics_existing = []
             in_new = False
             for line in lines:
@@ -639,7 +628,6 @@ def rename_list(old_name: str, new_name: str, list_paths: list[str]):
 
             to_add = [t for t in old_topics if t not in new_topics_existing]
 
-            # rebuild: remove old section, append to_add after new_header
             new_lines = []
             skip_old = False
             for line in lines:
@@ -691,14 +679,12 @@ def set_add_link(topic: str, list_paths: list[str], list_names: list[str] | None
             with open(p, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
 
-    # проверить что указанные листы существуют
         if list_names:
             all_headers = [h for p in list_paths for h in read_list_headers(p)]
             for name in list_names:
                 if name not in all_headers:
                     print(f"List not found: {name}")
 
-        # проверить что тема найдена хотя бы в одном из целевых листов
         found_in_any = False
         for p in list_paths:
             lines = read_list_lines(p)
@@ -746,7 +732,6 @@ def del_add_link(topic: str, list_paths: list[str], list_names: list[str] | None
             with open(p, "w", encoding="utf-8") as f:
                 f.writelines(new_lines)
 
-    # проверить что листы существуют
     if list_names:
         all_headers = [h for p in list_paths for h in read_list_headers(p)]
         for name in list_names:
@@ -1063,7 +1048,6 @@ def main():
             count_input_uniq = len(set(topics_i))
             count_list_uniq = len(set(strip_link(t) for t in topics_l))
 
-            # темы со ссылками в листах
             list_link_topics = set()
             for lp in current_list_paths:
                 for line in read_list_lines(lp):
@@ -1071,7 +1055,6 @@ def main():
                     if stripped and extract_link(stripped)[1] is not None:
                         list_link_topics.add(strip_link(stripped))
 
-            # уникальные темы с учётом дублей (тема и тема со ссылкой — одна)
             union_clean = set(strip_link(t) for t in topics)
 
             print(f"Union uniq topics: {len(union_clean)}")
@@ -1184,7 +1167,6 @@ def main():
                             if current_section not in topic_lists[plain]:
                                 topic_lists[plain].append(current_section)
 
-            # дедуплицировать по clean key, предпочитать версию со ссылкой
             seen_keys: dict[str, str] = {}
             for t in topics:
                 key = normalize_topic(strip_link(t))
@@ -1239,3 +1221,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#
