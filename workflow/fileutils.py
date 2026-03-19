@@ -127,8 +127,8 @@ def sort_list_file(path: Optional[str]) -> None:
         f.writelines(new_lines)
 
 
-def print_section(name: str, items: List[str], solid: bool = False) -> None:
-    if not solid:
+def print_section(name: str, items: List[str], pure: bool = False) -> None:
+    if not pure:
         print(f"\n[{name}] ({len(items)}):")
     for t in items:
-        print(f"  {t}" if not solid else t)
+        print(f"  {t}" if not pure else t)

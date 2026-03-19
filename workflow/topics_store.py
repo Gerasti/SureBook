@@ -61,27 +61,6 @@ def load_toml_topics(toml_path: str) -> List[Dict]:
         topics.append(current)
     return topics
 
-
-def load_list_topics_with_sections(list_paths: List[str]) -> Dict[str, List[str]]:
-    """Return dict: topic_title -> list of section names it appears in."""
-    topic_sections: Dict[str, List[str]] = {}
-    for p in list_paths:
-        lines = read_list_lines(p)
-        current_section = None
-        for line in lines:
-            sn = parse_section_name(line)
-            if sn is not None:
-                current_section = sn
-                continue
-            stripped = line.strip()
-            if stripped and current_section:
-                plain = strip_link(stripped)
-                topic_sections.setdefault(plain, [])
-                if current_section not in topic_sections[plain]:
-                    topic_sections[plain].append(current_section)
-    return topic_sections
-
-
 def load_list_links_by_section(list_paths: List[str]) -> Dict[Tuple[str, str], Tuple[Optional[str], Optional[str]]]:
     """Return dict: (topic_title, section) -> (link_look, url)."""
     result: Dict[Tuple[str, str], Tuple[Optional[str], Optional[str]]] = {}
@@ -185,38 +164,6 @@ def save_topics_to_toml(
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     update_toml_paths_key(toml_path, "last_saved", now_str)
     print(f"Total saved: {len(new_topics)}")
-
-
-def add_topics(topics_to_add: List[str], toml_path: str, base_dir: str) -> None:
-    if not topics_to_add:
-        return
-
-    existing = load_existing_topic_keys(toml_path)
-
-    lines = []
-    if os.path.exists(toml_path):
-        with open(toml_path, "r", encoding="utf-8") as f:
-            lines = f.read().splitlines()
-
-    os.makedirs(base_dir, exist_ok=True)
-
-    with open(toml_path, "a", encoding="utf-8") as f:
-        if "[topics]" not in "\n".join(lines):
-            f.write("\n[topics]\n")
-
-        for topic in topics_to_add:
-            topic = topic.strip('"')
-            key = normalize_topic(topic)
-            if key in existing:
-                print(f"Topic already exists, skipping: {topic}")
-                continue
-            md_path = os.path.join(base_dir, f"{key}.md")
-            f.write(f'\n[topics."{key}"]\n')
-            f.write(f'title = "{topic}"\n')
-            f.write(f'path = "{md_path}"\n')
-            Path(md_path).touch()
-            print(f"Added topic: {topic}")
-
 
 def del_topics(
     topics_to_del: List[str],
@@ -355,3 +302,22 @@ def del_topics(
             print(f"Deleted: {t}  [{fmt_sources(srcs)}]")
         else:
             print(f"Not found: {t}")
+
+def wipe_topics(toml_path: str) -> None:
+    if not os.path.exists(toml_path):
+        return
+    with open(toml_path, encoding="utf-8") as f:
+        lines = f.readlines()
+    new_lines = []
+    skip = False
+    for line in lines:
+        if line.strip() == "[topics]":
+            skip = True
+            continue
+        if skip and line.strip().startswith("[") and not line.strip().startswith('[topics."'):
+            skip = False
+        if not skip:
+            new_lines.append(line)
+    with open(toml_path, "w", encoding="utf-8") as f:
+        f.writelines(new_lines)
+    print(f"Wiped all topics from {toml_path}")

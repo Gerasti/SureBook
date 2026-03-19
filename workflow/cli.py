@@ -12,8 +12,7 @@ from fileutils import (
 )
 from topics_store import (
     load_existing_topic_keys, save_topics_to_toml,
-    add_topics, del_topics, load_toml_topics,
-    load_list_topics_with_sections,
+    del_topics, load_toml_topics, wipe_topics
 )
 from lists_store import (
     add_topics_to_input, add_topics_to_list, add_list, del_list,
@@ -21,7 +20,7 @@ from lists_store import (
 )
 from links import set_add_link, del_add_link
 from rename import rename_topic, rename_list
-from reports import build_topic_distribution, search_topic, generate_source_table
+from reports import build_topic_distribution, search_topic, generate_source_table, search_saved
 
 
 def main():
@@ -30,7 +29,7 @@ def main():
     parser.add_argument("-i", "--input", nargs="+", help="Topics files (overrides default)")
     parser.add_argument("-l", "--list", nargs="+", help="Topic-lists files (overrides default)")
     parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=-1,
-            help="Show all or first N topics from inputs, lists (may use with --list-name, --solid)")
+            help="Show all or first N topics from inputs, lists (may use with --list-name, --pure)")
     parser.add_argument("--count", action="store_true", help="Show count of topics")
     parser.add_argument("--ab", "--alphabetic", action="store_true",
             help="Sort topics alphabetically AND rewrite input/list files")
@@ -58,9 +57,10 @@ def main():
             help="Force operation without confirmation (use with --del-list")
     parser.add_argument("--show-lists", type=int, nargs='?', const=-1,
             help="Show all or first N using list section names")
-    parser.add_argument("--solid", action="store_true",
-            help="Disable section name headers in output (use with --show, --show-lists, --compare, --search")
+    parser.add_argument("--pure", action="store_true",
+            help="Disable section name headers in output (use with --show, --show-lists, --compare, --search, --show-saved")
     parser.add_argument("--search", help="Search topic across input and lists")
+    parser.add_argument("--search-saved", help="Search topics in TOML by title, list, or link")
     parser.add_argument("--rename-topic", nargs=2, metavar=("OLD", "NEW"),
             help="Rename topic in using input, list and TOML")
     parser.add_argument("--rename-list", nargs=2, metavar=("OLD", "NEW"),
@@ -71,9 +71,14 @@ def main():
             help="Topic name to remove link in lists from (requires --list-name)")
     parser.add_argument("--link", help="URL for the topic link (used with --add-link)")
     parser.add_argument("--link-look", help="Display text for the link (used with --add-link)")
-    parser.add_argument("--save", action="store_true", help="Save topics to TOML and create their files")
+    parser.add_argument("--save", nargs="*", metavar="TOPIC", help="Save topics to TOML (no args = all)")
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete their files)")
-    parser.add_argument("--show-save", action="store_true", help="Show topics that would be saved on --save")
+    parser.add_argument("--wipe-save", action="store_true",
+            help="Remove all topics from TOML (requires --force)")
+    parser.add_argument("--show-save", action="store_true",
+            help="Show topics that would be saved on --save")
+    parser.add_argument("--show-saved", type=int, nargs="?", const=-1,
+            help="Show saved topics from TOML (default: all)")
     parser.add_argument("--auto-ab", choices=["true", "false"],
             help="Enable/disable auto alphabetic sort on every run")
     parser.add_argument("--auto-save", choices=["true", "false"],
@@ -183,20 +188,20 @@ def main():
             for p2, t2_type, t2 in all_files[i + 1:]:
                 diff_1 = diff_lists(t1, t2)
                 diff_2 = diff_lists(t2, t1)
-                if not args.solid:
+                if not args.pure:
                     print(f"\n[{p1} ({t1_type})] vs [{p2} ({t2_type})]")
                 if diff_1:
-                    if not args.solid:
+                    if not args.pure:
                         print(f"  Only in {p1} ({len(diff_1)}):")
                     for t in diff_1:
-                        print(f"    {t}" if not args.solid else t)
+                        print(f"    {t}" if not args.pure else t)
                 if diff_2:
-                    if not args.solid:
+                    if not args.pure:
                         print(f"  Only in {p2} ({len(diff_2)}):")
                     for t in diff_2:
-                        print(f"    {t}" if not args.solid else t)
+                        print(f"    {t}" if not args.pure else t)
                 if not diff_1 and not diff_2:
-                    if not args.solid:
+                    if not args.pure:
                         print("  No differences found")
 
     topics = uniq_keep_order(topics_i + topics_l)
@@ -257,7 +262,7 @@ def main():
             seen.add(norm)
             data = dist.get(norm)
             title = strip_link(t) if not data else data["title"]
-            if args.solid:
+            if args.pure:
                 print(title)
             else:
                 if args.list_name:
@@ -274,9 +279,32 @@ def main():
                     src = "—"
                 print(f"{title}  [{src}]")
 
+    if args.show_saved is not None:
+        saved = load_toml_topics(TOPICS_TOML_PATH)
+        display = saved if args.show_saved == -1 else saved[:args.show_saved]
+        for t in display:
+            if args.pure:
+                print(t["title"])
+            else:
+                parts = []
+                for sl in t.get("lists", []):
+                    sec = sl["list"]
+                    url = sl.get("link")
+                    link_look = sl.get("link_look")
+                    if url:
+                        display_text = link_look if link_look else t["title"]
+                        parts.append(f"{sec} [{display_text}]({url})")
+                    else:
+                        parts.append(sec)
+                lists_str = ", ".join(parts) if parts else "—"
+                print(f"\n{t['title']} [path: {t['path']}] \n[lists: {lists_str}]")
+
     if args.search:
         for lp in current_list_paths:
-            search_topic(args.search, topics_i, lp, args.solid)
+            search_topic(args.search, topics_i, lp, args.pure)
+
+    if args.search_saved:
+        search_saved(args.search_saved, TOPICS_TOML_PATH, pure=args.pure)
 
     if args.add_topic:
         if args.list_name:
@@ -325,7 +353,7 @@ def main():
             print("No lists found")
         else:
             display = headers if args.show_lists == -1 else headers[:args.show_lists]
-            if args.solid:
+            if args.pure:
                 for h in display:
                     print(h)
             else:
@@ -335,10 +363,18 @@ def main():
 
     auto_save = defaults.get("auto_save", "false") == "true"
 
-    if args.save or auto_save:
+    if args.save is not None or auto_save:
         if current_topic_save_path:
+            if args.save:
+                topics_to_save = [
+                    t for t in topics
+                    if strip_link(t) in args.save
+                    or normalize_topic(strip_link(t)) in {normalize_topic(s) for s in args.save}
+                ]
+            else:
+                topics_to_save = topics
             save_topics_to_toml(
-                TOPICS_TOML_PATH, topics, current_topic_save_path,
+                TOPICS_TOML_PATH, topics_to_save, current_topic_save_path,
                 input_topics=topics_i, list_paths=current_list_paths,
             )
         else:
@@ -346,6 +382,12 @@ def main():
 
     if args.unsave:
         del_topics(args.unsave, TOPICS_TOML_PATH, input_path=None, list_path=None)
+
+    if args.wipe_save:
+        if not args.force:
+            print("Error: --wipe-save requires --force")
+        else:
+            wipe_topics(TOPICS_TOML_PATH)
 
     if args.show_save:
         existing = load_existing_topic_keys(TOPICS_TOML_PATH)
@@ -410,15 +452,18 @@ def main():
         args.compare,
         args.settings,
         args.search,
+        args.search_saved,
         args.add_topic,
         args.del_topic,
         args.show_input is not None,
         args.add_list,
         args.del_list,
         args.show_lists is not None,
-        args.save,
+        args.save is not None,
         args.unsave,
+        args.wipe_save,
         args.show_save,
+        args.show_saved is not None,
         args.source_table,
     ])
     if not any_action:

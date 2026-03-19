@@ -49,12 +49,12 @@ def search_topic(
     query: str,
     topics_i: List[str],
     list_path: str,
-    solid: bool = False,
+    pure: bool = False,
 ) -> None:
     query_lower = query.casefold()
     matches_input = [t for t in topics_i if query_lower in normalize_for_compare(t)]
     if matches_input:
-        print_section("input", matches_input, solid)
+        print_section("input", matches_input, pure)
 
     if not os.path.exists(list_path):
         return
@@ -72,11 +72,34 @@ def search_topic(
                 section_matches.setdefault(current_section, []).append(line.strip())
 
     for section, matches in section_matches.items():
-        print_section(section, matches, solid)
+        print_section(section, matches, pure)
 
     if not matches_input and not section_matches:
         print(f"Not found: {query}")
 
+def search_saved(query: str, toml_path: str, pure: bool = False) -> None:
+    query_lower = query.casefold()
+    topics = load_toml_topics(toml_path)
+    for t in topics:
+        title = t["title"]
+        lists = [sl["list"] for sl in t.get("lists", [])]
+        links = [sl.get("link", "") for sl in t.get("lists", [])]
+        searchable = " ".join([title] + lists + links).casefold()
+        if query_lower in searchable:
+            if pure:
+                print(title)
+            else:
+                parts = []
+                for sl in t.get("lists", []):
+                    sec = sl["list"]
+                    url = sl.get("link")
+                    link_look = sl.get("link_look")
+                    if url:
+                        parts.append(f"{sec} [{link_look or title}]({url})")
+                    else:
+                        parts.append(sec)
+                lists_str = ", ".join(parts) if parts else "—"
+                print(f"{title}  [{lists_str}]")
 
 def generate_source_table(toml_path: str, out_path: str) -> None:
     topics = load_toml_topics(toml_path)
