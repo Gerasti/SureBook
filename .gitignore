@@ -1,2 +1,3 @@
 .zed/
 *.txt
+workflow/__pycache__/

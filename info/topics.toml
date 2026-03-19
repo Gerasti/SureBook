@@ -4,589 +4,672 @@ list = "/home/stip/surebook/info/topic-lists.md"
 topic_save = "/home/stip/surebook/topics"
 auto_alphabetic_sort = "true"
 auto_save = "false"
+source_table_file = "/home/stip/surebook/info/source-table.md"
+last_saved = "2026-03-19 20:12:05"
 
 [topics]
-
-[topics."alt_fail2ban"]
-title = "alt fail2ban"
-path = "/home/stip/surebook/topics/alt_fail2ban.md"
 
 [topics."alt_samba_ADMC"]
 title = "alt samba ADMC"
 path = "/home/stip/surebook/topics/alt_samba_ADMC.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=735"
-link-look = "BIND9_DLZ samba && alt samba ADMC"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "сетевикон"}, {list = "yesterday-it-worked"}]
 
 [topics."ansible_inventory"]
 title = "ansible inventory"
 path = "/home/stip/surebook/topics/ansible_inventory.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."ansible_NextCloud"]
 title = "ansible NextCloud"
 path = "/home/stip/surebook/topics/ansible_NextCloud.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=28"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=28"}]
 
 [topics."ansible_OTRS"]
 title = "ansible OTRS"
 path = "/home/stip/surebook/topics/ansible_OTRS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=25"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=25"}]
 
 [topics."ansible_OwnCloud"]
 title = "ansible OwnCloud"
 path = "/home/stip/surebook/topics/ansible_OwnCloud.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=26"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=26"}]
 
 [topics."ansible_ping"]
 title = "ansible ping"
 path = "/home/stip/surebook/topics/ansible_ping.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}]
 
 [topics."apt"]
 title = "apt"
 path = "/home/stip/surebook/topics/apt.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "setting_screens"}]
 
 [topics."attach_samba_reserve_domain_controller"]
 title = "attach samba reserve domain controller"
 path = "/home/stip/surebook/topics/attach_samba_reserve_domain_controller.md"
+lists = [{list = "notesk"}, {list = "AltLabs"}]
 
 [topics."auto_mounting_devices"]
 title = "auto mounting devices"
 path = "/home/stip/surebook/topics/auto_mounting_devices.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}]
 
 [topics."base_samba-command"]
 title = "base samba-command"
 path = "/home/stip/surebook/topics/base_samba-command.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "yesterday-it-worked"}]
 
 [topics."bash_script_for_samba"]
 title = "bash script for samba"
 path = "/home/stip/surebook/topics/bash_script_for_samba.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "AltLabs"}]
 
 [topics."bind_DNS"]
 title = "bind DNS"
 path = "/home/stip/surebook/topics/bind_DNS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=734"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=734"}, {list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."bind_slave_DNS"]
 title = "bind slave DNS"
 path = "/home/stip/surebook/topics/bind_slave_DNS.md"
+lists = [{list = "notesk"}]
 
 [topics."BIND9_DLZ_samba"]
 title = "BIND9_DLZ samba"
 path = "/home/stip/surebook/topics/BIND9_DLZ_samba.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=735"
-link-look = "BIND9_DLZ samba && alt samba ADMC"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "yesterday-it-worked"}]
 
 [topics."chrony"]
 title = "chrony"
 path = "/home/stip/surebook/topics/chrony.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "yesterday-it-worked"}]
 
 [topics."console-debian_samba"]
 title = "console-debian samba"
 path = "/home/stip/surebook/topics/console-debian_samba.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."cups-pdf"]
 title = "cups-pdf"
 path = "/home/stip/surebook/topics/cups-pdf.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."DBeaver"]
 title = "DBeaver"
 path = "/home/stip/surebook/topics/DBeaver.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=772"
-link-look = "SQL install PostgreSQL && DBeaver"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=772", link_look = "SQL install PostgreSQL && DBeaver"}, {list = "yesterday-it-worked"}]
 
 [topics."debian_gre_tunnel"]
 title = "debian gre tunnel"
 path = "/home/stip/surebook/topics/debian_gre_tunnel.md"
+lists = [{list = "notesk"}]
 
 [topics."debian_ip"]
 title = "debian ip"
 path = "/home/stip/surebook/topics/debian_ip.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."debian_ip_forward"]
 title = "debian ip forward"
 path = "/home/stip/surebook/topics/debian_ip_forward.md"
+lists = [{list = "notesk"}]
 
 [topics."debian_vlan"]
 title = "debian vlan"
 path = "/home/stip/surebook/topics/debian_vlan.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}]
 
 [topics."dhcpd"]
 title = "dhcpd"
 path = "/home/stip/surebook/topics/dhcpd.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."dnsmasq_DHCP"]
 title = "dnsmasq DHCP"
 path = "/home/stip/surebook/topics/dnsmasq_DHCP.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
 
 [topics."dnsmasq_DNS"]
 title = "dnsmasq DNS"
 path = "/home/stip/surebook/topics/dnsmasq_DNS.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}]
 
 [topics."docker_`Hello-app`"]
 title = "docker `Hello-app`"
 path = "/home/stip/surebook/topics/docker_`Hello-app`.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_Elasticsearch_-_Logstash_-_Kibana_(ELK)"]
 title = "docker Elasticsearch - Logstash - Kibana (ELK)"
 path = "/home/stip/surebook/topics/docker_Elasticsearch_-_Logstash_-_Kibana_(ELK).md"
+lists = [{list = "notesk"}]
 
 [topics."docker_Grafana-Prometheus-NodeExporter"]
 title = "docker Grafana-Prometheus-NodeExporter"
 path = "/home/stip/surebook/topics/docker_Grafana-Prometheus-NodeExporter.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_install"]
 title = "docker install"
 path = "/home/stip/surebook/topics/docker_install.md"
+lists = [{list = "notesk"}, {list = "DemoScreens"}]
 
 [topics."docker_Local_Registry"]
 title = "docker Local Registry"
 path = "/home/stip/surebook/topics/docker_Local_Registry.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_MediaWiki"]
 title = "docker MediaWiki"
 path = "/home/stip/surebook/topics/docker_MediaWiki.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_OTRS"]
 title = "docker OTRS"
 path = "/home/stip/surebook/topics/docker_OTRS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=22"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=22"}]
 
 [topics."docker_OwnCloud"]
 title = "docker OwnCloud"
 path = "/home/stip/surebook/topics/docker_OwnCloud.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=24"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=24"}]
 
 [topics."docker_phpMyAdmin"]
 title = "docker phpMyAdmin"
 path = "/home/stip/surebook/topics/docker_phpMyAdmin.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=33"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=33"}]
 
 [topics."docker_single-mode_Open_WebUI"]
 title = "docker single-mode Open WebUI"
 path = "/home/stip/surebook/topics/docker_single-mode_Open_WebUI.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_WordPress"]
 title = "docker WordPress"
 path = "/home/stip/surebook/topics/docker_WordPress.md"
+lists = [{list = "notesk"}]
 
 [topics."docker_Zabbix"]
 title = "docker Zabbix"
 path = "/home/stip/surebook/topics/docker_Zabbix.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=20"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=20"}]
 
 [topics."ecorouter_bgp"]
 title = "ecorouter bgp"
 path = "/home/stip/surebook/topics/ecorouter_bgp.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=722"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=722"}, {list = "yesterday-it-worked"}]
 
 [topics."ecorouter_DHCP-retranslation"]
 title = "ecorouter DHCP-retranslation"
 path = "/home/stip/surebook/topics/ecorouter_DHCP-retranslation.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=325"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=325"}]
 
 [topics."ecorouter_DHCP-server"]
 title = "ecorouter DHCP-server"
 path = "/home/stip/surebook/topics/ecorouter_DHCP-server.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."ecorouter_gre_tunnel"]
 title = "ecorouter gre tunnel"
 path = "/home/stip/surebook/topics/ecorouter_gre_tunnel.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."ecorouter_ip"]
 title = "ecorouter ip"
 path = "/home/stip/surebook/topics/ecorouter_ip.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."ecorouter_NAT"]
 title = "ecorouter NAT"
 path = "/home/stip/surebook/topics/ecorouter_NAT.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=725"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=725"}, {list = "yesterday-it-worked"}]
 
 [topics."ecorouter_NTP"]
 title = "ecorouter NTP"
 path = "/home/stip/surebook/topics/ecorouter_NTP.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."ecorouter_OSPF"]
 title = "ecorouter OSPF"
 path = "/home/stip/surebook/topics/ecorouter_OSPF.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."ecorouter_port_forwarding"]
 title = "ecorouter port forwarding"
 path = "/home/stip/surebook/topics/ecorouter_port_forwarding.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=327"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=327"}]
 
 [topics."ecorouter_RADIUS"]
 title = "ecorouter RADIUS"
 path = "/home/stip/surebook/topics/ecorouter_RADIUS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=732"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=732"}, {list = "yesterday-it-worked"}]
 
 [topics."ecorouter_ssh"]
 title = "ecorouter ssh"
 path = "/home/stip/surebook/topics/ecorouter_ssh.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=322"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=322"}]
 
 [topics."ecorouter_vlan"]
 title = "ecorouter vlan"
 path = "/home/stip/surebook/topics/ecorouter_vlan.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=720"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=720"}, {list = "yesterday-it-worked"}]
 
 [topics."ecorouter_Zabbix"]
 title = "ecorouter Zabbix"
 path = "/home/stip/surebook/topics/ecorouter_Zabbix.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."encryption_devices"]
 title = "encryption devices"
 path = "/home/stip/surebook/topics/encryption_devices.md"
+lists = [{list = "notesk"}]
 
 [topics."etcnet_gre_tunnel"]
 title = "etcnet gre tunnel"
 path = "/home/stip/surebook/topics/etcnet_gre_tunnel.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."etcnet_ip"]
 title = "etcnet ip"
 path = "/home/stip/surebook/topics/etcnet_ip.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "setting_screens"}]
 
 [topics."etcnet_ip_forward"]
 title = "etcnet ip forward"
 path = "/home/stip/surebook/topics/etcnet_ip_forward.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}]
 
 [topics."etcnet_OVS_install"]
 title = "etcnet OVS install"
 path = "/home/stip/surebook/topics/etcnet_OVS_install.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."etcnet_OVS_mgmt-interface"]
 title = "etcnet OVS mgmt-interface"
 path = "/home/stip/surebook/topics/etcnet_OVS_mgmt-interface.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."etcnet_OVS_settings"]
 title = "etcnet OVS settings"
 path = "/home/stip/surebook/topics/etcnet_OVS_settings.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."etcnet_vlan"]
 title = "etcnet vlan"
 path = "/home/stip/surebook/topics/etcnet_vlan.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}]
 
 [topics."fail2ban"]
 title = "fail2ban"
 path = "/home/stip/surebook/topics/fail2ban.md"
+lists = [{list = "DemoScreens"}]
 
 [topics."FreeIPA_with_DNS"]
 title = "FreeIPA with DNS"
 path = "/home/stip/surebook/topics/FreeIPA_with_DNS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=139"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=139"}, {list = "notesk"}, {list = "SuroTools"}]
 
 [topics."FreeIPA_without_DNS"]
 title = "FreeIPA without DNS"
 path = "/home/stip/surebook/topics/FreeIPA_without_DNS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=188"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=188"}, {list = "notesk"}, {list = "SuroTools"}]
 
 [topics."frr_and_quagga_OSPF"]
 title = "frr and quagga OSPF"
 path = "/home/stip/surebook/topics/frr_and_quagga_OSPF.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."GOST_OpenSSL"]
 title = "GOST OpenSSL"
 path = "/home/stip/surebook/topics/GOST_OpenSSL.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."GRUB_password_recovery"]
 title = "GRUB password recovery"
 path = "/home/stip/surebook/topics/GRUB_password_recovery.md"
+lists = [{list = "notesk"}]
 
 [topics."HAProxy_balance_of_servers"]
 title = "HAProxy balance of servers"
 path = "/home/stip/surebook/topics/HAProxy_balance_of_servers.md"
+lists = [{list = "notesk"}]
 
 [topics."hostname"]
 title = "hostname"
 path = "/home/stip/surebook/topics/hostname.md"
+lists = [{list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}]
 
 [topics."Ideco_admin"]
 title = "Ideco admin"
 path = "/home/stip/surebook/topics/Ideco_admin.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=724"
-link-look = "Ideco admin && Ideco LAN interface"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=724", link_look = "Ideco admin && Ideco LAN interface"}]
 
 [topics."Ideco_gateway"]
 title = "Ideco gateway"
 path = "/home/stip/surebook/topics/Ideco_gateway.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."Ideco_LAN_interface"]
 title = "Ideco LAN interface"
 path = "/home/stip/surebook/topics/Ideco_LAN_interface.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=724"
-link-look = "Ideco admin && Ideco LAN interface"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=724", link_look = "Ideco admin && Ideco LAN interface"}, {list = "yesterday-it-worked"}]
 
 [topics."Ideco_license"]
 title = "Ideco license"
 path = "/home/stip/surebook/topics/Ideco_license.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=728"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=728"}]
 
 [topics."Ideco_Zabbix_agent"]
 title = "Ideco Zabbix agent"
 path = "/home/stip/surebook/topics/Ideco_Zabbix_agent.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."install_MariaDB_Zabbix"]
 title = "install MariaDB Zabbix"
 path = "/home/stip/surebook/topics/install_MariaDB_Zabbix.md"
+lists = [{list = "SuroTools"}]
 
 [topics."install_PostgreSQL_Zabbix"]
 title = "install PostgreSQL Zabbix"
 path = "/home/stip/surebook/topics/install_PostgreSQL_Zabbix.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=18"
-link-look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=18", link_look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"}, {list = "notesk"}, {list = "SuroTools"}]
 
 [topics."install_quagga"]
 title = "install quagga"
 path = "/home/stip/surebook/topics/install_quagga.md"
+lists = [{list = "notesk"}]
 
 [topics."install_SSL_certificate_Debian-like"]
 title = "install SSL certificate Debian-like"
 path = "/home/stip/surebook/topics/install_SSL_certificate_Debian-like.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=134"
-link-look = "SSL certificate center && install SSL certificate Debian-like"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=134", link_look = "SSL certificate center && install SSL certificate Debian-like"}, {list = "SuroTools"}]
 
 [topics."install_SSL_certificate_RedHat-like"]
 title = "install SSL certificate RedHat-like"
 path = "/home/stip/surebook/topics/install_SSL_certificate_RedHat-like.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
 
 [topics."IP-телефония_SNG7"]
 title = "IP-телефония SNG7"
 path = "/home/stip/surebook/topics/IP-телефония_SNG7.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=777"
-link-look = "Ip-телефония SNG7"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=777", link_look = "Ip-телефония SNG7"}]
 
 [topics."iptables_NAT"]
 title = "iptables NAT"
 path = "/home/stip/surebook/topics/iptables_NAT.md"
+lists = [{list = "SuroTools"}]
 
 [topics."iptables_port_forwarding"]
 title = "iptables port forwarding"
 path = "/home/stip/surebook/topics/iptables_port_forwarding.md"
+lists = [{list = "SuroTools"}]
 
 [topics."isc-dhcp-server"]
 title = "isc-dhcp-server"
 path = "/home/stip/surebook/topics/isc-dhcp-server.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}]
 
 [topics."isc-dhcp-server_and_dhcpd_failover"]
 title = "isc-dhcp-server and dhcpd failover"
 path = "/home/stip/surebook/topics/isc-dhcp-server_and_dhcpd_failover.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=132"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=132"}]
 
 [topics."iscsi"]
 title = "iscsi"
 path = "/home/stip/surebook/topics/iscsi.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=773"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=773"}]
 
 [topics."iscsi_attach"]
 title = "iscsi attach"
 path = "/home/stip/surebook/topics/iscsi_attach.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=774"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=774"}]
 
 [topics."logrotate"]
 title = "logrotate"
 path = "/home/stip/surebook/topics/logrotate.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}]
 
 [topics."mdadm_options"]
 title = "mdadm options"
 path = "/home/stip/surebook/topics/mdadm_options.md"
+lists = [{list = "SuroTools"}]
 
 [topics."moodle"]
 title = "moodle"
 path = "/home/stip/surebook/topics/moodle.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=34"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=34"}, {list = "сетевикон"}, {list = "SuroTools"}]
 
 [topics."mounting_devices"]
 title = "mounting devices"
 path = "/home/stip/surebook/topics/mounting_devices.md"
+lists = [{list = "notesk"}]
 
 [topics."network_mask_table"]
 title = "network mask table"
 path = "/home/stip/surebook/topics/network_mask_table.md"
+lists = [{list = "сетевикон"}, {list = "SuroTools"}]
 
 [topics."NextCloud"]
 title = "NextCloud"
 path = "/home/stip/surebook/topics/NextCloud.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=27"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=27"}]
 
 [topics."NFS"]
 title = "NFS"
 path = "/home/stip/surebook/topics/NFS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=775"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=775"}, {list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."nftables_firewall"]
 title = "nftables firewall"
 path = "/home/stip/surebook/topics/nftables_firewall.md"
+lists = [{list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."nftables_NAT"]
 title = "nftables NAT"
 path = "/home/stip/surebook/topics/nftables_NAT.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."nginx_reverse_proxy"]
 title = "nginx reverse proxy"
 path = "/home/stip/surebook/topics/nginx_reverse_proxy.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."nginx_server_balance"]
 title = "nginx server balance"
 path = "/home/stip/surebook/topics/nginx_server_balance.md"
+lists = [{list = "notesk"}]
 
 [topics."nginx_SSL_reverse_proxy"]
 title = "nginx SSL reverse proxy"
 path = "/home/stip/surebook/topics/nginx_SSL_reverse_proxy.md"
+lists = [{list = "notesk"}]
 
 [topics."nginx_Web-based_authentication"]
 title = "nginx Web-based authentication"
 path = "/home/stip/surebook/topics/nginx_Web-based_authentication.md"
+lists = [{list = "SuroTools"}]
 
 [topics."OTRS"]
 title = "OTRS"
 path = "/home/stip/surebook/topics/OTRS.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=21"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=21"}]
 
 [topics."OVS_bond"]
 title = "OVS bond"
 path = "/home/stip/surebook/topics/OVS_bond.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."OVS_STP"]
 title = "OVS STP"
 path = "/home/stip/surebook/topics/OVS_STP.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."OVS_vlan"]
 title = "OVS vlan"
 path = "/home/stip/surebook/topics/OVS_vlan.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."OwnCloud"]
 title = "OwnCloud"
 path = "/home/stip/surebook/topics/OwnCloud.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=23"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=23"}]
 
 [topics."partitions_of_devices"]
 title = "partitions of devices"
 path = "/home/stip/surebook/topics/partitions_of_devices.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
 
 [topics."phpMyAdmin"]
 title = "phpMyAdmin"
 path = "/home/stip/surebook/topics/phpMyAdmin.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=29"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=29"}]
 
 [topics."PostgreSQL_base-command"]
 title = "PostgreSQL base-command"
 path = "/home/stip/surebook/topics/PostgreSQL_base-command.md"
+lists = [{list = "notesk"}]
 
 [topics."RADIUS_client"]
 title = "RADIUS client"
 path = "/home/stip/surebook/topics/RADIUS_client.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."RADIUS_server"]
 title = "RADIUS server"
 path = "/home/stip/surebook/topics/RADIUS_server.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."RAID_0"]
 title = "RAID 0"
 path = "/home/stip/surebook/topics/RAID_0.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."RAID_1"]
 title = "RAID 1"
 path = "/home/stip/surebook/topics/RAID_1.md"
+lists = [{list = "notesk"}]
 
 [topics."replication_postgresql-server"]
 title = "replication postgresql-server"
 path = "/home/stip/surebook/topics/replication_postgresql-server.md"
+lists = [{list = "notesk"}]
 
 [topics."resolve_options"]
 title = "resolve options"
 path = "/home/stip/surebook/topics/resolve_options.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."rsyslog"]
 title = "rsyslog"
 path = "/home/stip/surebook/topics/rsyslog.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."samba_share_folder"]
 title = "samba share folder"
 path = "/home/stip/surebook/topics/samba_share_folder.md"
+lists = [{list = "notesk"}, {list = "AltLabs"}]
 
 [topics."SAMBA_INTERNAL_samba"]
 title = "SAMBA_INTERNAL samba"
 path = "/home/stip/surebook/topics/SAMBA_INTERNAL_samba.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=164"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=164"}, {list = "DemoScreens"}]
 
 [topics."SQL_install_MariaDB"]
 title = "SQL install MariaDB"
 path = "/home/stip/surebook/topics/SQL_install_MariaDB.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=191"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=191"}, {list = "SuroTools"}]
 
 [topics."SQL_install_MySQL"]
 title = "SQL install MySQL"
 path = "/home/stip/surebook/topics/SQL_install_MySQL.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=190"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=190"}, {list = "SuroTools"}]
 
 [topics."SQL_install_PostgreSQL"]
 title = "SQL install PostgreSQL"
 path = "/home/stip/surebook/topics/SQL_install_PostgreSQL.md"
+lists = [{list = "sysahelper"}, {list = "notesk"}, {list = "SuroTools"}, {list = "yesterday-it-worked"}]
 
 [topics."squid_base_options"]
 title = "squid base options"
 path = "/home/stip/surebook/topics/squid_base_options.md"
+lists = [{list = "notesk"}]
 
 [topics."ssh_key-connection"]
 title = "ssh key-connection"
 path = "/home/stip/surebook/topics/ssh_key-connection.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."ssh_options"]
 title = "ssh options"
 path = "/home/stip/surebook/topics/ssh_options.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
 
 [topics."ssh-connection_automate_to_servers"]
 title = "ssh-connection automate to servers"
 path = "/home/stip/surebook/topics/ssh-connection_automate_to_servers.md"
+lists = [{list = "notesk"}]
 
 [topics."SSL_certificate_center"]
 title = "SSL certificate center"
 path = "/home/stip/surebook/topics/SSL_certificate_center.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=134"
-link-look = "SSL certificate center && install SSL certificate Debian-like"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=134", link_look = "SSL certificate center && install SSL certificate Debian-like"}, {list = "SuroTools"}]
 
 [topics."strongswan_ipsec"]
 title = "strongswan ipsec"
 path = "/home/stip/surebook/topics/strongswan_ipsec.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."sudo_user"]
 title = "sudo user"
 path = "/home/stip/surebook/topics/sudo_user.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."systemd_backup"]
 title = "systemd backup"
 path = "/home/stip/surebook/topics/systemd_backup.md"
+lists = [{list = "notesk"}]
 
 [topics."systemd-timesyncd"]
 title = "systemd-timesyncd"
 path = "/home/stip/surebook/topics/systemd-timesyncd.md"
+lists = [{list = "сетевикон"}]
 
 [topics."timedatectl"]
 title = "timedatectl"
 path = "/home/stip/surebook/topics/timedatectl.md"
+lists = [{list = "yesterday-it-worked"}]
 
 [topics."vmware_open-vm-tools"]
 title = "vmware open-vm-tools"
 path = "/home/stip/surebook/topics/vmware_open-vm-tools.md"
+lists = [{list = "SuroTools"}]
 
 [topics."wireguard"]
 title = "wireguard"
 path = "/home/stip/surebook/topics/wireguard.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=128"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=128"}]
 
 [topics."wireguard_OSPF"]
 title = "wireguard OSPF"
 path = "/home/stip/surebook/topics/wireguard_OSPF.md"
-link = "https://sysahelper.ru/mod/page/view.php?id=127"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=127"}]
 
 [topics."Zabbix_agent"]
 title = "Zabbix agent"
 path = "/home/stip/surebook/topics/Zabbix_agent.md"
+lists = [{list = "sysahelper"}, {list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
 [topics."Zabbix_web-interface"]
 title = "Zabbix web-interface"
 path = "/home/stip/surebook/topics/Zabbix_web-interface.md"
-link = "https://sysahelper.ru/mod/book/view.php?id=18"
-link-look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=18", link_look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"}, {list = "notesk"}, {list = "SuroTools"}]
 
 [topics."Кибер_Бэкап"]
 title = "Кибер Бэкап"
 path = "/home/stip/surebook/topics/Кибер_Бэкап.md"
+lists = [{list = "notesk"}]
+
+[topics."alt_fail2ban"]
+title = "alt fail2ban"
+path = "/home/stip/surebook/topics/alt_fail2ban.md"
+lists = [{list = "SuroTools"}]
