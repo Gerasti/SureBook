@@ -58,7 +58,7 @@ def main():
     parser.add_argument("--show-lists", type=int, nargs='?', const=-1,
             help="Show all or first N using list section names")
     parser.add_argument("--pure", action="store_true",
-            help="Disable section name headers in output (use with --show, --show-lists, --compare, --search, --show-saved")
+    help="Disable section name headers in output (use with --show, --show-lists, --show-saved, --compare, --search, --search-saved")
     parser.add_argument("--search", help="Search topic across input and lists")
     parser.add_argument("--search-saved", help="Search topics in TOML by title, list, or link")
     parser.add_argument("--rename-topic", nargs=2, metavar=("OLD", "NEW"),
