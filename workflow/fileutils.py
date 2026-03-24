@@ -126,9 +126,16 @@ def sort_list_file(path: Optional[str]) -> None:
     with open(path, "w", encoding="utf-8") as f:
         f.writelines(new_lines)
 
-
 def print_section(name: str, items: List[str], pure: bool = False) -> None:
     if not pure:
         print(f"\n[{name}] ({len(items)}):")
     for t in items:
         print(f"  {t}" if not pure else t)
+
+def slice_with_negative(lst, n):
+    if n is None:
+        return lst
+    if n > 0:
+        return lst[:n]
+    if n < 0:
+        return list(reversed(lst[n:]))

@@ -101,7 +101,7 @@ def search_saved(query: str, toml_path: str, pure: bool = False) -> None:
                 lists_str = ", ".join(parts) if parts else "—"
                 print(f"{title}  [{lists_str}]")
 
-def generate_source_table(toml_path: str, out_path: str) -> None:
+def generate_source_table(toml_path: str, out_path: str, topic_save: str = "") -> None:
     topics = load_toml_topics(toml_path)
     defaults = load_defaults(toml_path)
     last_saved = defaults.get("last_saved", "")
@@ -109,8 +109,8 @@ def generate_source_table(toml_path: str, out_path: str) -> None:
     lines = []
     if last_saved:
         lines.append(f"> last saved: {last_saved}\n")
-    lines.append("| № | Topic | Sources (lists + links) |")
-    lines.append("|---|-------|-------------------------|")
+    lines.append("| № | Topic | Sources (lists + links) | Has file(s) |")
+    lines.append("|---|-------|-------------------------|-------------|")
 
     for i, t in enumerate(topics, 1):
         title = t["title"]
@@ -125,7 +125,20 @@ def generate_source_table(toml_path: str, out_path: str) -> None:
             else:
                 sources_parts.append(sec)
         sources = ", ".join(sources_parts) if sources_parts else ""
-        lines.append(f"| {i} | {title} | {sources} |")
+
+        topic_path = t.get("path", "")
+        exts = []
+        if topic_path and topic_save and os.path.isdir(topic_save):
+            stem = os.path.splitext(os.path.basename(topic_path))[0]
+            for fname in os.listdir(topic_save):
+                fpath = os.path.join(topic_save, fname)
+                if os.path.isfile(fpath) and os.path.splitext(fname)[0] == stem:
+                    ext = os.path.splitext(fname)[1].lstrip(".")
+                    if ext:
+                        exts.append(ext)
+        has_files = ", ".join(sorted(exts)) if exts else ""
+
+        lines.append(f"| {i} | {title} | {sources} | {has_files} |")
 
     action = "renewed" if os.path.exists(out_path) else "created"
     os.makedirs(os.path.dirname(out_path), exist_ok=True)

@@ -8,7 +8,7 @@ from fileutils import (
     read_non_empty, read_list_file, uniq_keep_order,
     diff_lists, normalize_for_compare, normalize_topic,
     strip_link, extract_link, sort_list_file, write_files,
-    paths_to_list, paths_to_str, read_list_lines, parse_section_name,
+    paths_to_list, paths_to_str, read_list_lines, parse_section_name,slice_with_negative
 )
 from topics_store import (
     load_existing_topic_keys, save_topics_to_toml,
@@ -28,9 +28,9 @@ def main():
 
     parser.add_argument("-i", "--input", nargs="+", help="Topics files (overrides default)")
     parser.add_argument("-l", "--list", nargs="+", help="Topic-lists files (overrides default)")
-    parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=-1,
+    parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=None,
             help="Show all or first N topics from inputs, lists (may use with --list-name, --pure)")
-    parser.add_argument("--count", action="store_true", help="Show count of topics")
+    parser.add_argument("--count", action="store_true", help="Show variety count of topics, lists")
     parser.add_argument("--ab", "--alphabetic", action="store_true",
             help="Sort topics alphabetically AND rewrite input/list files")
     parser.add_argument("--compare", action="store_true",
@@ -101,6 +101,8 @@ def main():
             help="Enable/disable auto save to TOML on every run")
     parser.add_argument("--source-table", "--src-table", dest="source_table", action="store_true",
             help="Generate markdown source table in default path (see --settings)")
+    parser.add_argument("--show-source-table", "--show-src-table", dest="show_source_table",
+            action="store_true", help="Open source table in md viewer")
     args = parser.parse_args()
 
     defaults = load_defaults(TOPICS_TOML_PATH)
@@ -260,12 +262,14 @@ def main():
         topics = sorted_topics
 
     if args.count:
-        count_input = len(topics_i)
+        all_input_topics = [t for p in current_input_paths for t in read_non_empty(p)]
+        count_input = len(all_input_topics)
         count_list = len(topics_l)
-        count_union_uniq = len(topics)
-        count_common = len(set(topics_i) & set(topics_l))
-        count_input_uniq = len(set(topics_i))
-        count_list_uniq = len(set(strip_link(t) for t in topics_l))
+        norm_i = {normalize_for_compare(t) for t in topics_i}
+        norm_l = {normalize_for_compare(t) for t in topics_l}
+        count_common = len(norm_i & norm_l)
+        count_input_uniq = len(norm_i)
+        count_list_uniq = len(norm_l)
 
         list_link_topics = set()
         for lp in current_list_paths:
@@ -295,8 +299,7 @@ def main():
             show_topics = uniq_keep_order(show_topics)
         else:
             show_topics = topics_i
-        if args.show != -1:
-            show_topics = show_topics[:args.show]
+        show_topics = slice_with_negative(show_topics, args.show)
         seen = set()
         for t in show_topics:
             norm = normalize_for_compare(t)
@@ -324,7 +327,7 @@ def main():
 
     if args.show_saved is not None:
         saved = load_toml_topics(TOPICS_TOML_PATH)
-        display = saved if args.show_saved == -1 else saved[:args.show_saved]
+        display = slice_with_negative(saved, args.show_saved)
         for t in display:
             if args.pure:
                 print(t["title"])
@@ -377,7 +380,7 @@ def main():
         if not topics_i:
             print("Input file is empty or missing")
         else:
-            display = topics_i if args.show_input == -1 else topics_i[:args.show_input]
+            display = slice_with_negative(topics_i, args.show_input)
             print(f"Input topics ({len(display)}/{len(topics_i)}):")
             for t in display:
                 print(f"  {t}")
@@ -395,7 +398,7 @@ def main():
         if not headers:
             print("No lists found")
         else:
-            display = headers if args.show_lists == -1 else headers[:args.show_lists]
+            display = slice_with_negative(headers, args.show_lists)
             if args.pure:
                 for h in display:
                     print(h)
@@ -482,7 +485,20 @@ def main():
         if not out_path:
             print("Error: source_table_file is not set. Use --edit --source-table-file <path>")
         else:
-            generate_source_table(TOPICS_TOML_PATH, out_path)
+            generate_source_table(TOPICS_TOML_PATH, out_path, topic_save=current_topic_save_path or "")
+
+    if args.show_source_table:
+            src_table_path = defaults.get("source_table_file")
+            viewer = defaults.get("viewer_md")
+            if not src_table_path:
+                print("Error: source_table_file is not set. Use --edit --source-table-file <path>")
+            elif not viewer:
+                print("Error: no viewer set for md. Use --edit --default-viewer <cmd> -f md")
+            elif not os.path.exists(src_table_path):
+                print(f"Error: source table file not found: {src_table_path}. Run --source-table first")
+            else:
+                import subprocess
+                subprocess.Popen([viewer, src_table_path])
 
     if args.write:
             import subprocess
@@ -624,6 +640,7 @@ def main():
         args.show_save,
         args.show_saved is not None,
         args.source_table,
+        args.show_source_table,
         args.editor,
         args.write,
         args.cast,

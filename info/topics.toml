@@ -680,7 +680,3 @@ lists = [{list = "notesk"}]
 
 
 
-[topics."test"]
-title = "test"
-path = "/home/stip/surebook/topics/test.md"
-lists = [{list = "test"}]
