@@ -38,6 +38,18 @@ def main():
     parser.add_argument("--settings", action="store_true",
             help="Show current default paths of inputs, lists, source table, topic save dir")
     parser.add_argument("--edit", action="store_true", help="Edit settings mode")
+    parser.add_argument("--default-editor", help="Set default editor command (used with --edit)")
+    parser.add_argument("--editor", help="Editor command to use (overrides default for this run)")
+    parser.add_argument("-w", "--write", metavar="TOPIC",
+            help="Open (or create) a .unikey file for TOPIC in topic_save dir")
+    parser.add_argument("-c", "--cast", metavar="TOPIC",
+            help="Convert TOPIC's .unikey file via unikey.py into the format given by --format")
+    parser.add_argument("-f", "--format", metavar="EXT",
+            help="Output format/extension for --cast (e.g. md)")
+    parser.add_argument("--auto-cast", choices=["true", "false"],
+            help="Enable/disable auto cast after --write if file was modified")
+    parser.add_argument("--auto-cast-format", metavar="EXT",
+            help="Default format for auto cast (used with --edit)")
     parser.add_argument("--default-input", nargs="+", help="Set default input paths (used with --edit)")
     parser.add_argument("--default-list", nargs="+", help="Set default list paths (used with --edit)")
     parser.add_argument("--default-topic-save", help="Set default directory for topic files")
@@ -107,6 +119,10 @@ def main():
             defaults["source_table_file"] = os.path.expanduser(args.source_table_file)
             print(f"Default source table file set to: {defaults['source_table_file']}")
             changed = True
+        if args.default_editor:
+            defaults["editor"] = args.default_editor
+            print(f"Default editor set to: {defaults['editor']}")
+            changed = True
         if args.auto_ab:
             defaults["auto_alphabetic_sort"] = args.auto_ab
             print(f"Auto alphabetic sort set to: {args.auto_ab}")
@@ -115,6 +131,14 @@ def main():
             defaults["auto_save"] = args.auto_save
             print(f"Auto save set to: {args.auto_save}")
             changed = True
+        if args.auto_cast:
+            defaults["auto_cast"] = args.auto_cast
+            print(f"Auto cast set to: {args.auto_cast}")
+            changed = True
+        if args.auto_cast_format:
+                    defaults["auto_cast_format"] = args.auto_cast_format
+                    print(f"Auto cast format set to: {defaults['auto_cast_format']}")
+                    changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
         else:
@@ -136,6 +160,9 @@ def main():
         print(f"Topic save dir:       {current_topic_save_path}")
         print(f"Auto alphabetic sort: {defaults.get('auto_alphabetic_sort')}")
         print(f"Auto save:            {defaults.get('auto_save', 'false')}")
+        print(f"Auto cast:            {defaults.get('auto_cast', 'false')}")
+        print(f"Auto cast format:     {defaults.get('auto_cast_format', '')}")
+        print(f"Editor:               {defaults.get('editor', '')}")
         print(f"Last saved:           {defaults.get('last_saved', "")}")
 
     topics_i = uniq_keep_order([t for p in current_input_paths for t in read_non_empty(p)])
@@ -441,6 +468,102 @@ def main():
         else:
             generate_source_table(TOPICS_TOML_PATH, out_path)
 
+    if args.write:
+            import subprocess
+            import sys
+            import threading
+            import time
+            topic_save = defaults.get("topic_save")
+            if not topic_save:
+                print("Error: topic_save path is not set. Use --edit --default-topic-save <path>")
+            else:
+                os.makedirs(topic_save, exist_ok=True)
+                key = normalize_topic(args.write)
+                unikey_path = os.path.join(topic_save, f"{key}.unikey")
+                if not os.path.exists(unikey_path):
+                    open(unikey_path, "w", encoding="utf-8").close()
+                    print(f"Created: {unikey_path}")
+                else:
+                    print(f"Opening: {unikey_path}")
+                editor = args.editor or defaults.get("editor") or os.environ.get("EDITOR") or os.environ.get("VISUAL")
+                if not editor:
+                    print(f"Error: no editor set. Use --editor <cmd> or --edit --default-editor <cmd>")
+                else:
+                    messages = []
+
+                    def do_cast():
+                        out_path = os.path.join(topic_save, f"{key}.{fmt}")
+                        unikey_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "unikey.py")
+                        with open(unikey_path, "r", encoding="utf-8") as fh:
+                            unikey_input = fh.read()
+                        result = subprocess.run(
+                            [sys.executable, unikey_script, "-f", fmt],
+                            input=unikey_input, capture_output=True, text=True,
+                        )
+                        if result.returncode != 0:
+                            messages.append(f"Error: unikey.py failed:\n{result.stderr.strip()}")
+                        else:
+                            action = "Updated" if os.path.exists(out_path) else "Created"
+                            with open(out_path, "w", encoding="utf-8") as fh:
+                                fh.write(result.stdout)
+                            messages.append(f"{action}: {out_path}")
+
+                    fmt = args.format or defaults.get("auto_cast_format")
+                    auto_cast = defaults.get("auto_cast") == "true" and fmt
+                    stop_event = threading.Event()
+
+                    def watch():
+                        last = os.path.getmtime(unikey_path) if os.path.exists(unikey_path) else 0
+                        while not stop_event.is_set():
+                            time.sleep(1)
+                            cur = os.path.getmtime(unikey_path) if os.path.exists(unikey_path) else 0
+                            if cur != last:
+                                last = cur
+                                do_cast()
+
+                    if auto_cast:
+                        t = threading.Thread(target=watch, daemon=True)
+                        t.start()
+
+                    subprocess.call([editor, unikey_path])
+
+                    if auto_cast:
+                        stop_event.set()
+                        for msg in messages:
+                            print(msg)
+
+    if args.cast:
+        import subprocess
+        import sys
+        topic_save = defaults.get("topic_save")
+        fmt = args.format or defaults.get("auto_cast_format")
+        if not fmt:
+            print("Error: --cast requires --format <ext> or --auto-cast-format to be set")
+
+        elif not topic_save:
+            print("Error: topic_save path is not set. Use --edit --default-topic-save <path>")
+        else:
+            key = normalize_topic(args.cast)
+            unikey_path = os.path.join(topic_save, f"{key}.unikey")
+            if not os.path.exists(unikey_path):
+                print(f"Error: file not found: {unikey_path}")
+            else:
+                out_path = os.path.join(topic_save, f"{key}.{fmt}")
+                unikey_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "unikey.py")
+                with open(unikey_path, "r", encoding="utf-8") as f:
+                    unikey_input = f.read()
+                result = subprocess.run(
+                    [sys.executable, unikey_script, "-f", fmt],
+                    input=unikey_input, capture_output=True, text=True,
+                )
+                if result.returncode != 0:
+                    print(f"Error: unikey.py failed:\n{result.stderr.strip()}")
+                else:
+                    action = "Updated" if os.path.exists(out_path) else "Created"
+                    with open(out_path, "w", encoding="utf-8") as f:
+                        f.write(result.stdout)
+                    print(f"{action}: {out_path}")
+
     any_action = any([
         args.show is not None,
         args.count,
@@ -465,6 +588,9 @@ def main():
         args.show_save,
         args.show_saved is not None,
         args.source_table,
+        args.editor,
+        args.write,
+        args.cast,
     ])
     if not any_action:
         parser.print_help()

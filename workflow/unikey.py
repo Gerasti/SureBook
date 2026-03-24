@@ -1,6 +1,6 @@
 import sys
 
-HELP = """unikey — markup preprocessor
+HELP = """unikey preprocessor
 
 KEYS:
   hd, /head       ### text <!-- HEAD -->
@@ -70,7 +70,7 @@ def clean_data(data):
 def join_data(data):
     return ' '.join(''.join(data).split())
 
-def format_output(key, data, ctx):
+def format_output(key, data, ctx, fmt):
     key = CANON.get(key, key)
     data = clean_data(data)
     ctx = ctx.copy()
@@ -84,26 +84,29 @@ def format_output(key, data, ctx):
 
     joined = join_data(data)
 
-    if ctx['MODE_LIST_lt']:
-        if key == '-':
-            return f"- {joined}", ctx
-        if key == '--':
-            return f"    - {joined}", ctx
-        return None, ctx
+    if fmt == 'md':
+        if ctx['MODE_LIST_lt']:
+            if key == '-':
+                return f"- {joined}", ctx
+            if key == '--':
+                return f"    - {joined}", ctx
+            return None, ctx
 
-    formats = {
-        'hd': f"\n### {joined} <!-- HEAD -->",
-        'ce': f"\n```CODE\n{''.join(data)}\n```",
-        'ne': f"\n#### {joined} <!-- NAME -->",
-        'ct': f"\n> {joined}",
-    }
-    if key == 'lt':
-        ctx['MODE_LIST_lt'] = True
-        return f"\n### {joined} <!-- LIST -->", ctx
+        formats = {
+            'hd': f"\n### {joined} <!-- HEAD -->",
+            'ce': f"\n```CODE\n{''.join(data)}\n```",
+            'ne': f"\n#### {joined} <!-- NAME -->",
+            'ct': f"\n> {joined}",
+        }
+        if key == 'lt':
+            ctx['MODE_LIST_lt'] = True
+            return f"\n### {joined} <!-- LIST -->", ctx
 
-    return formats.get(key), ctx
+        return formats.get(key), ctx
 
-def process_tokens(tokens):
+    return None, ctx
+
+def process_tokens(tokens, fmt):
     output, context = [], {'MODE_LIST_lt': False}
 
     key_positions = []
@@ -126,7 +129,7 @@ def process_tokens(tokens):
         if token in KEYS and CANON.get(token, token) != 'lt':
             context['MODE_LIST_lt'] = False
 
-        formatted, context = format_output(token, data, context)
+        formatted, context = format_output(token, data, context, fmt)
         if formatted:
             output.append(formatted)
 
@@ -139,4 +142,27 @@ if __name__ == "__main__":
     if '--help' in sys.argv or '-h' in sys.argv:
         print(HELP)
         sys.exit(0)
-    print("\n".join(process_tokens(tokenize_input(sys.stdin.read()))))
+
+    fmt = None
+    if '-f' in sys.argv or '--format' in sys.argv:
+        flag = '-f' if '-f' in sys.argv else '--format'
+        idx = sys.argv.index(flag)
+        if idx + 1 < len(sys.argv):
+            fmt = sys.argv[idx + 1]
+        else:
+            print(f"Error: {flag} requires a format argument", file=sys.stderr)
+            sys.exit(1)
+
+    FORMATS = {
+        'md': lambda tokens: "\n".join(process_tokens(tokens, 'md')),
+    }
+
+    if fmt is None:
+        print("Error: -f, --format is required", file=sys.stderr)
+        sys.exit(1)
+    if fmt not in FORMATS:
+        print(f"Error: unsupported format '{fmt}'. Supported: {', '.join(FORMATS)}", file=sys.stderr)
+        sys.exit(1)
+
+    tokens = tokenize_input(sys.stdin.read())
+    print(FORMATS[fmt](tokens))

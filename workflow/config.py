@@ -10,6 +10,9 @@ _DEFAULTS_TEMPLATE = {
     "source_table_file": os.path.expanduser("~/surebook/info/source-table.md"),
     "auto_alphabetic_sort": "false",
     "auto_save": "false",
+    "auto_cast": "false",
+    "auto_cast_format": "",
+    "editor": "",
 }
 
 

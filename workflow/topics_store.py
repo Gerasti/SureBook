@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 from fileutils import (
@@ -81,6 +80,27 @@ def load_list_links_by_section(list_paths: List[str]) -> Dict[Tuple[str, str], T
     return result
 
 
+def load_list_topics_with_sections(list_paths: List[str]) -> Dict[str, List[str]]:
+    """Return dict: topic_title -> [section, ...]  from all list files."""
+    result: Dict[str, List[str]] = {}
+    for p in list_paths:
+        lines = read_list_lines(p)
+        current_section = None
+        for line in lines:
+            sn = parse_section_name(line)
+            if sn is not None:
+                current_section = sn
+                continue
+            stripped = line.strip()
+            if stripped and current_section:
+                plain = strip_link(stripped)
+                if plain not in result:
+                    result[plain] = []
+                if current_section not in result[plain]:
+                    result[plain].append(current_section)
+    return result
+
+
 def save_topics_to_toml(
     toml_path: str,
     topics: List[str],
@@ -157,8 +177,6 @@ def save_topics_to_toml(
             else:
                 f.write('lists = []\n')
 
-            if not os.path.exists(md_path):
-                Path(md_path).touch()
             print(f"Saved: {clean_topic}")
 
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

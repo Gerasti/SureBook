@@ -5,8 +5,10 @@ topic_save = "/home/stip/surebook/topics"
 auto_alphabetic_sort = "true"
 auto_save = "false"
 source_table_file = "/home/stip/surebook/info/source-table.md"
-last_saved = "2026-03-20 00:11:08"
-
+last_saved = "2026-03-24 02:24:26"
+editor = "nvim"
+auto_cast = "true"
+auto_cast_format = "md"
 
 [topics]
 
@@ -674,3 +676,10 @@ lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?i
 title = "Кибер Бэкап"
 path = "/home/stip/surebook/topics/Кибер_Бэкап.md"
 lists = [{list = "notesk"}]
+
+
+
+[topics."test"]
+title = "test"
+path = "/home/stip/surebook/topics/test.md"
+lists = [{list = "test"}]
