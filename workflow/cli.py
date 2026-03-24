@@ -50,6 +50,10 @@ def main():
             help="Enable/disable auto cast after --write if file was modified")
     parser.add_argument("--auto-cast-format", metavar="EXT",
             help="Default format for auto cast (used with --edit)")
+    parser.add_argument("-v", "--view", metavar="TOPIC",
+            help="Open TOPIC's file in the viewer for the given format (requires -f)")
+    parser.add_argument("--default-viewer", metavar="CMD",
+            help="Set default viewer for a format (used with --edit and -f, --format)")
     parser.add_argument("--default-input", nargs="+", help="Set default input paths (used with --edit)")
     parser.add_argument("--default-list", nargs="+", help="Set default list paths (used with --edit)")
     parser.add_argument("--default-topic-save", help="Set default directory for topic files")
@@ -136,13 +140,21 @@ def main():
             print(f"Auto cast set to: {args.auto_cast}")
             changed = True
         if args.auto_cast_format:
-                    defaults["auto_cast_format"] = args.auto_cast_format
-                    print(f"Auto cast format set to: {defaults['auto_cast_format']}")
-                    changed = True
+            defaults["auto_cast_format"] = args.auto_cast_format
+            print(f"Auto cast format set to: {defaults['auto_cast_format']}")
+            changed = True
+        if args.default_viewer:
+            if not args.format:
+                print("Error: --default-viewer requires -f <format>")
+            else:
+                key = f"viewer_{args.format}"
+                defaults[key] = args.default_viewer
+                print(f"Default viewer for {args.format} set to: {args.default_viewer}")
+                changed = True
         if changed:
             save_defaults(TOPICS_TOML_PATH, defaults)
         else:
-            print("Nothing to edit. Use --default-input, --default-list or --default-topic-save")
+            print("Nothing to edit. Use --default-input, --default-list, --default-topic-save, --default-editor, --default-viewer")
         return
 
     default_inputs = paths_to_list(defaults.get("input", ""))
@@ -163,6 +175,10 @@ def main():
         print(f"Auto cast:            {defaults.get('auto_cast', 'false')}")
         print(f"Auto cast format:     {defaults.get('auto_cast_format', '')}")
         print(f"Editor:               {defaults.get('editor', '')}")
+        for k, v in defaults.items():
+                    if k.startswith("viewer_"):
+                        fmt = k[len("viewer_"):]
+                        print(f"Viewer ({fmt}):          {v}")
         print(f"Last saved:           {defaults.get('last_saved', "")}")
 
     topics_i = uniq_keep_order([t for p in current_input_paths for t in read_non_empty(p)])
@@ -564,6 +580,26 @@ def main():
                         f.write(result.stdout)
                     print(f"{action}: {out_path}")
 
+    if args.view:
+            import subprocess
+            topic_save = defaults.get("topic_save")
+            fmt = args.format or defaults.get("auto_cast_format")
+            if not fmt:
+                print("Error: --view requires -f <format> or --auto-cast-format to be set")
+            elif not topic_save:
+                print("Error: topic_save path is not set.")
+            else:
+                key = normalize_topic(args.view)
+                file_path = os.path.join(topic_save, f"{key}.{fmt}")
+                if not os.path.exists(file_path):
+                    print(f"Error: file not found: {file_path}")
+                else:
+                    viewer = defaults.get(f"viewer_{fmt}")
+                    if not viewer:
+                        print(f"Error: no viewer set for format '{fmt}'. Use --edit --default-viewer <cmd> -f {args.format}")
+                    else:
+                        subprocess.Popen([viewer, file_path])
+
     any_action = any([
         args.show is not None,
         args.count,
@@ -591,6 +627,7 @@ def main():
         args.editor,
         args.write,
         args.cast,
+        args.view,
     ])
     if not any_action:
         parser.print_help()
