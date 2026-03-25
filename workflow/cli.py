@@ -63,7 +63,7 @@ def main():
             help="Add topics to input file by default (or list with --list-name)")
     parser.add_argument("--list-name", nargs="+", help="Section names in using lists to add topics to")
     parser.add_argument("--del-topic", nargs="+", help="Delete topics from inputs, lists, toml save")
-    parser.add_argument("--show-input", type=int, nargs='?', const=-1,
+    parser.add_argument("--show-input", type=int, nargs='?', const=0,
             help="Show all or first N topics from inputs")
     parser.add_argument("--add-list", nargs="+",
             help="Add new sections to first using list (for other use -l)")
@@ -71,7 +71,7 @@ def main():
             help="Delete sections from first using list (for other use -l)")
     parser.add_argument("--force", action="store_true",
             help="Force operation without confirmation (use with --del-list")
-    parser.add_argument("--show-lists", type=int, nargs='?', const=-1,
+    parser.add_argument("--show-lists", type=int, nargs='?', const=0,
             help="Show all or first N using list section names")
     parser.add_argument("--pure", action="store_true",
     help="Disable section name headers in output (use with --show, --show-lists, --show-saved, --compare, --search, --search-saved")
@@ -91,9 +91,9 @@ def main():
     parser.add_argument("--unsave", nargs="+", help="Remove topics from TOML (and delete their files)")
     parser.add_argument("--wipe-save", action="store_true",
             help="Remove all topics from TOML (requires --force)")
-    parser.add_argument("--show-save", action="store_true",
-            help="Show topics that would be saved on --save")
-    parser.add_argument("--show-saved", type=int, nargs="?", const=-1,
+    parser.add_argument("--show-save", type=int, nargs="?", const=0,
+        help="Show topics that would be saved (default: all or first N)")
+    parser.add_argument("--show-saved", type=int, nargs="?", const=0,
             help="Show saved topics from TOML (default: all)")
     parser.add_argument("--auto-ab", choices=["true", "false"],
             help="Enable/disable auto alphabetic sort on every run")
@@ -328,7 +328,7 @@ def main():
 
     if args.show_saved is not None:
         saved = load_toml_topics(TOPICS_TOML_PATH)
-        display = slice_with_negative(saved, args.show_saved)
+        display = saved if args.show_saved == 0 else slice_with_negative(saved, args.show_saved)
         for t in display:
             if args.pure:
                 print(t["title"])
@@ -381,10 +381,14 @@ def main():
         if not topics_i:
             print("Input file is empty or missing")
         else:
-            display = slice_with_negative(topics_i, args.show_input)
-            print(f"Input topics ({len(display)}/{len(topics_i)}):")
-            for t in display:
-                print(f"  {t}")
+            display = topics_i if args.show_input == 0 else slice_with_negative(topics_i, args.show_input)
+            if args.pure:
+                for t in display:
+                    print(f"{t}")
+            else:
+                print(f"Input topics ({len(display)}/{len(topics_i)}):")
+                for t in display:
+                    print(f"  {t}")
 
     if args.add_list:
         for section in args.add_list:
@@ -399,10 +403,10 @@ def main():
         if not headers:
             print("No lists found")
         else:
-            display = slice_with_negative(headers, args.show_lists)
+            display = headers if args.show_lists == 0 else slice_with_negative(headers, args.show_lists)
             if args.pure:
                 for h in display:
-                    print(h)
+                    print(f"{h}")
             else:
                 print(f"Lists ({len(display)}/{len(headers)}):")
                 for h in display:
@@ -436,7 +440,7 @@ def main():
         else:
             wipe_topics(TOPICS_TOML_PATH)
 
-    if args.show_save:
+    if args.show_save is not None:
         existing = load_existing_topic_keys(TOPICS_TOML_PATH)
         input_set = set(topics_i)
 
@@ -470,16 +474,22 @@ def main():
         if not new_topics:
             print("Nothing to save — all topics already in TOML")
         else:
-            print(f"Would be saved ({len(new_topics)}):")
-            for t in new_topics:
-                clean = strip_link(t)
-                parts = []
-                if clean in input_set:
-                    parts.append("input")
-                if clean in topic_lists:
-                    parts.extend(topic_lists[clean])
-                src = ", ".join(parts) if parts else "unknown"
-                print(f"  {clean}  [{src}]")
+            display = new_topics if args.show_save == 0 else slice_with_negative(new_topics, args.show_save)
+            if args.pure:
+                for t in display:
+                    clean = strip_link(t)
+                    print(f"{clean}")
+            else:
+                print(f"Would be saved ({len(display)}/{len(new_topics)}):")
+                for t in display:
+                    clean = strip_link(t)
+                    parts = []
+                    if clean in input_set:
+                        parts.append("input")
+                    if clean in topic_lists:
+                        parts.extend(topic_lists[clean])
+                    src = ", ".join(parts) if parts else "unknown"
+                    print(f"  {clean}  [{src}]")
 
     if args.source_table:
         out_path = defaults.get("source_table_file")
@@ -558,7 +568,14 @@ def main():
                         t = threading.Thread(target=watch, daemon=True)
                         t.start()
 
-                    subprocess.call([editor, unikey_path])
+                    try:
+                        subprocess.call([editor, unikey_path])
+                    except FileNotFoundError:
+                        print(f"Error: editor not found: {editor}")
+                        return
+                    except Exception as e:
+                        print(f"Error: failed to launch editor '{editor}': {e}")
+                        return
 
                     if auto_cast:
                         stop_event.set()
@@ -638,7 +655,7 @@ def main():
         args.save is not None,
         args.unsave,
         args.wipe_save,
-        args.show_save,
+        args.show_save is not None,
         args.show_saved is not None,
         args.source_table,
         args.show_source_table,

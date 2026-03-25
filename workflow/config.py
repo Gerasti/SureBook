@@ -12,7 +12,7 @@ _DEFAULTS_TEMPLATE = {
     "auto_save": "false",
     "auto_cast": "false",
     "auto_cast_format": "",
-    "editor": "",
+    "editor": "nvim",
 }
 
 
@@ -69,10 +69,10 @@ def save_defaults(toml_path: str, defaults: Dict) -> None:
     with open(toml_path, "w", encoding="utf-8") as f:
         f.write("[settings]\n")
         for k, v in defaults.items():
+            home = os.path.expanduser("~")
+            if isinstance(v, str) and v.startswith(home):
+                v = "~" + v[len(home):]
             f.write(f'{k} = "{v}"\n')
-        if other_lines:
-            f.write("\n")
-            f.writelines(other_lines)
 
 
 def update_toml_paths_key(toml_path: str, key: str, value: str) -> None:
