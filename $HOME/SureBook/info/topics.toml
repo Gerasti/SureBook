@@ -1,0 +1,10 @@
+[settings]
+input = "~/SureBook/info/def_input.md"
+list = "~/SureBook/info/def_lists.md"
+topic_save = "~/SureBook/topics"
+source_table_file = "~/SureBook/info/src_table.md"
+auto_alphabetic_sort = "false"
+auto_save = "false"
+auto_cast = "false"
+auto_cast_format = ""
+editor = ""

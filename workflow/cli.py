@@ -28,7 +28,7 @@ def main():
 
     parser.add_argument("-i", "--input", nargs="+", help="Topics files (overrides default)")
     parser.add_argument("-l", "--list", nargs="+", help="Topic-lists files (overrides default)")
-    parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=None,
+    parser.add_argument("--sh", "--show", dest="show", type=int, nargs='?', const=0,
             help="Show all or first N topics from inputs, lists (may use with --list-name, --pure)")
     parser.add_argument("--count", action="store_true", help="Show variety count of topics, lists")
     parser.add_argument("--ab", "--alphabetic", action="store_true",
@@ -36,7 +36,7 @@ def main():
     parser.add_argument("--compare", action="store_true",
             help="Show differences between each input and list")
     parser.add_argument("--settings", action="store_true",
-            help="Show current default paths of inputs, lists, source table, topic save dir")
+            help="Show current default settings of inputs, lists, source table, topic save dir")
     parser.add_argument("--edit", action="store_true", help="Edit settings mode")
     parser.add_argument("--default-editor", help="Set default editor command (used with --edit)")
     parser.add_argument("--editor", help="Editor command to use (overrides default for this run)")
@@ -299,7 +299,8 @@ def main():
             show_topics = uniq_keep_order(show_topics)
         else:
             show_topics = topics_i
-        show_topics = slice_with_negative(show_topics, args.show)
+        if args.show !=0:
+            show_topics = slice_with_negative(show_topics, args.show)
         seen = set()
         for t in show_topics:
             norm = normalize_for_compare(t)

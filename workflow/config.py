@@ -1,13 +1,13 @@
 import os
 from typing import Dict
 
-TOPICS_TOML_PATH = os.path.expanduser("~/surebook/info/topics.toml")
+TOPICS_TOML_PATH = os.path.expanduser("~/SureBook/info/topics.toml")
 
 _DEFAULTS_TEMPLATE = {
-    "input": os.path.expanduser("~/surebook/info/topics.md"),
-    "list": os.path.expanduser("~/surebook/info/topic-lists.md"),
-    "topic_save": os.path.expanduser("~/surebook/topics"),
-    "source_table_file": os.path.expanduser("~/surebook/info/source-table.md"),
+    "input": os.path.expanduser("~/SureBook/info/def_input.md"),
+    "list": os.path.expanduser("~/SureBook/info/def_lists.md"),
+    "topic_save": os.path.expanduser("~/SureBook/topics"),
+    "source_table_file": os.path.expanduser("~/SureBook/info/src_table.md"),
     "auto_alphabetic_sort": "false",
     "auto_save": "false",
     "auto_cast": "false",
@@ -31,7 +31,7 @@ def load_defaults(toml_path: str) -> Dict:
                     if line.startswith("[") and line.endswith("]"):
                         section = line[1:-1].strip()
                         continue
-                    if "=" in line and section == "paths":
+                    if "=" in line and section == "settings":
                         key, val = line.split("=", 1)
                         defaults[key.strip()] = os.path.expanduser(val.strip().strip('"'))
         except Exception:
@@ -58,7 +58,7 @@ def save_defaults(toml_path: str, defaults: Dict) -> None:
             in_paths = False
             for line in f:
                 stripped = line.strip()
-                if stripped == "[paths]":
+                if stripped == "[settings]":
                     in_paths = True
                     continue
                 if in_paths and stripped.startswith("["):
@@ -67,7 +67,7 @@ def save_defaults(toml_path: str, defaults: Dict) -> None:
                     other_lines.append(line)
 
     with open(toml_path, "w", encoding="utf-8") as f:
-        f.write("[paths]\n")
+        f.write("[settings]\n")
         for k, v in defaults.items():
             f.write(f'{k} = "{v}"\n')
         if other_lines:
@@ -76,7 +76,7 @@ def save_defaults(toml_path: str, defaults: Dict) -> None:
 
 
 def update_toml_paths_key(toml_path: str, key: str, value: str) -> None:
-    """Insert or update a key in the [paths] section of the TOML file."""
+    """Insert or update a key in the [settings] section of the TOML file."""
     if not os.path.exists(toml_path):
         return
     with open(toml_path, encoding="utf-8") as f:
@@ -88,11 +88,11 @@ def update_toml_paths_key(toml_path: str, key: str, value: str) -> None:
 
     for line in lines:
         stripped = line.strip()
-        if stripped == "[paths]":
+        if stripped == "[settings]":
             in_paths = True
             new_lines.append(line)
             continue
-        if in_paths and stripped.startswith("[") and stripped != "[paths]":
+        if in_paths and stripped.startswith("[") and stripped != "[settings]":
             if not key_written:
                 new_lines.append(f'{key} = "{value}"\n')
                 key_written = True
