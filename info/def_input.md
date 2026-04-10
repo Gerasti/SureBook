@@ -125,6 +125,7 @@ sudo user
 systemd backup
 systemd-timesyncd
 timedatectl
+topic0
 vmware open-vm-tools
 wireguard
 wireguard OSPF
