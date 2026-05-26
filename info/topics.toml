@@ -9,6 +9,7 @@ auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
 last_saved = "1970-01-01 00:00:00"
+viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
 title = "alt fail2ban"
@@ -637,6 +638,8 @@ lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?i
 title = "Кибер Бэкап"
 path = "~/SureBook/info/src_table.md/Кибер_Бэкап.md"
 lists = [{list = "notesk"}]
+
+
 
 
 

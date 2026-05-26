@@ -71,6 +71,7 @@ class EditorCommand(Command):
 
         messages = []
         stop_event = threading.Event()
+        cast_done = {"flag": False}
 
         def do_cast():
             """Perform cast operation."""
@@ -90,12 +91,17 @@ class EditorCommand(Command):
             )
 
             if result.returncode != 0:
-                messages.append(f"Error: unikey.py failed:\n{result.stderr.strip()}")
+                msg = f"Error: unikey.py failed:\n{result.stderr.strip()}"
+                messages.append(msg)
             else:
                 action = "Updated" if FileManager.exists(out_path) else "Created"
                 with open(out_path, "w", encoding="utf-8") as fh:
                     fh.write(result.stdout)
-                messages.append(f"{action}: {out_path}")
+                msg = f"{action}: {out_path}"
+                # Store message but don't print yet (editor is still open)
+                if not cast_done["flag"]:
+                    messages.append(msg)
+                    cast_done["flag"] = True
 
         def watch():
             """Watch file for changes and auto-cast."""
@@ -120,6 +126,10 @@ class EditorCommand(Command):
 
         if auto_cast:
             stop_event.set()
+            # Perform final cast after editor closes
+            if FileManager.exists(unikey_path):
+                do_cast()
+            # Print messages after editor is closed
             for msg in messages:
                 print(msg)
 

@@ -32,7 +32,15 @@ class ConfigRepository:
             "auto_cast_format": "",
             "editor": "nvim",
         }
-        return self.toml_manager.load_settings(defaults)
+        settings = self.toml_manager.load_settings(defaults)
+
+        # Expand ~ in paths
+        settings.input = FileManager.expanduser(settings.input)
+        settings.list = FileManager.expanduser(settings.list)
+        settings.topic_save = FileManager.expanduser(settings.topic_save)
+        settings.source_table_file = FileManager.expanduser(settings.source_table_file)
+
+        return settings
 
     def save_settings(self, settings: Settings) -> None:
         """Save settings."""
