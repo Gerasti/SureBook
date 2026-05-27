@@ -13,6 +13,24 @@ class UnsaveCommand(Command):
     def __init__(self, topic_repo: TopicRepository):
         self.topic_repo = topic_repo
 
+    def help(self) -> str:
+        """Return help text for unsave command."""
+        return """Unsave command - remove topics from TOML
+
+Usage:
+  unsave <topics...>    Remove topics from TOML
+  unsave all force      Remove all topics (requires force)
+  unsave help           Show this help
+
+Flags:
+  force                 Required for 'unsave all'
+
+Examples:
+  unsave "Python Tutorial"           # Remove one topic
+  unsave "Python" "Django" "Flask"   # Remove multiple topics
+  unsave all force                   # Remove all topics
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute unsave command.
 
@@ -20,6 +38,10 @@ class UnsaveCommand(Command):
             unsave <topics...>  - Remove topics from TOML
             unsave all force    - Remove all topics (requires force)
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("unsave requires topic names or 'all force'")
 

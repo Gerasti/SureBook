@@ -12,6 +12,21 @@ class LinkCommand(Command):
     def __init__(self, list_repo: ListRepository):
         self.list_repo = list_repo
 
+    def help(self) -> str:
+        """Return help text for link command."""
+        return """Link command - manage topic links
+
+Usage:
+  link add <t> <s> <url> [display]  Add link to topic
+  link del <topic> <section>        Remove link
+  link help                         Show this help
+
+Examples:
+  link add "Python" backend https://python.org           # Add link
+  link add "Python" backend https://python.org "Docs"    # Add with display text
+  link del "Python" backend                              # Remove link
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute link command.
 
@@ -19,6 +34,10 @@ class LinkCommand(Command):
             link add <topic> <section> <url> [display]
             link del <topic> <section>
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("link requires subcommand: add, del")
 

@@ -37,7 +37,7 @@ Examples:
             search <query>        - Search in input/lists
             search saved <query>  - Search in TOML
         """
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 

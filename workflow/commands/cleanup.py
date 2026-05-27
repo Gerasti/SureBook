@@ -11,6 +11,18 @@ class CleanupCommand(Command):
     def __init__(self, toml_path: str):
         self.toml_path = toml_path
 
+    def help(self) -> str:
+        """Return help text for cleanup command."""
+        return """Cleanup command - remove duplicates from TOML
+
+Usage:
+  cleanup               Remove duplicate topics from TOML
+  cleanup help          Show this help
+
+Examples:
+  cleanup               # Remove all duplicate topics
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute cleanup command.
 
@@ -18,6 +30,10 @@ class CleanupCommand(Command):
             cleanup             - Remove duplicate topics from TOML
             cleanup duplicates  - Same as above
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not FileManager.exists(self.toml_path):
             return self.error(f"TOML file not found: {self.toml_path}")
 

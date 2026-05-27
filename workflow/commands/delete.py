@@ -42,7 +42,7 @@ Examples:
             del <topic> from <s>  - Delete from section
             del list <name>       - Delete section (use 'force' flag)
         """
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 

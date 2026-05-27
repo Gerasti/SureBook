@@ -1,6 +1,7 @@
 """Settings command for simple CLI."""
 
 from typing import List, Dict, Any
+from datetime import datetime
 from .base import Command
 from repositories import ConfigRepository
 from file_manager import FileManager
@@ -20,6 +21,7 @@ Usage:
   config                    Show all settings
   config <key> <value>      Set a setting
   config viewer <fmt> <cmd> Set viewer for format
+  config time               Update last_saved to current time
   config default            Reset to default settings
   config help               Show this help
 
@@ -42,6 +44,7 @@ Examples:
   config sort yes           # Enable auto sort
   config ed nvim            # Set editor
   config viewer md glow     # Set markdown viewer
+  config time               # Update last_saved time
   config default            # Reset to defaults
 """
 
@@ -52,14 +55,18 @@ Examples:
             config                  - Show all settings
             config <key> <value>    - Set a setting
             config viewer <fmt> <cmd> - Set viewer for format
+            config time             - Update last_saved to current time
             config default          - Reset to default settings
         """
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 
         if args and args[0] == "default":
             return self._reset_defaults()
+
+        if args and args[0] == "time":
+            return self._update_time()
 
         if not args:
             return self._show()
@@ -226,4 +233,11 @@ Examples:
         print("Settings reset to defaults")
         print()
         self._show()
+        return 0
+
+    def _update_time(self) -> int:
+        """Update last_saved to current time."""
+        now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.config_repo.update_setting("last_saved", now_str)
+        print(f"Updated last_saved to: {now_str}")
         return 0

@@ -18,6 +18,25 @@ class EditorCommand(Command):
     def __init__(self, config_repo: ConfigRepository):
         self.config_repo = config_repo
 
+    def help(self) -> str:
+        """Return help text for editor command."""
+        return """Editor command - manage topic files
+
+Usage:
+  write <topic>         Open/create .unikey file
+  cast <topic>          Convert .unikey to format
+  view <topic>          View converted file
+  help                  Show this help
+
+Flags:
+  format <ext>          Specify format (for cast/view)
+
+Examples:
+  write "Python"                # Open .unikey file
+  cast "Python" format md       # Convert to markdown
+  view "Python" format md       # View markdown file
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute editor command.
 
@@ -26,6 +45,10 @@ class EditorCommand(Command):
             cast <topic>        - Convert .unikey to format
             view <topic>        - View converted file
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("editor requires subcommand: write, cast, view")
 
@@ -42,6 +65,10 @@ class EditorCommand(Command):
 
     def _write(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Open topic file in editor."""
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("write requires: <topic>")
 
@@ -137,6 +164,10 @@ class EditorCommand(Command):
 
     def _cast(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Convert .unikey file to format."""
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("cast requires: <topic>")
 
@@ -183,6 +214,10 @@ class EditorCommand(Command):
 
     def _view(self, args: List[str], flags: Dict[str, Any]) -> int:
         """View converted file."""
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self.error("view requires: <topic>")
 

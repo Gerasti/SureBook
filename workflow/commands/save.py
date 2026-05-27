@@ -48,7 +48,7 @@ Examples:
             save [topics...]      - Save to TOML (empty = all)
         """
         # Check for help
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 
@@ -57,6 +57,9 @@ Examples:
             print("Note: 'save show' is deprecated. Use 'show save' instead.")
             print("Example: show save [N]")
             return 1
+
+        # Check if this is auto save
+        is_auto_save = flags.get("auto", False)
 
         settings = self.config_repo.get_settings()
 
@@ -126,7 +129,10 @@ Examples:
             saved_count += 1
 
         if saved_count == 0:
-            print("Nothing to save — all topics already in TOML")
+            if is_auto_save:
+                print("Nothing to auto save")
+            else:
+                print("Nothing to save — all topics already in TOML")
         else:
             print(f"Total saved: {saved_count}")
             now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

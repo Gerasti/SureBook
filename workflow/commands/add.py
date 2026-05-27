@@ -36,7 +36,7 @@ Examples:
             add <topic> to <sec>  - Add topic to section
             add list <name>       - Create new section
         """
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 

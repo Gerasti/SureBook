@@ -15,6 +15,20 @@ class RenameCommand(Command):
         self.list_repo = list_repo
         self.topic_repo = topic_repo
 
+    def help(self) -> str:
+        """Return help text for rename command."""
+        return """Rename command - rename topics and lists
+
+Usage:
+  rename <old> <new>    Rename topic everywhere
+  rename list <o> <n>   Rename section
+  rename help           Show this help
+
+Examples:
+  rename "Python Tutorial" "Python Guide"    # Rename topic
+  rename list backend server                 # Rename section
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute rename command.
 
@@ -22,6 +36,10 @@ class RenameCommand(Command):
             rename <old> <new>    - Rename topic
             rename list <o> <n>   - Rename section
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if len(args) < 2:
             return self.error("rename requires old and new names")
 

@@ -56,7 +56,7 @@ Examples:
             show saved [N]        - Show saved topics
             show lists [N]        - Show list sections
         """
-        if args and args[0] == "help":
+        if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 

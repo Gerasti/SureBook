@@ -199,6 +199,18 @@ def main():
     # Handle input/list path overrides first
     if command == "input":
         # input <path> [command] - use alternative input file
+        if args == ["help"] and not flags.get('force'):
+            print("""Input command - use alternative input file
+
+Usage:
+  input <path>      Show topics from alternative input file
+  input help        Show this help
+
+Examples:
+  input ~/other_input.md        # Show topics from other file
+""")
+            return 0
+
         if not args:
             print("Error: input requires path")
             return 1
@@ -221,6 +233,18 @@ def main():
 
     if command == "list":
         # list <path> [command] - use alternative list file
+        if args == ["help"] and not flags.get('force'):
+            print("""List command - use alternative list file
+
+Usage:
+  list <path>       Show sections from alternative list file
+  list help         Show this help
+
+Examples:
+  list ~/other_lists.md         # Show sections from other file
+""")
+            return 0
+
         if not args:
             print("Error: list requires path")
             return 1
@@ -275,12 +299,40 @@ def main():
             return save_cmd.execute(args, flags)
 
         elif command == "sort":
+            if args == ["help"] and not flags.get('force'):
+                print("""Sort command - sort topics alphabetically
+
+Usage:
+  sort              Sort input and lists alphabetically
+  sort help         Show this help
+
+Examples:
+  sort              # Sort all topics
+""")
+                return 0
             input_repo.sort_alphabetically()
             list_repo.sort_alphabetically()
             print("Sorted alphabetically")
             return 0
 
         elif command == "count":
+            if args == ["help"] and not flags.get('force'):
+                print("""Count command - show statistics
+
+Usage:
+  count             Show topic statistics
+  count help        Show this help
+
+Output:
+  - Union uniq topics: Total unique topics across input and lists
+  - Common topics: Topics present in both input and lists
+  - Input statistics: Total and unique topics in input
+  - List statistics: Total, unique, and linked topics in lists
+
+Examples:
+  count             # Show all statistics
+""")
+                return 0
             topics_i = input_repo.get_all()
             topics_l = list_repo.get_all_topics()
             from fileutils import normalize_for_compare, uniq_keep_order, strip_link, extract_link
@@ -312,6 +364,23 @@ def main():
             return 0
 
         elif command == "compare":
+            if args == ["help"] and not flags.get('force'):
+                print("""Compare command - compare topics between sources
+
+Usage:
+  compare           Compare input vs all list sections
+  compare help      Show this help
+
+Output:
+  For each pair of sources (input and sections):
+  - Only in source1: Topics unique to first source
+  - Only in source2: Topics unique to second source
+  - Common: Topics present in both sources
+
+Examples:
+  compare           # Compare all sources
+""")
+                return 0
             from fileutils import normalize_for_compare
 
             topics_i = input_repo.get_all()
@@ -390,7 +459,7 @@ def main():
         # Exclude show and its subcommands (show, show save, show input, etc.)
         if settings.auto_save and command not in ["config", "show", "search", "count", "compare"]:
             try:
-                save_cmd.execute([], {})
+                save_cmd.execute([], {"auto": True})
             except Exception as e:
                 print(f"Auto-save failed: {e}")
 

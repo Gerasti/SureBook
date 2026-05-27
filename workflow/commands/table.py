@@ -15,6 +15,21 @@ class TableCommand(Command):
         self.topic_repo = topic_repo
         self.config_repo = config_repo
 
+    def help(self) -> str:
+        """Return help text for table command."""
+        return """Table command - manage source table
+
+Usage:
+  table [generate]      Generate source table
+  table show            View source table
+  table help            Show this help
+
+Examples:
+  table                 # Generate source table
+  table generate        # Same as above
+  table show            # View source table
+"""
+
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
         """Execute table command.
 
@@ -22,6 +37,10 @@ class TableCommand(Command):
             table generate      - Generate source table
             table show          - View source table
         """
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
         if not args:
             return self._generate([], flags)
 
