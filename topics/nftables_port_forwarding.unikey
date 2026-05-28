@@ -1,0 +1,15 @@
+hd Проброс портов в nftables                                                                
+  ne Перенаправление порта на внутренний сервер                                               
+  ce nft add rule ip nat PREROUTING iifname "ВНЕШНИЙ_ИНТЕРФЕЙС" tcp dport ПОРТ_ВНЕШНИЙ dnat to
+   IP_СЕРВЕРА:ПОРТ_ВНУТРЕННИЙ                                                                 
+  nft add rule ip filter FORWARD ip daddr IP_СЕРВЕРА tcp dport ПОРТ_ВНУТРЕННИЙ accept         
+  ct PREROUTING(обработка до маршрутизации); dnat to(изменение адреса назначения);            
+  iifname(входящий интерфейс); FORWARD(разрешение пересылки)                                  
+                                                                                              
+  ne Пример проброса SSH                                                                      
+  ce nft add rule ip nat PREROUTING iifname "ens33" tcp dport 2222 dnat to 192.168.1.10:22
+  nft add rule ip filter FORWARD ip daddr 192.168.1.10 tcp dport 22 accept                    
+                                                                                              
+  ne Пример проброса HTTP                                                                     
+  ce nft add rule ip nat PREROUTING iifname "ens33" tcp dport 80 dnat to 192.168.1.20:80      
+  nft add rule ip filter FORWARD ip daddr 192.168.1.20 tcp dport 80 accept 

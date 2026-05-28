@@ -21,6 +21,7 @@ debian ip
 debian ip forward
 debian vlan
 dhcpd
+dhcpd failover
 dnsmasq
 docker `Hello-app`
 docker Elasticsearch - Logstash - Kibana (ELK)
@@ -68,14 +69,11 @@ Ideco license
 Ideco Zabbix agent
 install MariaDB Zabbix
 install PostgreSQL Zabbix
-install quagga
 install SSL certificate Debian-like
 install SSL certificate RedHat-like
 IP-телефония SNG7
 iptables NAT
 iptables port forwarding
-isc-dhcp-server
-isc-dhcp-server and dhcpd failover
 iscsi
 iscsi attach
 logrotate
@@ -87,6 +85,7 @@ NextCloud
 NFS
 nftables firewall
 nftables NAT
+nftables port forwarding
 nginx reverse proxy
 nginx server balance
 nginx SSL reverse proxy

@@ -1,0 +1,17 @@
+hd Проброс портов (Port Forwarding)                                                         
+  ne Перенаправление порта на внутренний сервер                                               
+  ce iptables -t nat -A PREROUTING -p tcp -i ВНЕШНИЙ_ИНТЕРФЕЙС --dport ПОРТ_ВНЕШНИЙ -j DNAT   
+  --to-destination IP_СЕРВЕРА:ПОРТ_ВНУТРЕННИЙ
+  iptables -A FORWARD -p tcp -d IP_СЕРВЕРА --dport ПОРТ_ВНУТРЕННИЙ -j ACCEPT                  
+  ct PREROUTING(обработка до маршрутизации); DNAT(изменение адреса назначения);               
+  --dport(внешний порт); --to-destination(внутренний IP:порт); FORWARD(разрешение пересылки)  
+                                                                                              
+  ne Пример проброса SSH                                                                      
+  ce iptables -t nat -A PREROUTING -p tcp -i ens33 --dport 2222 -j DNAT --to-destination
+  192.168.1.10:22                                                                             
+  iptables -A FORWARD -p tcp -d 192.168.1.10 --dport 22 -j ACCEPT
+                                                                                              
+  ne Пример проброса HTTP                                                                     
+  ce iptables -t nat -A PREROUTING -p tcp -i ens33 --dport 80 -j DNAT --to-destination        
+  192.168.1.20:80                                                                             
+  iptables -A FORWARD -p tcp -d 192.168.1.20 --dport 80 -j ACCEPT

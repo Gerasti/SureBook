@@ -1,0 +1,72 @@
+hd Установка FRR
+  ne Установка пакета
+  ce apt-get install frr                                                                      
+   
+  ne Включение OSPF в /etc/frr/daemons                                                        
+  ce ospfd=yes    
+
+  ne Добавление в автозагрузку и запуск
+  ce systemctl enable --now frr
+  ct FRR (Free Range Routing) - пакет протоколов маршрутизации; необходимо включить только
+  нужные протоколы маршрутизации                                                              
+   
+  hd Установка Quagga (старая версия для ALT Linux)                                           
+  ne Установка пакета
+  ce apt-get install quagga                                                                   
+                                                                                              
+  ne Назначение прав                                                                          
+  ce chown -R quagga:quagga /etc/quagga                                                       
+                                                                                              
+  ne Включение и запуск служб                                                                 
+  ce systemctl enable zebra ospfd                                                             
+  systemctl start zebra ospfd                                                                 
+  ct Важно включать и запускать службы отдельно                                               
+                                                                                              
+  hd Настройка OSPF                                                                           
+  ct Перед настройкой OSPF маршрутизаторы должны иметь IP-связность через GRE-туннели, VLAN,  
+  выделенные каналы или VPN                                                                   
+                  
+  ne Полная конфигурация OSPF в vtysh                                                         
+  ce vtysh
+  conf t       
+  ip forwarding                                                                               
+  router ospf     
+      ospf router-id 1.1.1.1                                                                  
+      network 10.10.10.0/30 area 0                                                            
+      network 192.168.11.0/26 area 0                                                          
+      network 192.168.11.65/28 area 0                                                         
+      network 192.168.11.81/29 area 0                                                         
+      passive-interface default                                                               
+      area 0 authentication message-digest                                                    
+  int tun                                                                                     
+      no ip ospf passive                                                                      
+      ip ospf message-digest-key 1 md5 P@ssw0rd                                               
+      ip ospf network point-to-point                                                          
+  int ens35                                                                                   
+      no ip ospf passive                                                                      
+  do wr mem                                                                                   
+  ct router ospf(включение процесса OSPF); ospf router-id(уникальный идентификатор            
+  маршрутизатора); network(сети участвующие в OSPF); area 0(backbone area, центральная область
+   OSPF); passive-interface default(все интерфейсы пассивны по умолчанию); no ip ospf         
+  passive(отключить пассивный режим); area 0 authentication message-digest(MD5-аутентификация 
+  для area); ip ospf message-digest-key(номер ключа, тип хеширования, пароль); ip ospf
+  network(тип сети OSPF); do wr mem(сохранение конфигурации); пароли на обеих сторонах должны
+  совпадать
+
+  hd Типы сетей OSPF                                                                          
+  ct point-to-point(для 2 узлов, экономит трафик, multicast 224.0.0.5)
+  ct broadcast(для >2 узлов, поддерживает DR/BDR, multicast 224.0.0.5 и 224.0.0.6)            
+                                                                                              
+  hd Проверка OSPF                                                                            
+  ne Проверка соседей                                                                         
+  ce show ip ospf neighbor                                                                    
+  ct Показывает соседние маршрутизаторы, состояние соседства, Router ID                       
+  ne Проверка маршрутов                                                                       
+  ce ip route show                                                                            
+  ct Маршруты OSPF помечаются буквой O                                                        
+                                                                                              
+  ne Просмотр интерфейсов OSPF                                                                
+  ce show ip ospf interface                                                                   
+                                                                                              
+  ne Просмотр конфигурации                                                                    
+  ce show running-config

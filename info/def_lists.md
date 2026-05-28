@@ -47,8 +47,6 @@ install SSL certificate Debian-like [SSL certificate center && install SSL certi
 
 IP-телефония SNG7 [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777)
 
-isc-dhcp-server and dhcpd failover [isc-dhcp-server and dhcpd failover](https://sysahelper.ru/mod/page/view.php?id=132)
-
 iscsi [iscsi](https://sysahelper.ru/mod/page/view.php?id=773)
 
 iscsi attach [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774)
@@ -156,11 +154,7 @@ HAProxy balance of servers
 
 install PostgreSQL Zabbix
 
-install quagga
-
 install SSL certificate RedHat-like
-
-isc-dhcp-server
 
 mounting devices
 
@@ -375,8 +369,6 @@ etcnet vlan
 frr and quagga OSPF
 
 hostname
-
-isc-dhcp-server
 
 NFS
 

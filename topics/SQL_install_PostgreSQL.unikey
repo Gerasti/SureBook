@@ -1,0 +1,50 @@
+hd Установка
+  ne Установка пакета
+  ce apt-get install -y postgresql16-server                                                   
+   
+  ne Создание системных БД                                                                    
+  ce /etc/init.d/postgresql initdb
+
+  ne Включение и запуск службы
+  ce systemctl enable --now postgresql
+
+  ne Разрешение доступа из сети в /var/lib/pgsql/data/postgresql.conf
+  ce listen_addresses = '*'
+  ct Найти строку listen_addresses = 'localhost' и заменить на listen_addresses = '*'
+                                                                                              
+  ne Перезапуск службы                                                                        
+  ce systemctl restart postgresql                                                             
+                                                                                              
+  ne Установка пароля для пользователя postgres                                               
+  ce psql -U postgres
+  ALTER USER postgres WITH ENCRYPTED PASSWORD 'P@ssw0rd';                                     
+  \q                                                                                          
+                                                                                              
+  ne Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf                     
+  ce host    all    all    0.0.0.0/0    md5                                                   
+  ct Разрешает подключение с любого IP с парольной аутентификацией                            
+                                                                                              
+  ne Перезапуск службы                                                                        
+  ce systemctl restart postgresql                                                             
+                                                                                              
+  hd Создание БД и пользователей                                                              
+  ne Создание базы данных и пользователя                                                      
+  ce psql -U postgres                                                                         
+  CREATE DATABASE db01;
+  CREATE USER user01 WITH PASSWORD 'P@ssw0rd';                                                
+  GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
+  \q                                                                                          
+  ct db01 - имя создаваемой БД; user01 - имя пользователя                                     
+                                                                                              
+  hd Проверка                                                                                 
+  ne Проверка БД и пользователей на сервере                                                   
+  ce psql -U postgres                                                                         
+  SELECT datname FROM pg_database;                                                            
+  SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
+  \q                                                                                          
+                                                                                              
+  ne Локальное подключение на клиенте                                                         
+  ce psql -U user01 db01                                                                      
+                                                                                              
+  ne Удаленное подключение на клиенте                                                         
+  ce psql -U user01 -h IP_СЕРВЕРА -d db01

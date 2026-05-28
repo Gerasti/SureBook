@@ -8,7 +8,7 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-28 23:23:11"
+last_saved = "2026-05-29 01:20:03"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -313,11 +313,6 @@ lists = [{list = "SuroTools"}]
 title = "install PostgreSQL Zabbix"
 path = "~/SureBook/info/src_table.md/install_PostgreSQL_Zabbix.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=18", link_look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"}, {list = "notesk"}, {list = "SuroTools"}]
-[topics."install_quagga"]
-title = "install quagga"
-path = "~/SureBook/info/src_table.md/install_quagga.md"
-lists = [{list = "notesk"}]
-
 [topics."install_SSL_certificate_Debian-like"]
 title = "install SSL certificate Debian-like"
 path = "~/SureBook/info/src_table.md/install_SSL_certificate_Debian-like.md"
@@ -339,15 +334,6 @@ lists = [{list = "SuroTools"}, {list = "surowiki"}]
 title = "iptables port forwarding"
 path = "/home/stip/SureBook/topics/iptables_port_forwarding.md"
 lists = [{list = "SuroTools"}, {list = "surowiki"}]
-[topics."isc-dhcp-server"]
-title = "isc-dhcp-server"
-path = "~/SureBook/info/src_table.md/isc-dhcp-server.md"
-lists = [{list = "notesk"}, {list = "DEMO-208"}]
-
-[topics."isc-dhcp-server_and_dhcpd_failover"]
-title = "isc-dhcp-server and dhcpd failover"
-path = "~/SureBook/info/src_table.md/isc-dhcp-server_and_dhcpd_failover.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=132", link_look = "isc-dhcp-server and dhcpd failover"}]
 [topics."iscsi"]
 title = "iscsi"
 path = "~/SureBook/info/src_table.md/iscsi.md"
@@ -606,3 +592,14 @@ lists = [{list = "notesk"}]
 title = "ansible base"
 path = "~/SureBook/info/src_table.md/ansible_base.md"
 lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
+
+[topics."nftables_port_forwarding"]
+title = "nftables port forwarding"
+path = "/home/stip/SureBook/topics/nftables_port_forwarding.md"
+lists = []
+
+
+[topics."dhcpd_failover"]
+title = "dhcpd failover"
+path = "/home/stip/SureBook/topics/dhcpd_failover.md"
+lists = []

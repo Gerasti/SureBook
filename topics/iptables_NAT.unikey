@@ -1,0 +1,43 @@
+  hd Базовые команды                                                                          
+  ne Очистка старых правил
+  ce iptables -F                                                                              
+  iptables -t nat -F                                                                          
+  ct iptables -F(очистка таблицы filter); iptables -t nat -F(очистка таблицы nat)             
+                                                                                              
+  ne Сохранение правил                                                                        
+  ce iptables-save > /etc/sysconfig/iptables                                                  
+  systemctl enable iptables                                                                   
+  ct Без сохранения правила будут потеряны после перезагрузки                                 
+                                                                                              
+  hd Включение IP Forwarding                                                                  
+  ne Временное включение                                                                      
+  ce echo 1 > /proc/sys/net/ipv4/ip_forward                                                   
+                                                                                              
+  ne Постоянное включение в /etc/sysctl.conf                                                  
+  ce net.ipv4.ip_forward = 1                                                                  
+                                                                                              
+  ne Применение изменений                                                                     
+  ce sysctl -p                                                                                
+                                                                                              
+  hd Настройка NAT                                                                            
+  ne Базовая настройка маскарадинга                                                           
+  ce iptables -t nat -A POSTROUTING -o ИНТЕРФЕЙС_ИНТЕРНЕТ -j MASQUERADE                       
+  iptables -A FORWARD -i ИНТЕРФЕЙС_ИНТЕРНЕТ -o ИНТЕРФЕЙС_ЛОКАЛЬНЫЙ -j ACCEPT                  
+  iptables -A FORWARD -i ИНТЕРФЕЙС_ЛОКАЛЬНЫЙ -o ИНТЕРФЕЙС_ИНТЕРНЕТ -m state --state           
+  ESTABLISHED,RELATED -j ACCEPT                                                               
+  ct MASQUERADE(подменяет внутренние IP внешним IP маршрутизатора); FORWARD(разрешает         
+  пересылку трафика); state ESTABLISHED,RELATED(разрешает только ответы на установленные      
+  соединения)     
+                                                                                              
+  ne Безопасная настройка NAT с ограничением по сети                                          
+  ce iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o ens33 -j MASQUERADE
+  iptables -A FORWARD -i ens33 -o ens37 -s 192.168.1.0/24 -j ACCEPT                           
+  ct -s(ограничение по исходной сети); только указанная сеть получает доступ в интернет       
+                                                                                              
+  hd Проверка правил                                                                          
+  ne Просмотр текущих правил                                                                  
+  ce iptables -L -n -v                                                                        
+  ct -L(показать правила); -n(вывод IP без DNS); -v(подробный вывод)                          
+                                                                                              
+  ne Просмотр NAT-таблицы                                                                     
+  ce iptables -t nat -L -n -v 

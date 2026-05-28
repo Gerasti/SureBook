@@ -1,0 +1,49 @@
+hd Настройка hostname                                                                       
+  ne Просмотр текущего hostname
+  ce hostname                                                                                 
+  hostnamectl
+                                                                                              
+  ne Временное изменение hostname до перезагрузки
+  ce hostname new-hostname
+  ct Изменения не сохраняются после перезагрузки
+
+  ne Постоянное изменение hostname
+  ce hostnamectl set-hostname new-hostname
+  ct Изменения сохраняются после перезагрузки
+
+  ne Изменение hostname с обновлением текущей сессии                                          
+  ce hostnamectl set-hostname new-hostname; exec bash
+  ct exec bash перезапускает оболочку без login shell                                         
+                                                                                              
+  ne Изменение hostname с обновлением login shell                                             
+  ce hostnamectl set-hostname new-hostname; exec bash -l                                      
+  ct exec bash -l перезапускает оболочку как login shell, загружает профили пользователя      
+                                                                                              
+  ne Изменение hostname в /etc/hostname                                                       
+  ce echo "new-hostname" > /etc/hostname                                                      
+  ct Альтернативный способ, требует перезагрузки или применения изменений                     
+                                                                                              
+  ne Изменение hostname в /etc/hosts                                                          
+  ce nano /etc/hosts                                                                          
+  ct Добавить или изменить строку                                                             
+  ce 127.0.0.1   localhost                                                                    
+  127.0.1.1   new-hostname                                                                    
+  192.168.1.10   new-hostname.some.domain new-hostname                                        
+  ct Рекомендуется синхронизировать с /etc/hostname для корректной работы DNS                 
+                                                                                              
+  ne Применение изменений без перезагрузки                                                    
+  ce systemctl restart systemd-hostnamed                                                      
+                                                                                              
+  hd Проверка hostname                                                                        
+  ne Проверка полного имени хоста                                                             
+  ce hostname -f                                                                              
+  ct Показывает FQDN (Fully Qualified Domain Name)                                            
+                                                                                              
+  ne Проверка короткого имени                                                                 
+  ce hostname -s                                                                              
+  ct Показывает короткое имя без домена                                                       
+                                                                                              
+  ne Проверка всех параметров                                                                 
+  ce hostnamectl status                                                                       
+  ct Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System,   
+  Kernel, Architecture        

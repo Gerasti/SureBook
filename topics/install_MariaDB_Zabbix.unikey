@@ -1,0 +1,71 @@
+hd Установка     
+  ne Установка пакетов
+  ce apt-get install mariadb-server zabbix-server-mysql fping                                 
+   
+  ne Включение и запуск службы                                                                
+  ce systemctl enable --now mysqld
+
+  hd Настройка БД
+  ne Создание базы данных и пользователя
+  ce mysql -uroot -p
+  CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin;
+  GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'P@ssw0rd';              
+  QUIT;                                                                                       
+  ct Пароль можно пропустить при первом входе                                                 
+                                                                                              
+  ne Импорт данных в БД                                                                       
+  ce mysql -uzabbix -pP@ssw0rd zabbix <                                                       
+  /usr/share/doc/zabbix-common-database-mysql-*/schema.sql                                    
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/images.sql
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/data.sql   
+  ct Важно соблюдать порядок ввода команд                                                     
+                                                                                              
+  hd Установка веб-сервера                                                                    
+  ne Установка Apache и PHP                                                                   
+  ce apt-get install apache2 apache2-mod_php8.2                                               
+  systemctl enable --now httpd2                                                               
+  apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
+  php8.2-mysqlnd-mysqli php8.2-ldap php8.2-openssl                                            
+                                                                                              
+  ne Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini                                     
+  ce memory_limit = 256M
+  post_max_size = 32M                                                                         
+  max_execution_time = 600                                                                    
+  max_input_time = 600                                                                        
+  date.timezone = Europe/Moscow                                                               
+  always_populate_raw_post_data = -1                                                          
+  ct date.timezone указать свой регион                                                        
+                                                                                              
+  ne Перезапуск веб-сервера                                                                   
+  ce systemctl restart httpd2                                                                 
+                                                                                              
+  hd Настройка сервера                                                                        
+  ne В /etc/zabbix/zabbix_server.conf                                                         
+  ce DBHost=localhost                                                                         
+  DBName=zabbix                                                                               
+  DBUser=zabbix                                                                               
+  DBPassword=P@ssw0rd                                                                         
+                                                                                              
+  ne Включение и запуск службы                                                                
+  ce systemctl enable --now zabbix_mysql                                                      
+                                                                                              
+  hd Установка веб-интерфейса                                                                 
+  ne Установка пакетов                                                                        
+  ce apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+                                                                                              
+  ne Создание символической ссылки                                                            
+  ce ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+                                                                                              
+  ne Перезапуск веб-сервера                                                                   
+  ce systemctl restart httpd2                                                                 
+                                                                                              
+  ne Назначение прав                                                                          
+  ce chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+                                                                                              
+  hd Доступ к веб-интерфейсу                                                                  
+  ne Открыть в браузере                                                                       
+  ce http://IP_СЕРВЕРА/zabbix                                                                 
+  ct Подключиться к БД, ввести пароль от БД                                                   
+                                                                                              
+  ne Вход по умолчанию                                                                        
+  ct Логин: Admin; Пароль: zabbix    

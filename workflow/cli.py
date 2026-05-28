@@ -328,6 +328,7 @@ Output:
   - Common topics: Topics present in both input and lists
   - Input statistics: Total and unique topics in input
   - List statistics: Total, unique, and linked topics in lists
+  - Topic files: Count of files by extension in topic_save directory
 
 Examples:
   count             # Show all statistics
@@ -361,6 +362,30 @@ Examples:
             print(f"All list topics:   {len(topics_l)}")
             print(f"List uniq topics:  {list_uniq}")
             print(f"List link topics:  {list_with_links}")
+
+            # Count topic files by extension
+            topic_save_dir = FileManager.expanduser(settings.topic_save)
+            if FileManager.exists(topic_save_dir):
+                from collections import defaultdict
+                ext_count = defaultdict(int)
+                total_files = 0
+
+                for filename in os.listdir(topic_save_dir):
+                    filepath = os.path.join(topic_save_dir, filename)
+                    if os.path.isfile(filepath):
+                        total_files += 1
+                        ext = os.path.splitext(filename)[1]
+                        if ext:
+                            ext_count[ext] += 1
+                        else:
+                            ext_count['(no ext)'] += 1
+
+                if total_files > 0:
+                    print()
+                    print(f"Topic files total: {total_files}")
+                    for ext in sorted(ext_count.keys()):
+                        print(f"  {ext:12} {ext_count[ext]}")
+
             return 0
 
         elif command == "compare":

@@ -1,4 +1,4 @@
-> last saved: 2026-05-28 23:23:11
+> last saved: 2026-05-29 01:20:03
 
 | № | Topic | Sources (lists + links) | Has file(s) |
 |---|-------|-------------------------|-------------|
@@ -57,77 +57,76 @@
 | 53 | etcnet OVS mgmt-interface | yesterday-it-worked | md |
 | 54 | etcnet OVS settings | yesterday-it-worked | md |
 | 55 | etcnet vlan | notesk, SuroTools, DEMO-208-2, DEMO-208, DemoScreens, surowiki | md, unikey |
-| 56 | frr and quagga OSPF | notesk, SuroTools, DEMO-208-2, DEMO-208, DemoScreens, setting_screens, surowiki | md |
-| 57 | GOST OpenSSL | notesk, DEMO-208-2, DemoScreens, surowiki | md |
+| 56 | frr and quagga OSPF | notesk, SuroTools, DEMO-208-2, DEMO-208, DemoScreens, setting_screens, surowiki | md, unikey |
+| 57 | GOST OpenSSL | notesk, DEMO-208-2, DemoScreens, surowiki | md, unikey |
 | 58 | GRUB password recovery | notesk | md |
-| 59 | HAProxy balance of servers | notesk | md |
-| 60 | hostname | DEMO-208-2, DEMO-208, DemoScreens | md |
+| 59 | HAProxy balance of servers | notesk | md, unikey |
+| 60 | hostname | DEMO-208-2, DEMO-208, DemoScreens | md, unikey |
 | 61 | Ideco admin | sysahelper [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724) | md |
 | 62 | Ideco gateway | yesterday-it-worked | md |
 | 63 | Ideco LAN interface | sysahelper [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724), yesterday-it-worked | md |
 | 64 | Ideco license | sysahelper [Ideco license](https://sysahelper.ru/mod/page/view.php?id=728) | md |
 | 65 | Ideco Zabbix agent | yesterday-it-worked | md |
-| 66 | install MariaDB Zabbix | SuroTools | md |
-| 67 | install PostgreSQL Zabbix | sysahelper [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18), notesk, SuroTools | md |
-| 68 | install quagga | notesk | md |
-| 69 | install SSL certificate Debian-like | sysahelper [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134), SuroTools | md |
-| 70 | install SSL certificate RedHat-like | notesk, SuroTools, DEMO-208-2 | md |
-| 71 | IP-телефония SNG7 | sysahelper [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777) | md |
-| 72 | iptables NAT | SuroTools, surowiki | md |
-| 73 | iptables port forwarding | SuroTools, surowiki | md |
-| 74 | isc-dhcp-server | notesk, DEMO-208 | md |
-| 75 | isc-dhcp-server and dhcpd failover | sysahelper [isc-dhcp-server and dhcpd failover](https://sysahelper.ru/mod/page/view.php?id=132) | md |
-| 76 | iscsi | sysahelper [iscsi](https://sysahelper.ru/mod/page/view.php?id=773) | md |
-| 77 | iscsi attach | sysahelper [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774) | md |
-| 78 | logrotate | SuroTools, DEMO-208-2 | md |
-| 79 | mdadm options | SuroTools, surowiki | md |
-| 80 | moodle | sysahelper [moodle](https://sysahelper.ru/mod/book/view.php?id=34), сетевикон, SuroTools | md |
-| 81 | mounting devices | notesk | md |
-| 82 | network mask table | сетевикон, SuroTools | md |
-| 83 | NextCloud | sysahelper [NextCloud](https://sysahelper.ru/mod/book/view.php?id=27) | md |
-| 84 | NFS | sysahelper [NFS](https://sysahelper.ru/mod/page/view.php?id=775), notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, DemoScreens, setting_screens, surowiki | md |
-| 85 | nftables firewall | DEMO-208-2, DemoScreens | md |
-| 86 | nftables NAT | notesk, DEMO-208-2, DEMO-208, DemoScreens, setting_screens | md |
-| 87 | nginx reverse proxy | notesk, сетевикон, SuroTools, DEMO-208-2, DemoScreens, surowiki | md |
-| 88 | nginx server balance | notesk | md |
-| 89 | nginx SSL reverse proxy | notesk | md |
-| 90 | nginx Web-based authentication | SuroTools | md |
-| 91 | OTRS | sysahelper [OTRS](https://sysahelper.ru/mod/page/view.php?id=21) | md |
-| 92 | OVS bond | yesterday-it-worked | md |
-| 93 | OVS STP | yesterday-it-worked | md |
-| 94 | OVS vlan | yesterday-it-worked | md |
-| 95 | OwnCloud | sysahelper [OwnCloud](https://sysahelper.ru/mod/book/view.php?id=23) | md |
-| 96 | partitions of devices | notesk, SuroTools, DEMO-208-2 | md |
-| 97 | phpMyAdmin | sysahelper [phpMyAdmin](https://sysahelper.ru/mod/book/view.php?id=29) | md |
-| 98 | PostgreSQL base-command | notesk | md |
-| 99 | RADIUS client | yesterday-it-worked | md |
-| 100 | RADIUS server | yesterday-it-worked | md |
-| 101 | RAID 0 | notesk, DEMO-208-2, DemoScreens | md |
-| 102 | RAID 1 | notesk | md |
-| 103 | replication postgresql-server | notesk | md |
-| 104 | resolve options | notesk, DEMO-208-2, DemoScreens, setting_screens | md |
-| 105 | rsyslog | SuroTools, DEMO-208-2, DemoScreens, surowiki | md |
-| 106 | samba share folder | notesk, AltLabs | md |
-| 107 | SAMBA_INTERNAL samba | sysahelper [SAMBA_INTERNAL samba](https://sysahelper.ru/mod/page/view.php?id=164), DemoScreens | md |
-| 108 | SQL install MariaDB | sysahelper [SQL install MariaDB](https://sysahelper.ru/mod/page/view.php?id=191), SuroTools | md |
-| 109 | SQL install MySQL | sysahelper [SQL install MySQL](https://sysahelper.ru/mod/page/view.php?id=190), SuroTools | md |
-| 110 | SQL install PostgreSQL | sysahelper, notesk, SuroTools, yesterday-it-worked | md |
-| 111 | squid base options | notesk | md |
-| 112 | ssh key-connection | SuroTools, DEMO-208, setting_screens | md |
-| 113 | ssh options | SuroTools, DEMO-208-2, DemoScreens, setting_screens, surowiki | md |
-| 114 | ssh-connection automate to servers | notesk | md |
-| 115 | SSL certificate center | sysahelper [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134), SuroTools | md |
-| 116 | strongswan ipsec | notesk, DEMO-208-2, DemoScreens | md |
-| 117 | sudo user | notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, setting_screens | md |
-| 118 | systemd backup | notesk | md |
-| 119 | systemd-timesyncd | сетевикон | md |
-| 120 | timedatectl | yesterday-it-worked, surowiki | md |
-| 121 | vmware open-vm-tools | SuroTools | md |
-| 122 | wireguard | sysahelper [wireguard](https://sysahelper.ru/mod/page/view.php?id=128) | md |
-| 123 | wireguard OSPF | sysahelper [wireguard OSPF](https://sysahelper.ru/mod/page/view.php?id=127) | md |
-| 124 | Zabbix agent | sysahelper, notesk, SuroTools, DEMO-208-2, DemoScreens | md |
-| 125 | Zabbix web-interface | sysahelper [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18), notesk, SuroTools | md |
-| 126 | Кибер Бэкап | notesk | md |
-| 127 | dnsmasq | notesk, surowiki | md, unikey |
-| 128 | FreeIPA | notesk | md, unikey |
-| 129 | ansible base | notesk, DEMO-208-2, DemoScreens | md, unikey |
+| 66 | install MariaDB Zabbix | SuroTools | md, unikey |
+| 67 | install PostgreSQL Zabbix | sysahelper [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18), notesk, SuroTools | md, unikey |
+| 68 | install SSL certificate Debian-like | sysahelper [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134), SuroTools | md |
+| 69 | install SSL certificate RedHat-like | notesk, SuroTools, DEMO-208-2 | md, unikey |
+| 70 | IP-телефония SNG7 | sysahelper [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777) | md |
+| 71 | iptables NAT | SuroTools, surowiki | md, unikey |
+| 72 | iptables port forwarding | SuroTools, surowiki | md, unikey |
+| 73 | iscsi | sysahelper [iscsi](https://sysahelper.ru/mod/page/view.php?id=773) | md |
+| 74 | iscsi attach | sysahelper [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774) | md |
+| 75 | logrotate | SuroTools, DEMO-208-2 | md |
+| 76 | mdadm options | SuroTools, surowiki | md |
+| 77 | moodle | sysahelper [moodle](https://sysahelper.ru/mod/book/view.php?id=34), сетевикон, SuroTools | md |
+| 78 | mounting devices | notesk | md |
+| 79 | network mask table | сетевикон, SuroTools | md |
+| 80 | NextCloud | sysahelper [NextCloud](https://sysahelper.ru/mod/book/view.php?id=27) | md |
+| 81 | NFS | sysahelper [NFS](https://sysahelper.ru/mod/page/view.php?id=775), notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, DemoScreens, setting_screens, surowiki | md |
+| 82 | nftables firewall | DEMO-208-2, DemoScreens | md |
+| 83 | nftables NAT | notesk, DEMO-208-2, DEMO-208, DemoScreens, setting_screens | md |
+| 84 | nginx reverse proxy | notesk, сетевикон, SuroTools, DEMO-208-2, DemoScreens, surowiki | md |
+| 85 | nginx server balance | notesk | md |
+| 86 | nginx SSL reverse proxy | notesk | md |
+| 87 | nginx Web-based authentication | SuroTools | md |
+| 88 | OTRS | sysahelper [OTRS](https://sysahelper.ru/mod/page/view.php?id=21) | md |
+| 89 | OVS bond | yesterday-it-worked | md |
+| 90 | OVS STP | yesterday-it-worked | md |
+| 91 | OVS vlan | yesterday-it-worked | md |
+| 92 | OwnCloud | sysahelper [OwnCloud](https://sysahelper.ru/mod/book/view.php?id=23) | md |
+| 93 | partitions of devices | notesk, SuroTools, DEMO-208-2 | md |
+| 94 | phpMyAdmin | sysahelper [phpMyAdmin](https://sysahelper.ru/mod/book/view.php?id=29) | md |
+| 95 | PostgreSQL base-command | notesk | md |
+| 96 | RADIUS client | yesterday-it-worked | md |
+| 97 | RADIUS server | yesterday-it-worked | md |
+| 98 | RAID 0 | notesk, DEMO-208-2, DemoScreens | md |
+| 99 | RAID 1 | notesk | md |
+| 100 | replication postgresql-server | notesk | md |
+| 101 | resolve options | notesk, DEMO-208-2, DemoScreens, setting_screens | md |
+| 102 | rsyslog | SuroTools, DEMO-208-2, DemoScreens, surowiki | md |
+| 103 | samba share folder | notesk, AltLabs | md |
+| 104 | SAMBA_INTERNAL samba | sysahelper [SAMBA_INTERNAL samba](https://sysahelper.ru/mod/page/view.php?id=164), DemoScreens | md |
+| 105 | SQL install MariaDB | sysahelper [SQL install MariaDB](https://sysahelper.ru/mod/page/view.php?id=191), SuroTools | md, unikey |
+| 106 | SQL install MySQL | sysahelper [SQL install MySQL](https://sysahelper.ru/mod/page/view.php?id=190), SuroTools | md, unikey |
+| 107 | SQL install PostgreSQL | sysahelper, notesk, SuroTools, yesterday-it-worked | md, unikey |
+| 108 | squid base options | notesk | md |
+| 109 | ssh key-connection | SuroTools, DEMO-208, setting_screens | md |
+| 110 | ssh options | SuroTools, DEMO-208-2, DemoScreens, setting_screens, surowiki | md |
+| 111 | ssh-connection automate to servers | notesk | md |
+| 112 | SSL certificate center | sysahelper [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134), SuroTools | md |
+| 113 | strongswan ipsec | notesk, DEMO-208-2, DemoScreens | md |
+| 114 | sudo user | notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, setting_screens | md |
+| 115 | systemd backup | notesk | md |
+| 116 | systemd-timesyncd | сетевикон | md |
+| 117 | timedatectl | yesterday-it-worked, surowiki | md |
+| 118 | vmware open-vm-tools | SuroTools | md |
+| 119 | wireguard | sysahelper [wireguard](https://sysahelper.ru/mod/page/view.php?id=128) | md |
+| 120 | wireguard OSPF | sysahelper [wireguard OSPF](https://sysahelper.ru/mod/page/view.php?id=127) | md |
+| 121 | Zabbix agent | sysahelper, notesk, SuroTools, DEMO-208-2, DemoScreens | md, unikey |
+| 122 | Zabbix web-interface | sysahelper [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18), notesk, SuroTools | md |
+| 123 | Кибер Бэкап | notesk | md |
+| 124 | dnsmasq | notesk, surowiki | md, unikey |
+| 125 | FreeIPA | notesk | md, unikey |
+| 126 | ansible base | notesk, DEMO-208-2, DemoScreens | md, unikey |
+| 127 | nftables port forwarding |  | md, unikey |
+| 128 | dhcpd failover |  |  |
