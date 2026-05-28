@@ -1,0 +1,86 @@
+hd Установка FreeIPA-сервера
+  ne Установка генератора энтропии
+  ce apt-get update && apt-get install -y haveged                                             
+                                                                                              
+  ne Включение и запуск haveged                                                               
+  ce systemctl enable --now haveged                                                           
+                                                                                              
+  ne Установка пакета FreeIPA                                                                 
+  ce apt-get install -y freeipa-server                                                        
+                                                                                              
+  ne Запуск интерактивной установки                                                           
+  ce ipa-server-install --setup-dns                                                           
+  ct --setup-dns опционально, если нужна интеграция с DNS                                     
+                                                                                              
+  lt Параметры установки                                                                      
+  - Server host name: имя узла FreeIPA-сервера                                                
+  - Domain name: доменное имя                                                                 
+  - Realm name: пространство Kerberos (обычно домен в верхнем регистре)                       
+  - Directory Manager password: пароль для LDAP-администратора (минимум 8 символов)           
+  - IPA admin password: пароль администратора FreeIPA                                         
+  - NetBIOS name: имя NetBIOS                                                                 
+  - DNS forwarders: внешние DNS-серверы (например 8.8.8.8)                                    
+  - Reverse DNS zone: обратная DNS-зона                                                       
+  ct Имена узла, домена и realm нельзя изменить после установки                               
+                                                                                              
+  hd Создание пользователей и групп                                                           
+  ne Получение билета Kerberos                                                                
+  ce kinit admin                                                                              
+  ct Ввести пароль администратора FreeIPA
+                                                                                              
+  ne Создание 30 пользователей с паролем                                                      
+  ce for i in {1..30}; do                                                                     
+      echo "P@ssw0rd" | ipa user-add user$i --first=User --last=$i --password;                
+      ipa user-mod user$i --setattr=krbPasswordExpiration=20251225011529Z;                    
+  done                                                                                        
+  ct Устанавливает срок действия пароля до 2025 года, чтобы не требовалась смена при первом   
+  входе                                                                                       
+                                                                                              
+  ne Создание групп                                                                           
+  ce for i in {1..3}; do
+      ipa group-add group$i;                                                                  
+  done                                                                                        
+                                                                                              
+  ne Добавление пользователей в группы                                                        
+  ce for i in {1..10}; do                                                                     
+      ipa group-add-member group1 --users=user$i;                                             
+  done                                                                                        
+                                                                                              
+  for i in {11..20}; do                                                                       
+      ipa group-add-member group2 --users=user$i;
+  done                                                                                        
+                  
+  for i in {21..30}; do                                                                       
+      ipa group-add-member group3 --users=user$i;
+  done                                                                                        
+                                                                                              
+  hd Подключение клиента к FreeIPA                                                            
+  ne Установка пакетов на клиенте                                                             
+  ce apt-get update && apt-get install -y freeipa-client zip                                  
+                                                                                              
+  ne Запуск настройки клиента                                                                 
+  ce ipa-client-install --server=srv-hq.your.domain --domain=your.domain --mkhomedir          
+  ct --mkhomedir автоматически создаёт домашние каталоги для доменных пользователей           
+  ct Скрипт автоматически найдёт настройки FreeIPA-сервера и запросит имя пользователя с      
+  правом ввода машин в домен                                                                  
+                                                                                              
+  ne Перезагрузка клиента                                                                     
+  ce reboot       
+                                                                                              
+  hd Установка CA-сертификата на клиенте                                                      
+  ne Копирование сертификата с сервера                                                        
+  ce scp /etc/ipa/ca.crt root@CLI-HQ:/etc/pki/ca-trust/source/anchors/                        
+  ct Выполняется на FreeIPA-сервере                                                           
+                                                                                              
+  ne Обновление доверенных сертификатов на клиенте                                            
+  ce update-ca-trust                                                                          
+                                                                                              
+  hd Проверка FreeIPA                                                                         
+  ne Проверка пользователя                                                                    
+  ce ipa user-find admin                                                                      
+                                                                                              
+  ne Проверка HTTPS-соединения                                                                
+  ce curl https://srv-hq.your.domain                                                          
+                                                                                              
+  ne Проверка запущенных служб                                                                
+  ce ipactl status 

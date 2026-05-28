@@ -245,7 +245,8 @@ Examples:
 
     def _show_save(self, limit: int, pure: bool) -> int:
         """Show topics that would be saved."""
-        from fileutils import normalize_topic, uniq_keep_order
+        from fileutils import normalize_topic, uniq_keep_order, extract_link
+        from models import ListEntry
 
         topics_i = self.input_repo.get_all()
         topics_l = self.list_repo.get_all_topics()
@@ -253,8 +254,9 @@ Examples:
 
         existing = self.topic_repo.get_existing_keys()
 
-        # Build topic sections mapping
+        # Build topic sections and links mapping
         topic_sections = {}
+        topic_links = {}
         for section in self.list_repo.get_all_sections():
             for topic_str in section.topics:
                 from fileutils import strip_link
@@ -264,37 +266,93 @@ Examples:
                 if section.name not in topic_sections[plain]:
                     topic_sections[plain].append(section.name)
 
-        # Filter new topics
+                # Extract link
+                link_look, url = extract_link(topic_str)
+                if url:
+                    topic_links[(plain, section.name)] = (link_look, url)
+
+        # Filter new topics and topics needing update
         new_topics = []
+        update_topics = []
+
         for topic_str in topics:
             from fileutils import strip_link
             clean_topic = strip_link(topic_str)
             key = normalize_topic(clean_topic)
+
             if key not in existing:
                 new_topics.append(clean_topic)
+            else:
+                # Check if lists changed
+                existing_topic = self.topic_repo.get_by_key(key)
+                if existing_topic:
+                    sections = topic_sections.get(clean_topic, [])
+                    list_entries = []
+                    for sec in sections:
+                        link_look, url = topic_links.get((clean_topic, sec), (None, None))
+                        if url:
+                            entry = ListEntry(list_name=sec, link=url, link_look=link_look)
+                        else:
+                            entry = ListEntry(list_name=sec)
+                        list_entries.append(entry)
 
-        if not new_topics:
-            print("No new topics to save (all topics already in TOML)")
+                    if self._lists_changed(existing_topic, list_entries):
+                        update_topics.append(clean_topic)
+
+        if not new_topics and not update_topics:
+            print("No topics to save or update")
             return 0
 
+        # Apply limit to combined list
+        all_topics = new_topics + update_topics
         if limit > 0:
-            new_topics = new_topics[:limit]
+            all_topics = all_topics[:limit]
         elif limit < 0:
-            new_topics = new_topics[limit:]
+            all_topics = all_topics[limit:]
 
         if pure:
-            for topic in new_topics:
+            for topic in all_topics:
                 print(topic)
         else:
-            print(f"Would be saved ({len(new_topics)}):")
-            topics_i_set = set(topics_i)
-            for topic in new_topics:
-                parts = []
-                if topic in topics_i_set:
-                    parts.append("input")
-                if topic in topic_sections:
-                    parts.extend(topic_sections[topic])
-                src = ", ".join(parts) if parts else "unknown"
-                print(f"  {topic}  [{src}]")
+            if new_topics:
+                print(f"Would be saved ({len(new_topics)}):")
+                topics_i_set = set(topics_i)
+                for topic in new_topics:
+                    if limit != 0 and topic not in all_topics:
+                        continue
+                    parts = []
+                    if topic in topics_i_set:
+                        parts.append("input")
+                    if topic in topic_sections:
+                        parts.extend(topic_sections[topic])
+                    src = ", ".join(parts) if parts else "unknown"
+                    print(f"  {topic}  [{src}]")
+
+            if update_topics:
+                print(f"\nWould be updated ({len(update_topics)}):")
+                topics_i_set = set(topics_i)
+                for topic in update_topics:
+                    if limit != 0 and topic not in all_topics:
+                        continue
+                    parts = []
+                    if topic in topics_i_set:
+                        parts.append("input")
+                    if topic in topic_sections:
+                        parts.extend(topic_sections[topic])
+                    src = ", ".join(parts) if parts else "unknown"
+                    print(f"  {topic}  [{src}]")
 
         return 0
+
+    def _lists_changed(self, existing_topic, new_list_entries) -> bool:
+        """Check if lists have changed for a topic."""
+        # Compare list entries
+        existing_lists = set()
+        for entry in existing_topic.lists:
+            existing_lists.add((entry.list_name, entry.link or "", entry.link_look or ""))
+
+        new_lists = set()
+        for entry in new_list_entries:
+            new_lists.add((entry.list_name, entry.link or "", entry.link_look or ""))
+
+        return existing_lists != new_lists

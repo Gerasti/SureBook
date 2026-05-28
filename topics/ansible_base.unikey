@@ -1,0 +1,93 @@
+hd Установка Ansible                                                                        
+  ne Установка пакетов                                                                        
+  ce apt-get install ansible sshpass                                                          
+  ct ansible(система управления конфигурациями); sshpass(передача паролей SSH)
+                                                                                              
+  hd Настройка Ansible
+  ne В /etc/ansible/ansible.cfg основные параметры
+  ce [defaults]                                                                               
+  retries = 3                                                                                 
+  timeout = 10                                                                                
+  inventory = /etc/ansible/inventory                                                          
+  ct retries(количество повторов); timeout(таймаут подключения); inventory(путь к файлу       
+  инвентаря)                                                                                  
+                                                                                              
+  ne Содержимое /etc/ansible/inventory                                                        
+  ce [Networking] 
+  hq-rtr ansible_host=192.168.24.1                                                            
+  br-rtr ansible_host=192.168.2.1                                                             
+                                                                                              
+  [Networking:vars]                                                                           
+  ansible_user=net_admin                                                                      
+  ansible_password="Password"                                                                 
+                                                                                              
+  [Branch]                                                                                    
+  hq-srv ansible_host=192.168.24.2                                                            
+  hq-cli ansible_host=192.168.24.43                                                           
+                                                                                              
+  [Branch:vars]                                                                               
+  ansible_user=sshuser                                                                        
+  ansible_port=2626                                                                           
+  ansible_password="P@ssw0rd"                                                                 
+                                                                                              
+  [all:vars]                                                                                  
+  ansible_python_interpreter=/usr/bin/python3                                                 
+  ct ansible_host(IP адрес хоста); ansible_user(пользователь для подключения);                
+  ansible_port(порт SSH); ansible_password(пароль); ansible_python_interpreter(путь к Python);
+   ansible_ssh_private_key_file(путь к приватному SSH-ключу для аутентификации по ключам      
+  вместо пароля)                                                                              
+                  
+  hd Преднастройка управляемых хостов                                                         
+  ne Установка необходимых пакетов
+  ce apt-get install sudo python3 openssh                                                     
+  ct sudo(повышение привилегий); python3(интерпретатор для Ansible); openssh(SSH сервер)      
+                                                                                              
+  ne В /etc/openssh/sshd_config настройка SSH                                                 
+  ce Port 2626                                                                                
+  AllowUsers sshuser                                                                          
+  MaxAuthTries 2                                                                              
+  PasswordAuthentication yes                                                                  
+  Banner /etc/openssh/banner                                                                  
+  ct Port(порт SSH); AllowUsers(разрешенные пользователи); MaxAuthTries(попытки               
+  аутентификации); PasswordAuthentication(аутентификация по паролю)                           
+                                                                                              
+  ne Запуск SSH сервиса                                                                       
+  ce systemctl enable --now sshd
+                                                                                              
+  ne Проверка доступности всех хостов                                                         
+  ce ansible all -m ping
+  ct -m(модуль); ping(модуль проверки доступности); SUCCESS(успешное подключение)             
+                                                                                              
+  hd Создание Ansible Playbook                                                                
+  ne Создание playbook для инвентаризации в /etc/ansible/playbook/inventory_pc.yml            
+  ce - name: Inventory HQ                                                                     
+    hosts: Branch                                                                             
+    gather_facts: yes                                                                         
+    tasks:                                                                                    
+      - name: Create PC-INFO                                                                  
+        local_action:                                                                         
+          module: file                                                                        
+          path: /etc/ansible/PC-INFO                                                          
+          state: directory                                                                    
+          mode: '0755'
+        run_once: true                                                                        
+                                                                                              
+      - name: Save to YAML                                                                    
+        local_action:                                                                         
+          module: copy                                                                        
+          dest: "/etc/ansible/PC-INFO/{{ ansible_hostname }}.yml"                             
+          content: |                                                                          
+            computer_name: {{ ansible_hostname }}                                             
+            ip_address: {{ ansible_default_ipv4.address }}                                    
+  ct name(название задачи); hosts(группа хостов); gather_facts(сбор информации о хостах);     
+  local_action(выполнение на управляющем хосте); run_once(выполнить один раз);                
+  ansible_hostname(имя хоста); ansible_default_ipv4.address(IP-адрес)                         
+                                                                                              
+  ne Запуск playbook                                                                          
+  ce ansible-playbook playbook/inventory_pc.yml
+                                                                                              
+  ne Проверка созданных файлов                                                                
+  ce ls /etc/ansible/PC-INFO                                                                  
+  cat /etc/ansible/PC-INFO/hq-cli.yml                                                         
+  cat /etc/ansible/PC-INFO/hq-srv.yml                                                         
+  ct Файлы содержат имя компьютера и IP-адрес каждого хоста

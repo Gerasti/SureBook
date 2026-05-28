@@ -1,0 +1,60 @@
+hd Массовый импорт пользователей в Samba AD                                                 
+  ne Подготовка CSV-файла                                                                     
+  ce First Name;Last Name;Role;Phone;OU;Street;ZIP;City;Country;Password                      
+  Ivan;Ivanov;Administrator;+79990000001;IT;Lenina 1;101000;Moscow;RU;P@ssw0rd1               
+  Petr;Petrov;Manager;+79990000002;Sales;Mira 10;101001;Moscow;RU;P@ssw0rd1                   
+  ct Разделитель - точка с запятой; First Name(имя); Last Name(фамилия); Role(должность);     
+  Phone(телефон); OU(подразделение); Street(улица); ZIP(индекс); City(город); Country(страна);
+   Password(пароль)                                                                           
+                                                                                              
+  ne Создание скрипта импорта                                                                 
+  ce vim import_user.sh
+                                                                                              
+  ne Содержимое /root/import_user.sh                                                          
+  ce #!/bin/bash                                                                              
+                                                                                              
+  csv_file="$1"                                                                               
+                                                                                              
+  # Create OU                                                                                 
+  awk -F ';' 'NR>1 {print $5}' "$csv_file" | sort | uniq | while read ou;
+  do                                                                                          
+      samba-tool ou add OU="$ou",DC=au-team,DC=irpo;                                          
+  done                                                                                        
+                                                                                              
+  # Create Users                                                                              
+  while IFS=";" read -r firstName lastName role phone ou street zip city country password;
+  do                                                                                          
+      if [ "$firstName" == "First Name" ];
+      then                                                                                    
+          continue
+      fi                                                                                      
+                  
+      username=$(echo $firstName | tr '[:upper:]' '[:lower:]' | tr -d ' '),$(echo $lastName | 
+  tr '[:upper:]' '[:lower:]' | tr -d ' ')
+                                                                                              
+      samba-tool user add "$username" P@ssw0rd1 \                                             
+      --given-name="$firstName" \
+      --surname="$lastName" \                                                                 
+      --telephone-number="$phone" \                                                           
+      --job-title="$role" \                                                                   
+      --ou="OU=$ou" \                                                                         
+      --userou="OU=$ou" --noexpiry                                                            
+  done < "$csv_file"                                                                          
+  ct Скрипт автоматически создаёт OU и пользователей; username формируется как ivan,ivanov;   
+  --noexpiry(пароль не истекает)                                                              
+                                                                                              
+  ne Выдача прав на запуск                                                                    
+  ce chmod +x import_user.sh
+                                                                                              
+  hd Запуск импорта                                                                           
+  ne Импорт пользователей из CSV                                                              
+  ce ./import_user.sh /mnt/Users.csv                                                          
+  ct Запускать от root или администратора домена                                              
+                                                                                              
+  hd Проверка                                                                                 
+  ne Проверка созданных OU                                                                    
+  ce samba-tool ou list                                                                       
+                                                                                              
+  ne Проверка объектов внутри OU                                                              
+  ce samba-tool ou listobjects OU=IT                                                          
+  ct Можно проверять любые подразделения {OU=Sales, OU=IT}                                    

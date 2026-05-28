@@ -1,0 +1,69 @@
+hd Установка и настройка CUPS
+  ne Установка пакетов на сервере
+  ce apt-get install cups cups-pdf                                                            
+   
+  hd Настройка CUPS-сервера                                                                   
+  ne Изменение конфигурации в /etc/cups/cupsd.conf
+  ce Listen *:631                                                                             
+                                                                                              
+  <Location />                                                                                
+  Order allow,deny                                                                            
+  Allow all                                                                                   
+  </Location>                                                                                 
+   
+  <Location /admin>                                                                           
+  Order allow,deny
+  Allow all                                                                                   
+  </Location>     
+  ct Listen *:631(слушать порт 631 на всех интерфейсах); <Location />(доступ к основной       
+  странице); <Location /admin>(доступ к панели администратора); Allow all(разрешить всем      
+  клиентам)
+  ct Для ограничения доступа по подсетям замените Allow all на Allow from 192.168.1.0/24      
+                                                                                              
+  ne Запуск и включение службы                                                                
+  ce systemctl enable cups                                                                    
+  systemctl restart cups                                                                      
+                                                                                              
+  ne Проверка доступных принтеров                                                             
+  ce lpstat -p                                                                                
+  ct Показывает список принтеров и их статус                                                  
+                                                                                              
+  hd Подключение клиента к CUPS                                                               
+  ne Установка пакетов на клиенте                                                             
+  ce apt-get install cups                                                                     
+                  
+  ne Подключение сетевого принтера                                                            
+  ce lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
+  ct -p(имя принтера); -E(включить принтер); -v(URI принтера); -m everywhere(автоматический   
+  драйвер)                                                                                    
+  ct Формат URI: ipp://IP_СЕРВЕРА:631/printers/ИМЯ_ПРИНТЕРА                                   
+                                                                                              
+  ne Назначение принтера по умолчанию                                                         
+  ce lpoptions -d PDF                                                                         
+                                                                                              
+  ne Проверка подключения                                                                     
+  ce lpstat -t                                                                                
+  ct Показывает список принтеров, очередь печати, принтер по умолчанию, состояние службы      
+                                                                                              
+  hd Работа с CUPS                                                                            
+  ne Печать документа                                                                         
+  ce echo "Тест печати" | lp -t "Example"                                                     
+  ct lp(команда печати); -t(название задания)                                                 
+                                                                                              
+  ne Проверка PDF-файлов на сервере                                                           
+  ce ls -l /home/USERNAME/                                                                    
+  ct При использовании cups-pdf документы сохраняются в домашнем каталоге пользователя клиента
+                                                                                              
+  ne Web-интерфейс                                                                            
+  ce http://IP_СЕРВЕРА:631                                                                    
+  ct Управление принтерами, очередью и заданиями                                              
+                                                                                              
+  hd Полезные команды                                                                         
+  ne Просмотр очереди печати                                                                  
+  ce lpq                                                                                      
+                                                                                              
+  ne Отмена задания                                                                           
+  ce cancel ID_ЗАДАНИЯ                                                                        
+                                                                                              
+  ne Список устройств                                                                         
+  ce lpinfo -v

@@ -8,7 +8,7 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-27 21:16:17"
+last_saved = "2026-05-28 23:23:11"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -20,11 +20,6 @@ lists = [{list = "SuroTools"}]
 title = "alt samba ADMC"
 path = "~/SureBook/info/src_table.md/alt_samba_ADMC.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "сетевикон"}, {list = "yesterday-it-worked"}]
-[topics."ansible_inventory"]
-title = "ansible inventory"
-path = "~/SureBook/info/src_table.md/ansible_inventory.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
 [topics."ansible_NextCloud"]
 title = "ansible NextCloud"
 path = "~/SureBook/info/src_table.md/ansible_NextCloud.md"
@@ -37,11 +32,6 @@ lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?i
 title = "ansible OwnCloud"
 path = "~/SureBook/info/src_table.md/ansible_OwnCloud.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=26", link_look = "ansible OwnCloud"}]
-[topics."ansible_ping"]
-title = "ansible ping"
-path = "~/SureBook/info/src_table.md/ansible_ping.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}]
-
 [topics."apt"]
 title = "apt"
 path = "~/SureBook/info/src_table.md/apt.md"
@@ -59,18 +49,16 @@ lists = [{list = "notesk"}, {list = "SuroTools"}]
 
 [topics."base_samba-command"]
 title = "base samba-command"
-path = "~/SureBook/info/src_table.md/base_samba-command.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "yesterday-it-worked"}]
-
+path = "/home/stip/SureBook/topics/base_samba-command.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "yesterday-it-worked"}, {list = "surowiki"}]
 [topics."bash_script_for_samba"]
 title = "bash script for samba"
-path = "~/SureBook/info/src_table.md/bash_script_for_samba.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "AltLabs"}]
-
+path = "/home/stip/SureBook/topics/bash_script_for_samba.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "AltLabs"}, {list = "surowiki"}]
 [topics."bind_DNS"]
 title = "bind DNS"
-path = "~/SureBook/info/src_table.md/bind_DNS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=734", link_look = "bind DNS"}, {list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
+path = "/home/stip/SureBook/topics/bind_DNS.md"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=734", link_look = "bind DNS"}, {list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."bind_slave_DNS"]
 title = "bind slave DNS"
 path = "~/SureBook/info/src_table.md/bind_slave_DNS.md"
@@ -82,9 +70,8 @@ path = "~/SureBook/info/src_table.md/BIND9_DLZ_samba.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "yesterday-it-worked"}]
 [topics."chrony"]
 title = "chrony"
-path = "~/SureBook/info/src_table.md/chrony.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "yesterday-it-worked"}]
-
+path = "/home/stip/SureBook/topics/chrony.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "yesterday-it-worked"}, {list = "surowiki"}]
 [topics."console-debian_samba"]
 title = "console-debian samba"
 path = "~/SureBook/info/src_table.md/console-debian_samba.md"
@@ -92,9 +79,8 @@ lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."cups-pdf"]
 title = "cups-pdf"
-path = "~/SureBook/info/src_table.md/cups-pdf.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
+path = "/home/stip/SureBook/topics/cups-pdf.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."DBeaver"]
 title = "DBeaver"
 path = "~/SureBook/info/src_table.md/DBeaver.md"
@@ -121,19 +107,8 @@ lists = [{list = "notesk"}, {list = "DEMO-208"}]
 
 [topics."dhcpd"]
 title = "dhcpd"
-path = "~/SureBook/info/src_table.md/dhcpd.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
-[topics."dnsmasq_DHCP"]
-title = "dnsmasq DHCP"
-path = "~/SureBook/info/src_table.md/dnsmasq_DHCP.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
-
-[topics."dnsmasq_DNS"]
-title = "dnsmasq DNS"
-path = "~/SureBook/info/src_table.md/dnsmasq_DNS.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}]
-
+path = "/home/stip/SureBook/topics/dhcpd.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."docker_`Hello-app`"]
 title = "docker `Hello-app`"
 path = "~/SureBook/info/src_table.md/docker_`Hello-app`.md"
@@ -151,9 +126,8 @@ lists = [{list = "notesk"}]
 
 [topics."docker_install"]
 title = "docker install"
-path = "~/SureBook/info/src_table.md/docker_install.md"
-lists = [{list = "notesk"}, {list = "DemoScreens"}]
-
+path = "/home/stip/SureBook/topics/docker_install.md"
+lists = [{list = "notesk"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."docker_Local_Registry"]
 title = "docker Local Registry"
 path = "~/SureBook/info/src_table.md/docker_Local_Registry.md"
@@ -255,14 +229,12 @@ lists = [{list = "notesk"}]
 
 [topics."etcnet_gre_tunnel"]
 title = "etcnet gre tunnel"
-path = "~/SureBook/info/src_table.md/etcnet_gre_tunnel.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
+path = "/home/stip/SureBook/topics/etcnet_gre_tunnel.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."etcnet_ip"]
 title = "etcnet ip"
-path = "~/SureBook/info/src_table.md/etcnet_ip.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "setting_screens"}]
-
+path = "/home/stip/SureBook/topics/etcnet_ip.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."etcnet_ip_forward"]
 title = "etcnet ip forward"
 path = "~/SureBook/info/src_table.md/etcnet_ip_forward.md"
@@ -285,32 +257,16 @@ lists = [{list = "yesterday-it-worked"}]
 
 [topics."etcnet_vlan"]
 title = "etcnet vlan"
-path = "~/SureBook/info/src_table.md/etcnet_vlan.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}]
-
-[topics."fail2ban"]
-title = "fail2ban"
-path = "~/SureBook/info/src_table.md/fail2ban.md"
-lists = [{list = "DemoScreens"}]
-
-[topics."FreeIPA_with_DNS"]
-title = "FreeIPA with DNS"
-path = "~/SureBook/info/src_table.md/FreeIPA_with_DNS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=139", link_look = "FreeIPA with DNS"}, {list = "notesk"}, {list = "SuroTools"}]
-[topics."FreeIPA_without_DNS"]
-title = "FreeIPA without DNS"
-path = "~/SureBook/info/src_table.md/FreeIPA_without_DNS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=188", link_look = "FreeIPA without DNS"}, {list = "notesk"}, {list = "SuroTools"}]
+path = "/home/stip/SureBook/topics/etcnet_vlan.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."frr_and_quagga_OSPF"]
 title = "frr and quagga OSPF"
-path = "~/SureBook/info/src_table.md/frr_and_quagga_OSPF.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
+path = "/home/stip/SureBook/topics/frr_and_quagga_OSPF.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."GOST_OpenSSL"]
 title = "GOST OpenSSL"
-path = "~/SureBook/info/src_table.md/GOST_OpenSSL.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
+path = "/home/stip/SureBook/topics/GOST_OpenSSL.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."GRUB_password_recovery"]
 title = "GRUB password recovery"
 path = "~/SureBook/info/src_table.md/GRUB_password_recovery.md"
@@ -377,14 +333,12 @@ path = "~/SureBook/info/src_table.md/IP-телефония_SNG7.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=777", link_look = "Ip-телефония SNG7"}]
 [topics."iptables_NAT"]
 title = "iptables NAT"
-path = "~/SureBook/info/src_table.md/iptables_NAT.md"
-lists = [{list = "SuroTools"}]
-
+path = "/home/stip/SureBook/topics/iptables_NAT.md"
+lists = [{list = "SuroTools"}, {list = "surowiki"}]
 [topics."iptables_port_forwarding"]
 title = "iptables port forwarding"
-path = "~/SureBook/info/src_table.md/iptables_port_forwarding.md"
-lists = [{list = "SuroTools"}]
-
+path = "/home/stip/SureBook/topics/iptables_port_forwarding.md"
+lists = [{list = "SuroTools"}, {list = "surowiki"}]
 [topics."isc-dhcp-server"]
 title = "isc-dhcp-server"
 path = "~/SureBook/info/src_table.md/isc-dhcp-server.md"
@@ -409,9 +363,8 @@ lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}]
 
 [topics."mdadm_options"]
 title = "mdadm options"
-path = "~/SureBook/info/src_table.md/mdadm_options.md"
-lists = [{list = "SuroTools"}]
-
+path = "/home/stip/SureBook/topics/mdadm_options.md"
+lists = [{list = "SuroTools"}, {list = "surowiki"}]
 [topics."moodle"]
 title = "moodle"
 path = "~/SureBook/info/src_table.md/moodle.md"
@@ -432,8 +385,8 @@ path = "~/SureBook/info/src_table.md/NextCloud.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=27", link_look = "NextCloud"}]
 [topics."NFS"]
 title = "NFS"
-path = "~/SureBook/info/src_table.md/NFS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=775", link_look = "NFS"}, {list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
+path = "/home/stip/SureBook/topics/NFS.md"
+lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=775", link_look = "NFS"}, {list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."nftables_firewall"]
 title = "nftables firewall"
 path = "~/SureBook/info/src_table.md/nftables_firewall.md"
@@ -446,9 +399,8 @@ lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = 
 
 [topics."nginx_reverse_proxy"]
 title = "nginx reverse proxy"
-path = "~/SureBook/info/src_table.md/nginx_reverse_proxy.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
+path = "/home/stip/SureBook/topics/nginx_reverse_proxy.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."nginx_server_balance"]
 title = "nginx server balance"
 path = "~/SureBook/info/src_table.md/nginx_server_balance.md"
@@ -533,9 +485,8 @@ lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list
 
 [topics."rsyslog"]
 title = "rsyslog"
-path = "~/SureBook/info/src_table.md/rsyslog.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
+path = "/home/stip/SureBook/topics/rsyslog.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."samba_share_folder"]
 title = "samba share folder"
 path = "~/SureBook/info/src_table.md/samba_share_folder.md"
@@ -570,9 +521,8 @@ lists = [{list = "SuroTools"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."ssh_options"]
 title = "ssh options"
-path = "~/SureBook/info/src_table.md/ssh_options.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
+path = "/home/stip/SureBook/topics/ssh_options.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."ssh-connection_automate_to_servers"]
 title = "ssh-connection automate to servers"
 path = "~/SureBook/info/src_table.md/ssh-connection_automate_to_servers.md"
@@ -604,14 +554,8 @@ lists = [{list = "сетевикон"}]
 
 [topics."timedatectl"]
 title = "timedatectl"
-path = "~/SureBook/info/src_table.md/timedatectl.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."topic0"]
-title = "topic0"
-path = "~/SureBook/info/src_table.md/topic0.md"
-lists = []
-
+path = "/home/stip/SureBook/topics/timedatectl.md"
+lists = [{list = "yesterday-it-worked"}, {list = "surowiki"}]
 [topics."vmware_open-vm-tools"]
 title = "vmware open-vm-tools"
 path = "~/SureBook/info/src_table.md/vmware_open-vm-tools.md"
@@ -645,3 +589,20 @@ lists = [{list = "notesk"}]
 
 
 
+
+
+
+[topics."dnsmasq"]
+title = "dnsmasq"
+path = "/home/stip/SureBook/topics/dnsmasq.md"
+lists = [{list = "notesk"}, {list = "surowiki"}]
+
+[topics."FreeIPA"]
+title = "FreeIPA"
+path = "/home/stip/SureBook/topics/FreeIPA.md"
+lists = [{list = "notesk"}]
+
+[topics."ansible_base"]
+title = "ansible base"
+path = "~/SureBook/info/src_table.md/ansible_base.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]

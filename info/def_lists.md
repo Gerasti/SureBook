@@ -35,10 +35,6 @@ ecorouter ssh [ecorouter ssh](https://sysahelper.ru/mod/page/view.php?id=322)
 
 ecorouter vlan [ecorouter vlan](https://sysahelper.ru/mod/page/view.php?id=720)
 
-FreeIPA with DNS [FreeIPA with DNS](https://sysahelper.ru/mod/page/view.php?id=139)
-
-FreeIPA without DNS [FreeIPA without DNS](https://sysahelper.ru/mod/page/view.php?id=188)
-
 Ideco admin [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724)
 
 Ideco LAN interface [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724)
@@ -88,9 +84,7 @@ Zabbix agent
 Zabbix web-interface [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
 
 ## notesk list:
-ansible inventory
-
-ansible ping
+ansible base
 
 apt
 
@@ -122,9 +116,7 @@ debian vlan
 
 dhcpd
 
-dnsmasq DHCP
-
-dnsmasq DNS
+dnsmasq
 
 docker `Hello-app`
 
@@ -152,9 +144,7 @@ etcnet ip forward
 
 etcnet vlan
 
-FreeIPA with DNS
-
-FreeIPA without DNS
+FreeIPA
 
 frr and quagga OSPF
 
@@ -227,8 +217,6 @@ BIND9_DLZ samba
 
 chrony
 
-dnsmasq DNS
-
 moodle
 
 network mask table
@@ -244,8 +232,6 @@ systemd-timesyncd
 ## SuroTools list:
 alt fail2ban
 
-ansible ping
-
 auto mounting devices
 
 base samba-command
@@ -256,10 +242,6 @@ chrony
 
 dhcpd
 
-dnsmasq DHCP
-
-dnsmasq DNS
-
 etcnet gre tunnel
 
 etcnet ip
@@ -267,10 +249,6 @@ etcnet ip
 etcnet ip forward
 
 etcnet vlan
-
-FreeIPA with DNS
-
-FreeIPA without DNS
 
 frr and quagga OSPF
 
@@ -325,9 +303,7 @@ Zabbix agent
 Zabbix web-interface
 
 ## DEMO-208-2 list:
-ansible inventory
-
-ansible ping
+ansible base
 
 apt
 
@@ -340,8 +316,6 @@ BIND9_DLZ samba
 chrony
 
 cups-pdf
-
-dnsmasq DHCP
 
 etcnet gre tunnel
 
@@ -382,8 +356,6 @@ sudo user
 Zabbix agent
 
 ## DEMO-208 list:
-ansible ping
-
 bind DNS
 
 BIND9_DLZ samba
@@ -426,9 +398,7 @@ etcnet ip
 samba share folder
 
 ## DemoScreens list:
-ansible inventory
-
-ansible ping
+ansible base
 
 bind DNS
 
@@ -445,8 +415,6 @@ docker install
 etcnet gre tunnel
 
 etcnet vlan
-
-fail2ban
 
 frr and quagga OSPF
 
@@ -563,6 +531,49 @@ RADIUS client
 RADIUS server
 
 SQL install PostgreSQL
+
+timedatectl
+
+## surowiki list:
+base samba-command
+
+bash script for samba
+
+bind DNS
+
+chrony
+
+cups-pdf
+
+dhcpd
+
+dnsmasq
+
+docker install
+
+etcnet gre tunnel
+
+etcnet ip
+
+etcnet vlan
+
+frr and quagga OSPF
+
+GOST OpenSSL
+
+iptables NAT
+
+iptables port forwarding
+
+mdadm options
+
+NFS
+
+nginx reverse proxy
+
+rsyslog
+
+ssh options
 
 timedatectl
 

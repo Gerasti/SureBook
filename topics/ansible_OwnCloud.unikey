@@ -1,96 +1,44 @@
-
-### Установка Ansible <!-- HEAD -->
-
-#### Обновление и установка пакетов <!-- NAME -->
-
-```CODE
-apt-get update && apt-get install -y ansible sshpass                                                  
+hd Установка Ansible
+  ne Обновление и установка пакетов
+  ce apt-get update && apt-get install -y ansible sshpass                                                  
                                                                                                            
- 
-```
-
-### Создание структуры проекта <!-- HEAD -->
-
-#### Создание директории проекта <!-- NAME -->
-
-```CODE
-mkdir ansible                                                                                         
+  hd Создание структуры проекта                                                                            
+  ne Создание директории проекта                                                                           
+  ce mkdir ansible                                                                                         
   cd ansible                                                                                               
                                                                                                            
- 
-```
-
-#### Создание инвентарного файла inventory <!-- NAME -->
-
-```CODE
-vim inventory
+  ne Создание инвентарного файла inventory                                                                 
+  ce vim inventory
                                                                                                            
- 
-```
-
-#### Содержимое inventory <!-- NAME -->
-
-```CODE
-all:
+  ne Содержимое inventory                                                                                  
+  ce all:
     hosts:                                                                                                 
       localhost:  
- 
-```
-
-> формат YAML; хост localhost
-
-#### Создание директории для переменных <!-- NAME -->
-
-```CODE
-mkdir host_vars                                                                                       
+  ct формат YAML; хост localhost                                                                           
                                                                                                            
- 
-```
-
-#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-vim host_vars/localhost.yml                                                                           
+  ne Создание директории для переменных                                                                    
+  ce mkdir host_vars                                                                                       
                                                                                                            
- 
-```
-
-#### Содержимое host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-ansible_ssh_user: root                                                                                
+  ne Создание файла переменных host_vars/localhost.yml                                                     
+  ce vim host_vars/localhost.yml                                                                           
+                                                                                                           
+  ne Содержимое host_vars/localhost.yml                                                                    
+  ce ansible_ssh_user: root                                                                                
   ansible_ssh_pass: toor                                                                                   
   ansible_python_interpreter: /usr/bin/python3                                                             
- 
-```
-
-> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
-
-### Проверка работоспособности <!-- HEAD -->
-
-#### Проверка подключения к localhost <!-- NAME -->
-
-```CODE
-ansible -i inventory -m ping all                                                                      
- 
-```
-
-> -i(инвентарный файл); -m(модуль); all(все хосты)
-
-### Создание playbook для OwnCloud <!-- HEAD -->
-
-#### Создание файла playbook.yml <!-- NAME -->
-
-```CODE
-vim playbook.yml                                                                                      
+  ct ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)   
                                                                                                            
- 
-```
-
-#### Содержимое playbook.yml <!-- NAME -->
-
-```CODE
----                                                                                                   
+  hd Проверка работоспособности                                                                            
+  ne Проверка подключения к localhost                                                                      
+  ce ansible -i inventory -m ping all                                                                      
+  ct -i(инвентарный файл); -m(модуль); all(все хосты)                                                      
+                                                                                                           
+  hd Создание playbook для OwnCloud                                                                        
+  ne Создание файла playbook.yml                                                                           
+  ce vim playbook.yml                                                                                      
+                                                                                                           
+  ne Содержимое playbook.yml                                                                               
+  ce ---                                                                                                   
   - name: Install OwnCloud on ALT Server 10.1 (10.2)                                                       
     hosts: localhost                                                                                       
     become: true                                                                                           
@@ -223,34 +171,19 @@ vim playbook.yml
         systemd:                                                                                           
           name: httpd2                                                                                     
           state: restarted                                                                                 
- 
-```
-
-> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
-
-### Установка коллекций Ansible <!-- HEAD -->
-
-#### Установка community.general <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.general                                                   
+  ct become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление      
+  сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache);         
+  get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование);            
+  command(выполнение команд); with_items(цикл)                                                             
+                  
+  hd Установка коллекций Ansible                                                                           
+  ne Установка community.general
+  ce ansible-galaxy collection install community.general                                                   
                                                                                                            
- 
-```
-
-#### Установка community.mysql <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.mysql                                                     
- 
-```
-
-> ansible-galaxy(менеджер коллекций)
-
-### Запуск playbook <!-- HEAD -->
-
-#### Выполнение playbook-сценария <!-- NAME -->
-
-```CODE
-ansible-playbook -i inventory playbook.yml             
-```
+  ne Установка community.mysql                                                                             
+  ce ansible-galaxy collection install community.mysql                                                     
+  ct ansible-galaxy(менеджер коллекций)                                                                    
+                                                                                                           
+  hd Запуск playbook                                                                                       
+  ne Выполнение playbook-сценария                                                                          
+  ce ansible-playbook -i inventory playbook.yml             

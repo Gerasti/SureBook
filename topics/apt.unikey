@@ -1,0 +1,9 @@
+hd Настройка
+ne Раскомментировать строки в /etc/apt/sources.list.d/yandex.list
+ce rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/x86_64 classic
+rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/i586 classic
+rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/noarch classic
+ct alt.list желательно весь закомментировать
+ne Обновление
+ce apt-get update
+ct Должен работать DNS и возможно Интернет, NAT

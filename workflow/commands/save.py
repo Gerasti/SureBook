@@ -96,13 +96,11 @@ Examples:
         # Save topics
         FileManager.ensure_dir(settings.topic_save)
         saved_count = 0
+        updated_count = 0
 
         for topic_str in topics:
             clean_topic = strip_link(topic_str)
             key = normalize_topic(clean_topic)
-
-            if key in existing:
-                continue
 
             # Create topic object
             md_path = FileManager.join(settings.topic_save, f"{key}.md")
@@ -124,18 +122,43 @@ Examples:
                 lists=list_entries
             )
 
+            # Check if topic exists and needs update
+            if key in existing:
+                existing_topic = self.topic_repo.get_by_key(key)
+                if existing_topic and self._lists_changed(existing_topic, list_entries):
+                    self.topic_repo.save(topic)
+                    print(f"Updated: {clean_topic}")
+                    updated_count += 1
+                continue
+
             self.topic_repo.save(topic)
             print(f"Saved: {clean_topic}")
             saved_count += 1
 
-        if saved_count == 0:
+        if saved_count == 0 and updated_count == 0:
             if is_auto_save:
                 print("Nothing to auto save")
             else:
                 print("Nothing to save — all topics already in TOML")
         else:
-            print(f"Total saved: {saved_count}")
+            if saved_count > 0:
+                print(f"Total saved: {saved_count}")
+            if updated_count > 0:
+                print(f"Total updated: {updated_count}")
             now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             self.config_repo.update_setting("last_saved", now_str)
 
         return 0
+
+    def _lists_changed(self, existing_topic: Topic, new_list_entries: List[ListEntry]) -> bool:
+        """Check if lists have changed for a topic."""
+        # Compare list entries
+        existing_lists = set()
+        for entry in existing_topic.lists:
+            existing_lists.add((entry.list_name, entry.link or "", entry.link_look or ""))
+
+        new_lists = set()
+        for entry in new_list_entries:
+            new_lists.add((entry.list_name, entry.link or "", entry.link_look or ""))
+
+        return existing_lists != new_lists

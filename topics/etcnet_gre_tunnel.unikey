@@ -1,0 +1,31 @@
+hd Настройка GRE-туннеля
+  ne Включение IP-forwarding в /etc/net/sysctl.conf
+  ce net.ipv4.ip_forward=1                                                                    
+  ct Разрешает маршрутизацию пакетов между интерфейсами                                       
+                                                                                              
+  ne Применение настроек sysctl                                                               
+  ce sysctl -p                                                                                
+                                                                                              
+  ne Создание каталога для туннельного интерфейса                                             
+  ce mkdir -p /etc/net/ifaces/tun                                                             
+                                                                                              
+  ne Настройка параметров туннеля в /etc/net/ifaces/tun/options                               
+  ce TYPE=iptun                                                                               
+  TUNTYPE=gre                                                                                 
+  TUNLOCAL=172.16.4.1
+  TUNREMOTE=172.16.5.1                                                                        
+  TUNOPTIONS='ttl 64'                                                                         
+  TUNTTL=64                                                                                   
+  TUNMTU=1476                                                                                 
+  ct TYPE=iptun(тип интерфейса - IP-туннель); TUNTYPE=gre(протокол туннелирования GRE);       
+  TUNLOCAL(локальный IP внешнего интерфейса); TUNREMOTE(удалённый IP внешнего интерфейса); TUNTTL(время жизни пакета); TUNMTU(максимальный размер пакета)    
+                                                                                              
+  ne Настройка IP-адреса туннеля в /etc/net/ifaces/tun/ipv4address                            
+  ce 10.10.10.2/30
+  ct Внутренний IP-адрес туннеля с маской /30                                                 
+                                                                                              
+  ne Перезапуск сети                                                                          
+  ce systemctl restart network                                                                
+                                                                                              
+  ct Аналогичную настройку необходимо выполнить на втором роутере с зеркальными параметрами   
+  TUNLOCAL и TUNREMOTE

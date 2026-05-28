@@ -1,10 +1,9 @@
 alt fail2ban
 alt samba ADMC
-ansible inventory
+ansible base
 ansible NextCloud
 ansible OTRS
 ansible OwnCloud
-ansible ping
 apt
 attach samba reserve domain controller
 auto mounting devices
@@ -22,8 +21,7 @@ debian ip
 debian ip forward
 debian vlan
 dhcpd
-dnsmasq DHCP
-dnsmasq DNS
+dnsmasq
 docker `Hello-app`
 docker Elasticsearch - Logstash - Kibana (ELK)
 docker Grafana-Prometheus-NodeExporter
@@ -57,9 +55,7 @@ etcnet OVS install
 etcnet OVS mgmt-interface
 etcnet OVS settings
 etcnet vlan
-fail2ban
-FreeIPA with DNS
-FreeIPA without DNS
+FreeIPA
 frr and quagga OSPF
 GOST OpenSSL
 GRUB password recovery
@@ -125,7 +121,6 @@ sudo user
 systemd backup
 systemd-timesyncd
 timedatectl
-topic0
 vmware open-vm-tools
 wireguard
 wireguard OSPF

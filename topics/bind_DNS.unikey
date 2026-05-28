@@ -1,0 +1,120 @@
+ hd Установка DNS-сервера
+ ne Установка пакетов                                                                         
+ ce apt-get install bind bind-utils
+
+ hd Настройка options.conf
+ ne Базовые параметры в /etc/bind/options.conf
+ ce listen-on { any; };
+ allow-query { any; };
+ allow-recursion { any; };
+ forwarders { 77.88.8.8; };
+ recursion yes;
+ ct listen-on(интерфейсы); allow-query(разрешение запросов); allow-recursion(рекурсивные
+ запросы); forwarders(DNS для пересылки); recursion(включение рекурсии)
+
+ ne Опциональная настройка slave-сервера в /etc/bind/options.conf
+ ce allow-transfer { 192.168.33.67; };
+ ct allow-transfer(разрешение передачи зон на slave-сервер) - опционально, только если
+ используется slave
+
+ ne Отключение логирования lame-servers в /etc/bind/options.conf
+ ce logging {
+     category lame-servers {null;};
+ };
+
+ hd Настройка local.conf
+ ne Шаблон зоны
+ ce zone "ZONE_NAME" {
+     type TYPE;
+     file "ZONE_FILE_PATH";
+ };
+ ct ZONE_NAME(имя DNS-зоны); TYPE(тип зоны) {master, slave}; ZONE_FILE_PATH(путь к файлу зоны
+  относительно /etc/bind/)
+ ct slave опционален - используется только для вторичных DNS-серверов
+
+ ne Пример прямой зоны в /etc/bind/local.conf
+ ce zone "bind.domain" {
+     type master;
+     file "bind.domain.db";
+ };
+
+ ne Пример обратных зон в /etc/bind/local.conf
+ ce zone "11.168.192.in-addr.arpa" {
+     type master;
+     file "11.168.192.in-addr.arpa.db";
+ };
+
+ hd Создание файлов зон
+ ne Копирование шаблонов
+ ce cp /etc/bind/zone/{localhost,bind.domain.db}
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+ ne Назначение прав
+ ce chown named:named /etc/bind/zone/bind.domain.db
+ chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
+ chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+ hd Настройка зон
+ ne Содержимое прямой зоны /etc/bind/zone/bind.domain.db
+ ce $TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   srv-hq.bind.domain.
+         IN NS   srv-dt.bind.domain.
+
+         IN A    192.168.11.67
+ srv  IN A    192.168.11.67
+ rtr  IN A    192.168.11.81
+ sw   IN A    192.168.11.82
+ ct SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый
+ сервер); CNAME(псевдоним); TXT(текстовые записи)
+
+ ne Содержимое обратной зоны /etc/bind/zone/11.168.192.in-addr.arpa.db
+ ce $TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   bind.domain.
+
+ 81      IN PTR  rtr.bind.domain.
+ 67      IN PTR  srv.bind.domain.
+ 82      IN PTR  sw.bind.domain.
+
+ hd Настройка resolv.conf
+ ne Содержимое /etc/net/ifaces/ens33/resolv.conf
+ ce search bind.domain
+ nameserver 192.168.11.67
+ nameserver 192.168.33.67
+ nameserver 8.8.8.8
+ ct nameserver(DNS-сервер); search(домен поиска по умолчанию)
+
+ ne Перезапуск сети
+ ce systemctl restart network
+
+ hd Проверка конфигурации
+ ne Проверка всех зон
+ ce named-checkconf -z
+
+ ne Проверка отдельной прямой зоны
+ ce named-checkzone bind.domain /etc/bind/zone/bind.domain.db
+
+ ne Проверка отдельной обратной зоны
+ ce named-checkzone 11.168.192.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+
+ hd Запуск BIND
+ ne Включение и запуск сервиса
+ ce systemctl enable --now bind
