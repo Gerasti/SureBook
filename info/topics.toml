@@ -347,10 +347,6 @@ title = "logrotate"
 path = "~/SureBook/info/src_table.md/logrotate.md"
 lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}]
 
-[topics."mdadm_options"]
-title = "mdadm options"
-path = "/home/stip/SureBook/topics/mdadm_options.md"
-lists = [{list = "SuroTools"}, {list = "surowiki"}]
 [topics."moodle"]
 title = "moodle"
 path = "~/SureBook/info/src_table.md/moodle.md"

@@ -1,0 +1,76 @@
+hd Установка                                                                         
+  ne Установка MariaDB
+  ce apt-get update && apt-get install -y mariadb-server                               
+  ne Включение службы MariaDB                                                          
+  ce systemctl enable --now mariadb                                                    
+  ne Создание базы данных и пользователя                                               
+  ce mariadb                                                                           
+  CREATE DATABASE moodle;                                                              
+  CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'moodle';                             
+  GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON 
+  moodle.* TO 'moodle'@'localhost';                                                    
+  ct Создание БД moodle, пользователя moodle с паролем moodle и выдача необходимых прав
+  ne Установка Apache2                                                                 
+  ce apt-get install -y apache2 apache2-{base,httpd-prefork,mod_php8.0,mods}           
+  ne Установка PHP и модулей                                                           
+  ce apt-get install -y php8.0 php8.0-{curl,fileinfo,fpm-fcgi,gd,intl,ldap,mbstring,mys
+  qlnd,mysqlnd-mysqli,opcache,soap,sodium,xmlreader,xmlrpc,zip,openssl}                
+  ne Запуск веб-сервера                                                                
+  ce systemctl enable --now httpd2                                                     
+  ne Установка git                                                                     
+  ce apt-get install -y git                                                            
+  ne Загрузка Moodle                                                                   
+  ce git clone git://git.moodle.org/moodle.git                                         
+  cd moodle                                                                            
+  ne Просмотр доступных веток                                                          
+  ce git branch -a                                                                     
+  ne Выбор версии Moodle                                                               
+  ce git branch --track MOODLE_403_STABLE origin/MOODLE_403_STABLE                     
+  git checkout MOODLE_403_STABLE                                                       
+  ct Переключение на стабильную ветку 4.03                                             
+  ne Копирование в веб-каталог                                                         
+  ce cd ../                                                                            
+  cp -R moodle /var/www/html/                                                          
+  ne Создание каталога данных                                                          
+  ce mkdir /var/moodledata                                                             
+  chown -R apache2 /var/moodledata                                                     
+  chmod -R 777 /var/moodledata                                                         
+  chmod -R 0755 /var/www/html/moodle                                                   
+  chown -R apache2:apache2 /var/www/html/moodle                                        
+                                                                                       
+  hd Настройка                                                                         
+  ne Содержимое файла /etc/httpd2/conf/sites-available/moodle.conf                     
+  ce <VirtualHost *:80>                                                                
+      ServerName moodle.champ.first                                                    
+      DocumentRoot /var/www/html/moodle                                                
+      <Directory "/var/www/html/moodle">                                               
+          AllowOverride All                                                            
+          Options -Indexes +FollowSymLinks                                             
+      </Directory>                                                                     
+  </VirtualHost>                                                                       
+  ct ServerName (доменное имя); DocumentRoot (путь к Moodle)                           
+  ne Активация конфигурации                                                            
+  ce ln -s /etc/httpd2/conf/sites-available/moodle.conf /etc/httpd2/conf/sites-enabled/
+  ne Настройка PHP                                                                     
+  ce sed -i "s/; max_input_vars = 1000/max_input_vars = 5000/g"                        
+  /etc/php/8.0/apache2-mod_php/php.ini                                                 
+  ct Увеличение max_input_vars до 5000                                                 
+  ne Перезапуск Apache                                                                 
+  ce systemctl restart httpd2                                                          
+                                                                                       
+  hd Веб-установщик                                                                    
+  lt Параметры установки                                                               
+  - Язык: Русский                                                                      
+  - Каталог данных: /var/moodledata                                                    
+  - Тип БД: MariaDB (родной/mariadb)                                                   
+  - Сервер БД: localhost                                                               
+  - Название БД: moodle                                                                
+  - Пользователь БД: moodle                                                            
+  - Пароль БД: moodle                                                                  
+  - Префикс таблиц: mdl_                                                               
+  - Порт БД: 3306                                                                      
+  - Логин администратора: admin                                                        
+  - Пароль, имя, фамилия: указать свои                                                 
+  - Электронная почта: любая                                                           
+  - Страна: выбрать                                                                    
+  - Самостоятельная регистрация: Отключить

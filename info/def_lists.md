@@ -260,8 +260,6 @@ iptables port forwarding
 
 logrotate
 
-mdadm options
-
 moodle
 
 network mask table
@@ -556,8 +554,6 @@ GOST OpenSSL
 iptables NAT
 
 iptables port forwarding
-
-mdadm options
 
 NFS
 

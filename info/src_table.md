@@ -74,11 +74,11 @@
 | 70 | IP-телефония SNG7 | sysahelper [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777) | md |
 | 71 | iptables NAT | SuroTools, surowiki | md, unikey |
 | 72 | iptables port forwarding | SuroTools, surowiki | md, unikey |
-| 73 | iscsi | sysahelper [iscsi](https://sysahelper.ru/mod/page/view.php?id=773) | md |
-| 74 | iscsi attach | sysahelper [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774) | md |
-| 75 | logrotate | SuroTools, DEMO-208-2 | md |
-| 76 | mdadm options | SuroTools, surowiki | md |
-| 77 | moodle | sysahelper [moodle](https://sysahelper.ru/mod/book/view.php?id=34), сетевикон, SuroTools | md |
+| 73 | iscsi | sysahelper [iscsi](https://sysahelper.ru/mod/page/view.php?id=773) | md, unikey |
+| 74 | iscsi attach | sysahelper [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774) | md, unikey |
+| 75 | logrotate | SuroTools, DEMO-208-2 | md, unikey |
+| 76 | mdadm options | SuroTools, surowiki | md, unikey |
+| 77 | moodle | sysahelper [moodle](https://sysahelper.ru/mod/book/view.php?id=34), сетевикон, SuroTools | md, unikey |
 | 78 | mounting devices | notesk | md |
 | 79 | network mask table | сетевикон, SuroTools | md |
 | 80 | NextCloud | sysahelper [NextCloud](https://sysahelper.ru/mod/book/view.php?id=27) | md |
@@ -129,4 +129,4 @@
 | 125 | FreeIPA | notesk | md, unikey |
 | 126 | ansible base | notesk, DEMO-208-2, DemoScreens | md, unikey |
 | 127 | nftables port forwarding |  | md, unikey |
-| 128 | dhcpd failover |  |  |
+| 128 | dhcpd failover |  | md, unikey |
