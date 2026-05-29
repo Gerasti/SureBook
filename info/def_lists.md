@@ -156,8 +156,6 @@ install PostgreSQL Zabbix
 
 install SSL certificate RedHat-like
 
-mounting devices
-
 NFS
 
 nftables NAT
@@ -213,8 +211,6 @@ chrony
 
 moodle
 
-network mask table
-
 NFS
 
 nginx reverse proxy
@@ -260,9 +256,9 @@ iptables port forwarding
 
 logrotate
 
-moodle
+mdadm options
 
-network mask table
+moodle
 
 NFS
 

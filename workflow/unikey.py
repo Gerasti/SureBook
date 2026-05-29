@@ -9,6 +9,8 @@ KEYS:
   ct, /comment    > text
   lt, /list       ### text <!-- LIST -->  (enters list mode)
 
+  Note: $$ prefix escapes keys (e.g., $$ct outputs plain text "ct", not a comment)
+
 LIST MODE (after lt, /list):
   -               - item
   --                  - subitem
@@ -109,9 +111,23 @@ def format_output(key, data, ctx, fmt):
 def process_tokens(tokens, fmt):
     output, context = [], {'MODE_LIST_lt': False}
 
+    # Strip $$ prefix from tokens - they won't be treated as keys
+    base_keys = ['hd', 'ne', 'ce', 'ct', 'lt']
+    cleaned_tokens = []
+    for token in tokens:
+        if token.startswith('$$') and token[2:] in base_keys:
+            # Remove $$ but mark this token to not be treated as a key
+            cleaned_tokens.append(token[2:] + '\x00')  # Add null marker
+        else:
+            cleaned_tokens.append(token)
+    tokens = cleaned_tokens
+
     key_positions = []
     mode_lt = False
     for idx, token in enumerate(tokens):
+        # Skip tokens with null marker (escaped keys)
+        if '\x00' in token:
+            continue
         is_list_item = token in KEYS_LIST and mode_lt
         is_key = token in KEYS or is_list_item
         if is_key:
@@ -120,6 +136,9 @@ def process_tokens(tokens, fmt):
                 mode_lt = True
             elif token in KEYS:
                 mode_lt = False
+
+    # Remove null markers from tokens
+    tokens = [t.replace('\x00', '') for t in tokens]
 
     for i, key_idx in enumerate(key_positions):
         token = tokens[key_idx]

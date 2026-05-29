@@ -77,9 +77,8 @@ iptables port forwarding
 iscsi
 iscsi attach
 logrotate
+mdadm options
 moodle
-mounting devices
-network mask table
 NextCloud
 NFS
 nftables firewall

@@ -58,6 +58,7 @@ Commands:
   write <topic>         Open/create .unikey file
   cast <topic>          Convert .unikey to format
   view <topic>          View converted file
+  work <topic>          Write and view (write + view)
 
   table [generate]      Generate source table
   table show            View source table
@@ -457,7 +458,7 @@ Examples:
         elif command == "link":
             return link_cmd.execute(args, flags)
 
-        elif command in ["write", "cast", "view"]:
+        elif command in ["write", "cast", "view", "work"]:
             return editor_cmd.execute([command] + args, flags)
 
         elif command == "table":

@@ -1,0 +1,21 @@
+hd Настройка                                                                                
+  ne В /etc/net/sysctl.conf изменить строку                                                   
+  ce net.ipv4.ip_forward = 1                                                                  
+  ct Включение пересылки пакетов между интерфейсами                                           
+  ne Применение изменений                                                                     
+  ce sysctl -p                                                                                
+  ne В /etc/nftables/nftables.nft добавить таблицу NAT                                        
+  ce table ip nat {                                                                           
+      chain postrouting {                                                                     
+          type nat hook postrouting priority 100; policy accept;                              
+          oif "ens32" masquerade                                                              
+      }                                                                                       
+  }                                                                                           
+  ct table ip nat (таблица NAT); chain postrouting (обработка после маршрутизации); oif ens32 
+  (исходящий интерфейс); masquerade (подмена адреса источника на адрес интерфейса)            
+  ne Применение конфигурации nftables
+  ce nft -f /etc/nftables/nftables.nft                                                        
+  ct Загрузка правил из файла                                                                 
+  ne Включение службы nftables                                                                
+  ce systemctl enable nftables                                                                
+  systemctl restart nftables         

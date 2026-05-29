@@ -1,0 +1,30 @@
+hd Установка на сервере                                                                     
+  ne Установка NFS-сервера                                                                    
+  ce apt-get install nfs-server                                                               
+  ne Создание каталога для экспорта                                                           
+  chown 777 /nfs                                                                              
+  ne Содержимое файла /etc/exports                                                            
+  ce /nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
+  ct /nfs (экспортируемый каталог); 192.168.20.0/26 (разрешенная подсеть); rw (чтение-запись);
+   sync (синхронная запись); no_subtree_check (отключить проверку подкаталогов)               
+  ne Применение изменений                                                                     
+  ce exportfs -ra                                                                             
+  ct Перечитывает /etc/exports и применяет изменения                                          
+                                                                                              
+  hd Установка на клиенте                                                                     
+  ne Установка NFS-клиента                                                                    
+  ce apt-get install nfs-clients                                                              
+  ne В /etc/fstab добавить строку                                                             
+  ce 192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
+  ct 192.168.30.3:/nfs (удаленный каталог); /mnt/nfs (точка монтирования); nfs (тип ФС)       
+  ne Монтирование                                                                             
+  ce mount -a                                                                                 
+                                                                                              
+  hd Проверка                                                                                 
+  ne Создание тестового файла на клиенте                                                      
+  ce cd /mnt/nfs                                                                              
+  touch txt                                                                                   
+  ls                                                                                          
+  ne Проверка на сервере                                                                      
+  ce ls -l /nfs                                                                               
+  ct Файл txt должен быть виден с владельцем nobody:nobody

@@ -8,7 +8,7 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-29 01:20:03"
+last_saved = "2026-05-30 00:58:55"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -351,16 +351,6 @@ lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}]
 title = "moodle"
 path = "~/SureBook/info/src_table.md/moodle.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=34", link_look = "moodle"}, {list = "сетевикон"}, {list = "SuroTools"}]
-[topics."mounting_devices"]
-title = "mounting devices"
-path = "~/SureBook/info/src_table.md/mounting_devices.md"
-lists = [{list = "notesk"}]
-
-[topics."network_mask_table"]
-title = "network mask table"
-path = "~/SureBook/info/src_table.md/network_mask_table.md"
-lists = [{list = "сетевикон"}, {list = "SuroTools"}]
-
 [topics."NextCloud"]
 title = "NextCloud"
 path = "~/SureBook/info/src_table.md/NextCloud.md"
@@ -599,3 +589,7 @@ lists = []
 title = "dhcpd failover"
 path = "/home/stip/SureBook/topics/dhcpd_failover.md"
 lists = []
+[topics."mdadm_options"]
+title = "mdadm options"
+path = "/home/stip/SureBook/topics/mdadm_options.md"
+lists = [{list = "SuroTools"}]

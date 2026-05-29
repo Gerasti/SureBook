@@ -26,6 +26,7 @@ Usage:
   write <topic>         Open/create .unikey file
   cast <topic>          Convert .unikey to format
   view <topic>          View converted file
+  work <topic>          Write and view (write + view)
   help                  Show this help
 
 Flags:
@@ -35,6 +36,7 @@ Examples:
   write "Python"                # Open .unikey file
   cast "Python" format md       # Convert to markdown
   view "Python" format md       # View markdown file
+  work "Python" format md       # Write and view
 """
 
     def execute(self, args: List[str], flags: Dict[str, Any]) -> int:
@@ -44,13 +46,14 @@ Examples:
             write <topic>       - Open/create .unikey file
             cast <topic>        - Convert .unikey to format
             view <topic>        - View converted file
+            work <topic>        - Write and view
         """
         if args and args[0] == "help" and not flags.get('force'):
             print(self.help())
             return 0
 
         if not args:
-            return self.error("editor requires subcommand: write, cast, view")
+            return self.error("editor requires subcommand: write, cast, view, work")
 
         subcommand = args[0]
 
@@ -60,6 +63,8 @@ Examples:
             return self._cast(args[1:], flags)
         elif subcommand in ["view", "v"]:
             return self._view(args[1:], flags)
+        elif subcommand in ["work", "wk"]:
+            return self._work(args[1:], flags)
         else:
             return self.error(f"Unknown editor subcommand: {subcommand}")
 
@@ -241,6 +246,51 @@ Examples:
         if not viewer:
             return self.error(f"No viewer set for format '{fmt}'. Use 'config viewer {fmt} <cmd>'")
 
-        subprocess.Popen([viewer, file_path])
+        # Split viewer command if it contains arguments
+        import shlex
+        viewer_cmd = shlex.split(viewer) + [file_path]
+        subprocess.Popen(viewer_cmd)
         print(f"Opened: {file_path}")
         return 0
+
+    def _work(self, args: List[str], flags: Dict[str, Any]) -> int:
+        """Write and view topic file."""
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
+        if not args:
+            return self.error("work requires: <topic>")
+
+        topic = args[0]
+        settings = self.config_repo.get_settings()
+
+        fmt = flags.get("format") or settings.auto_cast_format
+        if not fmt:
+            return self.error("Format not specified. Use 'work <topic> format <ext>'")
+
+        if not settings.topic_save:
+            return self.error("topic_save not set")
+
+        key = normalize_topic(topic)
+        file_path = FileManager.join(settings.topic_save, f"{key}.{fmt}")
+
+        # Ensure file exists (cast if needed)
+        unikey_path = FileManager.join(settings.topic_save, f"{key}.unikey")
+        if FileManager.exists(unikey_path):
+            # Cast to ensure target file exists
+            result = self._cast(args, flags)
+            if result != 0:
+                return result
+
+        # Open viewer first (non-blocking)
+        if FileManager.exists(file_path):
+            viewer = settings.viewers.get(fmt)
+            if viewer:
+                import shlex
+                viewer_cmd = shlex.split(viewer) + [file_path]
+                subprocess.Popen(viewer_cmd)
+                print(f"Opened viewer: {file_path}")
+
+        # Then open editor (blocking)
+        return self._write(args, flags)
