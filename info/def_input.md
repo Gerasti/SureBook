@@ -1,6 +1,6 @@
 alt fail2ban
 alt samba ADMC
-ansible base
+ansible
 ansible NextCloud
 ansible OTRS
 ansible OwnCloud
@@ -109,6 +109,7 @@ SQL install MySQL
 SQL install PostgreSQL
 strongswan ipsec
 sudo
+sudo-schema-samba
 systemd backup
 systemd-timesyncd
 timedatectl

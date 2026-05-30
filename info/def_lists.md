@@ -78,7 +78,7 @@ Zabbix agent
 Zabbix web-interface [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
 
 ## notesk list:
-ansible base
+ansible
 
 apt
 
@@ -279,7 +279,7 @@ Zabbix agent
 Zabbix web-interface
 
 ## DEMO-208-2 list:
-ansible base
+ansible
 
 apt
 
@@ -366,7 +366,7 @@ etcnet ip
 samba share folder
 
 ## DemoScreens list:
-ansible base
+ansible
 
 bind DNS
 

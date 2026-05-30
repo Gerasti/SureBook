@@ -8,7 +8,7 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-31 00:02:54"
+last_saved = "2026-05-31 02:15:16"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -512,11 +512,6 @@ title = "FreeIPA"
 path = "/home/stip/SureBook/topics/FreeIPA.md"
 lists = [{list = "notesk"}]
 
-[topics."ansible_base"]
-title = "ansible base"
-path = "~/SureBook/info/src_table.md/ansible_base.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
 [topics."nftables_port_forwarding"]
 title = "nftables port forwarding"
 path = "/home/stip/SureBook/topics/nftables_port_forwarding.md"
@@ -566,3 +561,14 @@ lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"},
 title = "open-vm-tools"
 path = "~/SureBook/info/src_table.md/open-vm-tools.md"
 lists = [{list = "SuroTools"}]
+
+[topics."ansible"]
+title = "ansible"
+path = "~/SureBook/info/src_table.md/ansible.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
+
+[topics."sudo-schema-samba"]
+title = "sudo-schema-samba"
+path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
+lists = []
+

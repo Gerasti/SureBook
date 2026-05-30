@@ -111,14 +111,14 @@
 | 107 | Кибер Бэкап | notesk | md |
 | 108 | dnsmasq | notesk, surowiki | md, unikey |
 | 109 | FreeIPA | notesk | md, unikey |
-| 110 | ansible base | notesk, DEMO-208-2, DemoScreens | md, unikey |
-| 111 | nftables port forwarding |  | md, unikey |
-| 112 | dhcpd failover |  | md, unikey |
-| 113 | mdadm options | SuroTools | md, unikey |
-| 114 | LVM | notesk | md, unikey |
-| 115 | RADIUS | yesterday-it-worked | md, unikey |
-| 116 | SSH | notesk, surowiki | md, unikey |
-| 117 | squid base options | notesk | md, unikey |
-| 118 | OpenSSL certificate center | SuroTools | md, unikey |
-| 119 | sudo | notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, setting_screens | md, unikey |
-| 120 | open-vm-tools | SuroTools | md, unikey |
+| 110 | nftables port forwarding |  | md, unikey |
+| 111 | dhcpd failover |  | md, unikey |
+| 112 | mdadm options | SuroTools | md, unikey |
+| 113 | LVM | notesk | md, unikey |
+| 114 | RADIUS | yesterday-it-worked | md, unikey |
+| 115 | SSH | notesk, surowiki | md, unikey |
+| 116 | squid base options | notesk | md, unikey |
+| 117 | OpenSSL certificate center | SuroTools | md, unikey |
+| 118 | sudo | notesk, сетевикон, SuroTools, DEMO-208-2, DEMO-208, setting_screens | md, unikey |
+| 119 | open-vm-tools | SuroTools | md, unikey |
+| 120 | ansible | notesk, DEMO-208-2, DemoScreens | md, unikey |

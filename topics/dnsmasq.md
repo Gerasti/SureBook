@@ -22,20 +22,29 @@ systemctl enable --now dnsmasq
 #### Конфигурация DNS в /etc/dnsmasq.conf <!-- NAME -->
 
 ```CODE
-listen-address=127.0.0.1,192.168.0.1
+domain=domain.irpo
 
-  domain=no.do
+server=/domain.irpo/192.168.5.2
+server=77.88.8.8
 
-  local=/home.lan/
+interface=*
 
-  cache-size=1000
+address=/hq-rtr.domain.irpo/192.168.1.1
+ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.domain.irpo
 
-  server=9.9.9.9
+address=/docker.domain.irpo/172.16.1.1
+address=/web.domain.irpo/172.16.2.1
 
-  expand-hosts
+address=/br-rtr.domain.irpo/192.168.5.1
 
-  log-queries
-  log-facility=/var/log/dnsmasq.log
+address=/hq-srv.domain.irpo/192.168.1.2
+ptr-record=2.1.168.192.in-addr.arpa,hq-srv.domain.irpo
+
+address=/hq-cli.domain.irpo/192.168.5.3
+ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.irpo
+
+address=/br-srv.domain.irpo/192.168.5.2 
+ 
  
 ```
 
@@ -113,7 +122,7 @@ ptr-record=10.0.168.192.in-addr.arpa,host.example.com
 ```CODE
 interface=ens3
   bind-interfaces
-
+  no-resolv
   dhcp-range=192.168.0.50,192.168.0.150,12h
 
   dhcp-option=3,192.168.0.1
@@ -132,7 +141,7 @@ user=nobody
  
 ```
 
-> user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq)
+> user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf)
 
 #### Применение конфигурации <!-- NAME -->
 

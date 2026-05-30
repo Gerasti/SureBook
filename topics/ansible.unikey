@@ -91,3 +91,4 @@ hd Установка Ansible
   cat /etc/ansible/PC-INFO/hq-cli.yml                                                         
   cat /etc/ansible/PC-INFO/hq-srv.yml                                                         
   ct Файлы содержат имя компьютера и IP-адрес каждого хоста
+
