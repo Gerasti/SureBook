@@ -1,0 +1,77 @@
+hd Установка
+   
+  ne Установка StrongSwan                                                                     
+  ce apt-get install strongswan
+                                                                                              
+  hd Настройка первого маршрутизатора                                                         
+                                                                                              
+  ne Основной конфигурационный файл                                                           
+  ce /etc/strongswan/ipsec.conf
+                                                                                              
+  ne Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.1                        
+  ce config setup                                                                             
+                                                                                              
+  conn nameConnect                                                                            
+      authby=psk                                                                              
+      keyexchange=ikev2                                                                       
+                                                                                              
+  leftid=10.10.10.1                                                                           
+  left=10.10.10.1                                                                             
+  leftsubnet=10.10.10.0/30                                                                    
+                                                                                              
+  rightid=10.10.10.2                                                                          
+  right=10.10.10.2                                                                            
+  rightsubnet=10.10.10.0/30                                                                   
+                                                                                              
+  auto=start                                                                                  
+  ct authby=psk(аутентификация по общему ключу); keyexchange=ikev2(протокол обмена ключами);  
+  leftid(публичный идентификатор локального узла); left(локальный IP-адрес);                  
+  leftsubnet(локальная подсеть); rightid(публичный идентификатор удалённого узла);
+  right(удалённый IP-адрес); rightsubnet(удалённая подсеть); auto=start(автоматический запуск 
+  туннеля)                                                                                   
+          
+  ne Файл с общими ключами
+  ce /etc/strongswan/ipsec.secrets                                                            
+                                                                                              
+  ne Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.1                     
+  ce 10.10.10.1 10.10.10.2 : PSK "P@ssw0rd"                                                   
+  ct Формат: локальный_IP удалённый_IP : PSK "пароль"                                         
+                                                                                              
+  hd Настройка второго маршрутизатора                                                         
+                                                                                              
+  ne Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.2                        
+  ce config setup 
+                                                                                              
+  conn nameConnect                                                                            
+      authby=psk
+      keyexchange=ikev2                                                                       
+                                                                                              
+  leftid=10.10.10.2                                                                           
+  left=10.10.10.2                                                                             
+  leftsubnet=10.10.10.0/30                                                                    
+                                                                                              
+  rightid=10.10.10.1                                                                          
+  right=10.10.10.1                                                                            
+  rightsubnet=10.10.10.0/30                                                                   
+                                                                                              
+  auto=start                                                                                  
+  ct Зеркальная конфигурация: left и right меняются местами                                   
+                                                                                              
+  ne Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.2
+  ce 10.10.10.2 10.10.10.1 : PSK "P@ssw0rd"                                                   
+  ct Тот же пароль, адреса в обратном порядке                                                 
+                                                                                              
+  hd Запуск                                                                                   
+                                                                                              
+  ne Запуск и автозагрузка службы на обоих маршрутизаторах                                    
+  ce systemctl enable --now strongswan-starter ipsec
+                                                                                              
+  hd Проверка     
+                                                                                              
+  ne Проверка статуса туннеля                                                                 
+  ce ipsec status
+  ct Показывает состояние IPsec соединений                                                    
+                                                                                              
+  ne Проверка связности через туннель                                                         
+  ce ping 10.10.10.2                                                                          
+  ct С первого маршрутизатора, с второго ping 10.10.10.1

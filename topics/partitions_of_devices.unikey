@@ -1,0 +1,184 @@
+ne Создание GPT разметки на диске /dev/sda                                                  
+  ce parted /dev/sda                                                                          
+  mklabel gpt                                                                                 
+  mkpart boot 0% 100%                                                                         
+  ct mklabel(создание таблицы разделов) {gpt, msdos}
+  ct mkpart(создание раздела) boot(название раздела, любое)                                   
+  ct 0% 100%(начало и конец раздела в процентах) {1MiB 100%, 0% 50GB}                         
+                                                                                              
+  ne Создание раздела с указанием файловой системы                                            
+  ce parted /dev/sdc                                                                          
+  mklabel gpt                                                                                 
+  mkpart root ext4 0% 100%                                                                    
+  ct ext4(тип файловой системы) {ext4, xfs, btrfs, swap}                                      
+  ct root(название раздела, может быть любым{A–Z, a–z}, {0–9}, {`-`, `_`})                                                 
+                                                                                              
+  ne Создание нескольких разделов                                                             
+  ce parted /dev/sdd                                                                          
+  mklabel gpt                                                                                 
+  mkpart system 0% 50%                                                                        
+  mkpart data 50% 100%                                                                        
+  ct Создание двух разделов по 50% диска с названиями system и data                           
+                                                                                              
+  ne Создание раздела с точным размером                                                       
+  ce parted /dev/sde                                                                          
+  mklabel gpt                                                                                 
+  mkpart root 1MiB 10GiB
+  ct 1MiB(начало раздела, выравнивание) 10GiB(конец раздела)                                  
+  ct Единицы измерения {MiB, GiB, TiB, MB, GB, TB}                                            
+                                                                                              
+  ne Создание swap раздела                                                                    
+  ce parted /dev/sdf                                                                          
+  mklabel gpt                                                                                 
+  mkpart swap linux-swap 0% 4GiB
+  mkpart root ext4 4GiB 100%                                                                  
+  ct Первый раздел для swap, второй для системы                                               
+                                                                                              
+  ne Создание EFI раздела для UEFI систем                                                     
+  ce parted /dev/sdg                                                                          
+  mklabel gpt                                                                                 
+  mkpart EFI fat32 1MiB 512MiB                                                                
+  set 1 esp on                                                                                
+  mkpart root ext4 512MiB 100%                                                                
+  ct EFI(название раздела) для загрузчика UEFI                                                
+  ct esp(флаг для UEFI загрузки) обязателен для EFI раздела                                   
+  ct Размер EFI раздела обычно 512MiB {256MiB, 512MiB, 1GiB}                                  
+  ct GPT обязательна для UEFI систем                                                          
+                                                                                              
+  ne Создание разметки для BIOS Legacy загрузки                                               
+  ce parted /dev/sdh                                                                          
+  mklabel msdos                                                                               
+  mkpart primary ext4 1MiB 100%                                                               
+  set 1 boot on                                                                               
+  ct msdos(таблица разделов MBR) для BIOS Legacy систем                                       
+  ct boot(флаг загрузочного раздела) для Legacy BIOS                                          
+  ct Для BIOS Legacy лучше использовать msdos, не gpt                                         
+                                                                                              
+  ne Создание разметки BIOS Legacy с swap                                                     
+  ce parted /dev/sdi                                                                          
+  mklabel msdos                                                                               
+  mkpart primary linux-swap 1MiB 4GiB                                                         
+  mkpart primary ext4 4GiB 100%                                                               
+  set 2 boot on                                                                               
+  ct msdos для совместимости со старыми BIOS                                                  
+  ct boot устанавливается на корневой раздел                                                  
+                                                                                              
+  ne Создание полной разметки с boot разделом                                                 
+  ce parted /dev/sdj                                                                          
+  mklabel gpt                                                                                 
+  mkpart boot ext4 1MiB 512MiB                                                                
+  set 1 boot on                                                                               
+  mkpart swap linux-swap 512MiB 4GiB                                                          
+  set 2 swap on                                                                               
+  mkpart root ext4 4GiB 100%                                                                  
+  ct boot(название и флаг загрузочного раздела) для /boot                                     
+  ct swap(название и флаг раздела подкачки) для swap                                          
+  ct Типичная схема: boot + swap + root                                                       
+                                                                                              
+  ne Создание разметки для UEFI с boot и swap                                                 
+  ce parted /dev/sdk                                                                          
+  mklabel gpt                                                                                 
+  mkpart EFI fat32 1MiB 512MiB                                                                
+  set 1 esp on                                                                                
+  mkpart boot ext4 512MiB 1GiB                                                                
+  set 2 boot on                                                                               
+  mkpart swap linux-swap 1GiB 5GiB                                                            
+  set 3 swap on                                                                               
+  mkpart root ext4 5GiB 100%                                                                  
+  ct esp(EFI раздел) + boot(/boot) + swap(подкачка) + root(корень)                            
+  ct Полная схема для UEFI системы                                                            
+                                                                                              
+  ne Создание разметки с LVM                                                                  
+  ce parted /dev/sdl                                                                          
+  mklabel gpt                                                                                 
+  mkpart EFI fat32 1MiB 512MiB                                                                
+  set 1 esp on                                                                                
+  mkpart lvm 512MiB 100%                                                                      
+  set 2 lvm on                                                                                
+  ct lvm(флаг для LVM) для физического тома LVM                                               
+  ct LVM позволяет гибко управлять разделами: изменять размер, создавать снапшоты, объединять 
+  диски                                                                                       
+                                                                                              
+  ne Пример использования LVM после создания раздела                                          
+  ce pvcreate /dev/sdl2
+  vgcreate vg0 /dev/sdl2                                                                      
+  lvcreate -L 4G -n swap vg0                                                                  
+  lvcreate -L 20G -n root vg0                                                                 
+  lvcreate -l 100%FREE -n home vg0                                                            
+  ct pvcreate(создание физического тома)                                                      
+  ct vgcreate(создание группы томов) vg0(название группы)                                     
+  ct lvcreate(создание логического тома) -L(размер) -n(название) -l(процент свободного места) 
+  ct LVM позволяет изменять размер разделов без перезагрузки                                  
+                                                                                              
+  ne Создание разметки с RAID                                                                 
+  ce parted /dev/sdm                                                                          
+  mklabel gpt                                                                                 
+  mkpart raid1 1MiB 100%
+  set 1 raid on                                                                               
+  ct raid(флаг для RAID) для программного RAID массива                                        
+  ct RAID объединяет несколько дисков для отказоустойчивости или производительности           
+                                                                                              
+  ne Неинтерактивное создание разметки                                                        
+  ce parted -s /dev/sdg mklabel gpt                                                           
+  parted -s /dev/sdg mkpart root 0% 100%                                                      
+  ct -s(неинтерактивный режим, без подтверждений)                                             
+                                                                                              
+  ne Удаление раздела                                                                         
+  ce parted /dev/sdh                                                                          
+  rm 1                                                                                        
+  ct rm(удаление раздела) 1(номер раздела)
+                                                                                              
+  ne Изменение размера раздела                                                                
+  ce parted /dev/sdi                                                                          
+  resizepart 1 50GiB                                                                          
+  ct resizepart(изменение размера) 1(номер раздела) 50GiB(новый размер)                       
+                                                                                              
+  ne Установка и снятие флагов раздела                                                        
+  ce parted /dev/sdj                                                                          
+  set 1 boot on                                                                               
+  set 1 boot off                                                                              
+  ct set(установка флага) 1(номер раздела) boot(тип флага) on/off(включить/выключить)         
+  ct Типы флагов {boot, esp, swap, raid, lvm, bios_grub}                                      
+                                                                                              
+  ne Просмотр доступных флагов                                                                
+  ce parted /dev/sda                                                                          
+  help set                                                                                    
+  ct Показывает все доступные флаги для установки                                             
+                                                                                              
+  hd Проверка                                                                                 
+  ne Просмотр разделов дисков                                                                 
+  ce lsblk                                                                                    
+  ct Показывает все блочные устройства и разделы                                              
+                                                                                              
+  ne Просмотр информации о разделах диска                                                     
+  ce parted /dev/sda print                                                                    
+  ct Показывает таблицу разделов конкретного диска с флагами                                  
+                                                                                              
+  ne Просмотр всех дисков                                                                     
+  ce parted -l                                                                                
+  ct Показывает информацию о всех дисках в системе                                            
+                                                                                              
+  ne Проверка выравнивания разделов                                                           
+  ce parted /dev/sda align-check optimal 1                                                    
+  ct align-check(проверка выравнивания) optimal(тип) 1(номер раздела)                         
+                                                                                              
+  ne Проверка активации swap                                                                  
+  ce swapon --show                                                                            
+  ct Показывает активные swap разделы                                                         
+                                                                                              
+  ne Проверка монтирования EFI раздела                                                        
+  ce mount | grep efi                                                                         
+  ct Показывает смонтированные EFI разделы                                                    
+                                                                                              
+  ne Проверка LVM томов                                                                       
+  ce pvdisplay                                                                                
+  vgdisplay                                                                                   
+  lvdisplay                                                                                   
+  ct Показывает физические тома, группы томов и логические тома LVM                           
+                                                                                              
+  Исправления:                                                                                
+  - primary заменено на осмысленные названия разделов (boot, root, swap, data)                
+  - Для BIOS Legacy использую msdos, не gpt                                                   
+  - Добавлено объяснение LVM: технология для гибкого управления разделами (изменение размера,
+  снапшоты, объединение дисков)                                                               
+  - Добавлен пример создания LVM томов после разметки

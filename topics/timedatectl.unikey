@@ -1,0 +1,93 @@
+hd Управление временем через timedatectl                                        
+   
+  ne Просмотр текущего времени и настроек                                         
+  ce timedatectl  
+  ct Показывает локальное время, UTC, часовой пояс, синхронизацию NTP             
+                                                                                  
+  ne Просмотр статуса синхронизации времени                                       
+  ce timedatectl status                                                           
+  ct Показывает полную информацию                             
+                                                                                  
+  hd Настройка времени                                                            
+                                                                                  
+  ne Установка текущей даты и времени                                             
+  ce timedatectl set-time "2026-05-31 10:30:00"
+  ct Формат: YYYY-MM-DD HH:MM:SS                                                  
+                                                                                  
+  ne Установка только даты                                                        
+  ce timedatectl set-time "2026-05-31"                                            
+                                                                                  
+  ne Установка только времени                                                     
+  ce timedatectl set-time "10:30:00"                                              
+                                                                                  
+  hd Настройка часового пояса                                                     
+                                                                                  
+  ne Просмотр текущего часового пояса                                             
+  ce timedatectl show-timezones
+  ct Показывает список всех доступных часовых поясов                              
+                                                                                  
+  ne Поиск часового пояса                                                         
+  ce timedatectl list-timezones | grep Moscow                                     
+                                                                                  
+  ne Установка часового пояса                                                     
+  ce timedatectl set-timezone Europe/Moscow                                       
+  ct Часовой пояс Москвы                                                          
+                                                                                  
+  ne Установка UTC                                                                
+  ce timedatectl set-timezone UTC                                                 
+                                                                                  
+  hd Настройка NTP-синхронизации                                                  
+                                                                                  
+  ne Включение NTP-синхронизации                                                  
+  ce timedatectl set-ntp true
+  ct Включает автоматическую синхронизацию времени через systemd-timesyncd        
+                                                                                  
+  ne Отключение NTP-синхронизации                                                 
+  ce timedatectl set-ntp false                                                    
+  ct Отключает автоматическую синхронизацию, позволяет устанавливать время вручную
+                                                                                  
+  ne Проверка статуса NTP-синхронизации                                           
+  ce timedatectl timesync-status                                                  
+  ct Показывает сервер, stratum, задержку, смещение времени                       
+                                                                                  
+  hd Настройка аппаратных часов                                                   
+                                                                                  
+  ne Синхронизация системного времени с аппаратными часами                        
+  ce hwclock --systohc
+  ct Записывает системное время в аппаратные часы (RTC)                           
+                                                                                  
+  ne Синхронизация аппаратных часов с системным временем                          
+  ce hwclock --hctosys                                                            
+  ct Устанавливает системное время из аппаратных часов                            
+                                                                                  
+  ne Просмотр аппаратных часов                                                    
+  ce hwclock --show                                                               
+  ct Показывает время из RTC                                                      
+                                                                                  
+  ne Установка аппаратных часов в UTC                                             
+  ce timedatectl set-local-rtc 0                                                  
+  ct 0(RTC в UTC), рекомендуется для Linux                                        
+                                                                                  
+  ne Установка аппаратных часов в локальное время                                 
+  ce timedatectl set-local-rtc 1                                                  
+  ct 1(RTC в локальном времени), используется для совместимости с Windows         
+                                                                                  
+  hd Проверка                                                                     
+                                                                                  
+  ne Просмотр всех свойств                                                        
+  ce timedatectl show
+  ct Показывает все параметры в формате ключ=значение                             
+                                                                                  
+  ne Просмотр конкретного свойства                                                
+  ce timedatectl show -p Timezone                                                 
+  ct -p(конкретное свойство): Timezone, NTPSynchronized, LocalRTC                 
+                                                                                  
+  ne Просмотр логов службы времени                                                
+  ce journalctl -u systemd-timesyncd                                              
+                                                                                  
+  lt Примеры часовых поясов                                                       
+  - Europe/Moscow (Москва, UTC+3)                                                 
+  - Asia/Yekaterinburg (Екатеринбург, UTC+5)                                      
+  - Asia/Novosibirsk (Новосибирск, UTC+7)   
+  - Asia/Vladivostok (Владивосток, UTC+10)                                        
+  - UTC (Всемирное координированное время)

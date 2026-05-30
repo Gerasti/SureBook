@@ -1,0 +1,73 @@
+hd Настройка службы резервного копирования                                                  
+   
+  ne Создание директории для резервных копий                                                  
+  ce mkdir -p /var/backup
+                                                                                              
+  ne Создание службы /etc/systemd/system/backup.service                                       
+  ce [Unit]                                                                                   
+  Description=Backup shared folder to /var/backup                                             
+  After=network.target                                                                        
+                                                                                              
+  [Service]                                                                                   
+  Type=oneshot                                                                                
+  ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
+  /path/to/shared/folder'                                                                     
+  ct Type=oneshot(служба завершается после выполнения команды); ExecStart(команда создания
+  архива с датой и временем); %%(двойной процент для экранирования в systemd)                 
+                  
+  ne Создание таймера /etc/systemd/system/backup.timer                                        
+  ce [Unit]       
+  Description=Run backup.service daily at 20:00                                               
+                                                                                              
+  [Timer]                                                                                     
+  OnCalendar=20:00                                                                            
+  Persistent=true                                                                             
+                                                                                              
+  [Install]                                                                                   
+  WantedBy=timers.target                                                                      
+  ct OnCalendar=20:00(запуск каждый день в 20:00); Persistent=true(выполнить пропущенную      
+  задачу при загрузке, если система была выключена)                                           
+                                                                                              
+  hd Запуск                                                                                   
+                  
+  ne Перезагрузка конфигурации systemd                                                        
+  ce systemctl daemon-reload
+  ct Применяет изменения после создания или редактирования unit-файлов                        
+                                                                                              
+  ne Включение и запуск таймера                                                               
+  ce systemctl enable --now backup.timer                                                      
+                                                                                              
+  hd Проверка                                                                                 
+                                                                                              
+  ne Просмотр активных таймеров                                                               
+  ce systemctl list-timers
+  ct Показывает все таймеры, время следующего запуска и последнего выполнения                 
+                                                                                              
+  ne Проверка статуса таймера                                                                 
+  ce systemctl status backup.timer                                                            
+                                                                                              
+  ne Проверка статуса службы                                                                  
+  ce systemctl status backup.service                                                          
+                                                                                              
+  ne Ручной запуск службы резервного копирования                                              
+  ce systemctl start backup.service                                                           
+  ct Для проверки работы службы без ожидания таймера                                          
+                                                                                              
+  ne Просмотр созданных архивов                                                               
+  ce ls -lh /var/backup                                                                       
+  ct -lh(список с размерами в читаемом формате)                                               
+                                                                                              
+  ne Просмотр логов службы                                                                    
+  ce journalctl -u backup.service                                                             
+  ct Показывает логи выполнения резервного копирования                                        
+                                                                                              
+  ne Просмотр логов таймера                                                                   
+  ce journalctl -u backup.timer                                                               
+                                                                                              
+  lt Дополнительные варианты OnCalendar                                                       
+  - OnCalendar=daily (каждый день в 00:00)                                                    
+  - OnCalendar=weekly (каждую неделю в понедельник 00:00)                                     
+  - OnCalendar=--* 02:00:00 (каждый день в 02:00)        
+  - OnCalendar=Mon,Fri 18:00 (понедельник и пятница в 18:00)                                  
+  - OnCalendar=*:0/15 (каждые 15 минут)                                                       
+  - OnCalendar=hourly (каждый час)

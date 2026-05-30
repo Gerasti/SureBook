@@ -1,0 +1,85 @@
+hd Установка                                                                                
+   
+  ne Установка OpenSSL                                                                        
+  ce apt-get install openssl
+  ct Обычно уже установлен в системе                                                          
+                                                                                              
+  hd Настройка сервера CA                                                                     
+                                                                                              
+  ne Создание корневой директории CA                                                          
+  ce mkdir /ca    
+                                                                                              
+  ne Поиск конфигурационного файла OpenSSL                                                    
+  ce openssl ca                                                                               
+  ct Команда выдаст ошибку с путём к конфигурационному файлу (/var/lib/ssl/openssl.cnf,       
+  /etc/ssl/openssl.cnf)                                                                       
+                                                                                              
+  ne Резервная копия конфигурационного файла                                                  
+  ce cp /var/lib/ssl/openssl.cnf /var/lib/ssl/openssl.cnf.backup
+                                                                                              
+  ne В /var/lib/ssl/openssl.cnf в секции [ CA_default ]                                       
+  ce dir = /ca                                                                                
+  ct Изменение корневой директории CA с ./demoCA на /ca                                       
+                                                                                              
+  ne Создание структуры директорий CA                                                         
+  ce cd /ca                                                                                   
+  mkdir certs newcerts crl private                                                            
+  touch index.txt                                                                             
+  echo -n '00' > serial                                                                       
+  ct certs(выпущенные сертификаты); newcerts(новые сертификаты); crl(списки отзыва);          
+  private(приватные ключи); index.txt(база данных сертификатов); serial(серийный номер);      
+  -n(без пробела и перевода строки)                                                           
+                                                                                              
+  ne В /var/lib/ssl/openssl.cnf в секции [ CA_default ]                                       
+  ce policy = policy_anything
+  ct Принимаем любые значения, требуем только CN (Common Name)                                
+                                                                                              
+  ne В /var/lib/ssl/openssl.cnf в секции [ policy_anything ]                                  
+  ce commonName = supplied                                                                    
+  ct CN обязателен для заполнения                                                             
+                                                                                              
+  ne В /var/lib/ssl/openssl.cnf в секции [ req_distinguished_name ]                           
+  ce countryName_default = RU                                                                 
+  0.organizationName_default = domain.sample                                                  
+  ct Значения по умолчанию для CA: C=RU, O=domain.sample, CN указывается при генерации        
+                                                                                              
+  ne В /var/lib/ssl/openssl.cnf в секции [ v3_ca ]                                            
+  ce basicConstraints = CA:true                                                               
+  ct Сертификат может быть корневым CA                                                        
+                                                                                              
+  ne Генерация ключей и запроса на сертификат CA                                              
+  ce openssl req -nodes -new -out cacert.csr -keyout private/cakey.pem -extensions v3_ca      
+  ct -nodes(без пароля на ключ); -new(новый запрос); -out(файл запроса); -keyout(приватный    
+  ключ); -extensions v3_ca(расширения CA). При заполнении: C=RU и O=domain.sample подставятся 
+  автоматически, CN указать вручную (например domain.sample RootCA), пустые поля заполнить    
+  точкой                                                                                      
+                  
+  ne Самоподписание сертификата CA                                                            
+  ce openssl ca -selfsign -in cacert.csr -out cacert.pem -extensions v3_ca
+  ct -selfsign(самоподписание); подтвердить y на вопросы                                      
+                                                                                              
+  ne Просмотр содержимого сертификата                                                         
+  ce openssl x509 -text -noout -in cacert.pem | less                                          
+  ct Необязательно, для проверки содержимого сертификата                                      
+                                                                                              
+  hd Настройка клиента                                                                        
+                                                                                              
+  ne Подготовка сертификата для клиента                                                       
+  ce mv cacert.pem cacert.crt
+  ct Сертификаты должны иметь расширение .crt                                                 
+                                                                                              
+  ne Копирование сертификата на клиент Debian/Ubuntu                                          
+  ce cp cacert.crt /usr/local/share/ca-certificates/                                          
+  update-ca-certificates                                                                      
+  ct Для дистрибутивов на базе deb                                                            
+                                                                                              
+  ne Копирование сертификата на клиент ALT/RHEL/CentOS                                        
+  ce cp cacert.crt /etc/pki/ca-trust/source/anchors/                                          
+  update-ca-trust                                                                      
+  ct Для дистрибутивов на базе rpm                                                            
+                                                                                              
+  hd Проверка                                                                                 
+                                                                                              
+  ne Проверка доверия к сертификату                                                           
+  ce openssl verify cacert.crt
+  ct Должен вывести: cacert.crt: OK

@@ -1,0 +1,53 @@
+hd Установка RADIUS сервера                                                                 
+  ne Установка пакетов                                                                        
+  ce apt-get update && apt-get install -y freeradius freeradius-utils                         
+  ne Запуск службы                                                                            
+  ce systemctl enable --now radiusd                                                           
+                                                                                              
+  hd Настройка RADIUS сервера                                                                 
+  ne В /etc/raddb/clients.conf                                                                
+  ce client ALL {                                                                             
+    ipaddr = 0.0.0.0
+    netmask = 0                                                                               
+    secret = P@ssw0rd                                                                         
+  }                                                                                           
+  ct ipaddr(IP клиента); netmask(маска сети); secret(общий секрет)                            
+                                                                                              
+  ne В конец /etc/raddb/users                                                                 
+  ce netuser Cleartext-Password := "P@ssw0rd"                                                 
+          Service-Type = Administrative-User,                                                 
+          Cisco-AVPair = "shell:roles=admin"                                                  
+  ct Cleartext-Password(пароль пользователя); Service-Type(тип доступа); Cisco-AVPair(роль для
+   Cisco)                                                                                     
+                                                                                              
+  ne Перезапуск службы                                                                        
+  ce systemctl restart radiusd
+                                                                                              
+  hd Проверка RADIUS сервера                                                                  
+  ne Проверка статуса службы                                                                  
+  ce systemctl status radiusd                                                                 
+  ct служба должна быть active (running)                                                      
+                                                                                              
+  ne Тестирование аутентификации                                                              
+  ce radtest netuser P@ssw0rd localhost 0 P@ssw0rd                                            
+  ct должен вернуть Access-Accept                                                             
+                                                                                              
+  hd Установка RADIUS клиента                                                                 
+  ne Установка пакетов                                                                        
+  ce apt-get update && apt-get install -y pam_radius                                          
+  ne В /etc/pam_radius_auth.conf                                                              
+  ce <ip сервера> P@ssw0rd 3                                                                  
+  ct формат: IP секрет таймаут                                                                
+                                                                                              
+  ne В /etc/pam.d/sshd и /etc/pam.d/system-auth-local                                         
+  ce auth  sufficient  pam_radius_auth.so                                                     
+  ct sufficient(достаточно для авторизации); pam_radius_auth.so(модуль RADIUS)                
+                                                                                              
+  ne Создание пользователя                                                                    
+  ce useradd netuser                                                                          
+  ct пользователь должен совпадать с настроенным на сервере                                   
+                                                                                              
+  hd Проверка RADIUS клиента                                                                  
+  ne Проверка подключения через SSH                                                           
+  ce ssh netuser@<ip клиента>                                                                 
+  ct вход должен пройти с паролем P@ssw0rd через RADIUS-сервер

@@ -77,6 +77,7 @@ iptables port forwarding
 iscsi
 iscsi attach
 logrotate
+LVM
 mdadm options
 moodle
 NextCloud
@@ -86,8 +87,9 @@ nftables NAT
 nftables port forwarding
 nginx reverse proxy
 nginx server balance
-nginx SSL reverse proxy
 nginx Web-based authentication
+open-vm-tools
+OpenSSL certificate center
 OTRS
 OVS bond
 OVS STP
@@ -96,10 +98,7 @@ OwnCloud
 partitions of devices
 phpMyAdmin
 PostgreSQL base-command
-RADIUS client
-RADIUS server
-RAID 0
-RAID 1
+RADIUS
 replication postgresql-server
 resolve options
 rsyslog
@@ -108,19 +107,12 @@ SAMBA_INTERNAL samba
 SQL install MariaDB
 SQL install MySQL
 SQL install PostgreSQL
-squid base options
-ssh key-connection
-ssh options
-ssh-connection automate to servers
-SSL certificate center
 strongswan ipsec
-sudo user
+sudo
 systemd backup
 systemd-timesyncd
 timedatectl
-vmware open-vm-tools
 wireguard
-wireguard OSPF
 Zabbix agent
 Zabbix web-interface
 Кибер Бэкап

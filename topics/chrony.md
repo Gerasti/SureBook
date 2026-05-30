@@ -4,16 +4,16 @@
 #### Установка пакета <!-- NAME -->
 
 ```CODE
-apt-get install -y chrony                                                                
-                                                                                              
+apt-get install -y chrony
+
  
 ```
 
 #### Запуск службы <!-- NAME -->
 
 ```CODE
-systemctl enable --now chronyd                                                           
-                                                                                              
+systemctl enable --now chronyd
+
  
 ```
 
@@ -37,10 +37,11 @@ server ntp2.vniiftri.ru iburst prefer minstratum 4
   allow 192.168.11.0/26                                                                       
   allow 192.168.11.64/28                                                                      
   allow 192.168.11.80/29                                                                      
+  makestep 1.0 3                                                                              
  
 ```
 
-> server(внешний NTP-сервер); iburst(быстрая синхронизация); prefer(предпочтительный сервер); minstratum 4(минимальный уровень источника); local stratum 5(локальный уровень сервера); allow(разрешить клиентам подключаться)
+> server(внешний NTP-сервер); iburst(быстрая синхронизация); prefer(предпочтительный сервер); minstratum 4(минимальный уровень источника); local stratum 5(локальный уровень сервера); allow(разрешить клиентам подключаться); makestep 1.0 3(корректировать время скачком, если расхождение больше 1 секунды, в первые 3 обновления)
 
 #### Перезапуск службы <!-- NAME -->
 
@@ -55,7 +56,7 @@ systemctl restart chronyd
 #### Разрешение UDP 123 в iptables <!-- NAME -->
 
 ```CODE
-iptables -A INPUT -p udp --dport 123 -j ACCEPT                                           
+iptables -A INPUT -p udp --dport 123 -j ACCEPT
   iptables -A OUTPUT -p udp --sport 123 -j ACCEPT                                             
  
 ```
@@ -76,7 +77,7 @@ nft add rule inet filter input udp dport 123 accept
 #### Проверка синхронизации <!-- NAME -->
 
 ```CODE
-chronyc tracking                                                                         
+chronyc tracking
  
 ```
 
@@ -95,6 +96,14 @@ chronyc sources
 
 ```CODE
 systemctl status chronyd                                                                 
+                                                                                              
+ 
+```
+
+#### Проверка открытого UDP-порта 123 <!-- NAME -->
+
+```CODE
+ss -ulnp | grep 123
                                                                                               
  
 ```
@@ -131,13 +140,7 @@ echo "server 192.168.11.67 iburst" >> /etc/chrony.conf
 
 ```CODE
 systemctl restart chronyd                                                                
- 
-```
-
-#### Проверка открытого UDP-порта 123 <!-- NAME -->
-
-```CODE
-ss -ulnp | grep 123                                                                                              
+                                                                                              
  
 ```
 
@@ -146,7 +149,7 @@ ss -ulnp | grep 123
 #### Проверка источников синхронизации <!-- NAME -->
 
 ```CODE
-chronyc sources                                                                          
+chronyc sources
  
 ```
 
@@ -171,5 +174,5 @@ chronyc makestep
 #### Подробная статистика <!-- NAME -->
 
 ```CODE
-chronyc sourcestats                                                                      
+chronyc sourcestats
 ```

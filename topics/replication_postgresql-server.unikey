@@ -1,0 +1,51 @@
+hd Установка PostgreSQL на резервном сервере                                                
+  ne На SRV-BR установка пакетов                                                              
+  ce apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+  ct SRV-BR(резервный сервер); SRV-HQ(основной сервер)                                        
+                                                                                              
+  hd Настройка основного сервера                                                              
+  ne На SRV-HQ в /var/lib/pgsql/data/postgresql.conf                                          
+  ce wal_level = replica                                                                      
+  max_wal_senders = 2                                                                         
+  max_replication_slots = 2                                                                   
+  hot_standby = on                                                                            
+  hot_standby_feedback = on                                                                   
+  ct wal_level(уровень журналирования); max_wal_senders(количество процессов репликации);     
+  hot_standby(чтение на реплике)                                                              
+                                                                                              
+  ne Перезапуск службы на SRV-HQ                                                              
+  ce systemctl restart postgresql
+                                                                                              
+  hd Настройка репликации на резервном сервере                                                
+  ne На SRV-BR остановка службы                                                               
+  ce systemctl stop postgresql                                                                
+                                                                                              
+  ne Очистка директории данных                                                                
+  ce rm -rf /var/lib/pgsql/data/*                                                             
+  ct удаляет существующие данные для создания реплики                                         
+                                                                                              
+  ne Создание базовой копии с SRV-HQ                                                          
+  ce pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
+  --write-recovery-conf                                                                       
+  ct -h(IP основного сервера); -U(пользователь); -D(директория данных); --wal-method(метод
+  передачи WAL); --write-recovery-conf(создание конфига репликации)                           
+                  
+  ne Установка прав доступа                                                                   
+  ce chown -R postgres:postgres /var/lib/pgsql/data/
+                                                                                              
+  ne Запуск службы на SRV-BR                                                                  
+  ce systemctl start postgresql                                                               
+                                                                                              
+  hd Проверка репликации                                                                      
+  ne Подключение к базе данных                                                                
+  ce psql -U postgres                                                                         
+  ct подключение к PostgreSQL                                                                 
+                                                                                              
+  ne Проверка статуса репликации на SRV-HQ                                                    
+  ce SELECT * FROM pg_stat_replication;                                                       
+  ct показывает подключенные реплики                                                          
+                                                                                              
+  ne Проверка данных на SRV-BR                                                                
+  ce \c one                                                                                   
+  \dt+                                                                                        
+  ct \c(подключение к БД); \dt+(список таблиц с размерами) 

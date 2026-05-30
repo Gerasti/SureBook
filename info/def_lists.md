@@ -71,11 +71,7 @@ SQL install MySQL [SQL install MySQL](https://sysahelper.ru/mod/page/view.php?id
 
 SQL install PostgreSQL
 
-SSL certificate center [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134)
-
 wireguard [wireguard](https://sysahelper.ru/mod/page/view.php?id=128)
-
-wireguard OSPF [wireguard OSPF](https://sysahelper.ru/mod/page/view.php?id=127)
 
 Zabbix agent
 
@@ -156,6 +152,8 @@ install PostgreSQL Zabbix
 
 install SSL certificate RedHat-like
 
+LVM
+
 NFS
 
 nftables NAT
@@ -164,15 +162,9 @@ nginx reverse proxy
 
 nginx server balance
 
-nginx SSL reverse proxy
-
 partitions of devices
 
 PostgreSQL base-command
-
-RAID 0
-
-RAID 1
 
 replication postgresql-server
 
@@ -184,11 +176,11 @@ SQL install PostgreSQL
 
 squid base options
 
-ssh-connection automate to servers
+SSH
 
 strongswan ipsec
 
-sudo user
+sudo
 
 systemd backup
 
@@ -215,7 +207,7 @@ NFS
 
 nginx reverse proxy
 
-sudo user
+sudo
 
 systemd-timesyncd
 
@@ -266,6 +258,10 @@ nginx reverse proxy
 
 nginx Web-based authentication
 
+open-vm-tools
+
+OpenSSL certificate center
+
 partitions of devices
 
 rsyslog
@@ -276,15 +272,7 @@ SQL install MySQL
 
 SQL install PostgreSQL
 
-ssh key-connection
-
-ssh options
-
-SSL certificate center
-
-sudo user
-
-vmware open-vm-tools
+sudo
 
 Zabbix agent
 
@@ -329,17 +317,13 @@ nginx reverse proxy
 
 partitions of devices
 
-RAID 0
-
 resolve options
 
 rsyslog
 
-ssh options
-
 strongswan ipsec
 
-sudo user
+sudo
 
 Zabbix agent
 
@@ -368,9 +352,7 @@ NFS
 
 nftables NAT
 
-ssh key-connection
-
-sudo user
+sudo
 
 ## AltLabs list:
 attach samba reserve domain controller
@@ -416,15 +398,11 @@ nftables NAT
 
 nginx reverse proxy
 
-RAID 0
-
 resolve options
 
 rsyslog
 
 SAMBA_INTERNAL samba
-
-ssh options
 
 strongswan ipsec
 
@@ -457,11 +435,7 @@ nftables NAT
 
 resolve options
 
-ssh key-connection
-
-ssh options
-
-sudo user
+sudo
 
 ## yesterday-it-worked list:
 alt samba ADMC
@@ -512,9 +486,7 @@ OVS STP
 
 OVS vlan
 
-RADIUS client
-
-RADIUS server
+RADIUS
 
 SQL install PostgreSQL
 
@@ -557,7 +529,7 @@ nginx reverse proxy
 
 rsyslog
 
-ssh options
+SSH
 
 timedatectl
 

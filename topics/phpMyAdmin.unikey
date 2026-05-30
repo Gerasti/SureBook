@@ -1,0 +1,158 @@
+ hd Установка                                                                                
+  ne Установка MariaDB
+  ce apt-get update -y && apt-get install -y mariadb-server                                   
+                                                                                              
+  ne Запуск MariaDB                                                                           
+  ce systemctl enable --now mariadb                                                           
+                                                                                              
+  ne Установка PHP расширений для phpMyAdmin                                                  
+  ce apt-get install -y php8.2 php8.2-{fpm-fcgi,mbstring,zip,gd,libs,mysqlnd,mysqlnd-mysqli,bz
+  2,curl,mcrypt,opcache,openssl} libmcrypt wget                                               
+  ct Расширения для дополнительных функций и производительности phpMyAdmin
+                                                                                              
+  ne Загрузка phpMyAdmin                                                                      
+  ce wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip    
+  ct Ссылку на последнюю версию копировать со страницы https://docs.phpmyadmin.net            
+                                                                                              
+  ne Распаковка архива                                                                        
+  ce unzip phpMyAdmin-5.2.1-all-languages.zip                                                 
+                                                                                              
+  ne Перемещение в рабочую директорию
+  ce mv phpMyAdmin-5.2.1-all-languages /usr/share/phpmyadmin                                  
+                                                                                              
+  ne Создание директории для временных файлов                                                 
+  ce mkdir -p /var/lib/phpmyadmin/tmp                                                         
+                                                                                              
+  ne Установка веб-сервера Apache                                                             
+  ce apt-get install -y httpd2 apache2-{httpd-prefork,mod_php8.2}                             
+                                                                                              
+  ne Назначение владельца файлов phpMyAdmin                                                   
+  ce chown -R apache2:apache2 /usr/share/phpmyadmin                                           
+  chown -R apache2:apache2 /var/lib/phpmyadmin                                                
+  ct apache2(пользователь веб-сервера)                                                        
+                                                                                              
+  ne Создание конфигурационного файла phpMyAdmin                                              
+  ce cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php      
+                                                                                              
+  ne Создание базы данных и таблиц phpMyAdmin                                                 
+  ce mariadb < /usr/share/phpmyadmin/sql/create_tables.sql                                    
+  ct Создание базы данных хранилища конфигурации                                              
+                                                                                              
+  ne Создание пользователя pma для phpMyAdmin                                                 
+  ce mariadb                                                                                  
+  GRANT SELECT, INSERT, UPDATE, DELETE ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY     
+  'P@ssw0rd';                                                                                 
+  EXIT;                                                                                       
+  ct pma(пользователь для административных задач phpMyAdmin)                                  
+                                                                                              
+  hd Настройка                                                                               
+ ne В /usr/share/phpmyadmin/config.inc.php параметр blowfish_secret                          
+  ce $cfg['blowfish_secret'] = 'случайная_строка_32_символа';
+  ct Строка из 32 случайных символов для шифрования AES                                       
+  ct Если короче 32 символов - менее надежные куки                                            
+                                                                                              
+  ne Генерация случайной строки для blowfish_secret                                           
+  ce openssl rand -base64 32                                                                  
+  ct Генерирует случайную строку, результат скопировать в config.inc.php                      
+  ct Альтернативные способы {openssl rand -hex 16, pwgen 32 1, head /dev/urandom | tr -dc     
+  A-Za-z0-9 | head -c 32}                                                                     
+                                                                                              
+  ne Пример сгенерированной строки в config.inc.php                                           
+  ce $cfg['blowfish_secret'] = 'a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3';
+  ct Использовать результат команды openssl rand -base64 32
+
+  ne В /usr/share/phpmyadmin/config.inc.php раскомментировать controluser и controlpass       
+  ce $cfg['Servers'][$i]['controluser'] = 'pma';                                              
+  $cfg['Servers'][$i]['controlpass'] = 'P@ssw0rd';                                            
+  ct Пользователь для административных задач в многопользовательских сценариях                
+                                                                                              
+  ne В /usr/share/phpmyadmin/config.inc.php раскомментировать Storage database and tables     
+  ce $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';                                             
+  $cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';                                     
+  $cfg['Servers'][$i]['relation'] = 'pma__relation';                                          
+  $cfg['Servers'][$i]['table_info'] = 'pma__table_info';                                      
+  $cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';                                  
+  $cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';                                        
+  $cfg['Servers'][$i]['column_info'] = 'pma__column_info';                                    
+  $cfg['Servers'][$i]['history'] = 'pma__history';                                            
+  $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';                                
+  $cfg['Servers'][$i]['tracking'] = 'pma__tracking';                                          
+  $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';                                      
+  $cfg['Servers'][$i]['recent'] = 'pma__recent';                                              
+  $cfg['Servers'][$i]['favorite'] = 'pma__favorite';                                          
+  $cfg['Servers'][$i]['users'] = 'pma__users';                                                
+  $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';                                      
+  $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';                          
+  $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';                                
+  $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';                            
+  $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';                        
+  $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';                          
+  ct Определение базы данных и таблиц хранилища конфигурации                                  
+                                                                                              
+  ne В /usr/share/phpmyadmin/config.inc.php настроить временную директорию                    
+  ce $cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';                                             
+  ct Использование созданной ранее директории для временных файлов                            
+                                                                                              
+  ne В /usr/share/phpmyadmin/config.inc.php разрешить указывать сервер БД                     
+  ce $cfg['AllowArbitraryServer'] = true;                                                     
+  ct Опционально, для явного указания IP-адреса или имени сервера БД                          
+                                                                                              
+  ne Настройка удалённого доступа к MariaDB в /etc/my.cnf.d/server.cnf                        
+  ce bind-address = 0.0.0.0                                                                   
+  #skip-networking                                                                            
+  ct bind-address(IP-адрес для подключений) {0.0.0.0, 192.168.1.0/24, конкретный_IP}          
+  ct 0.0.0.0(разрешено подключаться всем и отовсюду)                                          
+  ct skip-networking(закомментировать для разрешения сетевых подключений)                     
+  ct Опционально, не влияет на работу phpMyAdmin                                              
+                                                                                              
+  ne Предоставление привилегий пользователю root для удалённого доступа                       
+  ce mariadb                                                                                  
+  GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'P@ssw0rd' WITH GRANT OPTION;       
+  EXIT;                                                                                       
+  ct Опционально, если необходимо удалённое подключение                                       
+  ct GRANT ALL PRIVILEGES(полные права на все операции)                                       
+  ct *.*(все базы данных и таблицы)                                                           
+  ct 'root'@'%'(пользователь root с любого хоста)                                             
+  ct %(с любого хоста)                                                                        
+                                                                                              
+  ne Запуск веб-сервера Apache                                                                
+  ce systemctl enable --now httpd2                                                            
+                                                                                              
+  ne Содержимое файла /etc/httpd2/conf/sites-available/phpmyadmin.conf                        
+  ce Alias /phpmyadmin /usr/share/phpmyadmin                                                  
+                                                                                              
+  <Directory /usr/share/phpmyadmin>                                                           
+      Options FollowSymLinks                                                                  
+      DirectoryIndex index.php                                                                
+      AllowOverride All
+      Require all granted                                                                     
+  </Directory>                                                                                
+                                                                                              
+  ne Включение конфигурационного файла                                                        
+  ce a2ensite phpmyadmin                                                                      
+                                                                                              
+  ne Проверка синтаксиса конфигурации Apache                                                  
+  ce apachectl configtest                                                                     
+                                                                                              
+  ne Применение изменений Apache                                                              
+  ce systemctl reload httpd2                                                                  
+                                                                                              
+  ne Исправление ошибки входа в phpMyAdmin в /etc/my.cnf.d/server.cnf                         
+  ce skip-grant-tables                                                                        
+  ct Опционально, если возникает ошибка при входе                                             
+                                                                                              
+  ne Перезагрузка MariaDB после изменений                                                     
+  ce systemctl restart mariadb                                                                
+                                                                                              
+  hd Проверка                                                                                 
+  ne Проверка открытого порта MariaDB                                                         
+  ce ss -tlpn | grep mysqld                                                                   
+  ct Показывает открытый порт 3306 для удалённых подключений                                  
+                                                                                              
+  ne Проверка удалённого доступа с клиента                                                    
+  ce mariadb -h IP_адрес_сервера -u root -p                                                   
+  ct На клиенте должен быть установлен пакет mariadb-client                                   
+                                                                                              
+  ne Доступ к phpMyAdmin                                                                      
+  ct Открыть в браузере http://IP_адрес_сервера/phpmyadmin                                    
+  ct Вход под пользователем root с паролем P@ssw0rd 

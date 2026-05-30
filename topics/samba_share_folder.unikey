@@ -1,0 +1,104 @@
+hd Настройка Samba для анонимного доступа                                                   
+                                                                                              
+  ne Создание общей директории                                                                
+  ce mkdir /opt/data                                                                          
+  chmod 777 /opt/data                                                                         
+  ct 777(полные права для всех пользователей)                                                 
+                                                                                              
+  ne В /etc/samba/smb.conf добавить секцию                                                    
+  ce [samba]                                                                                  
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  guest ok = yes                                                                              
+  read only = no                                                                              
+  force user = nobody                                                                         
+  ct guest ok = yes(анонимный доступ); force user(все действия от имени nobody)               
+                                                                                              
+  ne Перезапуск службы                                                                        
+  ce systemctl restart smbd                                                                   
+                                                                                              
+  hd Настройка Samba для пользователей домена                                                 
+                                                                                              
+  ne Создание общей директории                                                                
+  ce mkdir /opt/data
+  chmod 770 /opt/data                                                                         
+  chown root:domain_users /opt/data                                                           
+  ct 770(доступ только владельцу и группе); domain_users(группа домена)                       
+                                                                                              
+  ne В /etc/samba/smb.conf добавить секцию                                                    
+  ce [samba]                                                                                  
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  valid users = @domain_users                                                                 
+  read only = no                                                                              
+  create mask = 0660                                                                          
+  directory mask = 0770                                                                       
+  ct valid users = @domain_users(доступ только группе домена); create mask(права на новые     
+  файлы); directory mask(права на новые каталоги)                                             
+                                                                                              
+  ne Добавление пользователя Samba                                                            
+  ce smbpasswd -a username
+  ct создает пароль Samba для существующего системного пользователя                           
+                                                                                              
+  hd Настройка Samba для конкретных пользователей                                             
+                                                                                              
+  ne В /etc/samba/smb.conf добавить секцию                                                    
+  ce [samba]      
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  valid users = user1, user2, user3                                                           
+  read only = no                                                                              
+  write list = user1, user2                                                                   
+  ct valid users(список разрешенных пользователей); write list(пользователи с правом записи)  
+                                                                                              
+  hd Описание основных опций Samba                                                            
+                                                                                              
+  ne Опции доступа                                                                            
+  ce browseable = yes
+  guest ok = yes                                                                              
+  valid users = user1, @group1                                                                
+  invalid users = user2                                                                       
+  read only = no                                                                              
+  writable = yes                                                                              
+  write list = user1, @group1                                                                 
+  read list = user2                                                                           
+  ct browseable(видимость в сети); guest ok(гостевой доступ); valid users(разрешенные         
+  пользователи/группы); invalid users(запрещенные); write list(право записи); read list(только
+   чтение)                                                                                    
+                                                                                              
+  ne Опции прав доступа                                                                       
+  ce create mask = 0660
+  directory mask = 0770                                                                       
+  force user = nobody                                                                         
+  force group = nogroup                                                                       
+  inherit permissions = yes                                                                   
+  ct create mask(права на файлы); directory mask(права на каталоги); force                    
+  user/group(принудительный владелец); inherit permissions(наследование прав)                 
+                                                                                              
+  ne Опции безопасности                                                                       
+  ce hosts allow = 192.168.1.0/24
+  hosts deny = 192.168.2.0/24                                                                 
+  max connections = 10                                                                        
+  ct hosts allow(разрешенные сети); hosts deny(запрещенные сети); max connections(лимит       
+  подключений)                                                                                
+                                                                                              
+  hd Проверка                                                                                 
+                  
+  ne Проверка конфигурации                                                                    
+  ce testparm     
+  ct проверяет синтаксис smb.conf                                                             
+                                                                                              
+  ne Просмотр активных подключений                                                            
+  ce smbstatus                                                                                
+  ct показывает подключенных пользователей и открытые файлы                                   
+                                                                                              
+  ne Подключение с клиента Windows                                                            
+  ce \\192.168.1.1\samba                                                                      
+  ct в проводнике Windows                                                                     
+                                                                                              
+  ne Подключение с клиента Linux                                                              
+  ce smb://192.168.1.1/samba                                                                  
+  ct в файловом менеджере или через smbclient

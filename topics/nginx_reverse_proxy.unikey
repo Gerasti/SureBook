@@ -1,37 +1,16 @@
-
-### Установка <!-- HEAD -->
-
-#### Установка nginx <!-- NAME -->
-
-```CODE
-apt-get install nginx                                                                    
- 
-```
-
-#### Включение автозапуска <!-- NAME -->
-
-```CODE
-systemctl enable --now nginx                                                             
+hd Установка                                                                                
+  ne Установка nginx                                                                          
+  ce apt-get install nginx                                                                    
+  ne Включение автозапуска
+  ce systemctl enable --now nginx                                                             
                                                                                               
- 
-```
-
-### Настройка обратного прокси <!-- HEAD -->
-
-> Для настройки необходима ip-адресация и работа DNS(или hosts)
-
-#### Создание файла конфигурации <!-- NAME -->
-
-```CODE
-nano /etc/nginx/sites-available.d/some.domain.conf                                       
+  hd Настройка обратного прокси
+  ct Для настройки необходима ip-адресация и работа DNS(или hosts)
+  ne Создание файла конфигурации                                                              
+  ce nano /etc/nginx/sites-available.d/some.domain.conf                                       
                                                                                               
- 
-```
-
-#### Базовая конфигурация обратного прокси <!-- NAME -->
-
-```CODE
-server {                                                                                 
+  ne Базовая конфигурация обратного прокси                                                    
+  ce server {                                                                                 
       listen 80;                                                                              
       server_name some.domain;                                                                
                                                                                               
@@ -46,21 +25,16 @@ server {
       proxy_set_header Connection "";                                                         
   }                                                                                           
   }                                                                                           
- 
-```
-
-> listen(порт прослушивания); server_name(имя виртуального хоста); location(обработка запросов к корню)
-
-> proxy_pass(адрес внутреннего веб-приложения); proxy_http_version(версия HTTP-протокола)
-
-> proxy_set_header Host(передача оригинального заголовка Host); X-Real-IP(реальный IP клиента)
-
-> X-Forwarded-For(цепочка IP-адресов); X-Forwarded-Proto(протокол http или https); Connection(управление соединением)
-
-#### Конфигурация для нескольких приложений <!-- NAME -->
-
-```CODE
-server {                                                                                 
+  ct listen(порт прослушивания); server_name(имя виртуального хоста); location(обработка      
+  запросов к корню)                                                                           
+  ct proxy_pass(адрес внутреннего веб-приложения); proxy_http_version(версия HTTP-протокола)  
+  ct proxy_set_header Host(передача оригинального заголовка Host); X-Real-IP(реальный IP    
+  клиента)                                                                                    
+  ct X-Forwarded-For(цепочка IP-адресов); X-Forwarded-Proto(протокол http или https);         
+  Connection(управление соединением)                                                          
+                                                                                              
+  ne Конфигурация для нескольких приложений
+  ce server {                                                                                 
       listen 80;  
       server_name app1.some.domain;                                                           
                                                                                               
@@ -89,15 +63,11 @@ server {
       proxy_set_header X-Forwarded-Proto $scheme;                                             
   }                                                                                           
   }                                                                                           
- 
-```
-
-> app1.some.domain перенаправляет на 10.0.0.10:8080; app2.some.domain перенаправляет на 10.0.0.20:8080
-
-#### Конфигурация с SSL-сертификатом <!-- NAME -->
-
-```CODE
-server {                                                                                 
+  ct app1.some.domain перенаправляет на 10.0.0.10:8080; app2.some.domain перенаправляет на    
+  10.0.0.20:8080                                                                              
+                                                                                              
+  ne Конфигурация с SSL-сертификатом
+  ce server {                                                                                 
       listen 443 ssl;
       server_name some.domain;                                                                
                                                                                               
@@ -114,19 +84,13 @@ server {
       proxy_set_header X-Forwarded-Proto $scheme;                                             
   }                                                                                           
   }                                                                                           
- 
-```
-
-> listen 443 ssl(прослушивание порта 443 с поддержкой SSL/TLS)
-
-> ssl_certificate(путь к SSL-сертификату); ssl_certificate_key(путь к приватному ключу)
-
-> ssl_protocols(разрешенные версии TLS); ssl_prefer_server_ciphers(приоритет шифров сервера)
-
-#### Конфигурация с таймаутами <!-- NAME -->
-
-```CODE
-server {                                                                                 
+  ct listen 443 ssl(прослушивание порта 443 с поддержкой SSL/TLS)                             
+  ct ssl_certificate(путь к SSL-сертификату); ssl_certificate_key(путь к приватному ключу)
+  ct ssl_protocols(разрешенные версии TLS); ssl_prefer_server_ciphers(приоритет шифров        
+  сервера)                                                                                    
+                                                                                              
+  ne Конфигурация с таймаутами                                                                
+  ce server {                                                                                 
       listen 80;  
       server_name some.domain;                                                                
                                                                                               
@@ -144,57 +108,25 @@ server {
       proxy_read_timeout 30s;                                                                 
   }                                                                                           
   }                                                                                           
- 
-```
-
-> proxy_connect_timeout(время ожидания подключения к backend); proxy_send_timeout(время отправки запроса)
-
-> proxy_read_timeout(время ожидания ответа от backend)
-
-#### Создание символической ссылки <!-- NAME -->
-
-```CODE
-ln -s /etc/nginx/sites-available.d/some.domain.conf /etc/nginx/sites-enabled.d/          
- 
-```
-
-### Проверка <!-- HEAD -->
-
-#### Проверка синтаксиса конфигурации <!-- NAME -->
-
-```CODE
-nginx -t                                                                                 
+  ct proxy_connect_timeout(время ожидания подключения к backend); proxy_send_timeout(время    
+  отправки запроса)                                                                       
+  ct proxy_read_timeout(время ожидания ответа от backend)                                     
+                                                         
+  ne Создание символической ссылки                                                            
+  ce ln -s /etc/nginx/sites-available.d/some.domain.conf /etc/nginx/sites-enabled.d/          
+  hd Проверка                                                                                 
+  ne Проверка синтаксиса конфигурации                                                         
+  ce nginx -t                                                                                 
                                                                                               
- 
-```
-
-#### Применение настроек <!-- NAME -->
-
-```CODE
-systemctl restart nginx                                                                  
- 
-```
-
-> можно использовать systemctl reload nginx
-
-#### Проверка открытых портов <!-- NAME -->
-
-```CODE
-ss -tulpn | grep nginx                                                                   
+  ne Применение настроек                                                                      
+  ce systemctl restart nginx                                                                  
+  ct можно использовать systemctl reload nginx                                                
                                                                                               
- 
-```
-
-#### Проверка доступности backend-сервера <!-- NAME -->
-
-```CODE
-curl -I http://10.0.0.10:8080                                                            
+  ne Проверка открытых портов                                                                 
+  ce ss -tulpn | grep nginx                                                                   
                                                                                               
- 
-```
-
-#### Просмотр логов nginx <!-- NAME -->
-
-```CODE
-journalctl -u nginx --no-pager
-```
+  ne Проверка доступности backend-сервера                                                     
+  ce curl -I http://10.0.0.10:8080                                                            
+                                                                                              
+  ne Просмотр логов nginx                                                                     
+  ce journalctl -u nginx --no-pager

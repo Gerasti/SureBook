@@ -1,10 +1,7 @@
+hd Балансировка нагрузки
 
-### Балансировка нагрузки <!-- HEAD -->
-
-#### Добавление блока upstream в конфигурацию сайта <!-- NAME -->
-
-```CODE
-upstream backend_site1 {
+  ne Добавление блока upstream в конфигурацию сайта                                           
+  ce upstream backend_site1 {
       server 192.168.1.101;                                                                   
       server 192.168.1.102;                                                                   
   }                                                                                           
@@ -21,78 +18,50 @@ upstream backend_site1 {
       proxy_set_header X-Forwarded-Proto $scheme;                                             
   }                                                                                           
   }                                                                                           
- 
-```
-
-> upstream(группа backend-серверов); backend_site1(имя группы); proxy_pass использует имя upstream
-
-#### Метод round-robin с весами <!-- NAME -->
-
-```CODE
-upstream backend_site1 {                                                                 
+  ct upstream(группа backend-серверов); backend_site1(имя группы); proxy_pass использует имя  
+  upstream                                                                                  
+                                                                                              
+  ne Метод round-robin с весами
+  ce upstream backend_site1 {                                                                 
       server 192.168.1.101 weight=3;                                                          
       server 192.168.1.102 weight=1;                                                          
   }                                                                                           
- 
-```
-
-> weight(вес сервера, по умолчанию 1); сервер с weight=3 получит в 3 раза больше запросов
-
-#### Метод least_conn <!-- NAME -->
-
-```CODE
-upstream backend_site1 {                                                                 
+  ct weight(вес сервера, по умолчанию 1); сервер с weight=3 получит в 3 раза больше запросов  
+                                                                                              
+  ne Метод least_conn                                                                         
+  ce upstream backend_site1 {                                                                 
       least_conn;                                                                             
       server 192.168.1.101;                                                                   
       server 192.168.1.102;                                                                   
   }                                                                                           
- 
-```
-
-> least_conn(запросы направляются на сервер с минимальным количеством активных соединений)
-
-#### Метод ip_hash <!-- NAME -->
-
-```CODE
-upstream backend_site1 {                                                                 
+  ct least_conn(запросы направляются на сервер с минимальным количеством активных соединений) 
+                                                                                              
+  ne Метод ip_hash                                                                            
+  ce upstream backend_site1 {                                                                 
       ip_hash;                                                                                
       server 192.168.1.101;                                                                   
       server 192.168.1.102;                                                                   
   }                                                                                           
- 
-```
-
-> ip_hash(клиент всегда направляется на один и тот же сервер по IP-адресу)
-
-#### Настройка keepalive соединений <!-- NAME -->
-
-```CODE
-upstream backend_site1 {                                                                 
+  ct ip_hash(клиент всегда направляется на один и тот же сервер по IP-адресу)                 
+                                                                                              
+  ne Настройка keepalive соединений                                                           
+  ce upstream backend_site1 {                                                                 
       server 192.168.1.101;                                                                   
       server 192.168.1.102;                                                                   
       keepalive 32;                                                                           
   }                                                                                           
- 
-```
-
-> keepalive(количество постоянных соединений к backend-серверам)
-
-#### Настройка таймаутов и проверки доступности <!-- NAME -->
-
-```CODE
-upstream backend_site1 {                                                                 
+  ct keepalive(количество постоянных соединений к backend-серверам)                           
+                                                                                              
+  ne Настройка таймаутов и проверки доступности                                               
+  ce upstream backend_site1 {                                                                 
       server 192.168.1.101 max_fails=3 fail_timeout=30s;                                      
       server 192.168.1.102 max_fails=3 fail_timeout=30s;                                      
   }                                                                                           
- 
-```
-
-> max_fails(количество неудачных попыток); fail_timeout(время, на которое сервер считается недоступным)
-
-#### Комбинированная конфигурация <!-- NAME -->
-
-```CODE
-upstream backend_site1 {
+  ct max_fails(количество неудачных попыток); fail_timeout(время, на которое сервер считается 
+  недоступным)                                                                                
+                                                                                              
+  ne Комбинированная конфигурация                                                             
+  ce upstream backend_site1 {
       least_conn;                                                                             
       server 192.168.1.101 weight=2 max_fails=3 fail_timeout=30s;                             
       server 192.168.1.102 weight=1 max_fails=3 fail_timeout=30s;                             
@@ -113,7 +82,5 @@ upstream backend_site1 {
       proxy_set_header X-Forwarded-Proto $scheme;                                             
   }                                                                                           
   }                                                                                           
- 
-```
-
-> least_conn с весами и проверкой доступности; proxy_http_version 1.1 и Connection "" для keepalive
+  ct least_conn с весами и проверкой доступности; proxy_http_version 1.1 и Connection "" для  
+  keepalive 

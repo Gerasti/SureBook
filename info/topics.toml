@@ -8,7 +8,7 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-30 00:58:55"
+last_saved = "2026-05-31 00:02:54"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -378,11 +378,6 @@ title = "nginx server balance"
 path = "~/SureBook/info/src_table.md/nginx_server_balance.md"
 lists = [{list = "notesk"}]
 
-[topics."nginx_SSL_reverse_proxy"]
-title = "nginx SSL reverse proxy"
-path = "~/SureBook/info/src_table.md/nginx_SSL_reverse_proxy.md"
-lists = [{list = "notesk"}]
-
 [topics."nginx_Web-based_authentication"]
 title = "nginx Web-based authentication"
 path = "~/SureBook/info/src_table.md/nginx_Web-based_authentication.md"
@@ -425,26 +420,6 @@ title = "PostgreSQL base-command"
 path = "~/SureBook/info/src_table.md/PostgreSQL_base-command.md"
 lists = [{list = "notesk"}]
 
-[topics."RADIUS_client"]
-title = "RADIUS client"
-path = "~/SureBook/info/src_table.md/RADIUS_client.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."RADIUS_server"]
-title = "RADIUS server"
-path = "~/SureBook/info/src_table.md/RADIUS_server.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."RAID_0"]
-title = "RAID 0"
-path = "~/SureBook/info/src_table.md/RAID_0.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
-[topics."RAID_1"]
-title = "RAID 1"
-path = "~/SureBook/info/src_table.md/RAID_1.md"
-lists = [{list = "notesk"}]
-
 [topics."replication_postgresql-server"]
 title = "replication postgresql-server"
 path = "~/SureBook/info/src_table.md/replication_postgresql-server.md"
@@ -481,38 +456,10 @@ title = "SQL install PostgreSQL"
 path = "~/SureBook/info/src_table.md/SQL_install_PostgreSQL.md"
 lists = [{list = "sysahelper"}, {list = "notesk"}, {list = "SuroTools"}, {list = "yesterday-it-worked"}]
 
-[topics."squid_base_options"]
-title = "squid base options"
-path = "~/SureBook/info/src_table.md/squid_base_options.md"
-lists = [{list = "notesk"}]
-
-[topics."ssh_key-connection"]
-title = "ssh key-connection"
-path = "~/SureBook/info/src_table.md/ssh_key-connection.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208"}, {list = "setting_screens"}]
-
-[topics."ssh_options"]
-title = "ssh options"
-path = "/home/stip/SureBook/topics/ssh_options.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
-[topics."ssh-connection_automate_to_servers"]
-title = "ssh-connection automate to servers"
-path = "~/SureBook/info/src_table.md/ssh-connection_automate_to_servers.md"
-lists = [{list = "notesk"}]
-
-[topics."SSL_certificate_center"]
-title = "SSL certificate center"
-path = "~/SureBook/info/src_table.md/SSL_certificate_center.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=134", link_look = "SSL certificate center && install SSL certificate Debian-like"}, {list = "SuroTools"}]
 [topics."strongswan_ipsec"]
 title = "strongswan ipsec"
 path = "~/SureBook/info/src_table.md/strongswan_ipsec.md"
 lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
-[topics."sudo_user"]
-title = "sudo user"
-path = "~/SureBook/info/src_table.md/sudo_user.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
 [topics."systemd_backup"]
 title = "systemd backup"
@@ -528,19 +475,10 @@ lists = [{list = "сетевикон"}]
 title = "timedatectl"
 path = "/home/stip/SureBook/topics/timedatectl.md"
 lists = [{list = "yesterday-it-worked"}, {list = "surowiki"}]
-[topics."vmware_open-vm-tools"]
-title = "vmware open-vm-tools"
-path = "~/SureBook/info/src_table.md/vmware_open-vm-tools.md"
-lists = [{list = "SuroTools"}]
-
 [topics."wireguard"]
 title = "wireguard"
 path = "~/SureBook/info/src_table.md/wireguard.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=128", link_look = "wireguard"}]
-[topics."wireguard_OSPF"]
-title = "wireguard OSPF"
-path = "~/SureBook/info/src_table.md/wireguard_OSPF.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=127", link_look = "wireguard OSPF"}]
 [topics."Zabbix_agent"]
 title = "Zabbix agent"
 path = "~/SureBook/info/src_table.md/Zabbix_agent.md"
@@ -592,4 +530,39 @@ lists = []
 [topics."mdadm_options"]
 title = "mdadm options"
 path = "/home/stip/SureBook/topics/mdadm_options.md"
+lists = [{list = "SuroTools"}]
+
+[topics."LVM"]
+title = "LVM"
+path = "/home/stip/SureBook/topics/LVM.md"
+lists = [{list = "notesk"}]
+
+[topics."RADIUS"]
+title = "RADIUS"
+path = "/home/stip/SureBook/topics/RADIUS.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."SSH"]
+title = "SSH"
+path = "/home/stip/SureBook/topics/SSH.md"
+lists = [{list = "notesk"}, {list = "surowiki"}]
+
+[topics."squid_base_options"]
+title = "squid base options"
+path = "/home/stip/SureBook/topics/squid_base_options.md"
+lists = [{list = "notesk"}]
+
+
+[topics."OpenSSL_certificate_center"]
+title = "OpenSSL certificate center"
+path = "/home/stip/SureBook/topics/OpenSSL_certificate_center.md"
+lists = [{list = "SuroTools"}]
+[topics."sudo"]
+title = "sudo"
+path = "~/SureBook/info/src_table.md/sudo.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "setting_screens"}]
+
+[topics."open-vm-tools"]
+title = "open-vm-tools"
+path = "~/SureBook/info/src_table.md/open-vm-tools.md"
 lists = [{list = "SuroTools"}]
