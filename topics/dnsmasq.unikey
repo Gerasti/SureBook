@@ -7,28 +7,28 @@ hd Установка и настройка dnsmasq
 
   hd Настройка DNS в dnsmasq
   ne Конфигурация DNS в /etc/dnsmasq.conf
-ce domain=domain.irpo
+ce domain=domain.example
 
-server=/domain.irpo/192.168.5.2
+server=/domain.example/192.168.5.2
 server=77.88.8.8
 
 interface=*
 
-address=/hq-rtr.domain.irpo/192.168.1.1
-ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.domain.irpo
+address=/hq-rtr.domain.example/192.168.1.1
+ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.domain.example
 
-address=/docker.domain.irpo/172.16.1.1
-address=/web.domain.irpo/172.16.2.1
+address=/docker.domain.example/172.16.1.1
+address=/web.domain.example/172.16.2.1
 
-address=/br-rtr.domain.irpo/192.168.5.1
+address=/br-rtr.domain.example/192.168.5.1
 
-address=/hq-srv.domain.irpo/192.168.1.2
-ptr-record=2.1.168.192.in-addr.arpa,hq-srv.domain.irpo
+address=/hq-srv.domain.example/192.168.1.2
+ptr-record=2.1.168.192.in-addr.arpa,hq-srv.domain.example
 
-address=/hq-cli.domain.irpo/192.168.5.3
-ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.irpo
+address=/hq-cli.domain.example/192.168.5.3
+ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.example
 
-address=/br-srv.domain.irpo/192.168.5.2 
+address=/br-srv.domain.example/192.168.5.2 
  
   ct listen-address(IP-адреса для приёма DNS-запросов); domain(локальный домен сети);
   local(запрет пересылки локальной зоны во внешний DNS); cache-size(размер DNS-кэша);

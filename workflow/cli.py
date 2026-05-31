@@ -217,7 +217,7 @@ def main():
     settings_cmd = SettingsCommand(config_repo)
     link_cmd = LinkCommand(list_repo)
     editor_cmd = EditorCommand(config_repo)
-    post_cmd = PostCommand(config_repo)
+    post_cmd = PostCommand(config_repo, topic_repo)
     table_cmd = TableCommand(topic_repo, config_repo)
     unsave_cmd = UnsaveCommand(topic_repo)
     cleanup_cmd = CleanupCommand(toml_path)
@@ -301,6 +301,7 @@ Examples:
     settings_cmd = SettingsCommand(config_repo)
     link_cmd = LinkCommand(list_repo)
     editor_cmd = EditorCommand(config_repo)
+    post_cmd = PostCommand(config_repo, topic_repo)
     table_cmd = TableCommand(topic_repo, config_repo)
     unsave_cmd = UnsaveCommand(topic_repo)
 

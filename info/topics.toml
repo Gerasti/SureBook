@@ -2,7 +2,7 @@
 input = "~/SureBook/info/def_input.md"
 list = "~/SureBook/info/def_lists.md"
 topic_save = "~/SureBook/topics"
-post_save = ""
+post_save = "~/SureBook/posting"
 source_table_file = "~/SureBook/info/src_table.md"
 auto_alphabetic_sort = "true"
 auto_save = "true"
@@ -571,11 +571,5 @@ lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 [topics."sudo-schema-samba"]
 title = "sudo-schema-samba"
 path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
-lists = []
-
-
-[topics."test"]
-title = "test"
-path = "/home/stip/SureBook/topics/test.md"
 lists = []
 

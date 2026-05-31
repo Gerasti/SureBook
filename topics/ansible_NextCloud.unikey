@@ -1,4 +1,4 @@
-● hd Установка Ansible                                                                                
+hd Установка Ansible                                                                                
   ne Обновление и установка пакетов                                                                   
   ce apt-get update && apt-get install -y ansible sshpass                                             
                                                                                                       

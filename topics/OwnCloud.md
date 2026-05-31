@@ -233,7 +233,7 @@ systemctl enable --now nginx
 
 > Игнорировать предупреждение безопасности при использовании самоподписанного сертификата
 
-### Параметры веб-установщика <!-- LIST -->
+#### Параметры веб-установщика <!-- LIST -->
 - Admin user: admin
 - Admin password: P@ssw0rd
 - Data folder: /var/www/webapps/owncloud/data

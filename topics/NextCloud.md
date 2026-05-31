@@ -124,7 +124,7 @@ ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-ena
 
 ### Веб-установщик <!-- HEAD -->
 
-### Параметры установки <!-- LIST -->
+#### Параметры установки <!-- LIST -->
 - Создать учётную запись администратора
 - Пользователь БД: nextcloud
 - Пароль БД: P@ssw0rd

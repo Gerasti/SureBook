@@ -7,7 +7,7 @@ KEYS md; wikitext:
   ne, /name       #### text <!-- NAME -->; ==== text ====
   ce, /code       ```CODE ... ```; <syntaxhighlight lang="bash"> ... </syntaxhighlight>
   ct, /comment    > text; <blockquote> ... </blockquote>
-  lt, /list       ### text <!-- LIST -->  (enters list mode); === text ===
+  lt, /list       #### text <!-- LIST -->  (enters list mode); ==== text ====
   lk, /link       [text](#name); [[#name]] or [[#name|text]]
 
   Note: $$ prefix escapes keys (e.g., $$ct outputs plain text "ct", not a comment)
@@ -29,7 +29,7 @@ EXAMPLE INPUT:
 
 EXAMPLE OUTPUT:
   ### Title <!-- HEAD -->
-  ### Sections <!-- LIST -->
+  #### Sections <!-- LIST -->
   - First
       - Nested
   #### Item Name <!-- NAME -->
@@ -118,7 +118,7 @@ def format_output(key, data, ctx, fmt):
         }
         if key == 'lt':
             ctx['MODE_LIST_lt'] = True
-            return f"\n### {joined} <!-- LIST -->", ctx
+            return f"\n#### {joined} <!-- LIST -->", ctx
 
         return formats.get(key), ctx
 
@@ -150,7 +150,7 @@ def format_output(key, data, ctx, fmt):
         }
         if key == 'lt':
             ctx['MODE_LIST_lt'] = True
-            return f"\n=== {joined} ===", ctx
+            return f"\n==== {joined} ====", ctx
 
         return formats.get(key), ctx
 

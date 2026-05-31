@@ -1,7 +1,5 @@
 
-=== Установка Ansible ===
-
-==== Установка пакетов ====
+=== Установка пакетов ===
 
 <syntaxhighlight lang="bash">
 apt-get install ansible sshpass                                                          

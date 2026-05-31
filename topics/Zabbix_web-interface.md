@@ -45,7 +45,7 @@ http://<ip сервера>/zabbix
 
 > открыть в браузере
 
-### Параметры подключения к базе данных <!-- LIST -->
+#### Параметры подключения к базе данных <!-- LIST -->
 - type database: PostgreSQL{MySQL}
 - host: localhost
 - port: 0

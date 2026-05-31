@@ -70,7 +70,7 @@ systemctl restart httpd2
 
 > Открыть в браузере http://IP_адрес_сервера/otrs/installer.pl
 
-### Действия в веб-установщике <!-- LIST -->
+#### Действия в веб-установщике <!-- LIST -->
 - Принять лицензию
 - Настроить базу данных
     - type database: PostgreSQL

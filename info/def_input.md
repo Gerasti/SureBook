@@ -112,7 +112,6 @@ sudo
 sudo-schema-samba
 systemd backup
 systemd-timesyncd
-test
 timedatectl
 wireguard
 Zabbix agent

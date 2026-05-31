@@ -186,7 +186,7 @@ journalctl -u systemd-timesyncd
  
 ```
 
-### Примеры часовых поясов <!-- LIST -->
+#### Примеры часовых поясов <!-- LIST -->
 - Europe/Moscow (Москва, UTC+3)
 - Asia/Yekaterinburg (Екатеринбург, UTC+5)
 - Asia/Novosibirsk (Новосибирск, UTC+7)

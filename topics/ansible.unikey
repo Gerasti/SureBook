@@ -1,5 +1,4 @@
-hd Установка Ansible                                                                        
-  ne Установка пакетов                                                                        
+  hd Установка пакетов                                                                        
   ce apt-get install ansible sshpass                                                          
   ct ansible(система управления конфигурациями); sshpass(передача паролей SSH)
                                                                                               

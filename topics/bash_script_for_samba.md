@@ -30,7 +30,7 @@ vim import_user.sh
   # Create OU                                                                                 
   awk -F ';' 'NR>1 {print $5}' "$csv_file" | sort | uniq | while read ou;
   do                                                                                          
-      samba-tool ou add OU="$ou",DC=au-team,DC=irpo;                                          
+      samba-tool ou add OU="$ou",DC=domain,DC=example;                                          
   done                                                                                        
                                                                                               
   # Create Users                                                                              

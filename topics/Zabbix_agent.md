@@ -33,7 +33,7 @@ systemctl restart zabbix-agentd
 
 ### Добавление хоста в веб-интерфейсе <!-- HEAD -->
 
-### Действия <!-- LIST -->
+#### Действия <!-- LIST -->
 - Monitoring -> Hosts
 - Create host
 - Host name: указать как в zabbix_agentd.conf

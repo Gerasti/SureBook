@@ -79,5 +79,5 @@ ls -l /nfs
 </syntaxhighlight>
 
 <blockquote>
-Файл txt должен быть виден с владельцем nobody:nobody
+Файл txt должен быть виден с владельцем nobody:nobody [](#Установка на сервере)
 </blockquote>

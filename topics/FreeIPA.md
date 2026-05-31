@@ -34,7 +34,7 @@ ipa-server-install --setup-dns
 
 > --setup-dns опционально, если нужна интеграция с DNS
 
-### Параметры установки <!-- LIST -->
+#### Параметры установки <!-- LIST -->
 - Server host name: имя узла FreeIPA-сервера
 - Domain name: доменное имя
 - Realm name: пространство Kerberos (обычно домен в верхнем регистре)

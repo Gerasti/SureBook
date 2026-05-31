@@ -137,7 +137,7 @@ journalctl -u backup.timer
  
 </syntaxhighlight>
 
-=== Дополнительные варианты OnCalendar ===
+==== Дополнительные варианты OnCalendar ====
 * OnCalendar=daily (каждый день в 00:00)
 * OnCalendar=weekly (каждую неделю в понедельник 00:00)
 * OnCalendar=--* 02:00:00 (каждый день в 02:00)

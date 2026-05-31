@@ -1,7 +1,5 @@
 
-### Установка Ansible <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
+### Установка пакетов <!-- HEAD -->
 
 ```CODE
 apt-get install ansible sshpass                                                          
