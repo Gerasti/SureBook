@@ -1,0 +1,525 @@
+
+=== Основы LVM ===
+
+<blockquote>
+LVM(Logical Volume Manager) - система управления логическими томами
+</blockquote>
+
+<blockquote>
+Основа LVM: абстракция физических дисков для гибкого управления хранилищем
+</blockquote>
+
+<blockquote>
+Зачем LVM: изменение размера разделов без перезагрузки, создание снапшотов, объединение дисков, миграция данных
+</blockquote>
+
+<blockquote>
+Преимущества: динамическое изменение размера, перемещение данных между дисками, создание резервных копий на лету
+</blockquote>
+
+<blockquote>
+LVM vs mdadm: LVM для гибкого управления томами, mdadm для отказоустойчивости
+</blockquote>
+
+<blockquote>
+LVM может striping и mirroring, но mdadm лучше для RAID (производительность, надёжность)
+</blockquote>
+
+<blockquote>
+Часто используют вместе: mdadm для RAID массива, затем LVM поверх для управления томами
+</blockquote>
+
+=== Компоненты LVM ===
+* Physical Volume (PV)
+* физический том, диск или раздел
+* Volume Group (VG)
+* группа томов, объединяет несколько PV
+* Logical Volume (LV)
+* логический том, используется как обычный раздел
+* Physical Extent (PE)
+* минимальная единица данных для распределения
+
+=== Установка ===
+
+==== Установка пакета LVM ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y lvm2                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+lvm2(пакет для работы с LVM)
+</blockquote>
+
+==== Создание разметки на дисках ====
+
+<syntaxhighlight lang="bash">
+parted /dev/sda                                                                          
+  mklabel gpt                                                                                 
+  mkpart primary 0% 100%
+  set 1 lvm on                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+set 1 lvm on(установка флага LVM на раздел)
+</blockquote>
+
+==== Создание разметки на втором диске ====
+
+<syntaxhighlight lang="bash">
+parted /dev/sdb                                                                          
+  mklabel gpt                                                                                 
+  mkpart primary 0% 100%                                                                      
+  set 1 lvm on                                                                                
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание Physical Volume ====
+
+<syntaxhighlight lang="bash">
+pvcreate /dev/sda1 /dev/sdb1                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+pvcreate(инициализация физических томов для LVM)
+</blockquote>
+
+==== Создание Volume Group ====
+
+<syntaxhighlight lang="bash">
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+vgcreate(создание группы томов) vg01(имя группы)
+</blockquote>
+
+<blockquote>
+Объединяет несколько физических томов в один пул
+</blockquote>
+
+==== Создание Logical Volume ====
+
+<syntaxhighlight lang="bash">
+lvcreate -L 10G -n lv_data vg01                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+lvcreate(создание логического тома) -L(размер) -n(имя тома)
+</blockquote>
+
+<blockquote>
+Альтернатива: -l 100%FREE(использовать всё свободное место)
+</blockquote>
+
+==== Создание LV с использованием всего пространства ====
+
+<syntaxhighlight lang="bash">
+lvcreate -l 100%FREE -n lv_data vg01                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+-l 100%FREE(использовать 100% свободного места в VG)
+</blockquote>
+
+==== Создание файловой системы на LV ====
+
+<syntaxhighlight lang="bash">
+mkfs.ext4 /dev/vg01/lv_data                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Форматирование логического тома {ext4, xfs, btrfs}
+</blockquote>
+
+==== Создание точки монтирования ====
+
+<syntaxhighlight lang="bash">
+mkdir /mnt/data                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Монтирование LV ====
+
+<syntaxhighlight lang="bash">
+mount /dev/vg01/lv_data /mnt/data                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка striped (RAID 0) ===
+
+<blockquote>
+striped(чередование) - данные распределяются по дискам для увеличения скорости
+</blockquote>
+
+<blockquote>
+Требуется минимум 2 диска
+</blockquote>
+
+==== Создание PV для striped ====
+
+<syntaxhighlight lang="bash">
+pvcreate /dev/sda1 /dev/sdb1                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание VG для striped ====
+
+<syntaxhighlight lang="bash">
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание striped LV ====
+
+<syntaxhighlight lang="bash">
+lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+-i2(количество дисков для striping, страйпинг по 2 дискам)
+</blockquote>
+
+<blockquote>
+Увеличивает скорость чтения/записи, но нет отказоустойчивости
+</blockquote>
+
+==== Создание файловой системы ====
+
+<syntaxhighlight lang="bash">
+mkfs.ext4 /dev/vg01/lv_data                                                              
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Монтирование ====
+
+<syntaxhighlight lang="bash">
+mkdir /mnt/data                                                                          
+  mount /dev/vg01/lv_data /mnt/data                                                           
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка mirroring (RAID 1) ===
+
+<blockquote>
+mirroring(зеркалирование) - данные дублируются на несколько дисков для отказоустойчивости
+</blockquote>
+
+<blockquote>
+Требуется минимум 2 диска
+</blockquote>
+
+==== Создание PV для mirroring ====
+
+<syntaxhighlight lang="bash">
+pvcreate /dev/sda1 /dev/sdb1                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание VG для mirroring ====
+
+<syntaxhighlight lang="bash">
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание mirrored LV ====
+
+<syntaxhighlight lang="bash">
+lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+-m1(количество копий минус одна, одно зеркало = 2 копии)
+</blockquote>
+
+<blockquote>
+Обеспечивает отказоустойчивость, выдерживает отказ одного диска
+</blockquote>
+
+==== Создание файловой системы ====
+
+<syntaxhighlight lang="bash">
+mkfs.ext4 /dev/vg01/lvmirror                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Монтирование ====
+
+<syntaxhighlight lang="bash">
+mkdir /mnt/mirror                                                                        
+  mount /dev/vg01/lvmirror /mnt/mirror                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Управление LVM ===
+
+==== Увеличение размера LV ====
+
+<syntaxhighlight lang="bash">
+lvextend -L +5G /dev/vg01/lv_data                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+-L +5G(добавить 5GB к текущему размеру)
+</blockquote>
+
+<blockquote>
+Изменение размера без перезагрузки и размонтирования
+</blockquote>
+
+==== Увеличение размера файловой системы ====
+
+<syntaxhighlight lang="bash">
+resize2fs /dev/vg01/lv_data                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+resize2fs(для ext4); xfs_growfs(для xfs)
+</blockquote>
+
+<blockquote>
+Расширяет файловую систему на весь размер LV
+</blockquote>
+
+==== Уменьшение размера LV ====
+
+<syntaxhighlight lang="bash">
+umount /mnt/data                                                                         
+  e2fsck -f /dev/vg01/lv_data                                                                 
+  resize2fs /dev/vg01/lv_data 5G                                                              
+  lvreduce -L 5G /dev/vg01/lv_data                                                            
+  mount /dev/vg01/lv_data /mnt/data                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Сначала уменьшить ФС, потом LV; требует размонтирования
+</blockquote>
+
+==== Добавление диска в VG ====
+
+<syntaxhighlight lang="bash">
+pvcreate /dev/sdc1                                                                       
+  vgextend vg01 /dev/sdc1                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+vgextend(расширение группы томов новым диском)
+</blockquote>
+
+==== Удаление диска из VG ====
+
+<syntaxhighlight lang="bash">
+pvmove /dev/sda1                                                                         
+  vgreduce vg01 /dev/sda1                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+pvmove(перемещение данных с диска); vgreduce(удаление диска из VG)
+</blockquote>
+
+==== Создание снапшота LV ====
+
+<syntaxhighlight lang="bash">
+lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-s(создание снапшота); -L 1G(размер для хранения изменений)
+</blockquote>
+
+<blockquote>
+Снапшот для резервного копирования без остановки системы
+</blockquote>
+
+==== Восстановление из снапшота ====
+
+<syntaxhighlight lang="bash">
+lvconvert --merge /dev/vg01/lv_data_snap                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Откат LV к состоянию снапшота; требует перезагрузки или размонтирования
+</blockquote>
+
+==== Удаление снапшота ====
+
+<syntaxhighlight lang="bash">
+lvremove /dev/vg01/lv_data_snap                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление LV ====
+
+<syntaxhighlight lang="bash">
+umount /mnt/data                                                                         
+  lvremove /dev/vg01/lv_data                                                                  
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление VG ====
+
+<syntaxhighlight lang="bash">
+vgremove vg01                                                                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление PV ====
+
+<syntaxhighlight lang="bash">
+pvremove /dev/sda1                                                                       
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Автомонтирование ===
+
+==== В /etc/fstab добавить строку ====
+
+<syntaxhighlight lang="bash">
+/dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Автоматическое монтирование при загрузке
+</blockquote>
+
+==== Применение изменений fstab без перезагрузки ====
+
+<syntaxhighlight lang="bash">
+mount -a                                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+mount -a(монтирует все из /etc/fstab, что ещё не смонтировано)
+</blockquote>
+
+=== Проверка ===
+
+==== Просмотр Physical Volumes ====
+
+<syntaxhighlight lang="bash">
+pvdisplay                                                                                
+  pvs
+ 
+</syntaxhighlight>
+
+<blockquote>
+pvdisplay(детальная информация); pvs(краткая таблица)
+</blockquote>
+
+==== Просмотр Volume Groups ====
+
+<syntaxhighlight lang="bash">
+vgdisplay                                                                                
+  vgs                                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает размер VG, свободное место, количество PV
+</blockquote>
+
+==== Просмотр Logical Volumes ====
+
+<syntaxhighlight lang="bash">
+lvdisplay                                                                                
+  lvs                                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает размер LV, VG, состояние
+</blockquote>
+
+==== Просмотр всех компонентов LVM ====
+
+<syntaxhighlight lang="bash">
+lsblk                                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает иерархию дисков, разделов и LVM томов
+</blockquote>
+
+==== Проверка монтирования ====
+
+<syntaxhighlight lang="bash">
+df -h                                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает смонтированные файловые системы и использование
+</blockquote>
+
+==== Проверка автомонтирования после перезагрузки ====
+
+<syntaxhighlight lang="bash">
+reboot                                                                                   
+  df -h                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Опционально, только для проверки автомонтирования после перезагрузки
+</blockquote>
+
+<blockquote>
+Вместо перезагрузки можно использовать mount -a
+</blockquote>
+
+==== Проверка состояния mirrored LV ====
+
+<syntaxhighlight lang="bash">
+lvs -a -o +devices                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает устройства и состояние зеркал
+</blockquote>
+
+==== Проверка снапшотов ====
+
+<syntaxhighlight lang="bash">
+lvs -a -o +snap_percent                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает процент использования снапшота
+</blockquote>

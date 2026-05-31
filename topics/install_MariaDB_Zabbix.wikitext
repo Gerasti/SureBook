@@ -1,0 +1,159 @@
+
+=== Установка ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install mariadb-server zabbix-server-mysql fping                                 
+   
+ 
+</syntaxhighlight>
+
+==== Включение и запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now mysqld
+
+ 
+</syntaxhighlight>
+
+=== Настройка БД ===
+
+==== Создание базы данных и пользователя ====
+
+<syntaxhighlight lang="bash">
+mysql -uroot -p
+  CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin;
+  GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'P@ssw0rd';              
+  QUIT;                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Пароль можно пропустить при первом входе
+</blockquote>
+
+==== Импорт данных в БД ====
+
+<syntaxhighlight lang="bash">
+mysql -uzabbix -pP@ssw0rd zabbix <                                                       
+  /usr/share/doc/zabbix-common-database-mysql-*/schema.sql                                    
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/images.sql
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/data.sql   
+ 
+</syntaxhighlight>
+
+<blockquote>
+Важно соблюдать порядок ввода команд
+</blockquote>
+
+=== Установка веб-сервера ===
+
+==== Установка Apache и PHP ====
+
+<syntaxhighlight lang="bash">
+apt-get install apache2 apache2-mod_php8.2                                               
+  systemctl enable --now httpd2                                                               
+  apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
+  php8.2-mysqlnd-mysqli php8.2-ldap php8.2-openssl                                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini ====
+
+<syntaxhighlight lang="bash">
+memory_limit = 256M
+  post_max_size = 32M                                                                         
+  max_execution_time = 600                                                                    
+  max_input_time = 600                                                                        
+  date.timezone = Europe/Moscow                                                               
+  always_populate_raw_post_data = -1                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+date.timezone указать свой регион
+</blockquote>
+
+==== Перезапуск веб-сервера ====
+
+<syntaxhighlight lang="bash">
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка сервера ===
+
+==== В /etc/zabbix/zabbix_server.conf ====
+
+<syntaxhighlight lang="bash">
+DBHost=localhost                                                                         
+  DBName=zabbix                                                                               
+  DBUser=zabbix                                                                               
+  DBPassword=P@ssw0rd                                                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Включение и запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now zabbix_mysql                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Установка веб-интерфейса ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание символической ссылки ====
+
+<syntaxhighlight lang="bash">
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Перезапуск веб-сервера ====
+
+<syntaxhighlight lang="bash">
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Назначение прав ====
+
+<syntaxhighlight lang="bash">
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Доступ к веб-интерфейсу ===
+
+==== Открыть в браузере ====
+
+<syntaxhighlight lang="bash">
+http://IP_СЕРВЕРА/zabbix                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Подключиться к БД, ввести пароль от БД
+</blockquote>
+
+==== Вход по умолчанию ====
+
+<blockquote>
+Логин: Admin; Пароль: zabbix
+</blockquote>

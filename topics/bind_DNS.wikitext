@@ -1,0 +1,221 @@
+
+=== Установка DNS-сервера ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install bind bind-utils
+
+
+</syntaxhighlight>
+
+=== Настройка options.conf ===
+
+==== Базовые параметры в /etc/bind/options.conf ====
+
+<syntaxhighlight lang="bash">
+listen-on { any; };
+ allow-query { any; };
+ allow-recursion { any; };
+ forwarders { 77.88.8.8; };
+ recursion yes;
+
+</syntaxhighlight>
+
+<blockquote>
+listen-on(интерфейсы); allow-query(разрешение запросов); allow-recursion(рекурсивные запросы); forwarders(DNS для пересылки); recursion(включение рекурсии)
+</blockquote>
+
+==== Опциональная настройка slave-сервера в /etc/bind/options.conf ====
+
+<syntaxhighlight lang="bash">
+allow-transfer { 192.168.33.67; };
+
+</syntaxhighlight>
+
+<blockquote>
+allow-transfer(разрешение передачи зон на slave-сервер) - опционально, только если используется slave
+</blockquote>
+
+==== Отключение логирования lame-servers в /etc/bind/options.conf ====
+
+<syntaxhighlight lang="bash">
+logging {
+     category lame-servers {null;};
+ };
+
+
+</syntaxhighlight>
+
+=== Настройка local.conf ===
+
+==== Шаблон зоны ====
+
+<syntaxhighlight lang="bash">
+zone "ZONE_NAME" {
+     type TYPE;
+     file "ZONE_FILE_PATH";
+ };
+
+</syntaxhighlight>
+
+<blockquote>
+ZONE_NAME(имя DNS-зоны); TYPE(тип зоны) {master, slave}; ZONE_FILE_PATH(путь к файлу зоны относительно /etc/bind/)
+</blockquote>
+
+<blockquote>
+slave опционален - используется только для вторичных DNS-серверов
+</blockquote>
+
+==== Пример прямой зоны в /etc/bind/local.conf ====
+
+<syntaxhighlight lang="bash">
+zone "bind.domain" {
+     type master;
+     file "bind.domain.db";
+ };
+
+
+</syntaxhighlight>
+
+==== Пример обратных зон в /etc/bind/local.conf ====
+
+<syntaxhighlight lang="bash">
+zone "11.168.192.in-addr.arpa" {
+     type master;
+     file "11.168.192.in-addr.arpa.db";
+ };
+
+
+</syntaxhighlight>
+
+=== Создание файлов зон ===
+
+==== Копирование шаблонов ====
+
+<syntaxhighlight lang="bash">
+cp /etc/bind/zone/{localhost,bind.domain.db}
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+</syntaxhighlight>
+
+==== Назначение прав ====
+
+<syntaxhighlight lang="bash">
+chown named:named /etc/bind/zone/bind.domain.db
+ chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
+ chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+</syntaxhighlight>
+
+=== Настройка зон ===
+
+==== Содержимое прямой зоны /etc/bind/zone/bind.domain.db ====
+
+<syntaxhighlight lang="bash">
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   srv-hq.bind.domain.
+         IN NS   srv-dt.bind.domain.
+
+         IN A    192.168.11.67
+ srv  IN A    192.168.11.67
+ rtr  IN A    192.168.11.81
+ sw   IN A    192.168.11.82
+
+</syntaxhighlight>
+
+<blockquote>
+SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый сервер); CNAME(псевдоним); TXT(текстовые записи)
+</blockquote>
+
+==== Содержимое обратной зоны /etc/bind/zone/11.168.192.in-addr.arpa.db ====
+
+<syntaxhighlight lang="bash">
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   bind.domain.
+
+ 81      IN PTR  rtr.bind.domain.
+ 67      IN PTR  srv.bind.domain.
+ 82      IN PTR  sw.bind.domain.
+
+
+</syntaxhighlight>
+
+=== Настройка resolv.conf ===
+
+==== Содержимое /etc/net/ifaces/ens33/resolv.conf ====
+
+<syntaxhighlight lang="bash">
+search bind.domain
+ nameserver 192.168.11.67
+ nameserver 192.168.33.67
+ nameserver 8.8.8.8
+
+</syntaxhighlight>
+
+<blockquote>
+nameserver(DNS-сервер); search(домен поиска по умолчанию)
+</blockquote>
+
+==== Перезапуск сети ====
+
+<syntaxhighlight lang="bash">
+systemctl restart network
+
+
+</syntaxhighlight>
+
+=== Проверка конфигурации ===
+
+==== Проверка всех зон ====
+
+<syntaxhighlight lang="bash">
+named-checkconf -z
+
+
+</syntaxhighlight>
+
+==== Проверка отдельной прямой зоны ====
+
+<syntaxhighlight lang="bash">
+named-checkzone bind.domain /etc/bind/zone/bind.domain.db
+
+
+</syntaxhighlight>
+
+==== Проверка отдельной обратной зоны ====
+
+<syntaxhighlight lang="bash">
+named-checkzone 11.168.192.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+
+
+</syntaxhighlight>
+
+=== Запуск BIND ===
+
+==== Включение и запуск сервиса ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now bind
+</syntaxhighlight>

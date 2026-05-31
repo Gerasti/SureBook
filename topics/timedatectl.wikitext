@@ -1,0 +1,224 @@
+
+=== Управление временем через timedatectl ===
+
+==== Просмотр текущего времени и настроек ====
+
+<syntaxhighlight lang="bash">
+timedatectl  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает локальное время, UTC, часовой пояс, синхронизацию NTP
+</blockquote>
+
+==== Просмотр статуса синхронизации времени ====
+
+<syntaxhighlight lang="bash">
+timedatectl status                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает полную информацию
+</blockquote>
+
+=== Настройка времени ===
+
+==== Установка текущей даты и времени ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-time "2026-05-31 10:30:00"
+ 
+</syntaxhighlight>
+
+<blockquote>
+Формат: YYYY-MM-DD HH:MM:SS
+</blockquote>
+
+==== Установка только даты ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-time "2026-05-31"                                            
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Установка только времени ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-time "10:30:00"                                              
+                                                                                  
+ 
+</syntaxhighlight>
+
+=== Настройка часового пояса ===
+
+==== Просмотр текущего часового пояса ====
+
+<syntaxhighlight lang="bash">
+timedatectl show-timezones
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список всех доступных часовых поясов
+</blockquote>
+
+==== Поиск часового пояса ====
+
+<syntaxhighlight lang="bash">
+timedatectl list-timezones | grep Moscow                                     
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Установка часового пояса ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-timezone Europe/Moscow                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Часовой пояс Москвы
+</blockquote>
+
+==== Установка UTC ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-timezone UTC                                                 
+                                                                                  
+ 
+</syntaxhighlight>
+
+=== Настройка NTP-синхронизации ===
+
+==== Включение NTP-синхронизации ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-ntp true
+ 
+</syntaxhighlight>
+
+<blockquote>
+Включает автоматическую синхронизацию времени через systemd-timesyncd
+</blockquote>
+
+==== Отключение NTP-синхронизации ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-ntp false                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Отключает автоматическую синхронизацию, позволяет устанавливать время вручную
+</blockquote>
+
+==== Проверка статуса NTP-синхронизации ====
+
+<syntaxhighlight lang="bash">
+timedatectl timesync-status                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает сервер, stratum, задержку, смещение времени
+</blockquote>
+
+=== Настройка аппаратных часов ===
+
+==== Синхронизация системного времени с аппаратными часами ====
+
+<syntaxhighlight lang="bash">
+hwclock --systohc
+ 
+</syntaxhighlight>
+
+<blockquote>
+Записывает системное время в аппаратные часы (RTC)
+</blockquote>
+
+==== Синхронизация аппаратных часов с системным временем ====
+
+<syntaxhighlight lang="bash">
+hwclock --hctosys                                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+Устанавливает системное время из аппаратных часов
+</blockquote>
+
+==== Просмотр аппаратных часов ====
+
+<syntaxhighlight lang="bash">
+hwclock --show                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает время из RTC
+</blockquote>
+
+==== Установка аппаратных часов в UTC ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-local-rtc 0                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+0(RTC в UTC), рекомендуется для Linux
+</blockquote>
+
+==== Установка аппаратных часов в локальное время ====
+
+<syntaxhighlight lang="bash">
+timedatectl set-local-rtc 1                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+1(RTC в локальном времени), используется для совместимости с Windows
+</blockquote>
+
+=== Проверка ===
+
+==== Просмотр всех свойств ====
+
+<syntaxhighlight lang="bash">
+timedatectl show
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все параметры в формате ключ=значение
+</blockquote>
+
+==== Просмотр конкретного свойства ====
+
+<syntaxhighlight lang="bash">
+timedatectl show -p Timezone                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+-p(конкретное свойство): Timezone, NTPSynchronized, LocalRTC
+</blockquote>
+
+==== Просмотр логов службы времени ====
+
+<syntaxhighlight lang="bash">
+journalctl -u systemd-timesyncd                                              
+                                                                                  
+ 
+</syntaxhighlight>
+
+=== Примеры часовых поясов ===
+* Europe/Moscow (Москва, UTC+3)
+* Asia/Yekaterinburg (Екатеринбург, UTC+5)
+* Asia/Novosibirsk (Новосибирск, UTC+7)
+* Asia/Vladivostok (Владивосток, UTC+10)
+* UTC (Всемирное координированное время)

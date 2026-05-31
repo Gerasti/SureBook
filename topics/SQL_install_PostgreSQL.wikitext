@@ -1,0 +1,215 @@
+
+=== Установка ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+postgresql16-contrib(дополнительные модули и утилиты)
+</blockquote>
+
+==== Создание системных БД ====
+
+<syntaxhighlight lang="bash">
+/etc/init.d/postgresql initdb
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now postgresql                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Установка пароля для пользователя postgres ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+  ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
+  \q                                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка ===
+
+==== Разрешение доступа из сети в /var/lib/pgsql/data/postgresql.conf ====
+
+<syntaxhighlight lang="bash">
+listen_addresses = '*'                                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+Найти listen_addresses = 'localhost' и заменить на '*'
+</blockquote>
+
+<blockquote>
+listen_addresses(адреса для прослушивания) {'*', 'localhost', '192.168.1.1'}
+</blockquote>
+
+==== Перезапуск службы после изменения postgresql.conf ====
+
+<syntaxhighlight lang="bash">
+systemctl restart postgresql                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf ====
+
+<syntaxhighlight lang="bash">
+host    all             all             0.0.0.0/0               md5                      
+  host    replication     all             0.0.0.0/0               md5                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Добавить строки в конец файла перед секцией IPv6
+</blockquote>
+
+<blockquote>
+host(тип подключения) {host, local, hostssl}
+</blockquote>
+
+<blockquote>
+all(база данных) {all, имя_БД}
+</blockquote>
+
+<blockquote>
+all(пользователь) {all, имя_пользователя}
+</blockquote>
+
+<blockquote>
+0.0.0.0/0(IP-адреса клиентов) {0.0.0.0/0, 192.168.1.0/24, конкретный_IP}
+</blockquote>
+
+<blockquote>
+md5(метод аутентификации) {md5, trust, reject, scram-sha-256}
+</blockquote>
+
+<blockquote>
+Первая строка для обычных подключений, вторая для репликации
+</blockquote>
+
+==== Перезапуск службы после изменения pg_hba.conf ====
+
+<syntaxhighlight lang="bash">
+systemctl restart postgresql                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание базы данных и пользователя ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+  CREATE DATABASE db01;                                                                       
+  CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
+  GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
+  \q                                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+db01(имя создаваемой БД); user01(имя пользователя)
+</blockquote>
+
+==== Создание нескольких баз данных и пользователей ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+  CREATE DATABASE one;                                                                        
+  CREATE DATABASE two;                                                                        
+  CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
+  CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
+  GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
+  GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
+  \q                                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Заполнение базы данных тестовыми данными ====
+
+<syntaxhighlight lang="bash">
+pgbench -U postgres -i one                                                               
+  pgbench -U postgres -i two                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Опционально, для тестирования производительности
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка открытого порта PostgreSQL ====
+
+<syntaxhighlight lang="bash">
+ss -tlpn | grep postgres                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает открытый порт 5432
+</blockquote>
+
+==== Проверка БД и пользователей на сервере ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+  SELECT datname FROM pg_database;                                                            
+  SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
+  \q                                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список баз данных и пользователей
+</blockquote>
+
+==== Проверка таблиц в базе данных ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+  \c one                                                                                      
+  \dt+                                                                                        
+  \c two                                                                                      
+  \dt+                                                                                        
+  \q              
+ 
+</syntaxhighlight>
+
+<blockquote>
+\c(подключение к БД); \dt+(список таблиц с размерами)
+</blockquote>
+
+==== Локальное подключение на клиенте ====
+
+<syntaxhighlight lang="bash">
+psql -U user01 db01                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Подключение к БД db01 от имени user01
+</blockquote>
+
+==== Удалённое подключение на клиенте ====
+
+<syntaxhighlight lang="bash">
+psql -U user01 -h IP_сервера -d db01                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+-h(хост сервера); -d(имя базы данных)
+</blockquote>

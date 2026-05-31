@@ -1,0 +1,184 @@
+
+=== Установка FreeIPA-сервера ===
+
+==== Установка генератора энтропии ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y haveged                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Включение и запуск haveged ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now haveged                                                           
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Установка пакета FreeIPA ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y freeipa-server                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Запуск интерактивной установки ====
+
+<syntaxhighlight lang="bash">
+ipa-server-install --setup-dns                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+--setup-dns опционально, если нужна интеграция с DNS
+</blockquote>
+
+=== Параметры установки ===
+* Server host name: имя узла FreeIPA-сервера
+* Domain name: доменное имя
+* Realm name: пространство Kerberos (обычно домен в верхнем регистре)
+* Directory Manager password: пароль для LDAP-администратора (минимум 8 символов)
+* IPA admin password: пароль администратора FreeIPA
+* NetBIOS name: имя NetBIOS
+* DNS forwarders: внешние DNS-серверы (например 8.8.8.8)
+* Reverse DNS zone: обратная DNS-зона
+
+<blockquote>
+Имена узла, домена и realm нельзя изменить после установки
+</blockquote>
+
+=== Создание пользователей и групп ===
+
+==== Получение билета Kerberos ====
+
+<syntaxhighlight lang="bash">
+kinit admin                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Ввести пароль администратора FreeIPA
+</blockquote>
+
+==== Создание 30 пользователей с паролем ====
+
+<syntaxhighlight lang="bash">
+for i in {1..30}; do                                                                     
+      echo "P@ssw0rd" | ipa user-add user$i --first=User --last=$i --password;                
+      ipa user-mod user$i --setattr=krbPasswordExpiration=20251225011529Z;                    
+  done                                                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+Устанавливает срок действия пароля до 2025 года, чтобы не требовалась смена при первом входе
+</blockquote>
+
+==== Создание групп ====
+
+<syntaxhighlight lang="bash">
+for i in {1..3}; do
+      ipa group-add group$i;                                                                  
+  done                                                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Добавление пользователей в группы ====
+
+<syntaxhighlight lang="bash">
+for i in {1..10}; do                                                                     
+      ipa group-add-member group1 --users=user$i;                                             
+  done                                                                                        
+                                                                                              
+  for i in {11..20}; do                                                                       
+      ipa group-add-member group2 --users=user$i;
+  done                                                                                        
+                  
+  for i in {21..30}; do                                                                       
+      ipa group-add-member group3 --users=user$i;
+  done                                                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Подключение клиента к FreeIPA ===
+
+==== Установка пакетов на клиенте ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y freeipa-client zip                                  
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Запуск настройки клиента ====
+
+<syntaxhighlight lang="bash">
+ipa-client-install --server=srv-hq.your.domain --domain=your.domain --mkhomedir          
+ 
+</syntaxhighlight>
+
+<blockquote>
+--mkhomedir автоматически создаёт домашние каталоги для доменных пользователей
+</blockquote>
+
+<blockquote>
+Скрипт автоматически найдёт настройки FreeIPA-сервера и запросит имя пользователя с правом ввода машин в домен
+</blockquote>
+
+==== Перезагрузка клиента ====
+
+<syntaxhighlight lang="bash">
+reboot       
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Установка CA-сертификата на клиенте ===
+
+==== Копирование сертификата с сервера ====
+
+<syntaxhighlight lang="bash">
+scp /etc/ipa/ca.crt root@CLI-HQ:/etc/pki/ca-trust/source/anchors/                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+Выполняется на FreeIPA-сервере
+</blockquote>
+
+==== Обновление доверенных сертификатов на клиенте ====
+
+<syntaxhighlight lang="bash">
+update-ca-trust                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка FreeIPA ===
+
+==== Проверка пользователя ====
+
+<syntaxhighlight lang="bash">
+ipa user-find admin                                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка HTTPS-соединения ====
+
+<syntaxhighlight lang="bash">
+curl https://srv-hq.your.domain                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка запущенных служб ====
+
+<syntaxhighlight lang="bash">
+ipactl status 
+</syntaxhighlight>

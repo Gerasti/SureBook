@@ -1,0 +1,290 @@
+
+=== Установка ===
+
+==== Установка sudo ====
+
+<syntaxhighlight lang="bash">
+apt-get install sudo
+ 
+</syntaxhighlight>
+
+<blockquote>
+sudo(выполнение команд от имени другого пользователя, обычно root)
+</blockquote>
+
+=== Создание пользователя ===
+
+==== Создание пользователя с параметрами ====
+
+<syntaxhighlight lang="bash">
+useradd -m -g users -G wheel -s /bin/bash username
+ 
+</syntaxhighlight>
+
+<blockquote>
+-m(создать домашний каталог); -g(основная группа); -G(дополнительные группы); -s(оболочка по умолчанию /bin/bash)
+</blockquote>
+
+==== Создание пользователя с указанным UID ====
+
+<syntaxhighlight lang="bash">
+useradd -u 2026 -m -g users -G wheel username
+ 
+</syntaxhighlight>
+
+<blockquote>
+-u(указать конкретный UID)
+</blockquote>
+
+==== Установка пароля пользователю ====
+
+<syntaxhighlight lang="bash">
+passwd username                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание пользователя интерактивно ====
+
+<syntaxhighlight lang="bash">
+adduser username                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Либо интерактивный режим с запросом всех параметров
+</blockquote>
+
+=== Настройка sudo ===
+
+==== Основной конфигурационный файл ====
+
+<syntaxhighlight lang="bash">
+/etc/sudoers 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Редактирование конфигурации sudo ====
+
+<syntaxhighlight lang="bash">
+visudo                                                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+Безопасное редактирование /etc/sudoers с проверкой синтаксиса
+</blockquote>
+
+==== Предоставление sudo группе wheel ====
+
+<syntaxhighlight lang="bash">
+%wheel ALL=(ALL:ALL) ALL                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Пользователи группы wheel могут выполнять любые команды через sudo с вводом пароля
+</blockquote>
+
+==== Предоставление sudo без пароля группе wheel ====
+
+<syntaxhighlight lang="bash">
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Пользователи группы wheel могут выполнять sudo без ввода пароля
+</blockquote>
+
+==== Предоставление sudo конкретному пользователю ====
+
+<syntaxhighlight lang="bash">
+username ALL=(ALL:ALL) ALL                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+Конкретный пользователь может выполнять любые команды через sudo
+</blockquote>
+
+==== Предоставление sudo для конкретных команд ====
+
+<syntaxhighlight lang="bash">
+username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Пользователь может выполнять только указанные команды через sudo
+</blockquote>
+
+==== Добавление пользователя в группу wheel ====
+
+<syntaxhighlight lang="bash">
+usermod -aG wheel username                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+-aG(добавить в дополнительные группы, не удаляя из существующих)
+</blockquote>
+
+=== Управление пользователями ===
+
+==== Изменение оболочки пользователя ====
+
+<syntaxhighlight lang="bash">
+usermod -s /bin/bash username
+ 
+</syntaxhighlight>
+
+<blockquote>
+-s(изменить оболочку по умолчанию)
+</blockquote>
+
+==== Изменение домашнего каталога ====
+
+<syntaxhighlight lang="bash">
+usermod -d /home/newdir username                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+-d(изменить домашний каталог)
+</blockquote>
+
+==== Блокировка пользователя ====
+
+<syntaxhighlight lang="bash">
+usermod -L username                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-L(заблокировать учётную запись, запретить вход)
+</blockquote>
+
+==== Разблокировка пользователя ====
+
+<syntaxhighlight lang="bash">
+usermod -U username                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-U(разблокировать учётную запись)
+</blockquote>
+
+==== Удаление пользователя ====
+
+<syntaxhighlight lang="bash">
+userdel username                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Удаляет пользователя, но сохраняет домашний каталог
+</blockquote>
+
+==== Удаление пользователя с домашним каталогом ====
+
+<syntaxhighlight lang="bash">
+userdel -r username                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-r(удалить вместе с домашним каталогом)
+</blockquote>
+
+==== Просмотр групп пользователя ====
+
+<syntaxhighlight lang="bash">
+groups username                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все группы пользователя
+</blockquote>
+
+==== Просмотр информации о пользователе ====
+
+<syntaxhighlight lang="bash">
+id username                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает UID, GID и группы пользователя
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка sudo ====
+
+<syntaxhighlight lang="bash">
+sudo whoami  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Результат: root
+</blockquote>
+
+==== Проверка выполнения команды от другого пользователя ====
+
+<syntaxhighlight lang="bash">
+sudo -u username whoami                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+-u(выполнить от имени указанного пользователя), результат: username
+</blockquote>
+
+==== Просмотр прав sudo текущего пользователя ====
+
+<syntaxhighlight lang="bash">
+sudo -l                                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает какие команды может выполнять пользователь через sudo
+</blockquote>
+
+==== Просмотр истории sudo ====
+
+<syntaxhighlight lang="bash">
+journalctl -u sudo                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает логи выполнения команд через sudo
+</blockquote>
+
+==== Просмотр всех пользователей системы ====
+
+<syntaxhighlight lang="bash">
+cat /etc/passwd                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Список всех пользователей с их параметрами
+</blockquote>
+
+==== Просмотр всех групп системы ====
+
+<syntaxhighlight lang="bash">
+cat /etc/group                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Список всех групп и их членов
+</blockquote>

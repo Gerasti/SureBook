@@ -1,0 +1,88 @@
+
+=== Настройка slave DNS-сервера ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y bind bind-utils                                     
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Базовые параметры в /etc/bind/options.conf ====
+
+<syntaxhighlight lang="bash">
+listen-on { any; };                                                                      
+  allow-query { any; };                                                                       
+  allow-transfer { none; };                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Настройка slave-зон в /etc/bind/local.conf ====
+
+<syntaxhighlight lang="bash">
+zone "bind.domain" {                                                                     
+      type slave;                                                                             
+      file "slave/bind.domain";                                                               
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+                                                                                              
+  zone "11.168.192.in-addr.arpa" {                                                            
+      type slave; 
+      file "slave/11.168.192.in-addr.arpa.db";                                                
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+                                                                                              
+  zone "33.168.192.in-addr.arpa" {                                                            
+      type slave;                                                                             
+      file "slave/33.168.192.in-addr.arpa.db";                                                
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+type slave(вторичный сервер); masters(IP master-сервера для синхронизации)
+</blockquote>
+
+==== Содержимое /etc/net/ifaces/ens33/resolv.conf ====
+
+<syntaxhighlight lang="bash">
+search bind.domain                                                                       
+  nameserver 192.168.11.67                                                                    
+  nameserver 192.168.33.67                                                                    
+  nameserver 8.8.8.8                                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Перезапуск сети и запуск BIND ====
+
+<syntaxhighlight lang="bash">
+systemctl restart network                                                                
+  systemctl enable --now bind                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Включение slave-режима ====
+
+<syntaxhighlight lang="bash">
+control bind-slave enabled                                                               
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка slave-режима ===
+
+==== Проверка синхронизированных зон ====
+
+<syntaxhighlight lang="bash">
+ls -l /etc/bind/zone/slave/                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Должны появиться файлы зон, скопированные с master-сервера
+</blockquote>

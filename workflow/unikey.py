@@ -2,18 +2,19 @@ import sys
 
 HELP = """unikey preprocessor
 
-KEYS:
-  hd, /head       ### text <!-- HEAD -->
-  ne, /name       #### text <!-- NAME -->
-  ce, /code       ```CODE ... ```
-  ct, /comment    > text
-  lt, /list       ### text <!-- LIST -->  (enters list mode)
+KEYS md; wikitext:
+  hd, /head       ### text <!-- HEAD -->; === text ===
+  ne, /name       #### text <!-- NAME -->; ==== text ====
+  ce, /code       ```CODE ... ```; <syntaxhighlight lang="bash"> ... </syntaxhighlight>
+  ct, /comment    > text; <blockquote> ... </blockquote>
+  lt, /list       ### text <!-- LIST -->  (enters list mode); === text ===
+  lk, /link       [text](#name); [[#name]] or [[#name|text]]
 
   Note: $$ prefix escapes keys (e.g., $$ct outputs plain text "ct", not a comment)
 
-LIST MODE (after lt, /list):
-  -               - item
-  --                  - subitem
+LIST MODE (after lt, /list) md; wikitext:
+  -               - item; * item
+  --                  - subitem; ** subitem
   any other key   exits list mode
 
 EXAMPLE INPUT:
@@ -24,6 +25,7 @@ EXAMPLE INPUT:
   ne Item Name
   ct Some comment
   ce code
+  lk anchor Link Text
 
 EXAMPLE OUTPUT:
   ### Title <!-- HEAD -->
@@ -35,10 +37,11 @@ EXAMPLE OUTPUT:
   ```CODE
   code
   ```
+  [Link Text](#anchor)
 """
 
 KEYS_LIST = ['-', '--']
-KEYS = ['hd', '/head', 'ce', '/code', 'ne', '/name', 'ct', '/comment', 'lt', '/list']
+KEYS = ['hd', '/head', 'ce', '/code', 'ne', '/name', 'ct', '/comment', 'lt', '/list', 'lk', '/link']
 
 CANON = {
     'hd': 'hd', '/head': 'hd',
@@ -46,6 +49,7 @@ CANON = {
     'ce': 'ce', '/code': 'ce',
     'ct': 'ct', '/comment': 'ct',
     'lt': 'lt', '/list': 'lt',
+    'lk': 'lk', '/link': 'lk',
 }
 
 def tokenize_input(input_str):
@@ -94,6 +98,18 @@ def format_output(key, data, ctx, fmt):
                 return f"    - {joined}", ctx
             return None, ctx
 
+        if key == 'lk':
+            # Parse: first word is name, rest is text
+            parts = joined.split(None, 1)
+            if len(parts) == 1:
+                # Only name, use name as text
+                name = parts[0]
+                return f"\n[{name}](#{name})", ctx
+            else:
+                # name and text
+                name, text = parts
+                return f"\n[{text}](#{name})", ctx
+
         formats = {
             'hd': f"\n### {joined} <!-- HEAD -->",
             'ce': f"\n```CODE\n{''.join(data)}\n```",
@@ -106,13 +122,45 @@ def format_output(key, data, ctx, fmt):
 
         return formats.get(key), ctx
 
+    if fmt == 'wikitext':
+        if ctx['MODE_LIST_lt']:
+            if key == '-':
+                return f"* {joined}", ctx
+            if key == '--':
+                return f"** {joined}", ctx
+            return None, ctx
+
+        if key == 'lk':
+            # Parse: first word is name, rest is text
+            parts = joined.split(None, 1)
+            if len(parts) == 1:
+                # Only name, no text
+                name = parts[0]
+                return f"\n[[#{name}]]", ctx
+            else:
+                # name and text
+                name, text = parts
+                return f"\n[[#{name}|{text}]]", ctx
+
+        formats = {
+            'hd': f"\n=== {joined} ===",
+            'ce': f"\n<syntaxhighlight lang=\"bash\">\n{''.join(data)}\n</syntaxhighlight>",
+            'ne': f"\n==== {joined} ====",
+            'ct': f"\n<blockquote>\n{joined}\n</blockquote>",
+        }
+        if key == 'lt':
+            ctx['MODE_LIST_lt'] = True
+            return f"\n=== {joined} ===", ctx
+
+        return formats.get(key), ctx
+
     return None, ctx
 
 def process_tokens(tokens, fmt):
     output, context = [], {'MODE_LIST_lt': False}
 
     # Strip $$ prefix from tokens - they won't be treated as keys
-    base_keys = ['hd', 'ne', 'ce', 'ct', 'lt']
+    base_keys = ['hd', 'ne', 'ce', 'ct', 'lt', 'lk']
     cleaned_tokens = []
     for token in tokens:
         if token.startswith('$$') and token[2:] in base_keys:
@@ -174,6 +222,7 @@ if __name__ == "__main__":
 
     FORMATS = {
         'md': lambda tokens: "\n".join(process_tokens(tokens, 'md')),
+        'wikitext': lambda tokens: "\n".join(process_tokens(tokens, 'wikitext')),
     }
 
     if fmt is None:

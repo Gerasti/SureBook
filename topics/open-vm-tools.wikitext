@@ -1,0 +1,98 @@
+
+=== Установка VMware Tools ===
+
+==== Установка пакетов open-vm-tools ====
+
+<syntaxhighlight lang="bash">
+apt-get install open-vm-tools open-vm-tools-desktop xrandr
+ 
+</syntaxhighlight>
+
+<blockquote>
+open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция мыши, графика); xrandr(утилита для управления разрешением экрана)
+</blockquote>
+
+==== Включение службы в автозагрузку ====
+
+<syntaxhighlight lang="bash">
+systemctl enable vmtoolsd
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl start vmtoolsd                                                     
+                                                                                  
+ 
+</syntaxhighlight>
+
+=== Проверка ===
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status vmtoolsd
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Проверка версии VMware Tools ====
+
+<syntaxhighlight lang="bash">
+vmware-toolbox-cmd -v                                                        
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Проверка работы буфера обмена ====
+
+<syntaxhighlight lang="bash">
+vmware-toolbox-cmd stat clipboard                                            
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Проверка синхронизации времени ====
+
+<syntaxhighlight lang="bash">
+vmware-toolbox-cmd timesync status                                           
+                                                                                  
+ 
+</syntaxhighlight>
+
+=== Настройка ===
+
+==== Включение синхронизации времени с хостом ====
+
+<syntaxhighlight lang="bash">
+vmware-toolbox-cmd timesync enable
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Отключение синхронизации времени с хостом ====
+
+<syntaxhighlight lang="bash">
+vmware-toolbox-cmd timesync disable                                          
+                                                                                  
+ 
+</syntaxhighlight>
+
+==== Ручная настройка разрешения экрана ====
+
+<syntaxhighlight lang="bash">
+xrandr --output Virtual1 --mode 1920x1080                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение экрана)
+</blockquote>
+
+==== Просмотр доступных разрешений ====
+
+<syntaxhighlight lang="bash">
+xrandr
+</syntaxhighlight>

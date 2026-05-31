@@ -1,0 +1,157 @@
+
+=== Установка ===
+
+==== Установка пакетов на всех устройствах ====
+
+<syntaxhighlight lang="bash">
+apt-get install rsyslog logrotate                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+rsyslog(сбор и пересылка логов); logrotate(ротация и сжатие логов)
+</blockquote>
+
+<blockquote>
+Обычно работают в связке
+</blockquote>
+
+=== Настройка сервера сбора логов ===
+
+==== В /etc/rsyslog.conf ====
+
+<syntaxhighlight lang="bash">
+module(load="imuxsock")                                                                  
+  module(load="imklog")                                                                       
+  module(load="imudp")                                                                        
+  input(type="imudp" port="514")                                                              
+  module(load="imtcp")                                                                        
+  input(type="imtcp" port="514")                                                              
+                                                                                              
+  $template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
+                  
+  if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
+  & stop          
+ 
+</syntaxhighlight>
+
+<blockquote>
+imuxsock(локальные сообщения); imklog(логи ядра); imudp/imtcp(приём по UDP/TCP); $syslogseverity <= 4(warning и выше); & stop(остановка обработки)
+</blockquote>
+
+==== Создание каталогов для логов ====
+
+<syntaxhighlight lang="bash">
+mkdir -p /opt/client1
+  mkdir -p /opt/client2                                                                       
+  mkdir -p /opt/client3                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+создаются каталоги для каждого клиента
+</blockquote>
+
+==== Установка прав на каталоги ====
+
+<syntaxhighlight lang="bash">
+chown -R root:root /opt                                                                  
+  chmod -R 755 /opt                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+права для записи логов службой rsyslog
+</blockquote>
+
+==== Перезапуск службы на сервере ====
+
+<syntaxhighlight lang="bash">
+systemctl restart rsyslog                                                                
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка клиента ===
+
+==== В /etc/rsyslog.conf на клиенте ====
+
+<syntaxhighlight lang="bash">
+*.warning action(type="omfwd"                                                            
+      target="<HQ-SRV_IP>"                                                                    
+      port="514"                                                                              
+      protocol="tcp"                                                                          
+      action.resumeRetryCount="-1"                                                            
+      queue.type="linkedList"                                                                 
+      queue.size="10000")                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+*.warning(уровень warning и выше); target(IP сервера логов); protocol(tcp для надежности); resumeRetryCount=-1(бесконечные попытки); queue.size(размер очереди сообщений)
+</blockquote>
+
+==== Перезапуск службы на клиенте ====
+
+<syntaxhighlight lang="bash">
+systemctl restart rsyslog
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка ===
+
+==== Проверка открытого порта на сервере ====
+
+<syntaxhighlight lang="bash">
+ss -tulpn | grep 514                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+должен показать порты 514 TCP и UDP
+</blockquote>
+
+==== Проверка каталогов логов на сервере ====
+
+<syntaxhighlight lang="bash">
+ls -la /opt/                                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+должны появиться каталоги с именами клиентов
+</blockquote>
+
+==== Проверка содержимого логов ====
+
+<syntaxhighlight lang="bash">
+ls -la /opt/client1/                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+должны появиться файлы логов от клиента
+</blockquote>
+
+==== Тестовая отправка сообщения с клиента ====
+
+<syntaxhighlight lang="bash">
+logger -p user.warning "Test message from client"                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+отправляет тестовое сообщение уровня warning
+</blockquote>
+
+==== Проверка получения на сервере ====
+
+<syntaxhighlight lang="bash">
+tail -f /opt/client1/*.log                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+должно появиться тестовое сообщение
+</blockquote>

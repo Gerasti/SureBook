@@ -1,0 +1,24 @@
+
+=== Настройка ===
+
+==== Раскомментировать строки в /etc/apt/sources.list.d/yandex.list ====
+
+<syntaxhighlight lang="bash">
+rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/x86_64 classic
+rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/i586 classic
+rpm [alt] http://mirror.yandex.ru/altlinux Sisyphus/noarch classic
+</syntaxhighlight>
+
+<blockquote>
+alt.list желательно весь закомментировать
+</blockquote>
+
+==== Обновление ====
+
+<syntaxhighlight lang="bash">
+apt-get update
+</syntaxhighlight>
+
+<blockquote>
+Должен работать DNS и возможно Интернет, NAT
+</blockquote>

@@ -1,0 +1,96 @@
+
+=== Установка DHCP-сервера ===
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install dhcp-server                                                              
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Определение сетевого интерфейса ====
+
+<syntaxhighlight lang="bash">
+ip a -c                                                                                  
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Настройка интерфейса в /etc/sysconfig/dhcpd ====
+
+<syntaxhighlight lang="bash">
+DHCPDARGS=ens34                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Указывает интерфейс, который будет раздавать IP-адреса
+</blockquote>
+
+=== Настройка DHCP-сервера ===
+
+==== Основная конфигурация в /etc/dhcp/dhcpd.conf ====
+
+<syntaxhighlight lang="bash">
+ddns-update-style none;                                                                  
+                                                                                              
+  subnet 192.168.11.0 netmask 255.255.255.192 {                                               
+          option routers                  192.168.11.1;                                       
+          option domain-name              "bind.domain";                                      
+          option domain-name-servers      77.88.8.8,192.168.11.1;                             
+                                                                                              
+          range dynamic-bootp 192.168.11.2 192.168.11.63;                                     
+          default-lease-time 21600;                                                           
+          max-lease-time 43200;                                                               
+                                                                                              
+  host R-HQ {                                                                                 
+          hardware ethernet 00:0c:29:41:f2:9f;                                                
+          fixed-address 192.168.11.1;                                                         
+  }                                                                                           
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+subnet(определение подсети); range(диапазон выдаваемых адресов); option routers(шлюз по умолчанию); option domain-name-servers(DNS-серверы); default-lease-time(время аренды по умолчанию в секундах); max-lease-time(максимальное время аренды); host(резервирование IP по MAC-адресу)
+</blockquote>
+
+==== Проверка конфигурации ====
+
+<syntaxhighlight lang="bash">
+dhcpd -t -cf /etc/dhcp/dhcpd.conf
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Запуск и включение службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now dhcpd                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка DHCP-сервера ===
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status dhcpd                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка DHCP-клиента ===
+
+==== Получение IP-адреса от DHCP-сервера ====
+
+<syntaxhighlight lang="bash">
+dhcpcd                                                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+Клиент получит IP-адрес, шлюз и DNS-серверы из конфигурации сервера
+</blockquote>

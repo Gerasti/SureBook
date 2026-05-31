@@ -1,0 +1,817 @@
+
+=== Подключение к PostgreSQL ===
+
+==== Подключение к БД от имени пользователя postgres ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+-U(имя пользователя)
+</blockquote>
+
+==== Подключение к конкретной базе данных ====
+
+<syntaxhighlight lang="bash">
+psql -U user01 -d db01                                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+-d(имя базы данных)
+</blockquote>
+
+==== Удалённое подключение к БД ====
+
+<syntaxhighlight lang="bash">
+psql -U user01 -h 192.168.1.10 -d db01                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+-h(IP-адрес или hostname сервера)
+</blockquote>
+
+==== Подключение с указанием порта ====
+
+<syntaxhighlight lang="bash">
+psql -U user01 -h 192.168.1.10 -p 5432 -d db01                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+-p(порт) по умолчанию 5432
+</blockquote>
+
+==== Выход из psql ====
+
+<syntaxhighlight lang="bash">
+\q                                                                                       
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Управление базами данных ===
+
+==== Создание базы данных ====
+
+<syntaxhighlight lang="bash">
+CREATE DATABASE mydb;                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+mydb(имя создаваемой БД)
+</blockquote>
+
+==== Создание БД с указанием владельца и кодировки ====
+
+<syntaxhighlight lang="bash">
+CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+OWNER(владелец БД); ENCODING(кодировка) {UTF8, LATIN1}
+</blockquote>
+
+==== Удаление базы данных ====
+
+<syntaxhighlight lang="bash">
+DROP DATABASE mydb;                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Удаляет БД безвозвратно
+</blockquote>
+
+==== Переименование базы данных ====
+
+<syntaxhighlight lang="bash">
+ALTER DATABASE mydb RENAME TO newdb;                                                     
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Просмотр списка баз данных ====
+
+<syntaxhighlight lang="bash">
+\l                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все БД с владельцами и кодировками
+</blockquote>
+
+==== Просмотр списка БД через SQL ====
+
+<syntaxhighlight lang="bash">
+SELECT datname FROM pg_database;                                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Подключение к другой БД внутри psql ====
+
+<syntaxhighlight lang="bash">
+\c dbname                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Переключение между базами данных
+</blockquote>
+
+==== Просмотр размера базы данных ====
+
+<syntaxhighlight lang="bash">
+SELECT pg_size_pretty(pg_database_size('mydb'));                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Управление пользователями ===
+
+==== Создание пользователя ====
+
+<syntaxhighlight lang="bash">
+CREATE USER username WITH PASSWORD 'P@ssw0rd';                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+username(имя пользователя)
+</blockquote>
+
+==== Создание пользователя с правами суперпользователя ====
+
+<syntaxhighlight lang="bash">
+CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+SUPERUSER(полные права на сервер)
+</blockquote>
+
+==== Создание пользователя с правами создания БД ====
+
+<syntaxhighlight lang="bash">
+CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+CREATEDB(право создавать базы данных)
+</blockquote>
+
+==== Изменение пароля пользователя ====
+
+<syntaxhighlight lang="bash">
+ALTER USER username WITH PASSWORD 'NewP@ssw0rd';                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление пользователя ====
+
+<syntaxhighlight lang="bash">
+DROP USER username;                                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Просмотр списка пользователей ====
+
+<syntaxhighlight lang="bash">
+\du                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает пользователей с их ролями
+</blockquote>
+
+==== Просмотр списка пользователей через SQL ====
+
+<syntaxhighlight lang="bash">
+SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                           
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Переименование пользователя ====
+
+<syntaxhighlight lang="bash">
+ALTER USER oldname RENAME TO newname;                                                    
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Управление правами доступа ===
+
+==== Предоставление всех прав на БД пользователю ====
+
+<syntaxhighlight lang="bash">
+GRANT ALL PRIVILEGES ON DATABASE mydb TO username;                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+ALL PRIVILEGES(все права на БД)
+</blockquote>
+
+==== Предоставление прав на подключение к БД ====
+
+<syntaxhighlight lang="bash">
+GRANT CONNECT ON DATABASE mydb TO username;                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+CONNECT(право подключаться к БД)
+</blockquote>
+
+==== Предоставление прав на схему ====
+
+<syntaxhighlight lang="bash">
+GRANT ALL ON SCHEMA public TO username;                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+public(схема по умолчанию)
+</blockquote>
+
+==== Предоставление прав на все таблицы в схеме ====
+
+<syntaxhighlight lang="bash">
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username;                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Предоставление прав на конкретную таблицу ====
+
+<syntaxhighlight lang="bash">
+GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+SELECT, INSERT, UPDATE, DELETE(типы операций)
+</blockquote>
+
+==== Отзыв прав у пользователя ====
+
+<syntaxhighlight lang="bash">
+REVOKE ALL PRIVILEGES ON DATABASE mydb FROM username;                                    
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Изменение владельца базы данных ====
+
+<syntaxhighlight lang="bash">
+ALTER DATABASE mydb OWNER TO newowner;                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Изменение владельца таблицы ====
+
+<syntaxhighlight lang="bash">
+ALTER TABLE tablename OWNER TO newowner;                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Управление таблицами ===
+
+==== Просмотр списка таблиц ====
+
+<syntaxhighlight lang="bash">
+\dt                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает таблицы в текущей БД
+</blockquote>
+
+==== Просмотр списка таблиц с размерами ====
+
+<syntaxhighlight lang="bash">
+\dt+                                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает таблицы с размерами и описанием
+</blockquote>
+
+==== Просмотр структуры таблицы ====
+
+<syntaxhighlight lang="bash">
+\d tablename                                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает столбцы, типы данных, индексы
+</blockquote>
+
+==== Создание таблицы ====
+
+<syntaxhighlight lang="bash">
+CREATE TABLE users (                                                                     
+      id SERIAL PRIMARY KEY,                                                                  
+      username VARCHAR(50) NOT NULL,                                                          
+      email VARCHAR(100) UNIQUE,                                                              
+      created_at TIMESTAMP DEFAULT NOW()                                                      
+  );                                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+SERIAL(автоинкремент); PRIMARY KEY(первичный ключ); NOT NULL(обязательное поле); UNIQUE(уникальное значение)
+</blockquote>
+
+==== Удаление таблицы ====
+
+<syntaxhighlight lang="bash">
+DROP TABLE tablename;
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Переименование таблицы ====
+
+<syntaxhighlight lang="bash">
+ALTER TABLE oldname RENAME TO newname;                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Добавление столбца в таблицу ====
+
+<syntaxhighlight lang="bash">
+ALTER TABLE tablename ADD COLUMN columnname VARCHAR(50);                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление столбца из таблицы ====
+
+<syntaxhighlight lang="bash">
+ALTER TABLE tablename DROP COLUMN columnname;                                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Изменение типа данных столбца ====
+
+<syntaxhighlight lang="bash">
+ALTER TABLE tablename ALTER COLUMN columnname TYPE INTEGER;                              
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Очистка таблицы ====
+
+<syntaxhighlight lang="bash">
+TRUNCATE TABLE tablename;                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Удаляет все строки, но сохраняет структуру
+</blockquote>
+
+=== Работа с данными ===
+
+==== Вставка данных в таблицу ====
+
+<syntaxhighlight lang="bash">
+INSERT INTO users (username, email) VALUES ('john', 'john@example.com');                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Вставка нескольких строк ====
+
+<syntaxhighlight lang="bash">
+INSERT INTO users (username, email) VALUES                                               
+  ('alice', 'alice@example.com'),                                                             
+  ('bob', 'bob@example.com');                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Выборка всех данных из таблицы ====
+
+<syntaxhighlight lang="bash">
+SELECT * FROM users;                                                                     
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Выборка конкретных столбцов ====
+
+<syntaxhighlight lang="bash">
+SELECT username, email FROM users;                                                       
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Выборка с условием ====
+
+<syntaxhighlight lang="bash">
+SELECT * FROM users WHERE id = 1;                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+WHERE(условие фильтрации)
+</blockquote>
+
+==== Выборка с сортировкой ====
+
+<syntaxhighlight lang="bash">
+SELECT * FROM users ORDER BY created_at DESC;                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+ORDER BY(сортировка); DESC(по убыванию) {ASC, DESC}
+</blockquote>
+
+==== Выборка с ограничением количества строк ====
+
+<syntaxhighlight lang="bash">
+SELECT * FROM users LIMIT 10;                                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+LIMIT(ограничение количества строк)
+</blockquote>
+
+==== Обновление данных ====
+
+<syntaxhighlight lang="bash">
+UPDATE users SET email = 'newemail@example.com' WHERE id = 1;                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Удаление данных ====
+
+<syntaxhighlight lang="bash">
+DELETE FROM users WHERE id = 1;                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Подсчёт количества строк ====
+
+<syntaxhighlight lang="bash">
+SELECT COUNT(*) FROM users;                                                              
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Резервное копирование и восстановление ===
+
+==== Создание резервной копии БД ====
+
+<syntaxhighlight lang="bash">
+pg_dump -U postgres -d mydb -f backup.sql                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+-f(файл для сохранения резервной копии)
+</blockquote>
+
+==== Создание резервной копии в сжатом формате ====
+
+<syntaxhighlight lang="bash">
+pg_dump -U postgres -d mydb -F c -f backup.dump                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+-F c(custom format, сжатый формат)
+</blockquote>
+
+==== Создание резервной копии всех БД ====
+
+<syntaxhighlight lang="bash">
+pg_dumpall -U postgres -f all_databases.sql                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+pg_dumpall(резервное копирование всех БД и пользователей)
+</blockquote>
+
+==== Восстановление БД из SQL файла ====
+
+<syntaxhighlight lang="bash">
+psql -U postgres -d mydb -f backup.sql                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+Восстановление из текстового SQL файла
+</blockquote>
+
+==== Восстановление БД из сжатого формата ====
+
+<syntaxhighlight lang="bash">
+pg_restore -U postgres -d mydb backup.dump                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+pg_restore(восстановление из custom format)
+</blockquote>
+
+==== Восстановление с созданием новой БД ====
+
+<syntaxhighlight lang="bash">
+pg_restore -U postgres -C -d postgres backup.dump                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+-C(создать БД перед восстановлением)
+</blockquote>
+
+=== Информационные команды psql ===
+
+==== Список всех команд psql ====
+
+<syntaxhighlight lang="bash">
+\?                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все доступные команды psql
+</blockquote>
+
+==== Список SQL команд ====
+
+<syntaxhighlight lang="bash">
+\h                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает справку по SQL командам
+</blockquote>
+
+==== Справка по конкретной SQL команде ====
+
+<syntaxhighlight lang="bash">
+\h CREATE TABLE                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает синтаксис команды CREATE TABLE
+</blockquote>
+
+==== Просмотр текущей БД и пользователя ====
+
+<syntaxhighlight lang="bash">
+\conninfo                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает информацию о текущем подключении
+</blockquote>
+
+==== Просмотр всех схем ====
+
+<syntaxhighlight lang="bash">
+\dn                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список схем в текущей БД
+</blockquote>
+
+==== Просмотр всех представлений ====
+
+<syntaxhighlight lang="bash">
+\dv                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список представлений (views)
+</blockquote>
+
+==== Просмотр всех индексов ====
+
+<syntaxhighlight lang="bash">
+\di                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список индексов
+</blockquote>
+
+==== Просмотр всех последовательностей ====
+
+<syntaxhighlight lang="bash">
+\ds                                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список sequences
+</blockquote>
+
+==== Включение расширенного вывода ====
+
+<syntaxhighlight lang="bash">
+\x                                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Переключает между обычным и расширенным форматом вывода
+</blockquote>
+
+==== Выполнение команд из файла ====
+
+<syntaxhighlight lang="bash">
+\i /path/to/file.sql                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Выполняет SQL команды из файла
+</blockquote>
+
+==== Вывод результата запроса в файл ====
+
+<syntaxhighlight lang="bash">
+\o /path/to/output.txt                                                                   
+  SELECT * FROM users;                                                                        
+  \o                                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+\o(перенаправление вывода в файл); \o без параметра(отключение перенаправления)
+</blockquote>
+
+==== Измерение времени выполнения запросов ====
+
+<syntaxhighlight lang="bash">
+\timing                                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Включает/выключает отображение времени выполнения
+</blockquote>
+
+=== Управление индексами ===
+
+==== Создание индекса ====
+
+<syntaxhighlight lang="bash">
+CREATE INDEX idx_username ON users(username);                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+idx_username(имя индекса); users(таблица); username(столбец)
+</blockquote>
+
+==== Создание уникального индекса ====
+
+<syntaxhighlight lang="bash">
+CREATE UNIQUE INDEX idx_email ON users(email);                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+UNIQUE(индекс с уникальными значениями)
+</blockquote>
+
+==== Удаление индекса ====
+
+<syntaxhighlight lang="bash">
+DROP INDEX idx_username;                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Просмотр индексов таблицы ====
+
+<syntaxhighlight lang="bash">
+\d tablename                                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает индексы в описании таблицы
+</blockquote>
+
+=== Управление транзакциями ===
+
+==== Начало транзакции ====
+
+<syntaxhighlight lang="bash">
+BEGIN;                                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Фиксация транзакции ====
+
+<syntaxhighlight lang="bash">
+COMMIT;                                                                                  
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Откат транзакции ====
+
+<syntaxhighlight lang="bash">
+ROLLBACK;
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Пример использования транзакции ====
+
+<syntaxhighlight lang="bash">
+BEGIN;                                                                                   
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
+  COMMIT;                                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Транзакция для атомарного выполнения нескольких операций
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка версии PostgreSQL ====
+
+<syntaxhighlight lang="bash">
+SELECT version();                                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка текущего времени на сервере ====
+
+<syntaxhighlight lang="bash">
+SELECT NOW();                                                                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка активных подключений ====
+
+<syntaxhighlight lang="bash">
+SELECT * FROM pg_stat_activity;                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все активные подключения к серверу
+</blockquote>
+
+==== Проверка размера всех БД ====
+
+<syntaxhighlight lang="bash">
+SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;              
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка размера всех таблиц в БД ====
+
+<syntaxhighlight lang="bash">
+SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))     
+  FROM pg_tables WHERE schemaname = 'public'; 
+</syntaxhighlight>

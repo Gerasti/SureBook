@@ -1,0 +1,96 @@
+
+=== Настройка ===
+
+==== Просмотр текущей конфигурации ====
+
+<syntaxhighlight lang="bash">
+cat /etc/resolv.conf                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+показывает текущие DNS-серверы
+</blockquote>
+
+==== Добавление одного DNS-сервера ====
+
+<syntaxhighlight lang="bash">
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+перезаписывает файл; 77.88.8.8(Яндекс DNS)
+</blockquote>
+
+==== Добавление нескольких DNS-серверов ====
+
+<syntaxhighlight lang="bash">
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+  echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+добавляет в конец файла; 8.8.8.8(Google DNS)
+</blockquote>
+
+==== Настройка с доменом поиска ====
+
+<syntaxhighlight lang="bash">
+nameserver 192.168.1.1                                                                   
+  search example.local                                                                        
+  domain example.local                                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+search(список доменов для поиска); domain(локальный домен)
+</blockquote>
+
+==== Настройка с опциями ====
+
+<syntaxhighlight lang="bash">
+nameserver 77.88.8.8                                                                     
+  options timeout:2 attempts:3 rotate                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование серверов)
+</blockquote>
+
+=== Проверка DNS ===
+
+==== Проверка разрешения имен ====
+
+<syntaxhighlight lang="bash">
+nslookup ya.ru
+ 
+</syntaxhighlight>
+
+<blockquote>
+должен вернуть IP-адрес
+</blockquote>
+
+==== Проверка через dig(bind-utils) ====
+
+<syntaxhighlight lang="bash">
+dig ya.ru                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+показывает подробную информацию о DNS-запросе
+</blockquote>
+
+==== Проверка через host ====
+
+<syntaxhighlight lang="bash">
+host ya.ru                                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+простая проверка разрешения имени
+</blockquote>

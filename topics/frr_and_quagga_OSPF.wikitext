@@ -1,0 +1,141 @@
+
+=== Установка FRR ===
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install frr                                                                      
+   
+ 
+</syntaxhighlight>
+
+==== Включение OSPF в /etc/frr/daemons ====
+
+<syntaxhighlight lang="bash">
+ospfd=yes    
+
+ 
+</syntaxhighlight>
+
+==== Добавление в автозагрузку и запуск ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now frr
+ 
+</syntaxhighlight>
+
+<blockquote>
+FRR (Free Range Routing) - пакет протоколов маршрутизации; необходимо включить только нужные протоколы маршрутизации
+</blockquote>
+
+=== Установка Quagga (старая версия для ALT Linux) ===
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install quagga                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Назначение прав ====
+
+<syntaxhighlight lang="bash">
+chown -R quagga:quagga /etc/quagga                                                       
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Включение и запуск служб ====
+
+<syntaxhighlight lang="bash">
+systemctl enable zebra ospfd                                                             
+  systemctl start zebra ospfd                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Важно включать и запускать службы отдельно
+</blockquote>
+
+=== Настройка OSPF ===
+
+<blockquote>
+Перед настройкой OSPF маршрутизаторы должны иметь IP-связность через GRE-туннели, VLAN, выделенные каналы или VPN
+</blockquote>
+
+==== Полная конфигурация OSPF в vtysh ====
+
+<syntaxhighlight lang="bash">
+vtysh
+  conf t       
+  ip forwarding                                                                               
+  router ospf     
+      ospf router-id 1.1.1.1                                                                  
+      network 10.10.10.0/30 area 0                                                            
+      network 192.168.11.0/26 area 0                                                          
+      network 192.168.11.65/28 area 0                                                         
+      network 192.168.11.81/29 area 0                                                         
+      passive-interface default                                                               
+      area 0 authentication message-digest                                                    
+  int tun                                                                                     
+      no ip ospf passive                                                                      
+      ip ospf message-digest-key 1 md5 P@ssw0rd                                               
+      ip ospf network point-to-point                                                          
+  int ens35                                                                                   
+      no ip ospf passive                                                                      
+  do wr mem                                                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+router ospf(включение процесса OSPF); ospf router-id(уникальный идентификатор маршрутизатора); network(сети участвующие в OSPF); area 0(backbone area, центральная область OSPF); passive-interface default(все интерфейсы пассивны по умолчанию); no ip ospf passive(отключить пассивный режим); area 0 authentication message-digest(MD5-аутентификация для area); ip ospf message-digest-key(номер ключа, тип хеширования, пароль); ip ospf network(тип сети OSPF); do wr mem(сохранение конфигурации); пароли на обеих сторонах должны совпадать
+</blockquote>
+
+=== Типы сетей OSPF ===
+
+<blockquote>
+point-to-point(для 2 узлов, экономит трафик, multicast 224.0.0.5)
+</blockquote>
+
+<blockquote>
+broadcast(для >2 узлов, поддерживает DR/BDR, multicast 224.0.0.5 и 224.0.0.6)
+</blockquote>
+
+=== Проверка OSPF ===
+
+==== Проверка соседей ====
+
+<syntaxhighlight lang="bash">
+show ip ospf neighbor                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает соседние маршрутизаторы, состояние соседства, Router ID
+</blockquote>
+
+==== Проверка маршрутов ====
+
+<syntaxhighlight lang="bash">
+ip route show                                                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+Маршруты OSPF помечаются буквой O
+</blockquote>
+
+==== Просмотр интерфейсов OSPF ====
+
+<syntaxhighlight lang="bash">
+show ip ospf interface                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Просмотр конфигурации ====
+
+<syntaxhighlight lang="bash">
+show running-config
+</syntaxhighlight>

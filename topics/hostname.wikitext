@@ -1,0 +1,131 @@
+
+=== Настройка hostname ===
+
+==== Просмотр текущего hostname ====
+
+<syntaxhighlight lang="bash">
+hostname                                                                                 
+  hostnamectl
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Временное изменение hostname до перезагрузки ====
+
+<syntaxhighlight lang="bash">
+hostname new-hostname
+ 
+</syntaxhighlight>
+
+<blockquote>
+Изменения не сохраняются после перезагрузки
+</blockquote>
+
+==== Постоянное изменение hostname ====
+
+<syntaxhighlight lang="bash">
+hostnamectl set-hostname new-hostname
+ 
+</syntaxhighlight>
+
+<blockquote>
+Изменения сохраняются после перезагрузки
+</blockquote>
+
+==== Изменение hostname с обновлением текущей сессии ====
+
+<syntaxhighlight lang="bash">
+hostnamectl set-hostname new-hostname; exec bash
+ 
+</syntaxhighlight>
+
+<blockquote>
+exec bash перезапускает оболочку без login shell
+</blockquote>
+
+==== Изменение hostname с обновлением login shell ====
+
+<syntaxhighlight lang="bash">
+hostnamectl set-hostname new-hostname; exec bash -l                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+exec bash -l перезапускает оболочку как login shell, загружает профили пользователя
+</blockquote>
+
+==== Изменение hostname в /etc/hostname ====
+
+<syntaxhighlight lang="bash">
+echo "new-hostname" > /etc/hostname                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Альтернативный способ, требует перезагрузки или применения изменений
+</blockquote>
+
+==== Изменение hostname в /etc/hosts ====
+
+<syntaxhighlight lang="bash">
+nano /etc/hosts                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Добавить или изменить строку
+</blockquote>
+
+<syntaxhighlight lang="bash">
+127.0.0.1   localhost                                                                    
+  127.0.1.1   new-hostname                                                                    
+  192.168.1.10   new-hostname.some.domain new-hostname                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+Рекомендуется синхронизировать с /etc/hostname для корректной работы DNS
+</blockquote>
+
+==== Применение изменений без перезагрузки ====
+
+<syntaxhighlight lang="bash">
+systemctl restart systemd-hostnamed                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка hostname ===
+
+==== Проверка полного имени хоста ====
+
+<syntaxhighlight lang="bash">
+hostname -f                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает FQDN (Fully Qualified Domain Name)
+</blockquote>
+
+==== Проверка короткого имени ====
+
+<syntaxhighlight lang="bash">
+hostname -s                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает короткое имя без домена
+</blockquote>
+
+==== Проверка всех параметров ====
+
+<syntaxhighlight lang="bash">
+hostnamectl status                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System, Kernel, Architecture
+</blockquote>

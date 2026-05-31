@@ -1,0 +1,129 @@
+
+=== Настройка HTTPS с ГОСТ-сертификатами ===
+
+<blockquote>
+Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для веб-ресурсов, настройка доверия
+</blockquote>
+
+=== Установка поддержки ГОСТ ===
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y openssl-gost-engine                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Включение поддержки ГОСТ ====
+
+<syntaxhighlight lang="bash">
+control openssl-gost enabled                                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf ====
+
+<syntaxhighlight lang="bash">
+openssl_conf = openssl_def                                                               
+                                                                                              
+  [openssl_def]                                                                               
+  engines = engine_section                                                                    
+                                                                                              
+  [engine_section]                                                                            
+  gost = gost_section                                                                         
+                                                                                              
+  [gost_section]  
+  engine_id = gost                                                                            
+  dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
+  default_algorithms = ALL                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, корректной работы Nginx с ГОСТ-криптографией
+</blockquote>
+
+=== Создание корневого сертификата УЦ ===
+
+==== Создание закрытого ключа УЦ ====
+
+<syntaxhighlight lang="bash">
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание самоподписанного сертификата УЦ ====
+
+<syntaxhighlight lang="bash">
+openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
+ 
+</syntaxhighlight>
+
+<blockquote>
+В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ); ca.cer(корневой сертификат УЦ)
+</blockquote>
+
+=== Создание сертификатов для доменов ===
+
+==== Создание закрытого ключа для домена ====
+
+<syntaxhighlight lang="bash">
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
+  openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание запроса на подпись (CSR) ====
+
+<syntaxhighlight lang="bash">
+openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
+  -md_gost12_256                                                                              
+  openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
+  -md_gost12_256                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+В Common Name указать IP или домен(ы), например *.some.domain
+</blockquote>
+
+==== Подпись сертификатов УЦ ====
+
+<syntaxhighlight lang="bash">
+openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
+  web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
+  openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
+  docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
+                  
+ 
+</syntaxhighlight>
+
+==== Проверка сертификата ====
+
+<syntaxhighlight lang="bash">
+openssl x509 -in web.some.domain.cer -text -noout
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Установка сертификатов в систему ===
+
+==== Копирование сертификатов в доверенные ====
+
+<syntaxhighlight lang="bash">
+cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
+  cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
+  cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Обновление доверенных сертификатов ====
+
+<syntaxhighlight lang="bash">
+update-ca-trust         
+</syntaxhighlight>

@@ -1,0 +1,266 @@
+
+=== Установка Ansible ===
+
+==== Обновление и установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y ansible sshpass                                                  
+                                                                                                           
+ 
+</syntaxhighlight>
+
+=== Создание структуры проекта ===
+
+==== Создание директории проекта ====
+
+<syntaxhighlight lang="bash">
+mkdir ansible                                                                                         
+  cd ansible                                                                                               
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Создание инвентарного файла inventory ====
+
+<syntaxhighlight lang="bash">
+vim inventory
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Содержимое inventory ====
+
+<syntaxhighlight lang="bash">
+all:
+    hosts:                                                                                                 
+      localhost:  
+ 
+</syntaxhighlight>
+
+<blockquote>
+формат YAML; хост localhost
+</blockquote>
+
+==== Создание директории для переменных ====
+
+<syntaxhighlight lang="bash">
+mkdir host_vars                                                                                       
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Создание файла переменных host_vars/localhost.yml ====
+
+<syntaxhighlight lang="bash">
+vim host_vars/localhost.yml                                                                           
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Содержимое host_vars/localhost.yml ====
+
+<syntaxhighlight lang="bash">
+ansible_ssh_user: root                                                                                
+  ansible_ssh_pass: toor                                                                                   
+  ansible_python_interpreter: /usr/bin/python3                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
+</blockquote>
+
+=== Проверка работоспособности ===
+
+==== Проверка подключения к localhost ====
+
+<syntaxhighlight lang="bash">
+ansible -i inventory -m ping all                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-i(инвентарный файл); -m(модуль); all(все хосты)
+</blockquote>
+
+=== Создание playbook для OwnCloud ===
+
+==== Создание файла playbook.yml ====
+
+<syntaxhighlight lang="bash">
+vim playbook.yml                                                                                      
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Содержимое playbook.yml ====
+
+<syntaxhighlight lang="bash">
+---                                                                                                   
+  - name: Install OwnCloud on ALT Server 10.1 (10.2)                                                       
+    hosts: localhost                                                                                       
+    become: true                                                                                           
+                                                                                                           
+    vars:                                                                                                  
+      mariadb_database: owncloud                                                                           
+      mariadb_username: owncloud                                                                           
+      mariadb_password: owncloud                                                                           
+      url_download_owncloud: https://download.owncloud.com/server/stable/owncloud-complete-latest.tar.bz2  
+      dir_download_owncloud: /tmp                                                                          
+      path_project_owncloud: /var/www/html/                                                                
+      virtualhost_servername: owncloud.test.local                                                          
+                                                                                                           
+    tasks:                                                                                                 
+      - name: Install database Mariadb                                                                     
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - mariadb-server                                                                               
+            - python3-module-mysqlclient                                                                   
+          state: present                                                                                   
+          update_cache: true                                                                               
+                                                                                                           
+      - name: Started and enabled mariadb-server                                                           
+        systemd:                                                                                           
+          name: mariadb                                                                                    
+          state: started                                                                                   
+          enabled: true                                                                                    
+                                                                                                           
+      - name: "Create a database {{ mariadb_database }} for OwnCloud"                                      
+        mysql_db:                                                                                          
+          name: "{{ mariadb_database }}"                                                                   
+          encoding: utf8                                                                                   
+          collation: utf8_unicode_ci                                                                       
+          state: present                                                                                   
+                                                                                                           
+      - name: "Creating a database user {{ mariadb_username }} for OwnCloud"                               
+        mysql_user:                                                                                        
+          name: "{{ mariadb_username }}"                                                                   
+          password: "{{ mariadb_password }}"                                                               
+          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                       
+          host: localhost                                                                                  
+          state: present                                                                                   
+                                                                                                           
+      - name: Install web-server Apache2 and modules                                                       
+        apt_rpm:  
+          name:                                                                                            
+            - apache2
+            - apache2-base                                                                                 
+            - apache2-httpd-prefork                                                                        
+            - apache2-mod_php7                                                                             
+            - apache2-mod_ssl                                                                              
+          state: present                                                                                   
+                                                                                                           
+      - name: Install PHP7.4 and php modules                                                               
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - php7
+            - php7-curl                                                                                    
+            - php7-fileinfo                                                                                
+            - php7-gd                                                                                      
+            - php7-intl                                                                                    
+            - php7-libs                                                                                    
+            - php7-mbstring                                                                                
+            - php7-pdo                                                                                     
+            - php7-xmlreader                                                                               
+            - php7-zip                                                                                     
+            - php7-mysqli                                                                                  
+            - php7-pdo_mysql                                                                               
+          state: present                                                                                   
+                                                                                                           
+      - name: Enable the Apache2 module                                                                    
+        apache2_module:
+          name: "{{ item }}"                                                                               
+          state: present                                                                                   
+        with_items:
+          - rewrite                                                                                        
+          - headers                                                                                        
+          - env                                                                                            
+          - dir                                                                                            
+          - mime  
+          - unique_id                                                                                      
+                  
+      - name: Started and enabled Apache2                                                                  
+        systemd:  
+          name: httpd2                                                                                     
+          state: started                                                                                   
+          enabled: true                                                                                    
+                                                                                                           
+      - name: Download OwnCloud project                                                                    
+        get_url:  
+          url: "{{ url_download_owncloud }}"                                                               
+          dest: "{{ dir_download_owncloud }}"                                                              
+                                                                                                           
+      - name: Unarchive a file project OwnCloud                                                            
+        unarchive:                                                                                         
+          src: "{{ dir_download_owncloud }}/owncloud-complete-latest.tar.bz2"                              
+          dest: "{{ path_project_owncloud }}"                                                              
+                                                                                                           
+      - name: Assign rights to project OwnCloud                                                            
+        file:                                                                                              
+          path: "{{ path_project_owncloud }}/owncloud/"                                                    
+          recurse: yes                                                                                     
+          owner: apache2                                                                                   
+          group: apache2                                                                                   
+                                                                                                           
+      - name: Setting up a web server to work with OwnCloud                                                
+        copy:                                                                                              
+          dest: /etc/httpd2/conf/sites-available/owncloud.conf                                             
+          content: |                                                                                       
+            <VirtualHost *:80>                                                                             
+              DocumentRoot {{ path_project_owncloud }}/owncloud/                                           
+              ServerName {{ virtualhost_servername }}                                                      
+                                                                                                           
+              <Directory {{ path_project_owncloud }}/owncloud/>                                            
+                Require all granted                                                                        
+                AllowOverride All                                                                          
+                Options FollowSymLinks MultiViews                                                          
+                                                                                                           
+                <IfModule mod_dav.c>                                                                       
+                  Dav off                                                                                  
+                </IfModule>                                                                                
+              </Directory>                                                                                 
+            </VirtualHost>                                                                                 
+                                                                                                           
+      - name: Adding a symbolic link                                                                       
+        command:                                                                                           
+          cmd: ln -s /etc/httpd2/conf/sites-available/owncloud.conf /etc/httpd2/conf/sites-enabled/        
+                                                                                                           
+      - name: Restarted Apache2                                                                            
+        systemd:                                                                                           
+          name: httpd2                                                                                     
+          state: restarted                                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
+</blockquote>
+
+=== Установка коллекций Ansible ===
+
+==== Установка community.general ====
+
+<syntaxhighlight lang="bash">
+ansible-galaxy collection install community.general                                                   
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Установка community.mysql ====
+
+<syntaxhighlight lang="bash">
+ansible-galaxy collection install community.mysql                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+ansible-galaxy(менеджер коллекций)
+</blockquote>
+
+=== Запуск playbook ===
+
+==== Выполнение playbook-сценария ====
+
+<syntaxhighlight lang="bash">
+ansible-playbook -i inventory playbook.yml             
+</syntaxhighlight>

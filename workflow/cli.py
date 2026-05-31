@@ -8,7 +8,7 @@ from repositories import ConfigRepository, TopicRepository, InputRepository, Lis
 from commands import (
     ShowCommand, AddCommand, DeleteCommand, SearchCommand, RenameCommand,
     SaveCommand, SettingsCommand, LinkCommand, EditorCommand, TableCommand,
-    UnsaveCommand, CleanupCommand
+    UnsaveCommand, CleanupCommand, PostCommand
 )
 from fileutils import paths_to_list, diff_lists
 
@@ -57,8 +57,12 @@ Commands:
 
   write <topic>         Open/create .unikey file
   cast <topic>          Convert .unikey to format
+  cast force            Convert all .unikey files to format
   view <topic>          View converted file
+  cat <topic>           Show file content
   work <topic>          Write and view (write + view)
+
+  post <name>           Create/open post file
 
   table [generate]      Generate source table
   table show            View source table
@@ -117,8 +121,23 @@ def parse_args(args):
     }
 
     # Extract format flag (but not for config command)
+    format_found = False
     if 'format' in args and args[0] != 'config':
         idx = args.index('format')
+        if idx + 1 < len(args):
+            flags['format'] = args[idx + 1]
+            args = args[:idx] + args[idx + 2:]
+            format_found = True
+
+    if not format_found and '--format' in args and args[0] != 'config':
+        idx = args.index('--format')
+        if idx + 1 < len(args):
+            flags['format'] = args[idx + 1]
+            args = args[:idx] + args[idx + 2:]
+            format_found = True
+
+    if not format_found and '-f' in args and args[0] != 'config':
+        idx = args.index('-f')
         if idx + 1 < len(args):
             flags['format'] = args[idx + 1]
             args = args[:idx] + args[idx + 2:]
@@ -158,7 +177,12 @@ def main():
     settings.input = FileManager.expanduser(settings.input)
     settings.list = FileManager.expanduser(settings.list)
     settings.topic_save = FileManager.expanduser(settings.topic_save)
+    settings.post_save = FileManager.expanduser(settings.post_save)
     settings.source_table_file = FileManager.expanduser(settings.source_table_file)
+
+    # Ensure post_save directory exists
+    if settings.post_save:
+        FileManager.ensure_dir(settings.post_save)
 
     input_paths = paths_to_list(settings.input)
     list_paths = paths_to_list(settings.list)
@@ -193,6 +217,7 @@ def main():
     settings_cmd = SettingsCommand(config_repo)
     link_cmd = LinkCommand(list_repo)
     editor_cmd = EditorCommand(config_repo)
+    post_cmd = PostCommand(config_repo)
     table_cmd = TableCommand(topic_repo, config_repo)
     unsave_cmd = UnsaveCommand(topic_repo)
     cleanup_cmd = CleanupCommand(toml_path)
@@ -458,8 +483,11 @@ Examples:
         elif command == "link":
             return link_cmd.execute(args, flags)
 
-        elif command in ["write", "cast", "view", "work"]:
+        elif command in ["write", "cast", "view", "cat", "work"]:
             return editor_cmd.execute([command] + args, flags)
+
+        elif command == "post":
+            return post_cmd.execute(args, flags)
 
         elif command == "table":
             return table_cmd.execute(args, flags)

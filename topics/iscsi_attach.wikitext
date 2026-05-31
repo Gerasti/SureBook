@@ -1,0 +1,112 @@
+
+=== Установка LVM ===
+
+==== Определение диска для LVM ====
+
+<syntaxhighlight lang="bash">
+lsblk
+ 
+</syntaxhighlight>
+
+<blockquote>
+Определить диск для использования (в примере sdb - диск по iSCSI)
+</blockquote>
+
+==== Пометка диска для LVM ====
+
+<syntaxhighlight lang="bash">
+pvcreate /dev/sdb                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Инициализирует физический том для использования в LVM
+</blockquote>
+
+==== Создание группы логических томов ====
+
+<syntaxhighlight lang="bash">
+vgcreate VG /dev/sdb                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+VG - имя группы томов; /dev/sdb - физический том
+</blockquote>
+
+=== Настройка ===
+
+==== Создание логического тома ====
+
+<syntaxhighlight lang="bash">
+lvcreate -l 100%FREE -n DATA VG                                                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+-l 100%FREE (использовать всё свободное место); -n DATA (имя тома); VG (группа томов)
+</blockquote>
+
+==== Форматирование в XFS ====
+
+<syntaxhighlight lang="bash">
+mkfs.xfs /dev/VG/DATA                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Создание файловой системы XFS на логическом томе
+</blockquote>
+
+==== Создание точки монтирования ====
+
+<syntaxhighlight lang="bash">
+mkdir /opt/data                                                                   
+ 
+</syntaxhighlight>
+
+==== В /etc/fstab добавить строку ====
+
+<syntaxhighlight lang="bash">
+/dev/VG/DATA /opt/data xfs defaults 0 0                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Альтернатива: UUID=<uuid> /opt/data xfs defaults 0 0
+</blockquote>
+
+==== Монтирование тома ====
+
+<syntaxhighlight lang="bash">
+mount -av                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+-a (монтировать всё из fstab); -v (подробный вывод)
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка логических томов ====
+
+<syntaxhighlight lang="bash">
+lvdisplay                                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает информацию о логических томах
+</blockquote>
+
+==== Проверка монтирования ====
+
+<syntaxhighlight lang="bash">
+lsblk                                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Или команда df -h для просмотра смонтированных файловых систем
+</blockquote>

@@ -1,0 +1,232 @@
+
+=== Управление пользователями и группами ===
+
+==== Создание группы ====
+
+<syntaxhighlight lang="bash">
+samba-tool group add <имя_группы>                                                                     
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Создание пользователя ====
+
+<syntaxhighlight lang="bash">
+samba-tool user create <имя_пользователя>                                                             
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Добавление пользователя в группу ====
+
+<syntaxhighlight lang="bash">
+samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Список пользователей ====
+
+<syntaxhighlight lang="bash">
+samba-tool user list                                                                                  
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Список участников группы ====
+
+<syntaxhighlight lang="bash">
+samba-tool group listmembers <имя_группы>                                                             
+                                                                                                           
+ 
+</syntaxhighlight>
+
+=== Политика паролей ===
+
+==== Настройка сложности и длины пароля ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --complexity=off                                               
+  samba-tool domain passwordsettings set --min-pwd-length=1                                                
+  samba-tool domain passwordsettings set --max-pwd-age=0                                                   
+  samba-tool domain passwordsettings set --min-pwd-age=0                                                   
+  samba-tool domain passwordsettings set --pwd-history-length=0                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+--complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)
+</blockquote>
+
+=== Политика блокировки ===
+
+==== Настройка блокировки учетных записей ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --lockout-threshold=0                                          
+  samba-tool domain passwordsettings set --lockout-duration=30                                             
+  samba-tool domain passwordsettings set --reset-count=30                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+--lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки); --reset-count(интервал сброса счетчика)
+</blockquote>
+
+=== Kerberos-политика ===
+
+==== Настройка времени жизни билетов ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
+  samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+--krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)
+</blockquote>
+
+=== Параметры учетных записей ===
+
+==== Хранение паролей в открытом виде ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
+  samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+только для тестовых стендов; не рекомендуется в продакшене
+</blockquote>
+
+=== Параметры безопасности домена ===
+
+==== Настройка криптографии ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
+  samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+снижает безопасность; для совместимости со старыми устройствами
+</blockquote>
+
+=== Политика времени Kerberos ===
+
+==== Настройка флагов политики ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
+                                                                                                           
+ 
+</syntaxhighlight>
+
+=== Аудит и логирование ===
+
+==== Просмотр уровня домена ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain level show                                                                          
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Увеличение детализации логов ====
+
+<syntaxhighlight lang="bash">
+smbcontrol all debug 3                                                                                
+  smbcontrol all debug 10                                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+debug 3(средний уровень); debug 10(максимальная детализация)
+</blockquote>
+
+=== Уровень функциональности домена ===
+
+==== Просмотр уровня домена ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain level show                                                                          
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Повышение уровня домена и леса ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain level raise --domain-level=2008_R2                                                  
+  samba-tool domain level raise --forest-level=2008_R2                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+2008_R2(Windows Server 2008 R2)
+</blockquote>
+
+=== Проверка политики ===
+
+==== Просмотр всех настроек политики паролей ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain passwordsettings show                                                               
+                                                                                                           
+ 
+</syntaxhighlight>
+
+=== Управление DNS ===
+
+==== Добавление A-записи в DNS ====
+
+<syntaxhighlight lang="bash">
+samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
+ 
+</syntaxhighlight>
+
+<blockquote>
+пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator
+</blockquote>
+
+=== Создание организационных единиц ===
+
+==== Создание OU ====
+
+<syntaxhighlight lang="bash">
+samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
+                                                                                                           
+ 
+</syntaxhighlight>
+
+=== Массовое создание пользователей ===
+
+==== Создание нескольких пользователей циклом ====
+
+<syntaxhighlight lang="bash">
+for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Создание группы ====
+
+<syntaxhighlight lang="bash">
+samba-tool group add hq                                                                               
+                                                                                                           
+ 
+</syntaxhighlight>
+
+==== Массовое добавление пользователей в группу ====
+
+<syntaxhighlight lang="bash">
+for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
+</blockquote>

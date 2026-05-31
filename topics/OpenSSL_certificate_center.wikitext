@@ -1,0 +1,195 @@
+
+=== Установка ===
+
+==== Установка OpenSSL ====
+
+<syntaxhighlight lang="bash">
+apt-get install openssl
+ 
+</syntaxhighlight>
+
+<blockquote>
+Обычно уже установлен в системе
+</blockquote>
+
+=== Настройка сервера CA ===
+
+==== Создание корневой директории CA ====
+
+<syntaxhighlight lang="bash">
+mkdir /ca    
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Поиск конфигурационного файла OpenSSL ====
+
+<syntaxhighlight lang="bash">
+openssl ca                                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+Команда выдаст ошибку с путём к конфигурационному файлу (/var/lib/ssl/openssl.cnf, /etc/ssl/openssl.cnf)
+</blockquote>
+
+==== Резервная копия конфигурационного файла ====
+
+<syntaxhighlight lang="bash">
+cp /var/lib/ssl/openssl.cnf /var/lib/ssl/openssl.cnf.backup
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== В /var/lib/ssl/openssl.cnf в секции [ CA_default ] ====
+
+<syntaxhighlight lang="bash">
+dir = /ca                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Изменение корневой директории CA с ./demoCA на /ca
+</blockquote>
+
+==== Создание структуры директорий CA ====
+
+<syntaxhighlight lang="bash">
+cd /ca                                                                                   
+  mkdir certs newcerts crl private                                                            
+  touch index.txt                                                                             
+  echo -n '00' > serial                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+certs(выпущенные сертификаты); newcerts(новые сертификаты); crl(списки отзыва); private(приватные ключи); index.txt(база данных сертификатов); serial(серийный номер); -n(без пробела и перевода строки)
+</blockquote>
+
+==== В /var/lib/ssl/openssl.cnf в секции [ CA_default ] ====
+
+<syntaxhighlight lang="bash">
+policy = policy_anything
+ 
+</syntaxhighlight>
+
+<blockquote>
+Принимаем любые значения, требуем только CN (Common Name)
+</blockquote>
+
+==== В /var/lib/ssl/openssl.cnf в секции [ policy_anything ] ====
+
+<syntaxhighlight lang="bash">
+commonName = supplied                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+CN обязателен для заполнения
+</blockquote>
+
+==== В /var/lib/ssl/openssl.cnf в секции [ req_distinguished_name ] ====
+
+<syntaxhighlight lang="bash">
+countryName_default = RU                                                                 
+  0.organizationName_default = domain.sample                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Значения по умолчанию для CA: C=RU, O=domain.sample, CN указывается при генерации
+</blockquote>
+
+==== В /var/lib/ssl/openssl.cnf в секции [ v3_ca ] ====
+
+<syntaxhighlight lang="bash">
+basicConstraints = CA:true                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+Сертификат может быть корневым CA
+</blockquote>
+
+==== Генерация ключей и запроса на сертификат CA ====
+
+<syntaxhighlight lang="bash">
+openssl req -nodes -new -out cacert.csr -keyout private/cakey.pem -extensions v3_ca      
+ 
+</syntaxhighlight>
+
+<blockquote>
+-nodes(без пароля на ключ); -new(новый запрос); -out(файл запроса); -keyout(приватный ключ); -extensions v3_ca(расширения CA). При заполнении: C=RU и O=domain.sample подставятся автоматически, CN указать вручную (например domain.sample RootCA), пустые поля заполнить точкой
+</blockquote>
+
+==== Самоподписание сертификата CA ====
+
+<syntaxhighlight lang="bash">
+openssl ca -selfsign -in cacert.csr -out cacert.pem -extensions v3_ca
+ 
+</syntaxhighlight>
+
+<blockquote>
+-selfsign(самоподписание); подтвердить y на вопросы
+</blockquote>
+
+==== Просмотр содержимого сертификата ====
+
+<syntaxhighlight lang="bash">
+openssl x509 -text -noout -in cacert.pem | less                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Необязательно, для проверки содержимого сертификата
+</blockquote>
+
+=== Настройка клиента ===
+
+==== Подготовка сертификата для клиента ====
+
+<syntaxhighlight lang="bash">
+mv cacert.pem cacert.crt
+ 
+</syntaxhighlight>
+
+<blockquote>
+Сертификаты должны иметь расширение .crt
+</blockquote>
+
+==== Копирование сертификата на клиент Debian/Ubuntu ====
+
+<syntaxhighlight lang="bash">
+cp cacert.crt /usr/local/share/ca-certificates/                                          
+  update-ca-certificates                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Для дистрибутивов на базе deb
+</blockquote>
+
+==== Копирование сертификата на клиент ALT/RHEL/CentOS ====
+
+<syntaxhighlight lang="bash">
+cp cacert.crt /etc/pki/ca-trust/source/anchors/                                          
+  update-ca-trust                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+Для дистрибутивов на базе rpm
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка доверия к сертификату ====
+
+<syntaxhighlight lang="bash">
+openssl verify cacert.crt
+ 
+</syntaxhighlight>
+
+<blockquote>
+Должен вывести: cacert.crt: OK
+</blockquote>

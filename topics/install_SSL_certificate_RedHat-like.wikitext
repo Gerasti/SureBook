@@ -1,0 +1,63 @@
+
+=== Передача сертификатов на удаленный сервер ===
+
+==== Передача через rsync ====
+
+<syntaxhighlight lang="bash">
+rsync -avz ./ca.crt ./router.crt ./router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/    
+ 
+</syntaxhighlight>
+
+<blockquote>
+-a(архивный режим); -v(подробный вывод); -z(сжатие при передаче)
+</blockquote>
+
+==== Передача через scp ====
+
+<syntaxhighlight lang="bash">
+scp -P 2222 ca.crt router.crt router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/         
+ 
+</syntaxhighlight>
+
+<blockquote>
+-P(указание порта SSH)
+</blockquote>
+
+==== Передача через sftp ====
+
+<syntaxhighlight lang="bash">
+sftp USERNAME@IP_RTR                                                                     
+  put ca.crt /etc/nginx/ssl/WEB.com/                                                          
+  put router.crt /etc/nginx/ssl/WEB.com/                                                      
+  put router.key /etc/nginx/ssl/WEB.com/                                                      
+  exit                                                                                        
+ 
+</syntaxhighlight>
+
+<blockquote>
+Интерактивная передача файлов
+</blockquote>
+
+=== Установка сертификатов в систему ===
+
+==== Переход в каталог ====
+
+<syntaxhighlight lang="bash">
+cd /etc/nginx/ssl/WEB.com/                                                               
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Копирование в доверенные сертификаты ====
+
+<syntaxhighlight lang="bash">
+cp ./* /etc/pki/ca-trust/source/anchors/                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Обновление доверенных сертификатов ====
+
+<syntaxhighlight lang="bash">
+update-ca-trust 
+</syntaxhighlight>

@@ -1,0 +1,174 @@
+
+=== Установка sudo-samba-schema ===
+
+==== Добавление временного репозитория ====
+
+<syntaxhighlight lang="bash">
+echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
+  /etc/apt/sources.list                                          
+ 
+</syntaxhighlight>
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install sudo-samba-schema                           
+ 
+</syntaxhighlight>
+
+==== Удаление временного репозитория ====
+
+<syntaxhighlight lang="bash">
+sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
+ 
+</syntaxhighlight>
+
+==== Настройка DNS в /etc/resolv.conf ====
+
+<syntaxhighlight lang="bash">
+nameserver <ip_локального_сервера>                                   
+</syntaxhighlight>
+
+<blockquote>
+Оставляем только локальный DNS
+</blockquote>
+
+==== Перезапуск Samba ====
+
+<syntaxhighlight lang="bash">
+systemctl restart samba                                     
+ 
+</syntaxhighlight>
+
+=== Настройка схемы sudo в AD ===
+
+==== Применение схемы sudo ====
+
+<syntaxhighlight lang="bash">
+sudo-schema-apply                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Ответить Yes, ввести Administrator и пароль, подтвердить Ok
+</blockquote>
+
+==== Создание роли sudo ====
+
+<syntaxhighlight lang="bash">
+create-sudo-role                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE
+</blockquote>
+
+<blockquote>
+Имя роли: pravila_hq
+</blockquote>
+
+<blockquote>
+sudoHost: ALL
+</blockquote>
+
+<blockquote>
+sudoCommand: /bin/cat
+</blockquote>
+
+<blockquote>
+sudoUser: %hq
+</blockquote>
+
+=== Настройка через ADMC ===
+
+==== Установка ADMC на клиенте ====
+
+<syntaxhighlight lang="bash">
+apt-get install admc                                        
+ 
+</syntaxhighlight>
+
+==== Аутентификация ====
+
+<syntaxhighlight lang="bash">
+kinit administrator                                         
+ 
+</syntaxhighlight>
+
+==== Запуск ADMC ====
+
+<syntaxhighlight lang="bash">
+sudo admc                                                   
+ 
+</syntaxhighlight>
+
+==== Включение дополнительных возможностей ====
+
+=== Настройка правила pravila_hq ===
+* Настройки → Включить Дополнительные возможности
+* domain.sample → sudoers → pravila_hq → Правой кнопкой мыши → Свойства
+* Атрибуты → sudoOption → Изменить → Добавить параметр !authenticate → Apply
+* Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и /usr/bin/id → Apply
+
+=== Настройка клиента ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install sudo libsss_sudo                            
+ 
+</syntaxhighlight>
+
+==== Настройка прав sudo ====
+
+<syntaxhighlight lang="bash">
+control sudo public                                         
+ 
+</syntaxhighlight>
+
+==== Настройка SSSD в /etc/sssd/sssd.conf ====
+
+<syntaxhighlight lang="bash">
+[sssd]                                                      
+  services = nss, pam, sudo                                      
+                                                                 
+  [pam]                                                          
+                                                                 
+  [domain/DOMAIN.SAMPLE]                                          
+  sudo_provider = ad
+ 
+</syntaxhighlight>
+
+==== Настройка NSS в /etc/nsswitch.conf ====
+
+<syntaxhighlight lang="bash">
+sudoers: files sss                                          
+ 
+</syntaxhighlight>
+
+==== Очистка кэша и перезапуск ====
+
+<syntaxhighlight lang="bash">
+rm -rf /var/lib/sss/db/*                                    
+  sss_cache -E                                                   
+  systemctl restart sssd                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+Можно выполнить reboot вместо очистки кэша
+</blockquote>
+
+=== Проверка ===
+
+==== Вход за пользователя hquser1 ====
+
+<syntaxhighlight lang="bash">
+sudo cat /etc/passwd | sudo grep root && sudo id root       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Должны выполниться команды без запроса пароля благодаря !authenticate
+</blockquote>

@@ -2,13 +2,14 @@
 input = "~/SureBook/info/def_input.md"
 list = "~/SureBook/info/def_lists.md"
 topic_save = "~/SureBook/topics"
+post_save = ""
 source_table_file = "~/SureBook/info/src_table.md"
 auto_alphabetic_sort = "true"
 auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-31 02:15:16"
+last_saved = "2026-05-31 18:27:20"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -570,5 +571,11 @@ lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 [topics."sudo-schema-samba"]
 title = "sudo-schema-samba"
 path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
+lists = []
+
+
+[topics."test"]
+title = "test"
+path = "/home/stip/SureBook/topics/test.md"
 lists = []
 

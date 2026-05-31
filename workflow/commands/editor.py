@@ -25,17 +25,22 @@ class EditorCommand(Command):
 Usage:
   write <topic>         Open/create .unikey file
   cast <topic>          Convert .unikey to format
+  cast force            Convert all .unikey files to format
   view <topic>          View converted file
+  cat <topic>           Show file content
   work <topic>          Write and view (write + view)
   help                  Show this help
 
 Flags:
   format <ext>          Specify format (for cast/view)
+  force                 Convert all .unikey files (for cast)
 
 Examples:
   write "Python"                # Open .unikey file
   cast "Python" format md       # Convert to markdown
+  cast force format wikitext    # Convert all files to wikitext
   view "Python" format md       # View markdown file
+  cat "Python" format md        # Show file content
   work "Python" format md       # Write and view
 """
 
@@ -46,6 +51,7 @@ Examples:
             write <topic>       - Open/create .unikey file
             cast <topic>        - Convert .unikey to format
             view <topic>        - View converted file
+            cat <topic>         - Show file content
             work <topic>        - Write and view
         """
         if args and args[0] == "help" and not flags.get('force'):
@@ -53,7 +59,7 @@ Examples:
             return 0
 
         if not args:
-            return self.error("editor requires subcommand: write, cast, view, work")
+            return self.error("editor requires subcommand: write, cast, view, cat, work")
 
         subcommand = args[0]
 
@@ -63,6 +69,8 @@ Examples:
             return self._cast(args[1:], flags)
         elif subcommand in ["view", "v"]:
             return self._view(args[1:], flags)
+        elif subcommand in ["cat"]:
+            return self._cat(args[1:], flags)
         elif subcommand in ["work", "wk"]:
             return self._work(args[1:], flags)
         else:
@@ -173,12 +181,7 @@ Examples:
             print(self.help())
             return 0
 
-        if not args:
-            return self.error("cast requires: <topic>")
-
-        topic = args[0]
         settings = self.config_repo.get_settings()
-
         fmt = flags.get("format") or settings.auto_cast_format
         if not fmt:
             return self.error("Format not specified. Use 'cast <topic> format <ext>'")
@@ -186,6 +189,58 @@ Examples:
         if not settings.topic_save:
             return self.error("topic_save not set")
 
+        # Mass conversion with force flag
+        if flags.get('force') and not args:
+            unikey_files = FileManager.list_files(settings.topic_save, pattern="*.unikey")
+            if not unikey_files:
+                print("No .unikey files found")
+                return 0
+
+            unikey_script = FileManager.join(
+                os.path.dirname(os.path.abspath(__file__)), "..", "unikey.py"
+            )
+
+            success_count = 0
+            error_count = 0
+
+            for unikey_path in unikey_files:
+                key = FileManager.splitext(FileManager.basename(unikey_path))[0]
+                out_path = FileManager.join(settings.topic_save, f"{key}.{fmt}")
+
+                try:
+                    with open(unikey_path, "r", encoding="utf-8") as f:
+                        unikey_input = f.read()
+
+                    result = subprocess.run(
+                        [sys.executable, unikey_script, "-f", fmt],
+                        input=unikey_input,
+                        capture_output=True,
+                        text=True,
+                    )
+
+                    if result.returncode != 0:
+                        print(f"Error converting {key}: {result.stderr.strip()}")
+                        error_count += 1
+                        continue
+
+                    with open(out_path, "w", encoding="utf-8") as f:
+                        f.write(result.stdout)
+
+                    success_count += 1
+                except Exception as e:
+                    print(f"Error converting {key}: {e}")
+                    error_count += 1
+
+            print(f"\nConverted {success_count} files to .{fmt} format")
+            if error_count > 0:
+                print(f"Failed: {error_count} files")
+            return 0
+
+        # Single file conversion
+        if not args:
+            return self.error("cast requires: <topic>")
+
+        topic = args[0]
         key = normalize_topic(topic)
         unikey_path = FileManager.join(settings.topic_save, f"{key}.unikey")
 
@@ -251,6 +306,35 @@ Examples:
         viewer_cmd = shlex.split(viewer) + [file_path]
         subprocess.Popen(viewer_cmd)
         print(f"Opened: {file_path}")
+        return 0
+
+    def _cat(self, args: List[str], flags: Dict[str, Any]) -> int:
+        """Show file content."""
+        if args and args[0] == "help" and not flags.get('force'):
+            print(self.help())
+            return 0
+
+        if not args:
+            return self.error("cat requires: <topic>")
+
+        topic = args[0]
+        settings = self.config_repo.get_settings()
+
+        fmt = flags.get("format") or settings.auto_cast_format
+        if not fmt:
+            return self.error("Format not specified. Use 'cat <topic> format <ext>'")
+
+        if not settings.topic_save:
+            return self.error("topic_save not set")
+
+        key = normalize_topic(topic)
+        file_path = FileManager.join(settings.topic_save, f"{key}.{fmt}")
+
+        if not FileManager.exists(file_path):
+            return self.error(f"File not found: {file_path}")
+
+        content = FileManager.read_text(file_path)
+        print(content)
         return 0
 
     def _work(self, args: List[str], flags: Dict[str, Any]) -> int:

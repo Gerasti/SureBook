@@ -1,0 +1,212 @@
+
+=== Установка Samba DC ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y task-samba-dc                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+task-samba-dc(Samba DC на базе Heimdal Kerberos)
+</blockquote>
+
+==== Остановка конфликтующих служб ====
+
+<syntaxhighlight lang="bash">
+for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Samba DC использует собственные LDAP и Kerberos
+</blockquote>
+
+=== Настройка имени узла и домена ===
+
+==== В /etc/sysconfig/network ====
+
+<syntaxhighlight lang="bash">
+HOSTNAME=dc.domain.sample
+ 
+</syntaxhighlight>
+
+<blockquote>
+dc.domain.sample(FQDN сервера); domain.sample(имя домена)
+</blockquote>
+
+==== Установка имени узла ====
+
+<syntaxhighlight lang="bash">
+hostnamectl set-hostname dc.domain.sample                                                  
+  exec bash                                                                                   
+  domainname domain.sample                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+exec bash(перезагрузка оболочки для применения)
+</blockquote>
+
+==== В /etc/resolvconf.conf ====
+
+<syntaxhighlight lang="bash">
+nameserver 127.0.0.1                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+для корректного распознавания локальных DNS-запросов
+</blockquote>
+
+=== Подготовка к созданию домена ===
+
+==== Очистка баз и конфигурации Samba ====
+
+<syntaxhighlight lang="bash">
+rm -f /etc/samba/smb.conf
+  rm -rf /var/lib/samba                                                                       
+  rm -rf /var/cache/samba                                                                     
+  mkdir -p /var/lib/samba/sysvol                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+удаляет предыдущую конфигурацию домена
+</blockquote>
+
+=== Создание домена ===
+
+==== Интерактивное создание домена ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain provision
+ 
+</syntaxhighlight>
+
+<blockquote>
+указать: доменное имя, рабочую группу, роль dc, бэкенд SAMBA_INTERNAL, DNS forwarder 77.88.8.8, пароль администратора
+</blockquote>
+
+==== Пакетное создание домена ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
+  --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
+  --use-rfc2307   
+ 
+</syntaxhighlight>
+
+<blockquote>
+--realm(имя области Kerberos и DNS домена); --domain(имя рабочей группы); --dns-backend(бэкенд DNS); --use-rfc2307(поддержка UID/GID и ACL)
+</blockquote>
+
+==== Запуск службы Samba ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now samba
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Копирование конфигурации Kerberos ====
+
+<syntaxhighlight lang="bash">
+cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Samba создает шаблон krb5.conf при создании домена
+</blockquote>
+
+=== Проверка ===
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status samba
+ 
+</syntaxhighlight>
+
+<blockquote>
+служба должна быть active (running)
+</blockquote>
+
+==== Просмотр информации о домене ====
+
+<syntaxhighlight lang="bash">
+samba-tool domain info 127.0.0.1                                                         
+ 
+</syntaxhighlight>
+
+<blockquote>
+показывает общую информацию о домене
+</blockquote>
+
+==== Просмотр общих ресурсов ====
+
+<syntaxhighlight lang="bash">
+smbclient -L localhost -U administrator                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+должны быть netlogon и sysvol
+</blockquote>
+
+==== Проверка DNS в /etc/resolv.conf ====
+
+<syntaxhighlight lang="bash">
+cat /etc/resolv.conf                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+должен быть nameserver 127.0.0.1
+</blockquote>
+
+==== Проверка SRV-записи Kerberos ====
+
+<syntaxhighlight lang="bash">
+host -t SRV _kerberos._udp.domain.sample.                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+утилита host из пакета bind-utils
+</blockquote>
+
+==== Проверка SRV-записи LDAP ====
+
+<syntaxhighlight lang="bash">
+host -t SRV _ldap._tcp.domain.sample.                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+проверяет доступность LDAP
+</blockquote>
+
+==== Проверка A-записи хоста ====
+
+<syntaxhighlight lang="bash">
+host -t A dc.domain.sample.                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+должен вернуть IP-адрес контроллера домена
+</blockquote>
+
+==== Проверка Kerberos ====
+
+<syntaxhighlight lang="bash">
+kinit administrator@DOMAIN.SAMPLE                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+имя домена в верхнем регистре; запрашивает пароль администратора
+</blockquote>

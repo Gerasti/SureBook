@@ -1,0 +1,83 @@
+
+=== Установка на сервере ===
+
+==== Установка NFS-сервера ====
+
+<syntaxhighlight lang="bash">
+apt-get install nfs-server                                                               
+ 
+</syntaxhighlight>
+
+==== Создание каталога для экспорта chown 777 /nfs ====
+
+==== Содержимое файла /etc/exports ====
+
+<syntaxhighlight lang="bash">
+/nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+/nfs (экспортируемый каталог); 192.168.20.0/26 (разрешенная подсеть); rw (чтение-запись); sync (синхронная запись); no_subtree_check (отключить проверку подкаталогов)
+</blockquote>
+
+==== Применение изменений ====
+
+<syntaxhighlight lang="bash">
+exportfs -ra                                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Перечитывает /etc/exports и применяет изменения
+</blockquote>
+
+=== Установка на клиенте ===
+
+==== Установка NFS-клиента ====
+
+<syntaxhighlight lang="bash">
+apt-get install nfs-clients                                                              
+ 
+</syntaxhighlight>
+
+==== В /etc/fstab добавить строку ====
+
+<syntaxhighlight lang="bash">
+192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+192.168.30.3:/nfs (удаленный каталог); /mnt/nfs (точка монтирования); nfs (тип ФС)
+</blockquote>
+
+==== Монтирование ====
+
+<syntaxhighlight lang="bash">
+mount -a                                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка ===
+
+==== Создание тестового файла на клиенте ====
+
+<syntaxhighlight lang="bash">
+cd /mnt/nfs                                                                              
+  touch txt                                                                                   
+  ls                                                                                          
+ 
+</syntaxhighlight>
+
+==== Проверка на сервере ====
+
+<syntaxhighlight lang="bash">
+ls -l /nfs                                                                               
+ 
+</syntaxhighlight>
+
+<blockquote>
+Файл txt должен быть виден с владельцем nobody:nobody
+</blockquote>

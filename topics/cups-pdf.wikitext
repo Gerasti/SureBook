@@ -1,0 +1,160 @@
+
+=== Установка и настройка CUPS ===
+
+==== Установка пакетов на сервере ====
+
+<syntaxhighlight lang="bash">
+apt-get install cups cups-pdf                                                            
+   
+ 
+</syntaxhighlight>
+
+=== Настройка CUPS-сервера ===
+
+==== Изменение конфигурации в /etc/cups/cupsd.conf ====
+
+<syntaxhighlight lang="bash">
+Listen *:631                                                                             
+                                                                                              
+  <Location />                                                                                
+  Order allow,deny                                                                            
+  Allow all                                                                                   
+  </Location>                                                                                 
+   
+  <Location /admin>                                                                           
+  Order allow,deny
+  Allow all                                                                                   
+  </Location>     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Listen *:631(слушать порт 631 на всех интерфейсах); <Location />(доступ к основной странице); <Location /admin>(доступ к панели администратора); Allow all(разрешить всем клиентам)
+</blockquote>
+
+<blockquote>
+Для ограничения доступа по подсетям замените Allow all на Allow from 192.168.1.0/24
+</blockquote>
+
+==== Запуск и включение службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable cups                                                                    
+  systemctl restart cups                                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка доступных принтеров ====
+
+<syntaxhighlight lang="bash">
+lpstat -p                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список принтеров и их статус
+</blockquote>
+
+=== Подключение клиента к CUPS ===
+
+==== Установка пакетов на клиенте ====
+
+<syntaxhighlight lang="bash">
+apt-get install cups                                                                     
+                  
+ 
+</syntaxhighlight>
+
+==== Подключение сетевого принтера ====
+
+<syntaxhighlight lang="bash">
+lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
+ 
+</syntaxhighlight>
+
+<blockquote>
+-p(имя принтера); -E(включить принтер); -v(URI принтера); -m everywhere(автоматический драйвер)
+</blockquote>
+
+<blockquote>
+Формат URI: ipp://IP_СЕРВЕРА:631/printers/ИМЯ_ПРИНТЕРА
+</blockquote>
+
+==== Назначение принтера по умолчанию ====
+
+<syntaxhighlight lang="bash">
+lpoptions -d PDF                                                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка подключения ====
+
+<syntaxhighlight lang="bash">
+lpstat -t                                                                                
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список принтеров, очередь печати, принтер по умолчанию, состояние службы
+</blockquote>
+
+=== Работа с CUPS ===
+
+==== Печать документа ====
+
+<syntaxhighlight lang="bash">
+echo "Тест печати" | lp -t "Example"                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+lp(команда печати); -t(название задания)
+</blockquote>
+
+==== Проверка PDF-файлов на сервере ====
+
+<syntaxhighlight lang="bash">
+ls -l /home/USERNAME/                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+При использовании cups-pdf документы сохраняются в домашнем каталоге пользователя клиента
+</blockquote>
+
+==== Web-интерфейс ====
+
+<syntaxhighlight lang="bash">
+http://IP_СЕРВЕРА:631                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Управление принтерами, очередью и заданиями
+</blockquote>
+
+=== Полезные команды ===
+
+==== Просмотр очереди печати ====
+
+<syntaxhighlight lang="bash">
+lpq                                                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Отмена задания ====
+
+<syntaxhighlight lang="bash">
+cancel ID_ЗАДАНИЯ                                                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Список устройств ====
+
+<syntaxhighlight lang="bash">
+lpinfo -v
+</syntaxhighlight>

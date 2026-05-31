@@ -29,6 +29,7 @@ Keys (with aliases):
   input, i                  Input file path
   list, l                   Lists file path
   topic_save, save          Topic save path
+  post_save, post           Post save path
   source_table_file, table  Source table file path
   editor, ed                Editor command
   auto_alphabetic_sort, sort  Auto sort (yes/no)
@@ -101,6 +102,7 @@ Examples:
         print(f"Input:            {settings.input}")
         print(f"List:             {settings.list}")
         print(f"Topic save:       {settings.topic_save}")
+        print(f"Post save:        {settings.post_save}")
         print(f"Source table:     {settings.source_table_file}")
         print(f"Editor:           {settings.editor}")
         print(f"Auto sort:        {settings.auto_alphabetic_sort}")
@@ -127,6 +129,7 @@ Examples:
             "i": "input",
             "l": "list",
             "save": "topic_save",
+            "post": "post_save",
             "table": "source_table_file",
             "ed": "editor",
             "sort": "auto_alphabetic_sort",
@@ -138,7 +141,7 @@ Examples:
         key = aliases.get(key, key)
 
         # Expand paths
-        if key in ["input", "list", "topic_save", "source_table_file"]:
+        if key in ["input", "list", "topic_save", "post_save", "source_table_file"]:
             value = FileManager.expanduser(value)
 
         # Boolean settings - accept more values
@@ -158,6 +161,8 @@ Examples:
             settings.list = value
         elif key == "topic_save":
             settings.topic_save = value
+        elif key == "post_save":
+            settings.post_save = value
         elif key == "source_table_file":
             settings.source_table_file = value
         elif key == "editor":
@@ -219,6 +224,7 @@ Examples:
             input="~/SureBook/info/def_input.md",
             list="~/SureBook/info/def_lists.md",
             topic_save="~/SureBook/topics",
+            post_save="~/SureBook/posting",
             source_table_file="~/SureBook/info/src_table.md",
             auto_alphabetic_sort=True,
             auto_save=True,

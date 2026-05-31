@@ -1,0 +1,133 @@
+
+=== Балансировка нагрузки ===
+
+==== Добавление блока upstream в конфигурацию сайта ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {
+      server 192.168.1.101;                                                                   
+      server 192.168.1.102;                                                                   
+  }                                                                                           
+                                                                                              
+  server {                                                                                    
+      listen 80;                                                                              
+      server_name some.domain;                                                                
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://backend_site1;                                                        
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+upstream(группа backend-серверов); backend_site1(имя группы); proxy_pass использует имя upstream
+</blockquote>
+
+==== Метод round-robin с весами ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {                                                                 
+      server 192.168.1.101 weight=3;                                                          
+      server 192.168.1.102 weight=1;                                                          
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+weight(вес сервера, по умолчанию 1); сервер с weight=3 получит в 3 раза больше запросов
+</blockquote>
+
+==== Метод least_conn ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {                                                                 
+      least_conn;                                                                             
+      server 192.168.1.101;                                                                   
+      server 192.168.1.102;                                                                   
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+least_conn(запросы направляются на сервер с минимальным количеством активных соединений)
+</blockquote>
+
+==== Метод ip_hash ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {                                                                 
+      ip_hash;                                                                                
+      server 192.168.1.101;                                                                   
+      server 192.168.1.102;                                                                   
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+ip_hash(клиент всегда направляется на один и тот же сервер по IP-адресу)
+</blockquote>
+
+==== Настройка keepalive соединений ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {                                                                 
+      server 192.168.1.101;                                                                   
+      server 192.168.1.102;                                                                   
+      keepalive 32;                                                                           
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+keepalive(количество постоянных соединений к backend-серверам)
+</blockquote>
+
+==== Настройка таймаутов и проверки доступности ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {                                                                 
+      server 192.168.1.101 max_fails=3 fail_timeout=30s;                                      
+      server 192.168.1.102 max_fails=3 fail_timeout=30s;                                      
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+max_fails(количество неудачных попыток); fail_timeout(время, на которое сервер считается недоступным)
+</blockquote>
+
+==== Комбинированная конфигурация ====
+
+<syntaxhighlight lang="bash">
+upstream backend_site1 {
+      least_conn;                                                                             
+      server 192.168.1.101 weight=2 max_fails=3 fail_timeout=30s;                             
+      server 192.168.1.102 weight=1 max_fails=3 fail_timeout=30s;                             
+      keepalive 32;                                                                           
+  }                                                                                           
+                                                                                              
+  server {                                                                                    
+      listen 80;                                                                              
+      server_name some.domain;                                                                
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://backend_site1;                                                        
+      proxy_http_version 1.1;                                                                 
+      proxy_set_header Connection "";                                                         
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+least_conn с весами и проверкой доступности; proxy_http_version 1.1 и Connection "" для keepalive
+</blockquote>

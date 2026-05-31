@@ -1,0 +1,192 @@
+
+=== Установка и настройка Chrony NTP-сервера ===
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y chrony
+
+ 
+</syntaxhighlight>
+
+==== Запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now chronyd
+
+ 
+</syntaxhighlight>
+
+=== Настройка NTP-сервера ===
+
+<blockquote>
+Сервер получает время от внешнего NTP и раздаёт время клиентам
+</blockquote>
+
+==== Отключение стандартных pool в /etc/chrony.conf ====
+
+<syntaxhighlight lang="bash">
+sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Добавление внешнего NTP-сервера в /etc/chrony.conf ====
+
+<syntaxhighlight lang="bash">
+server ntp2.vniiftri.ru iburst prefer minstratum 4                                       
+  local stratum 5                                                                             
+  allow 192.168.11.0/26                                                                       
+  allow 192.168.11.64/28                                                                      
+  allow 192.168.11.80/29                                                                      
+  makestep 1.0 3                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+server(внешний NTP-сервер); iburst(быстрая синхронизация); prefer(предпочтительный сервер); minstratum 4(минимальный уровень источника); local stratum 5(локальный уровень сервера); allow(разрешить клиентам подключаться); makestep 1.0 3(корректировать время скачком, если расхождение больше 1 секунды, в первые 3 обновления)
+</blockquote>
+
+==== Перезапуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl restart chronyd
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Разрешение NTP в firewall ===
+
+==== Разрешение UDP 123 в iptables ====
+
+<syntaxhighlight lang="bash">
+iptables -A INPUT -p udp --dport 123 -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 123 -j ACCEPT                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+UDP порт 123 используется для NTP
+</blockquote>
+
+==== Разрешение UDP 123 в nftables ====
+
+<syntaxhighlight lang="bash">
+nft add rule inet filter input udp dport 123 accept                                      
+  nft add rule inet filter output udp sport 123 accept                                        
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка NTP-сервера ===
+
+==== Проверка синхронизации ====
+
+<syntaxhighlight lang="bash">
+chronyc tracking
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает текущий источник времени, stratum, смещение, стабильность
+</blockquote>
+
+==== Проверка источников ====
+
+<syntaxhighlight lang="bash">
+chronyc sources                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает список NTP-серверов и их статус
+</blockquote>
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status chronyd                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка открытого UDP-порта 123 ====
+
+<syntaxhighlight lang="bash">
+ss -ulnp | grep 123
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка NTP-клиента ===
+
+<blockquote>
+Клиент синхронизирует время с локальным NTP-сервером
+</blockquote>
+
+==== Установка пакета ====
+
+<syntaxhighlight lang="bash">
+apt-get install -y chrony                                                                
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Отключение стандартных pool ====
+
+<syntaxhighlight lang="bash">
+sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Добавление локального NTP-сервера в /etc/chrony.conf ====
+
+<syntaxhighlight lang="bash">
+echo "server 192.168.11.67 iburst" >> /etc/chrony.conf                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Перезапуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl restart chronyd                                                                
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка NTP-клиента ===
+
+==== Проверка источников синхронизации ====
+
+<syntaxhighlight lang="bash">
+chronyc sources
+ 
+</syntaxhighlight>
+
+<blockquote>
+^* означает текущий активный сервер
+</blockquote>
+
+==== Проверка текущего времени ====
+
+<syntaxhighlight lang="bash">
+timedatectl                                                                              
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Принудительная синхронизация ====
+
+<syntaxhighlight lang="bash">
+chronyc makestep                                                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Подробная статистика ====
+
+<syntaxhighlight lang="bash">
+chronyc sourcestats
+</syntaxhighlight>

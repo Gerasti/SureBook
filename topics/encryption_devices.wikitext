@@ -1,0 +1,113 @@
+
+=== Шифрование раздела с LUKS ===
+
+==== Создание ключа шифрования ====
+
+<syntaxhighlight lang="bash">
+dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Генерация случайного ключа размером 4 КБ
+</blockquote>
+
+==== Шифрование раздела с указанным ключом ====
+
+<syntaxhighlight lang="bash">
+cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Инициализация LUKS-шифрования на разделе
+</blockquote>
+
+==== Открытие зашифрованного раздела ====
+
+<syntaxhighlight lang="bash">
+cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Открывает зашифрованный раздел как /dev/mapper/data_crypt
+</blockquote>
+
+==== Форматирование раздела ====
+
+<syntaxhighlight lang="bash">
+mkfs.ext4 /dev/mapper/data_crypt                                                         
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Автоматическая разблокировка при загрузке ===
+
+==== Настройка автоматической разблокировки в /etc/crypttab ====
+
+<syntaxhighlight lang="bash">
+data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+Формат: имя устройство ключ тип
+</blockquote>
+
+==== Проверка синтаксиса ====
+
+<syntaxhighlight lang="bash">
+systemctl daemon-reexec                                                                  
+  systemctl restart systemd-cryptsetup@data_crypt                                             
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Монтирование раздела ===
+
+==== Настройка автомонтирования в /etc/fstab ====
+
+<syntaxhighlight lang="bash">
+/dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+Формат: устройство точка_монтирования файловая_система опции dump fsck
+</blockquote>
+
+=== Защита ключа шифрования ===
+
+==== Установка прав доступа на ключ ====
+
+<syntaxhighlight lang="bash">
+chmod 600 /root/ext4.key                                                                 
+  chown root:root /root/ext4.key                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+Только root может читать и записывать ключ
+</blockquote>
+
+=== Применение настроек ===
+
+==== Перезагрузка системы ====
+
+<syntaxhighlight lang="bash">
+reboot                                                                                   
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка монтирования ====
+
+<syntaxhighlight lang="bash">
+df -h                                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+Проверка, что зашифрованный раздел смонтирован
+</blockquote>

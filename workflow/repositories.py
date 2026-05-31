@@ -25,6 +25,7 @@ class ConfigRepository:
             "input": FileManager.expanduser("~/SureBook/info/def_input.md"),
             "list": FileManager.expanduser("~/SureBook/info/def_lists.md"),
             "topic_save": FileManager.expanduser("~/SureBook/topics"),
+            "post_save": FileManager.expanduser("~/SureBook/posting"),
             "source_table_file": FileManager.expanduser("~/SureBook/info/src_table.md"),
             "auto_alphabetic_sort": "false",
             "auto_save": "false",
@@ -38,6 +39,7 @@ class ConfigRepository:
         settings.input = FileManager.expanduser(settings.input)
         settings.list = FileManager.expanduser(settings.list)
         settings.topic_save = FileManager.expanduser(settings.topic_save)
+        settings.post_save = FileManager.expanduser(settings.post_save)
         settings.source_table_file = FileManager.expanduser(settings.source_table_file)
 
         return settings

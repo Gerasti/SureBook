@@ -63,6 +63,7 @@ class Settings:
     input: str
     list: str
     topic_save: str
+    post_save: str
     source_table_file: str
     auto_alphabetic_sort: bool = False
     auto_save: bool = False
@@ -78,6 +79,7 @@ class Settings:
             "input": self.input,
             "list": self.list,
             "topic_save": self.topic_save,
+            "post_save": self.post_save,
             "source_table_file": self.source_table_file,
             "auto_alphabetic_sort": "true" if self.auto_alphabetic_sort else "false",
             "auto_save": "true" if self.auto_save else "false",
@@ -107,6 +109,7 @@ class Settings:
             input=data.get("input", ""),
             list=data.get("list", ""),
             topic_save=data.get("topic_save", ""),
+            post_save=data.get("post_save", ""),
             source_table_file=data.get("source_table_file", ""),
             auto_alphabetic_sort=data.get("auto_alphabetic_sort", "false") == "true",
             auto_save=data.get("auto_save", "false") == "true",

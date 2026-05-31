@@ -1,0 +1,146 @@
+
+=== Настройка службы резервного копирования ===
+
+==== Создание директории для резервных копий ====
+
+<syntaxhighlight lang="bash">
+mkdir -p /var/backup
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Создание службы /etc/systemd/system/backup.service ====
+
+<syntaxhighlight lang="bash">
+[Unit]                                                                                   
+  Description=Backup shared folder to /var/backup                                             
+  After=network.target                                                                        
+                                                                                              
+  [Service]                                                                                   
+  Type=oneshot                                                                                
+  ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
+  /path/to/shared/folder'                                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+Type=oneshot(служба завершается после выполнения команды); ExecStart(команда создания архива с датой и временем); %%(двойной процент для экранирования в systemd)
+</blockquote>
+
+==== Создание таймера /etc/systemd/system/backup.timer ====
+
+<syntaxhighlight lang="bash">
+[Unit]       
+  Description=Run backup.service daily at 20:00                                               
+                                                                                              
+  [Timer]                                                                                     
+  OnCalendar=20:00                                                                            
+  Persistent=true                                                                             
+                                                                                              
+  [Install]                                                                                   
+  WantedBy=timers.target                                                                      
+ 
+</syntaxhighlight>
+
+<blockquote>
+OnCalendar=20:00(запуск каждый день в 20:00); Persistent=true(выполнить пропущенную задачу при загрузке, если система была выключена)
+</blockquote>
+
+=== Запуск ===
+
+==== Перезагрузка конфигурации systemd ====
+
+<syntaxhighlight lang="bash">
+systemctl daemon-reload
+ 
+</syntaxhighlight>
+
+<blockquote>
+Применяет изменения после создания или редактирования unit-файлов
+</blockquote>
+
+==== Включение и запуск таймера ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now backup.timer                                                      
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка ===
+
+==== Просмотр активных таймеров ====
+
+<syntaxhighlight lang="bash">
+systemctl list-timers
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает все таймеры, время следующего запуска и последнего выполнения
+</blockquote>
+
+==== Проверка статуса таймера ====
+
+<syntaxhighlight lang="bash">
+systemctl status backup.timer                                                            
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status backup.service                                                          
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Ручной запуск службы резервного копирования ====
+
+<syntaxhighlight lang="bash">
+systemctl start backup.service                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+Для проверки работы службы без ожидания таймера
+</blockquote>
+
+==== Просмотр созданных архивов ====
+
+<syntaxhighlight lang="bash">
+ls -lh /var/backup                                                                       
+ 
+</syntaxhighlight>
+
+<blockquote>
+-lh(список с размерами в читаемом формате)
+</blockquote>
+
+==== Просмотр логов службы ====
+
+<syntaxhighlight lang="bash">
+journalctl -u backup.service                                                             
+ 
+</syntaxhighlight>
+
+<blockquote>
+Показывает логи выполнения резервного копирования
+</blockquote>
+
+==== Просмотр логов таймера ====
+
+<syntaxhighlight lang="bash">
+journalctl -u backup.timer                                                               
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Дополнительные варианты OnCalendar ===
+* OnCalendar=daily (каждый день в 00:00)
+* OnCalendar=weekly (каждую неделю в понедельник 00:00)
+* OnCalendar=--* 02:00:00 (каждый день в 02:00)
+* OnCalendar=Mon,Fri 18:00 (понедельник и пятница в 18:00)
+* OnCalendar=*:0/15 (каждые 15 минут)
+* OnCalendar=hourly (каждый час)

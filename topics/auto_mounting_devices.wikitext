@@ -1,0 +1,88 @@
+
+=== Форматирование диска ===
+
+==== Создание файловой системы ext4 ====
+
+<syntaxhighlight lang="bash">
+mkfs.ext4 /dev/sda                                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+создает файловую систему ext4 на устройстве /dev/sda
+</blockquote>
+
+=== Подготовка точки монтирования ===
+
+==== Создание директории ====
+
+<syntaxhighlight lang="bash">
+mkdir -p /opt/data                                                                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+-p(создание родительских директорий)
+</blockquote>
+
+=== Монтирование ===
+
+==== Монтирование диска ====
+
+<syntaxhighlight lang="bash">
+mount /dev/sda /opt/data                                                                              
+ 
+</syntaxhighlight>
+
+<blockquote>
+временное монтирование до перезагрузки
+</blockquote>
+
+=== Автоматическое монтирование ===
+
+==== Добавление записи в /etc/fstab ====
+
+<syntaxhighlight lang="bash">
+/dev/sda /opt/data ext4 defaults 0 2                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+/dev/sda(устройство); /opt/data(точка монтирования); ext4(тип ФС); defaults(опции монтирования); 0(резервное копирование dump); 2(порядок проверки fsck)
+</blockquote>
+
+=== Параметры /etc/fstab ===
+
+=== Структура записи ===
+* /dev/sda: устройство
+* /opt/data: точка монтирования
+* ext4: тип файловой системы
+* defaults: обобщенные опции
+** rw(чтение-запись), suid(SUID биты), dev(файлы устройств), exec(выполнение), auto(автомонтирование), nouser(только root), async(асинхронная запись)
+* 0: управление резервным копированием (dump-flag)
+** 0(не создавать резервные копии), 1(обычно root /), 2(другие разделы /home, /opt, /var)
+* 2: порядок проверки файловой системы (fsck)
+** 0(не проверять), 1(первым, обычно root), 2(после root для /home, /opt, /var)
+
+==== Применение ====
+
+<syntaxhighlight lang="bash">
+mount -a
+</syntaxhighlight>
+
+<blockquote>
+-a(монтирование всего из fstab)
+</blockquote>
+
+=== Проверка монтирования ===
+
+==== Просмотр смонтированных разделов ====
+
+<syntaxhighlight lang="bash">
+df -h                                                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+-h(человекочитаемый формат)
+</blockquote>

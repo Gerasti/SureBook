@@ -1,0 +1,134 @@
+
+=== Установка RADIUS сервера ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y freeradius freeradius-utils                         
+ 
+</syntaxhighlight>
+
+==== Запуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now radiusd                                                           
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Настройка RADIUS сервера ===
+
+==== В /etc/raddb/clients.conf ====
+
+<syntaxhighlight lang="bash">
+client ALL {                                                                             
+    ipaddr = 0.0.0.0
+    netmask = 0                                                                               
+    secret = P@ssw0rd                                                                         
+  }                                                                                           
+ 
+</syntaxhighlight>
+
+<blockquote>
+ipaddr(IP клиента); netmask(маска сети); secret(общий секрет)
+</blockquote>
+
+==== В конец /etc/raddb/users ====
+
+<syntaxhighlight lang="bash">
+netuser Cleartext-Password := "P@ssw0rd"                                                 
+          Service-Type = Administrative-User,                                                 
+          Cisco-AVPair = "shell:roles=admin"                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+Cleartext-Password(пароль пользователя); Service-Type(тип доступа); Cisco-AVPair(роль для Cisco)
+</blockquote>
+
+==== Перезапуск службы ====
+
+<syntaxhighlight lang="bash">
+systemctl restart radiusd
+                                                                                              
+ 
+</syntaxhighlight>
+
+=== Проверка RADIUS сервера ===
+
+==== Проверка статуса службы ====
+
+<syntaxhighlight lang="bash">
+systemctl status radiusd                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+служба должна быть active (running)
+</blockquote>
+
+==== Тестирование аутентификации ====
+
+<syntaxhighlight lang="bash">
+radtest netuser P@ssw0rd localhost 0 P@ssw0rd                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+должен вернуть Access-Accept
+</blockquote>
+
+=== Установка RADIUS клиента ===
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get update && apt-get install -y pam_radius                                          
+ 
+</syntaxhighlight>
+
+==== В /etc/pam_radius_auth.conf ====
+
+<syntaxhighlight lang="bash">
+<ip сервера> P@ssw0rd 3                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+формат: IP секрет таймаут
+</blockquote>
+
+==== В /etc/pam.d/sshd и /etc/pam.d/system-auth-local ====
+
+<syntaxhighlight lang="bash">
+auth  sufficient  pam_radius_auth.so                                                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+sufficient(достаточно для авторизации); pam_radius_auth.so(модуль RADIUS)
+</blockquote>
+
+==== Создание пользователя ====
+
+<syntaxhighlight lang="bash">
+useradd netuser                                                                          
+ 
+</syntaxhighlight>
+
+<blockquote>
+пользователь должен совпадать с настроенным на сервере
+</blockquote>
+
+=== Проверка RADIUS клиента ===
+
+==== Проверка подключения через SSH ====
+
+<syntaxhighlight lang="bash">
+ssh netuser@<ip клиента>                                                                 
+ 
+</syntaxhighlight>
+
+<blockquote>
+вход должен пройти с паролем P@ssw0rd через RADIUS-сервер
+</blockquote>

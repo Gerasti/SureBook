@@ -1,0 +1,110 @@
+
+==== Установка пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+ 
+</syntaxhighlight>
+
+<blockquote>
+zabbix-phpfrontend-apache2(веб-интерфейс для Apache2); zabbix-phpfrontend-php8.2(поддержка PHP 8.2)
+</blockquote>
+
+==== Включение конфигурации Apache2 ====
+
+<syntaxhighlight lang="bash">
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
+ 
+</syntaxhighlight>
+
+<blockquote>
+создает символическую ссылку для активации конфигурации Zabbix
+</blockquote>
+
+==== Перезапуск Apache2 ====
+
+<syntaxhighlight lang="bash">
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+</syntaxhighlight>
+
+==== Изменение владельца для веб-установщика ====
+
+<syntaxhighlight lang="bash">
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+ 
+</syntaxhighlight>
+
+<blockquote>
+необходимо для записи конфигурации при установке
+</blockquote>
+
+=== Настройка через веб-интерфейс ===
+
+==== Открытие веб-установщика ====
+
+<syntaxhighlight lang="bash">
+http://<ip сервера>/zabbix
+ 
+</syntaxhighlight>
+
+<blockquote>
+открыть в браузере
+</blockquote>
+
+=== Параметры подключения к базе данных ===
+* type database: PostgreSQL{MySQL}
+* host: localhost
+* port: 0
+* name: zabbix
+* scheme: public
+* user: zabbix
+* password: zabbixpwd
+
+<blockquote>
+port 0(автоматически использует порт по умолчанию: PostgreSQL 5432, MySQL 3306); scheme(схема базы данных)
+</blockquote>
+
+=== Проверка ===
+
+==== Вход в веб-интерфейс ====
+
+<syntaxhighlight lang="bash">
+http://<ip сервера>/zabbix
+
+ 
+</syntaxhighlight>
+
+<blockquote>
+открыть страницу входа
+</blockquote>
+
+==== Учетные данные по умолчанию ====
+
+<syntaxhighlight lang="bash">
+username: Admin                                                                          
+  password: zabbix                                                                            
+ 
+</syntaxhighlight>
+
+<blockquote>
+Admin с заглавной буквы; рекомендуется сменить пароль после первого входа
+</blockquote>
+
+==== Проверка статуса Apache2 ====
+
+<syntaxhighlight lang="bash">
+systemctl status httpd2                                                                  
+ 
+</syntaxhighlight>
+
+<blockquote>
+служба должна быть active (running)
+</blockquote>
+
+==== Проверка прав на каталог конфигурации ====
+
+<syntaxhighlight lang="bash">
+ls -la /var/www/webapps/zabbix/ui/conf
+</syntaxhighlight>
