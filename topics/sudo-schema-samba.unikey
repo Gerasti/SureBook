@@ -16,7 +16,7 @@ hd Установка sudo-samba-schema
   ct Ответить Yes, ввести Administrator и пароль, подтвердить Ok 
   ne Создание роли sudo                                          
   ce create-sudo-role                                            
-  ct Вводим: OU=sudoers,dc=AU-TEAM,dc=IRPO                       
+  ct Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE                       
   ct Имя роли: pravila_hq                                        
   ct sudoHost: ALL                                               
   ct sudoCommand: /bin/cat                                       
@@ -31,7 +31,7 @@ hd Установка sudo-samba-schema
   ne Включение дополнительных возможностей                       
   lt Настройка правила pravila_hq                                
   - Настройки → Включить Дополнительные возможности              
-  - au-team.irpo → sudoers → pravila_hq → Правой кнопкой мыши →  
+  - domain.sample → sudoers → pravila_hq → Правой кнопкой мыши →  
   Свойства                                                       
   - Атрибуты → sudoOption → Изменить → Добавить параметр         
   !authenticate → Apply                                          
@@ -48,7 +48,7 @@ hd Установка sudo-samba-schema
                                                                  
   [pam]                                                          
                                                                  
-  [domain/AU-TEAM.IRPO]                                          
+  [domain/DOMAIN.SAMPLE]                                          
   sudo_provider = ad
   ne Настройка NSS в /etc/nsswitch.conf                          
   ce sudoers: files sss                                          

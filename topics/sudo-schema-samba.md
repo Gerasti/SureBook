@@ -56,7 +56,7 @@ create-sudo-role
  
 ```
 
-> Вводим: OU=sudoers,dc=AU-TEAM,dc=IRPO
+> Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE
 
 > Имя роли: pravila_hq
 
@@ -93,7 +93,7 @@ sudo admc
 
 ### Настройка правила pravila_hq <!-- LIST -->
 - Настройки → Включить Дополнительные возможности
-- au-team.irpo → sudoers → pravila_hq → Правой кнопкой мыши → Свойства
+- domain.sample → sudoers → pravila_hq → Правой кнопкой мыши → Свойства
 - Атрибуты → sudoOption → Изменить → Добавить параметр !authenticate → Apply
 - Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и /usr/bin/id → Apply
 
@@ -121,7 +121,7 @@ control sudo public
                                                                  
   [pam]                                                          
                                                                  
-  [domain/AU-TEAM.IRPO]                                          
+  [domain/DOMAIN.SAMPLE]                                          
   sudo_provider = ad
  
 ```
