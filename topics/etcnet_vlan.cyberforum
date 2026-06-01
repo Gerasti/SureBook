@@ -1,0 +1,72 @@
+
+[H3]Настройка VLAN-интерфейсов[/H3]
+
+[H3]Создание VLAN-интерфейса[/H3]
+
+[H4]Создание каталога VLAN-интерфейса[/H4]
+
+[CODE]
+mkdir -p /etc/net/ifaces/ens32.100                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Формат: физический_интерфейс.номер_VLAN
+[/QUOTE]
+
+[H4]Настройка параметров в /etc/net/ifaces/ens32.100/options[/H4]
+
+[CODE]
+TYPE=vlan                                                                                
+  CONFIG_IPV4=yes                                                                             
+  BOOTPROTO=static                                                                            
+  VID=100                                                                                     
+  HOST=ens32                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+TYPE=vlan(тип интерфейса VLAN); VID(идентификатор VLAN); HOST(физический интерфейс); BOOTPROTO(протокол получения IP) {static, dhcp}; HOST(для нескольких интерфейсов) 'ens32 ens33'
+[/QUOTE]
+
+[H4]Настройка IP-адреса в /etc/net/ifaces/ens32.100/ipv4address[/H4]
+
+[CODE]
+192.168.11.67/24
+                                                                                              
+ 
+[/CODE]
+
+[H4]Применение изменений[/H4]
+
+[CODE]
+systemctl restart network                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Ручное управление VLAN[/H3]
+
+[H4]Запуск VLAN-интерфейса[/H4]
+
+[CODE]
+ifup ens32.100                                                                           
+                                                                                              
+ 
+[/CODE]
+
+[H4]Остановка VLAN-интерфейса[/H4]
+
+[CODE]
+ifdown ens32.100                                                                         
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка VLAN[/H3]
+
+[H4]Просмотр интерфейсов[/H4]
+
+[CODE]
+ip a                                                                                     
+[/CODE]

@@ -1,0 +1,285 @@
+
+[SIZE=4]Установка Ansible[/SIZE]
+
+[SIZE=3]Обновление и установка пакетов[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y ansible sshpass                                             
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=4]Создание структуры проекта[/SIZE]
+
+[SIZE=3]Создание директории проекта[/SIZE]
+
+[CODE]
+mkdir ansible                                                                                    
+  cd ansible      
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Создание инвентарного файла inventory[/SIZE]
+
+[CODE]
+vim inventory                                                                                    
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Содержимое inventory[/SIZE]
+
+[CODE]
+all:                                                                                             
+    hosts:                                                                                            
+      localhost:                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+формат YAML; хост localhost
+[/QUOTE]
+
+[SIZE=3]Создание директории для переменных[/SIZE]
+
+[CODE]
+mkdir host_vars                                                                                  
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Создание файла переменных host_vars/localhost.yml[/SIZE]
+
+[CODE]
+vim host_vars/localhost.yml                                                                      
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Содержимое host_vars/localhost.yml[/SIZE]
+
+[CODE]
+ansible_ssh_user: root                                                                           
+  ansible_ssh_pass: toor                                                                              
+  ansible_python_interpreter: /usr/bin/python3                                                        
+ 
+[/CODE]
+
+[QUOTE]
+ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
+[/QUOTE]
+
+[SIZE=4]Проверка работоспособности[/SIZE]
+
+[SIZE=3]Проверка подключения к localhost[/SIZE]
+
+[CODE]
+ansible -i inventory -m ping all                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+-i(инвентарный файл); -m(модуль); all(все хосты)
+[/QUOTE]
+
+[SIZE=4]Создание playbook для Nextcloud[/SIZE]
+
+[SIZE=3]Создание файла playbook.yml[/SIZE]
+
+[CODE]
+vim playbook.yml                                                                                 
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Содержимое playbook.yml[/SIZE]
+
+[CODE]
+---                                                                                              
+  - name: Install Nextcloud on ALT Server 10.1 (10.2)                                                 
+    hosts: localhost                                                                                  
+    become: true
+                                                                                                      
+    vars:                                                                                             
+      mariadb_database: nextcloud                                                                     
+      mariadb_username: nextcloud                                                                     
+      mariadb_password: nextcloud                                                                     
+      url_download_nextcloud: https://download.nextcloud.com/server/releases/latest.zip               
+      dir_download_nextcloud: /tmp                                                                    
+      path_project_nextcloud: /var/www/html/                                                          
+      virtualhost_servername: nextcloud.test.local                                                    
+                                                                                                      
+    tasks:                                                                                            
+      - name: Install database MariaDB                                                                
+        apt_rpm:                                                                                      
+          name:
+            - mariadb-server                                                                          
+            - python3-module-mysqlclient                                                              
+          state: present                                                                              
+          update_cache: true                                                                          
+                                                                                                      
+      - name: Started and enabled mariadb-server                                                      
+        systemd:                                                                                      
+          name: mariadb                                                                               
+          state: started                                                                              
+          enabled: true                                                                               
+                                                                                                      
+      - name: "Creating a database {{ mariadb_database }} for Nextcloud"                              
+        mysql_db:                                                                                     
+          name: "{{ mariadb_database }}"                                                              
+          encoding: utf8                                                                              
+          collation: utf8_unicode_ci                                                                  
+          state: present                                                                              
+                  
+      - name: "Creating a database user {{ mariadb_username }} for Nextcloud"                         
+        mysql_user:
+          name: "{{ mariadb_username }}"                                                              
+          password: "{{ mariadb_password }}"                                                          
+          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                  
+          host: localhost                                                                             
+          state: present                                                                              
+                                                                                                      
+      - name: Install web-server Apache2 and modules                                                  
+        apt_rpm:                                                                                      
+          name:                                                                                       
+            - apache2                                                                                 
+            - apache2-mod_ssl                                                                         
+            - apache2-mod_php8.2                                                                      
+            - tzdata                                                                                  
+          state: present                                                                              
+                                                                                                      
+      - name: Install PHP8.2 and php modules                                                          
+        apt_rpm:  
+          name:                                                                                       
+            - php8.2
+            - php8.2-pdo_mysql                                                                        
+            - php8.2-curl                                                                             
+            - php8.2-dom                                                                              
+            - php8.2-ldap                                                                             
+            - php8.2-exif                                                                             
+            - php8.2-fileinfo                                                                         
+            - php8.2-gd2                                                                              
+            - php8.2-gmp                                                                              
+            - php8.2-imagick                                                                          
+            - php8.2-intl                                                                             
+            - php8.2-libs                                                                             
+            - php8.2-mbstring                                                                         
+            - php8.2-memcached                                                                        
+            - php8.2-opcache                                                                          
+            - php8.2-openssl                                                                          
+            - php8.2-pcntl                                                                            
+            - php8.2-pdo                                                                              
+            - php8.2-xmlreader                                                                        
+            - php8.2-zip                                                                              
+                                                                                                      
+      - name: Enable the Apache2 module                                                               
+        apache2_module:                                                                               
+          name: "{{ item }}"                                                                          
+          state: present                                                                              
+        with_items:                                                                                   
+          - dir                                                                                       
+          - env                                                                                       
+          - headers                                                                                   
+          - mime                                                                                      
+          - rewrite
+                                                                                                      
+      - name: Started and enabled Apache2                                                             
+        systemd:                                                                                      
+          name: httpd2                                                                                
+          state: started
+          enabled: true                                                                               
+                                                                                                      
+      - name: Download Nextcloud project                                                              
+        get_url:                                                                                      
+          url: "{{ url_download_nextcloud }}"                                                         
+          dest: "{{ dir_download_nextcloud }}"                                                        
+                                                                                                      
+      - name: Unarchive a file project Nextcloud                                                      
+        unarchive:                                                                                    
+          src: "{{ dir_download_nextcloud }}/latest.zip"                                              
+          dest: "{{ path_project_nextcloud }}"                                                        
+                                                                                                      
+      - name: Create directory "data" for Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/data"                                         
+          state: directory                                                                            
+                                                                                                      
+      - name: Assigning rights to project Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/"                                             
+          recurse: yes                                                                                
+          owner: root                                                                                 
+                                                                                                      
+      - name: Assigning rights to project Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/{{ item }}"                                   
+          recurse: yes                                                                                
+          owner: apache2
+        with_items:                                                                                   
+          - apps                                                                                      
+          - config                                                                                    
+          - data                                                                                      
+                  
+      - name: Setting up a web server to work with Nextcloud                                          
+        copy:     
+          dest: /etc/httpd2/conf/sites-available/nextcloud.conf                                       
+          content: |                                                                                  
+            <VirtualHost *:80>                                                                        
+              DocumentRoot {{ path_project_nextcloud }}/nextcloud/                                    
+              ServerName {{ virtualhost_servername }}                                                 
+                                                                                                      
+              <Directory {{ path_project_nextcloud }}/nextcloud/>                                     
+                Require all granted                                                                   
+                AllowOverride All                                                                     
+                Options FollowSymLinks MultiViews                                                     
+                                                                                                      
+                <IfModule mod_dav.c>                                                                  
+                  Dav off
+                </IfModule>                                                                           
+              </Directory>                                                                            
+            </VirtualHost>                                                                            
+                                                                                                      
+      - name: Adding a symbolic link                                                                  
+        command:                                                                                      
+          cmd: ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-enabled/  
+                                                                                                      
+      - name: Restarted Apache2                                                                       
+        systemd:                                                                                      
+          name: httpd2                                                                                
+          state: restarted
+ 
+[/CODE]
+
+[QUOTE]
+become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
+[/QUOTE]
+
+[SIZE=4]Установка коллекций Ansible[/SIZE]
+
+[SIZE=3]Установка community.general[/SIZE]
+
+[CODE]
+ansible-galaxy collection install community.general                                              
+                                                                                                      
+ 
+[/CODE]
+
+[SIZE=3]Установка community.mysql[/SIZE]
+
+[CODE]
+ansible-galaxy collection install community.mysql                                                
+ 
+[/CODE]
+
+[QUOTE]
+ansible-galaxy(менеджер коллекций)
+[/QUOTE]
+
+[SIZE=4]Запуск playbook[/SIZE]
+
+[SIZE=3]Выполнение playbook-сценария[/SIZE]
+
+[CODE]
+ansible-playbook -i inventory playbook.yml 
+[/CODE]

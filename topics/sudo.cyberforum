@@ -1,0 +1,290 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка sudo[/H4]
+
+[CODE]
+apt-get install sudo
+ 
+[/CODE]
+
+[QUOTE]
+sudo(выполнение команд от имени другого пользователя, обычно root)
+[/QUOTE]
+
+[H3]Создание пользователя[/H3]
+
+[H4]Создание пользователя с параметрами[/H4]
+
+[CODE]
+useradd -m -g users -G wheel -s /bin/bash username
+ 
+[/CODE]
+
+[QUOTE]
+-m(создать домашний каталог); -g(основная группа); -G(дополнительные группы); -s(оболочка по умолчанию /bin/bash)
+[/QUOTE]
+
+[H4]Создание пользователя с указанным UID[/H4]
+
+[CODE]
+useradd -u 2026 -m -g users -G wheel username
+ 
+[/CODE]
+
+[QUOTE]
+-u(указать конкретный UID)
+[/QUOTE]
+
+[H4]Установка пароля пользователю[/H4]
+
+[CODE]
+passwd username                                                                          
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание пользователя интерактивно[/H4]
+
+[CODE]
+adduser username                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Либо интерактивный режим с запросом всех параметров
+[/QUOTE]
+
+[H3]Настройка sudo[/H3]
+
+[H4]Основной конфигурационный файл[/H4]
+
+[CODE]
+/etc/sudoers 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Редактирование конфигурации sudo[/H4]
+
+[CODE]
+visudo                                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Безопасное редактирование /etc/sudoers с проверкой синтаксиса
+[/QUOTE]
+
+[H4]Предоставление sudo группе wheel[/H4]
+
+[CODE]
+%wheel ALL=(ALL:ALL) ALL                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Пользователи группы wheel могут выполнять любые команды через sudo с вводом пароля
+[/QUOTE]
+
+[H4]Предоставление sudo без пароля группе wheel[/H4]
+
+[CODE]
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Пользователи группы wheel могут выполнять sudo без ввода пароля
+[/QUOTE]
+
+[H4]Предоставление sudo конкретному пользователю[/H4]
+
+[CODE]
+username ALL=(ALL:ALL) ALL                                                               
+ 
+[/CODE]
+
+[QUOTE]
+Конкретный пользователь может выполнять любые команды через sudo
+[/QUOTE]
+
+[H4]Предоставление sudo для конкретных команд[/H4]
+
+[CODE]
+username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get                                  
+ 
+[/CODE]
+
+[QUOTE]
+Пользователь может выполнять только указанные команды через sudo
+[/QUOTE]
+
+[H4]Добавление пользователя в группу wheel[/H4]
+
+[CODE]
+usermod -aG wheel username                                                               
+ 
+[/CODE]
+
+[QUOTE]
+-aG(добавить в дополнительные группы, не удаляя из существующих)
+[/QUOTE]
+
+[H3]Управление пользователями[/H3]
+
+[H4]Изменение оболочки пользователя[/H4]
+
+[CODE]
+usermod -s /bin/bash username
+ 
+[/CODE]
+
+[QUOTE]
+-s(изменить оболочку по умолчанию)
+[/QUOTE]
+
+[H4]Изменение домашнего каталога[/H4]
+
+[CODE]
+usermod -d /home/newdir username                                                         
+ 
+[/CODE]
+
+[QUOTE]
+-d(изменить домашний каталог)
+[/QUOTE]
+
+[H4]Блокировка пользователя[/H4]
+
+[CODE]
+usermod -L username                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+-L(заблокировать учётную запись, запретить вход)
+[/QUOTE]
+
+[H4]Разблокировка пользователя[/H4]
+
+[CODE]
+usermod -U username                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+-U(разблокировать учётную запись)
+[/QUOTE]
+
+[H4]Удаление пользователя[/H4]
+
+[CODE]
+userdel username                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Удаляет пользователя, но сохраняет домашний каталог
+[/QUOTE]
+
+[H4]Удаление пользователя с домашним каталогом[/H4]
+
+[CODE]
+userdel -r username                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+-r(удалить вместе с домашним каталогом)
+[/QUOTE]
+
+[H4]Просмотр групп пользователя[/H4]
+
+[CODE]
+groups username                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все группы пользователя
+[/QUOTE]
+
+[H4]Просмотр информации о пользователе[/H4]
+
+[CODE]
+id username                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Показывает UID, GID и группы пользователя
+[/QUOTE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка sudo[/H4]
+
+[CODE]
+sudo whoami  
+ 
+[/CODE]
+
+[QUOTE]
+Результат: root
+[/QUOTE]
+
+[H4]Проверка выполнения команды от другого пользователя[/H4]
+
+[CODE]
+sudo -u username whoami                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+-u(выполнить от имени указанного пользователя), результат: username
+[/QUOTE]
+
+[H4]Просмотр прав sudo текущего пользователя[/H4]
+
+[CODE]
+sudo -l                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Показывает какие команды может выполнять пользователь через sudo
+[/QUOTE]
+
+[H4]Просмотр истории sudo[/H4]
+
+[CODE]
+journalctl -u sudo                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает логи выполнения команд через sudo
+[/QUOTE]
+
+[H4]Просмотр всех пользователей системы[/H4]
+
+[CODE]
+cat /etc/passwd                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Список всех пользователей с их параметрами
+[/QUOTE]
+
+[H4]Просмотр всех групп системы[/H4]
+
+[CODE]
+cat /etc/group                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+Список всех групп и их членов
+[/QUOTE]

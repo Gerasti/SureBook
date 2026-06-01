@@ -1,0 +1,489 @@
+
+[SIZE=4]Установка[/SIZE]
+
+[SIZE=3]Установка утилиты mdadm[/SIZE]
+
+[CODE]
+apt-get install -y mdadm                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+mdadm(утилита для управления программными RAID)
+[/QUOTE]
+
+[QUOTE]
+Программный RAID(реализован на уровне ОС) vs Аппаратный RAID(реализован контроллером)
+[/QUOTE]
+
+[QUOTE]
+Программный RAID использует CPU, аппаратный имеет собственный процессор
+[/QUOTE]
+
+[SIZE=3]Создание RAID 0 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc
+ 
+[/CODE]
+
+[QUOTE]
+RAID 0(striping, чередование) - данные распределяются по дискам
+[/QUOTE]
+
+[QUOTE]
+Преимущества: высокая скорость чтения/записи, полное использование объёма
+[/QUOTE]
+
+[QUOTE]
+Недостатки: нет отказоустойчивости, при отказе одного диска теряются все данные
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 2; Полезный объём: сумма всех дисков
+[/QUOTE]
+
+[SIZE=3]Создание RAID 1 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc           
+ 
+[/CODE]
+
+[QUOTE]
+RAID 1(mirroring, зеркалирование) - данные дублируются на все диски
+[/QUOTE]
+
+[QUOTE]
+Преимущества: высокая отказоустойчивость, быстрое чтение
+[/QUOTE]
+
+[QUOTE]
+Недостатки: половина объёма теряется, медленная запись
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 2; Полезный объём: размер одного диска
+[/QUOTE]
+
+[QUOTE]
+Выдерживает отказ N-1 дисков
+[/QUOTE]
+
+[SIZE=3]Создание RAID 4 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd  
+ 
+[/CODE]
+
+[QUOTE]
+RAID 4(striping with dedicated parity) - выделенный диск для чётности
+[/QUOTE]
+
+[QUOTE]
+Преимущества: простая реализация
+[/QUOTE]
+
+[QUOTE]
+Недостатки: диск чётности - узкое место, устарел
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 3; Полезный объём: (N-1) × размер диска
+[/QUOTE]
+
+[QUOTE]
+Редко используется, заменён на RAID 5
+[/QUOTE]
+
+[QUOTE]
+RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели, не поддерживаются mdadm
+[/QUOTE]
+
+[SIZE=3]Создание RAID 5 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
+ 
+[/CODE]
+
+[QUOTE]
+RAID 5(striping with parity) - данные и контрольные суммы распределены по дискам
+[/QUOTE]
+
+[QUOTE]
+Преимущества: баланс скорости и отказоустойчивости, экономия места
+[/QUOTE]
+
+[QUOTE]
+Недостатки: медленная запись из-за вычисления чётности, долгое восстановление
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 3; Полезный объём: (N-1) × размер диска
+[/QUOTE]
+
+[QUOTE]
+Выдерживает отказ 1 диска
+[/QUOTE]
+
+[SIZE=3]Создание RAID 6 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd  
+  /dev/sde                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+RAID 6(striping with double parity) - двойная контрольная сумма
+[/QUOTE]
+
+[QUOTE]
+Преимущества: выдерживает отказ 2 дисков одновременно
+[/QUOTE]
+
+[QUOTE]
+Недостатки: ещё медленнее запись, больше потерь объёма
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 4; Полезный объём: (N-2) × размер диска
+[/QUOTE]
+
+[QUOTE]
+Выдерживает отказ 2 дисков
+[/QUOTE]
+
+[SIZE=3]Создание RAID 10 массива[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd 
+  /dev/sde                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+RAID 10(1+0, зеркалирование + чередование) - комбинация RAID 1 и RAID 0
+[/QUOTE]
+
+[QUOTE]
+Преимущества: высокая скорость и отказоустойчивость
+[/QUOTE]
+
+[QUOTE]
+Недостатки: половина объёма теряется, дорого
+[/QUOTE]
+
+[QUOTE]
+Минимум дисков: 4; Полезный объём: 50% от суммы дисков
+[/QUOTE]
+
+[QUOTE]
+Выдерживает отказ нескольких дисков (не из одной зеркальной пары)
+[/QUOTE]
+
+[SIZE=3]Создание файловой системы на массиве[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/md0                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Форматирование массива {ext4, xfs, btrfs}
+[/QUOTE]
+
+[SIZE=3]Создание точки монтирования[/SIZE]
+
+[CODE]
+mkdir /mnt/raid                                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Монтирование массива[/SIZE]
+
+[CODE]
+mount /dev/md0 /mnt/raid                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Настройка[/SIZE]
+
+[SIZE=3]В /etc/fstab добавить строку для автомонтирования[/SIZE]
+
+[CODE]
+/dev/md0   /mnt/raid   ext4   defaults   0 0                                             
+ 
+[/CODE]
+
+[QUOTE]
+Автоматическое монтирование при загрузке
+[/QUOTE]
+
+[SIZE=3]Сохранение конфигурации mdadm[/SIZE]
+
+[CODE]
+mdadm --detail --scan >> /etc/mdadm.conf                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Сохраняет информацию о массиве для автосборки при загрузке
+[/QUOTE]
+
+[SIZE=3]Добавление spare диска в массив[/SIZE]
+
+[CODE]
+mdadm --add /dev/md0 /dev/sde                                                            
+ 
+[/CODE]
+
+[QUOTE]
+spare(горячий резерв) - диск автоматически заменит отказавший
+[/QUOTE]
+
+[SIZE=3]Создание массива с spare диском[/SIZE]
+
+[CODE]
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb  
+  /dev/sdc /dev/sdd /dev/sde                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+--spare-devices=1(количество резервных дисков)
+[/QUOTE]
+
+[SIZE=4]Управление массивом[/SIZE]
+
+[SIZE=3]Остановка массива[/SIZE]
+
+[CODE]
+mdadm --stop /dev/md0                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Размонтировать перед остановкой
+[/QUOTE]
+
+[SIZE=3]Запуск массива[/SIZE]
+
+[CODE]
+mdadm --assemble /dev/md0 /dev/sdb /dev/sdc /dev/sdd                                     
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление диска из массива[/SIZE]
+
+[CODE]
+mdadm --remove /dev/md0 /dev/sdc                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Диск должен быть помечен как failed
+[/QUOTE]
+
+[SIZE=3]Пометка диска как отказавшего[/SIZE]
+
+[CODE]
+mdadm --fail /dev/md0 /dev/sdc                                                           
+ 
+[/CODE]
+
+[QUOTE]
+Имитация отказа диска для тестирования
+[/QUOTE]
+
+[SIZE=3]Добавление нового диска взамен отказавшего[/SIZE]
+
+[CODE]
+mdadm --add /dev/md0 /dev/sde
+ 
+[/CODE]
+
+[QUOTE]
+Автоматически начнётся rebuild (восстановление)
+[/QUOTE]
+
+[SIZE=3]Увеличение количества дисков в массиве[/SIZE]
+
+[CODE]
+mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sde                                    
+ 
+[/CODE]
+
+[QUOTE]
+Расширение массива с пересчётом данных
+[/QUOTE]
+
+[SIZE=3]Изменение уровня RAID[/SIZE]
+
+[CODE]
+mdadm --grow /dev/md0 --level=6                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Преобразование RAID 5 в RAID 6 (требует время)
+[/QUOTE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка состояния всех RAID массивов[/SIZE]
+
+[CODE]
+cat /proc/mdstat                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Краткая информация: состояние, прогресс rebuild/resync
+[/QUOTE]
+
+[SIZE=3]Детальная информация о массиве[/SIZE]
+
+[CODE]
+mdadm --detail /dev/md0                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Показывает уровень RAID, состояние дисков, размер, UUID
+[/QUOTE]
+
+[SIZE=3]Проверка информации о диске в массиве[/SIZE]
+
+[CODE]
+mdadm --examine /dev/sdb                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Показывает метаданные RAID на конкретном диске
+[/QUOTE]
+
+[SIZE=3]Мониторинг состояния массива[/SIZE]
+
+[CODE]
+mdadm --monitor --scan --daemonise                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Запуск демона мониторинга для уведомлений об ошибках
+[/QUOTE]
+
+[SIZE=3]Проверка скорости rebuild[/SIZE]
+
+[CODE]
+cat /proc/sys/dev/raid/speed_limit_min                                                   
+  cat /proc/sys/dev/raid/speed_limit_max                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает минимальную и максимальную скорость восстановления
+[/QUOTE]
+
+[SIZE=3]Изменение скорости rebuild[/SIZE]
+
+[CODE]
+echo 50000 > /proc/sys/dev/raid/speed_limit_min                                          
+  echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
+ 
+[/CODE]
+
+[QUOTE]
+Значения в KB/s, влияет на производительность системы
+[/QUOTE]
+
+[SIZE=3]Проверка целостности массива[/SIZE]
+
+[CODE]
+echo check > /sys/block/md0/md/sync_action                                               
+ 
+[/CODE]
+
+[QUOTE]
+Запуск проверки без исправления ошибок
+[/QUOTE]
+
+[SIZE=3]Восстановление с исправлением ошибок[/SIZE]
+
+[CODE]
+echo repair > /sys/block/md0/md/sync_action                                              
+ 
+[/CODE]
+
+[QUOTE]
+Проверка и исправление несоответствий
+[/QUOTE]
+
+[SIZE=3]Просмотр прогресса проверки[/SIZE]
+
+[CODE]
+cat /proc/mdstat                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Показывает прогресс операции check/repair
+[/QUOTE]
+
+[SIZE=4]Удаление[/SIZE]
+
+[SIZE=3]Размонтирование массива[/SIZE]
+
+[CODE]
+umount /mnt/raid                                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Остановка массива[/SIZE]
+
+[CODE]
+mdadm --stop /dev/md0                                                                    
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление метаданных RAID с дисков[/SIZE]
+
+[CODE]
+mdadm --zero-superblock /dev/sdb /dev/sdc /dev/sdd                                       
+ 
+[/CODE]
+
+[QUOTE]
+Полное удаление информации о RAID с дисков
+[/QUOTE]
+
+[SIZE=3]Удаление записи из /etc/fstab[/SIZE]
+
+[CODE]
+sed -i '/\/dev\/md0/d' /etc/fstab                                                        
+ 
+[/CODE]
+
+[QUOTE]
+Удаление строки автомонтирования
+[/QUOTE]
+
+[SIZE=3]Удаление записи из /etc/mdadm.conf[/SIZE]
+
+[CODE]
+sed -i '/\/dev\/md0/d' /etc/mdadm.conf                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Удаление конфигурации массива
+[/QUOTE]

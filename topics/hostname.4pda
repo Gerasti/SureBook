@@ -1,0 +1,131 @@
+
+[SIZE=4]Настройка hostname[/SIZE]
+
+[SIZE=3]Просмотр текущего hostname[/SIZE]
+
+[CODE]
+hostname                                                                                 
+  hostnamectl
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Временное изменение hostname до перезагрузки[/SIZE]
+
+[CODE]
+hostname new-hostname
+ 
+[/CODE]
+
+[QUOTE]
+Изменения не сохраняются после перезагрузки
+[/QUOTE]
+
+[SIZE=3]Постоянное изменение hostname[/SIZE]
+
+[CODE]
+hostnamectl set-hostname new-hostname
+ 
+[/CODE]
+
+[QUOTE]
+Изменения сохраняются после перезагрузки
+[/QUOTE]
+
+[SIZE=3]Изменение hostname с обновлением текущей сессии[/SIZE]
+
+[CODE]
+hostnamectl set-hostname new-hostname; exec bash
+ 
+[/CODE]
+
+[QUOTE]
+exec bash перезапускает оболочку без login shell
+[/QUOTE]
+
+[SIZE=3]Изменение hostname с обновлением login shell[/SIZE]
+
+[CODE]
+hostnamectl set-hostname new-hostname; exec bash -l                                      
+ 
+[/CODE]
+
+[QUOTE]
+exec bash -l перезапускает оболочку как login shell, загружает профили пользователя
+[/QUOTE]
+
+[SIZE=3]Изменение hostname в /etc/hostname[/SIZE]
+
+[CODE]
+echo "new-hostname" > /etc/hostname                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Альтернативный способ, требует перезагрузки или применения изменений
+[/QUOTE]
+
+[SIZE=3]Изменение hostname в /etc/hosts[/SIZE]
+
+[CODE]
+nano /etc/hosts                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Добавить или изменить строку
+[/QUOTE]
+
+[CODE]
+127.0.0.1   localhost                                                                    
+  127.0.1.1   new-hostname                                                                    
+  192.168.1.10   new-hostname.some.domain new-hostname                                        
+ 
+[/CODE]
+
+[QUOTE]
+Рекомендуется синхронизировать с /etc/hostname для корректной работы DNS
+[/QUOTE]
+
+[SIZE=3]Применение изменений без перезагрузки[/SIZE]
+
+[CODE]
+systemctl restart systemd-hostnamed                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка hostname[/SIZE]
+
+[SIZE=3]Проверка полного имени хоста[/SIZE]
+
+[CODE]
+hostname -f                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Показывает FQDN (Fully Qualified Domain Name)
+[/QUOTE]
+
+[SIZE=3]Проверка короткого имени[/SIZE]
+
+[CODE]
+hostname -s                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Показывает короткое имя без домена
+[/QUOTE]
+
+[SIZE=3]Проверка всех параметров[/SIZE]
+
+[CODE]
+hostnamectl status                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System, Kernel, Architecture
+[/QUOTE]

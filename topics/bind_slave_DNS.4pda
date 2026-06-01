@@ -1,0 +1,88 @@
+
+[SIZE=4]Настройка slave DNS-сервера[/SIZE]
+
+[SIZE=3]Установка пакетов[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y bind bind-utils                                     
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Базовые параметры в /etc/bind/options.conf[/SIZE]
+
+[CODE]
+listen-on { any; };                                                                      
+  allow-query { any; };                                                                       
+  allow-transfer { none; };                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Настройка slave-зон в /etc/bind/local.conf[/SIZE]
+
+[CODE]
+zone "bind.domain" {                                                                     
+      type slave;                                                                             
+      file "slave/bind.domain";                                                               
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+                                                                                              
+  zone "11.168.192.in-addr.arpa" {                                                            
+      type slave; 
+      file "slave/11.168.192.in-addr.arpa.db";                                                
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+                                                                                              
+  zone "33.168.192.in-addr.arpa" {                                                            
+      type slave;                                                                             
+      file "slave/33.168.192.in-addr.arpa.db";                                                
+      masters { 192.168.11.67; };                                                             
+  };                                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+type slave(вторичный сервер); masters(IP master-сервера для синхронизации)
+[/QUOTE]
+
+[SIZE=3]Содержимое /etc/net/ifaces/ens33/resolv.conf[/SIZE]
+
+[CODE]
+search bind.domain                                                                       
+  nameserver 192.168.11.67                                                                    
+  nameserver 192.168.33.67                                                                    
+  nameserver 8.8.8.8                                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Перезапуск сети и запуск BIND[/SIZE]
+
+[CODE]
+systemctl restart network                                                                
+  systemctl enable --now bind                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Включение slave-режима[/SIZE]
+
+[CODE]
+control bind-slave enabled                                                               
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка slave-режима[/SIZE]
+
+[SIZE=3]Проверка синхронизированных зон[/SIZE]
+
+[CODE]
+ls -l /etc/bind/zone/slave/                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Должны появиться файлы зон, скопированные с master-сервера
+[/QUOTE]

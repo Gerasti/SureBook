@@ -1,0 +1,525 @@
+
+[SIZE=4]Основы LVM[/SIZE]
+
+[QUOTE]
+LVM(Logical Volume Manager) - система управления логическими томами
+[/QUOTE]
+
+[QUOTE]
+Основа LVM: абстракция физических дисков для гибкого управления хранилищем
+[/QUOTE]
+
+[QUOTE]
+Зачем LVM: изменение размера разделов без перезагрузки, создание снапшотов, объединение дисков, миграция данных
+[/QUOTE]
+
+[QUOTE]
+Преимущества: динамическое изменение размера, перемещение данных между дисками, создание резервных копий на лету
+[/QUOTE]
+
+[QUOTE]
+LVM vs mdadm: LVM для гибкого управления томами, mdadm для отказоустойчивости
+[/QUOTE]
+
+[QUOTE]
+LVM может striping и mirroring, но mdadm лучше для RAID (производительность, надёжность)
+[/QUOTE]
+
+[QUOTE]
+Часто используют вместе: mdadm для RAID массива, затем LVM поверх для управления томами
+[/QUOTE]
+
+[SIZE=4]Компоненты LVM[/SIZE]
+[LIST][*]Physical Volume (PV)[/LIST]
+[LIST][*]физический том, диск или раздел[/LIST]
+[LIST][*]Volume Group (VG)[/LIST]
+[LIST][*]группа томов, объединяет несколько PV[/LIST]
+[LIST][*]Logical Volume (LV)[/LIST]
+[LIST][*]логический том, используется как обычный раздел[/LIST]
+[LIST][*]Physical Extent (PE)[/LIST]
+[LIST][*]минимальная единица данных для распределения[/LIST]
+
+[SIZE=4]Установка[/SIZE]
+
+[SIZE=3]Установка пакета LVM[/SIZE]
+
+[CODE]
+apt-get install -y lvm2                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+lvm2(пакет для работы с LVM)
+[/QUOTE]
+
+[SIZE=3]Создание разметки на дисках[/SIZE]
+
+[CODE]
+parted /dev/sda                                                                          
+  mklabel gpt                                                                                 
+  mkpart primary 0% 100%
+  set 1 lvm on                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+set 1 lvm on(установка флага LVM на раздел)
+[/QUOTE]
+
+[SIZE=3]Создание разметки на втором диске[/SIZE]
+
+[CODE]
+parted /dev/sdb                                                                          
+  mklabel gpt                                                                                 
+  mkpart primary 0% 100%                                                                      
+  set 1 lvm on                                                                                
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание Physical Volume[/SIZE]
+
+[CODE]
+pvcreate /dev/sda1 /dev/sdb1                                                             
+ 
+[/CODE]
+
+[QUOTE]
+pvcreate(инициализация физических томов для LVM)
+[/QUOTE]
+
+[SIZE=3]Создание Volume Group[/SIZE]
+
+[CODE]
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+ 
+[/CODE]
+
+[QUOTE]
+vgcreate(создание группы томов) vg01(имя группы)
+[/QUOTE]
+
+[QUOTE]
+Объединяет несколько физических томов в один пул
+[/QUOTE]
+
+[SIZE=3]Создание Logical Volume[/SIZE]
+
+[CODE]
+lvcreate -L 10G -n lv_data vg01                                                          
+ 
+[/CODE]
+
+[QUOTE]
+lvcreate(создание логического тома) -L(размер) -n(имя тома)
+[/QUOTE]
+
+[QUOTE]
+Альтернатива: -l 100%FREE(использовать всё свободное место)
+[/QUOTE]
+
+[SIZE=3]Создание LV с использованием всего пространства[/SIZE]
+
+[CODE]
+lvcreate -l 100%FREE -n lv_data vg01                                                     
+ 
+[/CODE]
+
+[QUOTE]
+-l 100%FREE(использовать 100% свободного места в VG)
+[/QUOTE]
+
+[SIZE=3]Создание файловой системы на LV[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/vg01/lv_data                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Форматирование логического тома {ext4, xfs, btrfs}
+[/QUOTE]
+
+[SIZE=3]Создание точки монтирования[/SIZE]
+
+[CODE]
+mkdir /mnt/data                                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Монтирование LV[/SIZE]
+
+[CODE]
+mount /dev/vg01/lv_data /mnt/data                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Настройка striped (RAID 0)[/SIZE]
+
+[QUOTE]
+striped(чередование) - данные распределяются по дискам для увеличения скорости
+[/QUOTE]
+
+[QUOTE]
+Требуется минимум 2 диска
+[/QUOTE]
+
+[SIZE=3]Создание PV для striped[/SIZE]
+
+[CODE]
+pvcreate /dev/sda1 /dev/sdb1                                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание VG для striped[/SIZE]
+
+[CODE]
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание striped LV[/SIZE]
+
+[CODE]
+lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
+ 
+[/CODE]
+
+[QUOTE]
+-i2(количество дисков для striping, страйпинг по 2 дискам)
+[/QUOTE]
+
+[QUOTE]
+Увеличивает скорость чтения/записи, но нет отказоустойчивости
+[/QUOTE]
+
+[SIZE=3]Создание файловой системы[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/vg01/lv_data                                                              
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Монтирование[/SIZE]
+
+[CODE]
+mkdir /mnt/data                                                                          
+  mount /dev/vg01/lv_data /mnt/data                                                           
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Настройка mirroring (RAID 1)[/SIZE]
+
+[QUOTE]
+mirroring(зеркалирование) - данные дублируются на несколько дисков для отказоустойчивости
+[/QUOTE]
+
+[QUOTE]
+Требуется минимум 2 диска
+[/QUOTE]
+
+[SIZE=3]Создание PV для mirroring[/SIZE]
+
+[CODE]
+pvcreate /dev/sda1 /dev/sdb1                                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание VG для mirroring[/SIZE]
+
+[CODE]
+vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание mirrored LV[/SIZE]
+
+[CODE]
+lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
+ 
+[/CODE]
+
+[QUOTE]
+-m1(количество копий минус одна, одно зеркало = 2 копии)
+[/QUOTE]
+
+[QUOTE]
+Обеспечивает отказоустойчивость, выдерживает отказ одного диска
+[/QUOTE]
+
+[SIZE=3]Создание файловой системы[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/vg01/lvmirror                                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Монтирование[/SIZE]
+
+[CODE]
+mkdir /mnt/mirror                                                                        
+  mount /dev/vg01/lvmirror /mnt/mirror                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Управление LVM[/SIZE]
+
+[SIZE=3]Увеличение размера LV[/SIZE]
+
+[CODE]
+lvextend -L +5G /dev/vg01/lv_data                                                        
+ 
+[/CODE]
+
+[QUOTE]
+-L +5G(добавить 5GB к текущему размеру)
+[/QUOTE]
+
+[QUOTE]
+Изменение размера без перезагрузки и размонтирования
+[/QUOTE]
+
+[SIZE=3]Увеличение размера файловой системы[/SIZE]
+
+[CODE]
+resize2fs /dev/vg01/lv_data                                                              
+ 
+[/CODE]
+
+[QUOTE]
+resize2fs(для ext4); xfs_growfs(для xfs)
+[/QUOTE]
+
+[QUOTE]
+Расширяет файловую систему на весь размер LV
+[/QUOTE]
+
+[SIZE=3]Уменьшение размера LV[/SIZE]
+
+[CODE]
+umount /mnt/data                                                                         
+  e2fsck -f /dev/vg01/lv_data                                                                 
+  resize2fs /dev/vg01/lv_data 5G                                                              
+  lvreduce -L 5G /dev/vg01/lv_data                                                            
+  mount /dev/vg01/lv_data /mnt/data                                                           
+ 
+[/CODE]
+
+[QUOTE]
+Сначала уменьшить ФС, потом LV; требует размонтирования
+[/QUOTE]
+
+[SIZE=3]Добавление диска в VG[/SIZE]
+
+[CODE]
+pvcreate /dev/sdc1                                                                       
+  vgextend vg01 /dev/sdc1                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+vgextend(расширение группы томов новым диском)
+[/QUOTE]
+
+[SIZE=3]Удаление диска из VG[/SIZE]
+
+[CODE]
+pvmove /dev/sda1                                                                         
+  vgreduce vg01 /dev/sda1                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+pvmove(перемещение данных с диска); vgreduce(удаление диска из VG)
+[/QUOTE]
+
+[SIZE=3]Создание снапшота LV[/SIZE]
+
+[CODE]
+lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
+ 
+[/CODE]
+
+[QUOTE]
+-s(создание снапшота); -L 1G(размер для хранения изменений)
+[/QUOTE]
+
+[QUOTE]
+Снапшот для резервного копирования без остановки системы
+[/QUOTE]
+
+[SIZE=3]Восстановление из снапшота[/SIZE]
+
+[CODE]
+lvconvert --merge /dev/vg01/lv_data_snap                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Откат LV к состоянию снапшота; требует перезагрузки или размонтирования
+[/QUOTE]
+
+[SIZE=3]Удаление снапшота[/SIZE]
+
+[CODE]
+lvremove /dev/vg01/lv_data_snap                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление LV[/SIZE]
+
+[CODE]
+umount /mnt/data                                                                         
+  lvremove /dev/vg01/lv_data                                                                  
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление VG[/SIZE]
+
+[CODE]
+vgremove vg01                                                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление PV[/SIZE]
+
+[CODE]
+pvremove /dev/sda1                                                                       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Автомонтирование[/SIZE]
+
+[SIZE=3]В /etc/fstab добавить строку[/SIZE]
+
+[CODE]
+/dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
+ 
+[/CODE]
+
+[QUOTE]
+Автоматическое монтирование при загрузке
+[/QUOTE]
+
+[SIZE=3]Применение изменений fstab без перезагрузки[/SIZE]
+
+[CODE]
+mount -a                                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+mount -a(монтирует все из /etc/fstab, что ещё не смонтировано)
+[/QUOTE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Просмотр Physical Volumes[/SIZE]
+
+[CODE]
+pvdisplay                                                                                
+  pvs
+ 
+[/CODE]
+
+[QUOTE]
+pvdisplay(детальная информация); pvs(краткая таблица)
+[/QUOTE]
+
+[SIZE=3]Просмотр Volume Groups[/SIZE]
+
+[CODE]
+vgdisplay                                                                                
+  vgs                                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Показывает размер VG, свободное место, количество PV
+[/QUOTE]
+
+[SIZE=3]Просмотр Logical Volumes[/SIZE]
+
+[CODE]
+lvdisplay                                                                                
+  lvs                                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Показывает размер LV, VG, состояние
+[/QUOTE]
+
+[SIZE=3]Просмотр всех компонентов LVM[/SIZE]
+
+[CODE]
+lsblk                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Показывает иерархию дисков, разделов и LVM томов
+[/QUOTE]
+
+[SIZE=3]Проверка монтирования[/SIZE]
+
+[CODE]
+df -h                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Показывает смонтированные файловые системы и использование
+[/QUOTE]
+
+[SIZE=3]Проверка автомонтирования после перезагрузки[/SIZE]
+
+[CODE]
+reboot                                                                                   
+  df -h                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Опционально, только для проверки автомонтирования после перезагрузки
+[/QUOTE]
+
+[QUOTE]
+Вместо перезагрузки можно использовать mount -a
+[/QUOTE]
+
+[SIZE=3]Проверка состояния mirrored LV[/SIZE]
+
+[CODE]
+lvs -a -o +devices                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает устройства и состояние зеркал
+[/QUOTE]
+
+[SIZE=3]Проверка снапшотов[/SIZE]
+
+[CODE]
+lvs -a -o +snap_percent                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Показывает процент использования снапшота
+[/QUOTE]

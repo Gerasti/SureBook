@@ -1,0 +1,83 @@
+
+[H3]Установка на сервере[/H3]
+
+[H4]Установка NFS-сервера[/H4]
+
+[CODE]
+apt-get install nfs-server                                                               
+ 
+[/CODE]
+
+[H4]Создание каталога для экспорта chown 777 /nfs[/H4]
+
+[H4]Содержимое файла /etc/exports[/H4]
+
+[CODE]
+/nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
+ 
+[/CODE]
+
+[QUOTE]
+/nfs (экспортируемый каталог); 192.168.20.0/26 (разрешенная подсеть); rw (чтение-запись); sync (синхронная запись); no_subtree_check (отключить проверку подкаталогов)
+[/QUOTE]
+
+[H4]Применение изменений[/H4]
+
+[CODE]
+exportfs -ra                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Перечитывает /etc/exports и применяет изменения
+[/QUOTE]
+
+[H3]Установка на клиенте[/H3]
+
+[H4]Установка NFS-клиента[/H4]
+
+[CODE]
+apt-get install nfs-clients                                                              
+ 
+[/CODE]
+
+[H4]В /etc/fstab добавить строку[/H4]
+
+[CODE]
+192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
+ 
+[/CODE]
+
+[QUOTE]
+192.168.30.3:/nfs (удаленный каталог); /mnt/nfs (точка монтирования); nfs (тип ФС)
+[/QUOTE]
+
+[H4]Монтирование[/H4]
+
+[CODE]
+mount -a                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Создание тестового файла на клиенте[/H4]
+
+[CODE]
+cd /mnt/nfs                                                                              
+  touch txt                                                                                   
+  ls                                                                                          
+ 
+[/CODE]
+
+[H4]Проверка на сервере[/H4]
+
+[CODE]
+ls -l /nfs                                                                               
+ 
+[/CODE]
+
+[QUOTE]
+Файл txt должен быть виден с владельцем nobody:nobody [](#Установка на сервере)
+[/QUOTE]

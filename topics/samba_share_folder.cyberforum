@@ -1,0 +1,196 @@
+
+[H3]Настройка Samba для анонимного доступа[/H3]
+
+[H4]Создание общей директории[/H4]
+
+[CODE]
+mkdir /opt/data                                                                          
+  chmod 777 /opt/data                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+777(полные права для всех пользователей)
+[/QUOTE]
+
+[H4]В /etc/samba/smb.conf добавить секцию[/H4]
+
+[CODE]
+[samba]                                                                                  
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  guest ok = yes                                                                              
+  read only = no                                                                              
+  force user = nobody                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+guest ok = yes(анонимный доступ); force user(все действия от имени nobody)
+[/QUOTE]
+
+[H4]Перезапуск службы[/H4]
+
+[CODE]
+systemctl restart smbd                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка Samba для пользователей домена[/H3]
+
+[H4]Создание общей директории[/H4]
+
+[CODE]
+mkdir /opt/data
+  chmod 770 /opt/data                                                                         
+  chown root:domain_users /opt/data                                                           
+ 
+[/CODE]
+
+[QUOTE]
+770(доступ только владельцу и группе); domain_users(группа домена)
+[/QUOTE]
+
+[H4]В /etc/samba/smb.conf добавить секцию[/H4]
+
+[CODE]
+[samba]                                                                                  
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  valid users = @domain_users                                                                 
+  read only = no                                                                              
+  create mask = 0660                                                                          
+  directory mask = 0770                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+valid users = @domain_users(доступ только группе домена); create mask(права на новые файлы); directory mask(права на новые каталоги)
+[/QUOTE]
+
+[H4]Добавление пользователя Samba[/H4]
+
+[CODE]
+smbpasswd -a username
+ 
+[/CODE]
+
+[QUOTE]
+создает пароль Samba для существующего системного пользователя
+[/QUOTE]
+
+[H3]Настройка Samba для конкретных пользователей[/H3]
+
+[H4]В /etc/samba/smb.conf добавить секцию[/H4]
+
+[CODE]
+[samba]      
+  path = /opt/data                                                                            
+  browseable = yes                                                                            
+  writable = yes                                                                              
+  valid users = user1, user2, user3                                                           
+  read only = no                                                                              
+  write list = user1, user2                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+valid users(список разрешенных пользователей); write list(пользователи с правом записи)
+[/QUOTE]
+
+[H3]Описание основных опций Samba[/H3]
+
+[H4]Опции доступа[/H4]
+
+[CODE]
+browseable = yes
+  guest ok = yes                                                                              
+  valid users = user1, @group1                                                                
+  invalid users = user2                                                                       
+  read only = no                                                                              
+  writable = yes                                                                              
+  write list = user1, @group1                                                                 
+  read list = user2                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+browseable(видимость в сети); guest ok(гостевой доступ); valid users(разрешенные пользователи/группы); invalid users(запрещенные); write list(право записи); read list(только чтение)
+[/QUOTE]
+
+[H4]Опции прав доступа[/H4]
+
+[CODE]
+create mask = 0660
+  directory mask = 0770                                                                       
+  force user = nobody                                                                         
+  force group = nogroup                                                                       
+  inherit permissions = yes                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+create mask(права на файлы); directory mask(права на каталоги); force user/group(принудительный владелец); inherit permissions(наследование прав)
+[/QUOTE]
+
+[H4]Опции безопасности[/H4]
+
+[CODE]
+hosts allow = 192.168.1.0/24
+  hosts deny = 192.168.2.0/24                                                                 
+  max connections = 10                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+hosts allow(разрешенные сети); hosts deny(запрещенные сети); max connections(лимит подключений)
+[/QUOTE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка конфигурации[/H4]
+
+[CODE]
+testparm     
+ 
+[/CODE]
+
+[QUOTE]
+проверяет синтаксис smb.conf
+[/QUOTE]
+
+[H4]Просмотр активных подключений[/H4]
+
+[CODE]
+smbstatus                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+показывает подключенных пользователей и открытые файлы
+[/QUOTE]
+
+[H4]Подключение с клиента Windows[/H4]
+
+[CODE]
+\\192.168.1.1\samba                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+в проводнике Windows
+[/QUOTE]
+
+[H4]Подключение с клиента Linux[/H4]
+
+[CODE]
+smb://192.168.1.1/samba                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+в файловом менеджере или через smbclient
+[/QUOTE]

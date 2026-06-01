@@ -1,0 +1,141 @@
+
+[H3]Установка FRR[/H3]
+
+[H4]Установка пакета[/H4]
+
+[CODE]
+apt-get install frr                                                                      
+   
+ 
+[/CODE]
+
+[H4]Включение OSPF в /etc/frr/daemons[/H4]
+
+[CODE]
+ospfd=yes    
+
+ 
+[/CODE]
+
+[H4]Добавление в автозагрузку и запуск[/H4]
+
+[CODE]
+systemctl enable --now frr
+ 
+[/CODE]
+
+[QUOTE]
+FRR (Free Range Routing) - пакет протоколов маршрутизации; необходимо включить только нужные протоколы маршрутизации
+[/QUOTE]
+
+[H3]Установка Quagga (старая версия для ALT Linux)[/H3]
+
+[H4]Установка пакета[/H4]
+
+[CODE]
+apt-get install quagga                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Назначение прав[/H4]
+
+[CODE]
+chown -R quagga:quagga /etc/quagga                                                       
+                                                                                              
+ 
+[/CODE]
+
+[H4]Включение и запуск служб[/H4]
+
+[CODE]
+systemctl enable zebra ospfd                                                             
+  systemctl start zebra ospfd                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Важно включать и запускать службы отдельно
+[/QUOTE]
+
+[H3]Настройка OSPF[/H3]
+
+[QUOTE]
+Перед настройкой OSPF маршрутизаторы должны иметь IP-связность через GRE-туннели, VLAN, выделенные каналы или VPN
+[/QUOTE]
+
+[H4]Полная конфигурация OSPF в vtysh[/H4]
+
+[CODE]
+vtysh
+  conf t       
+  ip forwarding                                                                               
+  router ospf     
+      ospf router-id 1.1.1.1                                                                  
+      network 10.10.10.0/30 area 0                                                            
+      network 192.168.11.0/26 area 0                                                          
+      network 192.168.11.65/28 area 0                                                         
+      network 192.168.11.81/29 area 0                                                         
+      passive-interface default                                                               
+      area 0 authentication message-digest                                                    
+  int tun                                                                                     
+      no ip ospf passive                                                                      
+      ip ospf message-digest-key 1 md5 P@ssw0rd                                               
+      ip ospf network point-to-point                                                          
+  int ens35                                                                                   
+      no ip ospf passive                                                                      
+  do wr mem                                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+router ospf(включение процесса OSPF); ospf router-id(уникальный идентификатор маршрутизатора); network(сети участвующие в OSPF); area 0(backbone area, центральная область OSPF); passive-interface default(все интерфейсы пассивны по умолчанию); no ip ospf passive(отключить пассивный режим); area 0 authentication message-digest(MD5-аутентификация для area); ip ospf message-digest-key(номер ключа, тип хеширования, пароль); ip ospf network(тип сети OSPF); do wr mem(сохранение конфигурации); пароли на обеих сторонах должны совпадать
+[/QUOTE]
+
+[H3]Типы сетей OSPF[/H3]
+
+[QUOTE]
+point-to-point(для 2 узлов, экономит трафик, multicast 224.0.0.5)
+[/QUOTE]
+
+[QUOTE]
+broadcast(для >2 узлов, поддерживает DR/BDR, multicast 224.0.0.5 и 224.0.0.6)
+[/QUOTE]
+
+[H3]Проверка OSPF[/H3]
+
+[H4]Проверка соседей[/H4]
+
+[CODE]
+show ip ospf neighbor                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Показывает соседние маршрутизаторы, состояние соседства, Router ID
+[/QUOTE]
+
+[H4]Проверка маршрутов[/H4]
+
+[CODE]
+ip route show                                                                            
+ 
+[/CODE]
+
+[QUOTE]
+Маршруты OSPF помечаются буквой O
+[/QUOTE]
+
+[H4]Просмотр интерфейсов OSPF[/H4]
+
+[CODE]
+show ip ospf interface                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Просмотр конфигурации[/H4]
+
+[CODE]
+show running-config
+[/CODE]

@@ -1,0 +1,96 @@
+
+[SIZE=4]Настройка[/SIZE]
+
+[SIZE=3]Просмотр текущей конфигурации[/SIZE]
+
+[CODE]
+cat /etc/resolv.conf                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+показывает текущие DNS-серверы
+[/QUOTE]
+
+[SIZE=3]Добавление одного DNS-сервера[/SIZE]
+
+[CODE]
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+ 
+[/CODE]
+
+[QUOTE]
+перезаписывает файл; 77.88.8.8(Яндекс DNS)
+[/QUOTE]
+
+[SIZE=3]Добавление нескольких DNS-серверов[/SIZE]
+
+[CODE]
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+  echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
+ 
+[/CODE]
+
+[QUOTE]
+добавляет в конец файла; 8.8.8.8(Google DNS)
+[/QUOTE]
+
+[SIZE=3]Настройка с доменом поиска[/SIZE]
+
+[CODE]
+nameserver 192.168.1.1                                                                   
+  search example.local                                                                        
+  domain example.local                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+search(список доменов для поиска); domain(локальный домен)
+[/QUOTE]
+
+[SIZE=3]Настройка с опциями[/SIZE]
+
+[CODE]
+nameserver 77.88.8.8                                                                     
+  options timeout:2 attempts:3 rotate                                                         
+ 
+[/CODE]
+
+[QUOTE]
+timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование серверов)
+[/QUOTE]
+
+[SIZE=4]Проверка DNS[/SIZE]
+
+[SIZE=3]Проверка разрешения имен[/SIZE]
+
+[CODE]
+nslookup ya.ru
+ 
+[/CODE]
+
+[QUOTE]
+должен вернуть IP-адрес
+[/QUOTE]
+
+[SIZE=3]Проверка через dig(bind-utils)[/SIZE]
+
+[CODE]
+dig ya.ru                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+показывает подробную информацию о DNS-запросе
+[/QUOTE]
+
+[SIZE=3]Проверка через host[/SIZE]
+
+[CODE]
+host ya.ru                                                                               
+ 
+[/CODE]
+
+[QUOTE]
+простая проверка разрешения имени
+[/QUOTE]

@@ -1,0 +1,225 @@
+
+[SIZE=4]Установка Ansible[/SIZE]
+
+[SIZE=3]Обновление и установка пакетов[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y ansible sshpass                                                  
+   
+ 
+[/CODE]
+
+[SIZE=4]Создание структуры проекта[/SIZE]
+
+[SIZE=3]Создание директории проекта[/SIZE]
+
+[CODE]
+mkdir ansible                                                                                         
+  cd ansible                                                                                               
+  
+ 
+[/CODE]
+
+[SIZE=3]Создание инвентарного файла inventory[/SIZE]
+
+[CODE]
+vim inventory
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Содержимое inventory[/SIZE]
+
+[CODE]
+all:
+    hosts:                                                                                                 
+      localhost:  
+ 
+[/CODE]
+
+[QUOTE]
+формат YAML; хост localhost
+[/QUOTE]
+
+[SIZE=3]Создание директории для переменных[/SIZE]
+
+[CODE]
+mkdir host_vars                                                                                       
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Создание файла переменных host_vars/localhost.yml[/SIZE]
+
+[CODE]
+vim host_vars/localhost.yml                                                                           
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Содержимое host_vars/localhost.yml[/SIZE]
+
+[CODE]
+ansible_ssh_user: root                                                                                
+  ansible_ssh_pass: toor                                                                                   
+  ansible_python_interpreter: /usr/bin/python3                                                             
+ 
+[/CODE]
+
+[QUOTE]
+ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
+[/QUOTE]
+
+[SIZE=4]Проверка работоспособности[/SIZE]
+
+[SIZE=3]Проверка подключения к localhost[/SIZE]
+
+[CODE]
+ansible -i inventory -m ping all                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+-i(инвентарный файл); -m(модуль); all(все хосты)
+[/QUOTE]
+
+[SIZE=4]Создание playbook для OTRS[/SIZE]
+
+[SIZE=3]Создание файла playbook.yml[/SIZE]
+
+[CODE]
+vim playbook.yml                                                                                      
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Содержимое playbook.yml[/SIZE]
+
+[CODE]
+---                                                                                                   
+  - name: Deploy Help Desk system 'OTRS' on Alt Server 10.1                                                
+    hosts: localhost                                                                                       
+    become: true                                                                                           
+                                                                                                           
+    vars:                                                                                                  
+      version_postgresql: '15'                                                                             
+      postgresql_init_path: /etc/init.d/postgresql                                                         
+      postgresql_data_dir: /var/lib/pgsql/data                                                             
+      db_name: 'otrs'                                                                                      
+      db_user: 'otrs'                                                                                      
+      db_pass: 'otrs'                                                                                      
+                                                                                                           
+    tasks:                                                                                                 
+      - name: Update the package database                                                                  
+        apt_rpm:                                                                                           
+          update_cache: true                                                                               
+                                                                                                           
+      - name: Installing the necessary packages                                                            
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - postgresql{{ version_postgresql }}-server
+            - otrs                                                                                         
+            - otrs-apache2
+            - python3-module-psycopg2                                                                      
+            - postgresql{{ version_postgresql }}-perl                                                      
+            - perl-DBD-Pg                                                                                  
+            - apache2-httpd-prefork                                                                        
+          state: present                                                                                   
+                                                                                                           
+      - name: Enable daemon 'httpd2'                                                                       
+        systemd:  
+          name: httpd2                                                                                     
+          enabled: yes                                                                                     
+                                                                                                           
+      - name: Check system database postgresql                                                             
+        stat:     
+          path: '{{ postgresql_data_dir }}/pg_hba.conf'                                                    
+        register: postgres_data                                                                            
+                                                                                                           
+      - name: Initialize system databases                                                                  
+        command:                                                                                           
+          cmd: '{{ postgresql_init_path }} initdb'                                                         
+        when: not postgres_data.stat.exists                                                                
+                                                                                                           
+      - name: Started and enabled postgresql                                                               
+        systemd:                                                                                           
+          name: postgresql                                                                                 
+          state: started                                                                                   
+          enabled: yes                                                                                     
+                                                                                                           
+      - name: Create PostgreSQL database                                                                   
+        postgresql_db:
+          name: "{{ db_name }}"                                                                            
+                                                                                                           
+      - name: Create PostgreSQL user                                                                       
+        postgresql_user:                                                                                   
+          db: "{{ db_name }}"                                                                              
+          name: "{{ db_user }}"                                                                            
+          password: "{{ db_pass }}"                                                                        
+          priv: ALL                                                                                        
+          state: present                                                                                   
+                                                                                                           
+      - name: Grant privileges to PostgreSQL user                                                          
+        postgresql_privs:                                                                                  
+          db: "{{ db_name }}"                                                                              
+          privs: ALL                                                                                       
+          type: database                                                                                   
+          role: "{{ db_user }}"                                                                            
+          state: present                                                                                   
+                                                                                                           
+      - name: Assign a database owner                                                                      
+        postgresql_db:                                                                                     
+          name: "{{ db_name }}"                                                                            
+          owner: "{{ db_user }}"                                                                           
+                                                                                                           
+      - name: Add httpd-addon.d=yes to 999-otrs.conf                                                       
+        lineinfile:                                                                                        
+          path: /etc/httpd2/conf/extra-start.d/999-otrs.conf                                               
+          line: 'httpd-addon.d=yes'                                                                        
+          create: yes                                                                                      
+                                                                                                           
+      - name: Configuration httpd2                                                                         
+        shell: |                                                                                           
+          alternatives-manual /usr/sbin/httpd2 /usr/sbin/httpd2.prefork                                    
+          alternatives-update                                                                              
+          a2enextra httpd-addon.d                                                                          
+                                                                                                           
+      - name: Restarted httpd2                                                                             
+        systemd:                                                                                           
+          name: httpd2                                                                                     
+          state: restarted                                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); stat(проверка файла); register(сохранение результата); command(выполнение команды); when(условие); postgresql_db(модуль БД PostgreSQL); postgresql_user(модуль пользователя); postgresql_privs(модуль привилегий); lineinfile(добавление строки в файл); shell(выполнение shell команд)
+[/QUOTE]
+
+[SIZE=4]Установка коллекций Ansible[/SIZE]
+
+[SIZE=3]Установка community.general[/SIZE]
+
+[CODE]
+ansible-galaxy collection install community.general                                                   
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Установка community.postgresql[/SIZE]
+
+[CODE]
+ansible-galaxy collection install community.postgresql                                                
+ 
+[/CODE]
+
+[QUOTE]
+ansible-galaxy(менеджер коллекций)
+[/QUOTE]
+
+[SIZE=4]Запуск playbook[/SIZE]
+
+[SIZE=3]Выполнение playbook-сценария[/SIZE]
+
+[CODE]
+ansible-playbook -i inventory playbook.yml 
+[/CODE]

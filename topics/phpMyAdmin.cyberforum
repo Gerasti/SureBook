@@ -1,0 +1,378 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка MariaDB[/H4]
+
+[CODE]
+apt-get update -y && apt-get install -y mariadb-server                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Запуск MariaDB[/H4]
+
+[CODE]
+systemctl enable --now mariadb                                                           
+                                                                                              
+ 
+[/CODE]
+
+[H4]Установка PHP расширений для phpMyAdmin[/H4]
+
+[CODE]
+apt-get install -y php8.2 php8.2-{fpm-fcgi,mbstring,zip,gd,libs,mysqlnd,mysqlnd-mysqli,bz
+  2,curl,mcrypt,opcache,openssl} libmcrypt wget                                               
+ 
+[/CODE]
+
+[QUOTE]
+Расширения для дополнительных функций и производительности phpMyAdmin
+[/QUOTE]
+
+[H4]Загрузка phpMyAdmin[/H4]
+
+[CODE]
+wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip    
+ 
+[/CODE]
+
+[QUOTE]
+Ссылку на последнюю версию копировать со страницы https://docs.phpmyadmin.net
+[/QUOTE]
+
+[H4]Распаковка архива[/H4]
+
+[CODE]
+unzip phpMyAdmin-5.2.1-all-languages.zip                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Перемещение в рабочую директорию[/H4]
+
+[CODE]
+mv phpMyAdmin-5.2.1-all-languages /usr/share/phpmyadmin                                  
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание директории для временных файлов[/H4]
+
+[CODE]
+mkdir -p /var/lib/phpmyadmin/tmp                                                         
+                                                                                              
+ 
+[/CODE]
+
+[H4]Установка веб-сервера Apache[/H4]
+
+[CODE]
+apt-get install -y httpd2 apache2-{httpd-prefork,mod_php8.2}                             
+                                                                                              
+ 
+[/CODE]
+
+[H4]Назначение владельца файлов phpMyAdmin[/H4]
+
+[CODE]
+chown -R apache2:apache2 /usr/share/phpmyadmin                                           
+  chown -R apache2:apache2 /var/lib/phpmyadmin                                                
+ 
+[/CODE]
+
+[QUOTE]
+apache2(пользователь веб-сервера)
+[/QUOTE]
+
+[H4]Создание конфигурационного файла phpMyAdmin[/H4]
+
+[CODE]
+cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php      
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание базы данных и таблиц phpMyAdmin[/H4]
+
+[CODE]
+mariadb < /usr/share/phpmyadmin/sql/create_tables.sql                                    
+ 
+[/CODE]
+
+[QUOTE]
+Создание базы данных хранилища конфигурации
+[/QUOTE]
+
+[H4]Создание пользователя pma для phpMyAdmin[/H4]
+
+[CODE]
+mariadb                                                                                  
+  GRANT SELECT, INSERT, UPDATE, DELETE ON phpmyadmin.* TO 'pma'@'localhost' IDENTIFIED BY     
+  'P@ssw0rd';                                                                                 
+  EXIT;                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+pma(пользователь для административных задач phpMyAdmin)
+[/QUOTE]
+
+[H3]Настройка[/H3]
+
+[H4]В /usr/share/phpmyadmin/config.inc.php параметр blowfish_secret[/H4]
+
+[CODE]
+$cfg['blowfish_secret'] = 'случайная_строка_32_символа';
+ 
+[/CODE]
+
+[QUOTE]
+Строка из 32 случайных символов для шифрования AES
+[/QUOTE]
+
+[QUOTE]
+Если короче 32 символов - менее надежные куки
+[/QUOTE]
+
+[H4]Генерация случайной строки для blowfish_secret[/H4]
+
+[CODE]
+openssl rand -base64 32                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Генерирует случайную строку, результат скопировать в config.inc.php
+[/QUOTE]
+
+[QUOTE]
+Альтернативные способы {openssl rand -hex 16, pwgen 32 1, head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32}
+[/QUOTE]
+
+[H4]Пример сгенерированной строки в config.inc.php[/H4]
+
+[CODE]
+$cfg['blowfish_secret'] = 'a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3';
+ 
+[/CODE]
+
+[QUOTE]
+Использовать результат команды openssl rand -base64 32
+[/QUOTE]
+
+[H4]В /usr/share/phpmyadmin/config.inc.php раскомментировать controluser и controlpass[/H4]
+
+[CODE]
+$cfg['Servers'][$i]['controluser'] = 'pma';                                              
+  $cfg['Servers'][$i]['controlpass'] = 'P@ssw0rd';                                            
+ 
+[/CODE]
+
+[QUOTE]
+Пользователь для административных задач в многопользовательских сценариях
+[/QUOTE]
+
+[H4]В /usr/share/phpmyadmin/config.inc.php раскомментировать Storage database and tables[/H4]
+
+[CODE]
+$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';                                             
+  $cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';                                     
+  $cfg['Servers'][$i]['relation'] = 'pma__relation';                                          
+  $cfg['Servers'][$i]['table_info'] = 'pma__table_info';                                      
+  $cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';                                  
+  $cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';                                        
+  $cfg['Servers'][$i]['column_info'] = 'pma__column_info';                                    
+  $cfg['Servers'][$i]['history'] = 'pma__history';                                            
+  $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';                                
+  $cfg['Servers'][$i]['tracking'] = 'pma__tracking';                                          
+  $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';                                      
+  $cfg['Servers'][$i]['recent'] = 'pma__recent';                                              
+  $cfg['Servers'][$i]['favorite'] = 'pma__favorite';                                          
+  $cfg['Servers'][$i]['users'] = 'pma__users';                                                
+  $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';                                      
+  $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';                          
+  $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';                                
+  $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';                            
+  $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';                        
+  $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';                          
+ 
+[/CODE]
+
+[QUOTE]
+Определение базы данных и таблиц хранилища конфигурации
+[/QUOTE]
+
+[H4]В /usr/share/phpmyadmin/config.inc.php настроить временную директорию[/H4]
+
+[CODE]
+$cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';                                             
+ 
+[/CODE]
+
+[QUOTE]
+Использование созданной ранее директории для временных файлов
+[/QUOTE]
+
+[H4]В /usr/share/phpmyadmin/config.inc.php разрешить указывать сервер БД[/H4]
+
+[CODE]
+$cfg['AllowArbitraryServer'] = true;                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Опционально, для явного указания IP-адреса или имени сервера БД
+[/QUOTE]
+
+[H4]Настройка удалённого доступа к MariaDB в /etc/my.cnf.d/server.cnf[/H4]
+
+[CODE]
+bind-address = 0.0.0.0                                                                   
+  #skip-networking                                                                            
+ 
+[/CODE]
+
+[QUOTE]
+bind-address(IP-адрес для подключений) {0.0.0.0, 192.168.1.0/24, конкретный_IP}
+[/QUOTE]
+
+[QUOTE]
+0.0.0.0(разрешено подключаться всем и отовсюду)
+[/QUOTE]
+
+[QUOTE]
+skip-networking(закомментировать для разрешения сетевых подключений)
+[/QUOTE]
+
+[QUOTE]
+Опционально, не влияет на работу phpMyAdmin
+[/QUOTE]
+
+[H4]Предоставление привилегий пользователю root для удалённого доступа[/H4]
+
+[CODE]
+mariadb                                                                                  
+  GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'P@ssw0rd' WITH GRANT OPTION;       
+  EXIT;                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Опционально, если необходимо удалённое подключение
+[/QUOTE]
+
+[QUOTE]
+GRANT ALL PRIVILEGES(полные права на все операции)
+[/QUOTE]
+
+[QUOTE]
+*.*(все базы данных и таблицы)
+[/QUOTE]
+
+[QUOTE]
+'root'@'%'(пользователь root с любого хоста)
+[/QUOTE]
+
+[QUOTE]
+%(с любого хоста)
+[/QUOTE]
+
+[H4]Запуск веб-сервера Apache[/H4]
+
+[CODE]
+systemctl enable --now httpd2                                                            
+                                                                                              
+ 
+[/CODE]
+
+[H4]Содержимое файла /etc/httpd2/conf/sites-available/phpmyadmin.conf[/H4]
+
+[CODE]
+Alias /phpmyadmin /usr/share/phpmyadmin                                                  
+                                                                                              
+  <Directory /usr/share/phpmyadmin>                                                           
+      Options FollowSymLinks                                                                  
+      DirectoryIndex index.php                                                                
+      AllowOverride All
+      Require all granted                                                                     
+  </Directory>                                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H4]Включение конфигурационного файла[/H4]
+
+[CODE]
+a2ensite phpmyadmin                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка синтаксиса конфигурации Apache[/H4]
+
+[CODE]
+apachectl configtest                                                                     
+                                                                                              
+ 
+[/CODE]
+
+[H4]Применение изменений Apache[/H4]
+
+[CODE]
+systemctl reload httpd2                                                                  
+                                                                                              
+ 
+[/CODE]
+
+[H4]Исправление ошибки входа в phpMyAdmin в /etc/my.cnf.d/server.cnf[/H4]
+
+[CODE]
+skip-grant-tables                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+Опционально, если возникает ошибка при входе
+[/QUOTE]
+
+[H4]Перезагрузка MariaDB после изменений[/H4]
+
+[CODE]
+systemctl restart mariadb                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка открытого порта MariaDB[/H4]
+
+[CODE]
+ss -tlpn | grep mysqld                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Показывает открытый порт 3306 для удалённых подключений
+[/QUOTE]
+
+[H4]Проверка удалённого доступа с клиента[/H4]
+
+[CODE]
+mariadb -h IP_адрес_сервера -u root -p                                                   
+ 
+[/CODE]
+
+[QUOTE]
+На клиенте должен быть установлен пакет mariadb-client
+[/QUOTE]
+
+[H4]Доступ к phpMyAdmin[/H4]
+
+[QUOTE]
+Открыть в браузере http://IP_адрес_сервера/phpmyadmin
+[/QUOTE]
+
+[QUOTE]
+Вход под пользователем root с паролем P@ssw0rd
+[/QUOTE]

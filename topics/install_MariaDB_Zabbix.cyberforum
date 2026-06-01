@@ -1,0 +1,159 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка пакетов[/H4]
+
+[CODE]
+apt-get install mariadb-server zabbix-server-mysql fping                                 
+   
+ 
+[/CODE]
+
+[H4]Включение и запуск службы[/H4]
+
+[CODE]
+systemctl enable --now mysqld
+
+ 
+[/CODE]
+
+[H3]Настройка БД[/H3]
+
+[H4]Создание базы данных и пользователя[/H4]
+
+[CODE]
+mysql -uroot -p
+  CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin;
+  GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'P@ssw0rd';              
+  QUIT;                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Пароль можно пропустить при первом входе
+[/QUOTE]
+
+[H4]Импорт данных в БД[/H4]
+
+[CODE]
+mysql -uzabbix -pP@ssw0rd zabbix <                                                       
+  /usr/share/doc/zabbix-common-database-mysql-*/schema.sql                                    
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/images.sql
+  mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/data.sql   
+ 
+[/CODE]
+
+[QUOTE]
+Важно соблюдать порядок ввода команд
+[/QUOTE]
+
+[H3]Установка веб-сервера[/H3]
+
+[H4]Установка Apache и PHP[/H4]
+
+[CODE]
+apt-get install apache2 apache2-mod_php8.2                                               
+  systemctl enable --now httpd2                                                               
+  apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
+  php8.2-mysqlnd-mysqli php8.2-ldap php8.2-openssl                                            
+                                                                                              
+ 
+[/CODE]
+
+[H4]Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini[/H4]
+
+[CODE]
+memory_limit = 256M
+  post_max_size = 32M                                                                         
+  max_execution_time = 600                                                                    
+  max_input_time = 600                                                                        
+  date.timezone = Europe/Moscow                                                               
+  always_populate_raw_post_data = -1                                                          
+ 
+[/CODE]
+
+[QUOTE]
+date.timezone указать свой регион
+[/QUOTE]
+
+[H4]Перезапуск веб-сервера[/H4]
+
+[CODE]
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка сервера[/H3]
+
+[H4]В /etc/zabbix/zabbix_server.conf[/H4]
+
+[CODE]
+DBHost=localhost                                                                         
+  DBName=zabbix                                                                               
+  DBUser=zabbix                                                                               
+  DBPassword=P@ssw0rd                                                                         
+                                                                                              
+ 
+[/CODE]
+
+[H4]Включение и запуск службы[/H4]
+
+[CODE]
+systemctl enable --now zabbix_mysql                                                      
+                                                                                              
+ 
+[/CODE]
+
+[H3]Установка веб-интерфейса[/H3]
+
+[H4]Установка пакетов[/H4]
+
+[CODE]
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание символической ссылки[/H4]
+
+[CODE]
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+                                                                                              
+ 
+[/CODE]
+
+[H4]Перезапуск веб-сервера[/H4]
+
+[CODE]
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Назначение прав[/H4]
+
+[CODE]
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+                                                                                              
+ 
+[/CODE]
+
+[H3]Доступ к веб-интерфейсу[/H3]
+
+[H4]Открыть в браузере[/H4]
+
+[CODE]
+http://IP_СЕРВЕРА/zabbix                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Подключиться к БД, ввести пароль от БД
+[/QUOTE]
+
+[H4]Вход по умолчанию[/H4]
+
+[QUOTE]
+Логин: Admin; Пароль: zabbix
+[/QUOTE]

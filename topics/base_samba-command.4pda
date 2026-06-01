@@ -1,0 +1,232 @@
+
+[SIZE=4]Управление пользователями и группами[/SIZE]
+
+[SIZE=3]Создание группы[/SIZE]
+
+[CODE]
+samba-tool group add <имя_группы>                                                                     
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Создание пользователя[/SIZE]
+
+[CODE]
+samba-tool user create <имя_пользователя>                                                             
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Добавление пользователя в группу[/SIZE]
+
+[CODE]
+samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Список пользователей[/SIZE]
+
+[CODE]
+samba-tool user list                                                                                  
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Список участников группы[/SIZE]
+
+[CODE]
+samba-tool group listmembers <имя_группы>                                                             
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=4]Политика паролей[/SIZE]
+
+[SIZE=3]Настройка сложности и длины пароля[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --complexity=off                                               
+  samba-tool domain passwordsettings set --min-pwd-length=1                                                
+  samba-tool domain passwordsettings set --max-pwd-age=0                                                   
+  samba-tool domain passwordsettings set --min-pwd-age=0                                                   
+  samba-tool domain passwordsettings set --pwd-history-length=0                                            
+ 
+[/CODE]
+
+[QUOTE]
+--complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)
+[/QUOTE]
+
+[SIZE=4]Политика блокировки[/SIZE]
+
+[SIZE=3]Настройка блокировки учетных записей[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --lockout-threshold=0                                          
+  samba-tool domain passwordsettings set --lockout-duration=30                                             
+  samba-tool domain passwordsettings set --reset-count=30                                                  
+ 
+[/CODE]
+
+[QUOTE]
+--lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки); --reset-count(интервал сброса счетчика)
+[/QUOTE]
+
+[SIZE=4]Kerberos-политика[/SIZE]
+
+[SIZE=3]Настройка времени жизни билетов[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
+  samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
+ 
+[/CODE]
+
+[QUOTE]
+--krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)
+[/QUOTE]
+
+[SIZE=4]Параметры учетных записей[/SIZE]
+
+[SIZE=3]Хранение паролей в открытом виде[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
+  samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
+ 
+[/CODE]
+
+[QUOTE]
+только для тестовых стендов; не рекомендуется в продакшене
+[/QUOTE]
+
+[SIZE=4]Параметры безопасности домена[/SIZE]
+
+[SIZE=3]Настройка криптографии[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
+  samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
+ 
+[/CODE]
+
+[QUOTE]
+снижает безопасность; для совместимости со старыми устройствами
+[/QUOTE]
+
+[SIZE=4]Политика времени Kerberos[/SIZE]
+
+[SIZE=3]Настройка флагов политики[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=4]Аудит и логирование[/SIZE]
+
+[SIZE=3]Просмотр уровня домена[/SIZE]
+
+[CODE]
+samba-tool domain level show                                                                          
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Увеличение детализации логов[/SIZE]
+
+[CODE]
+smbcontrol all debug 3                                                                                
+  smbcontrol all debug 10                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+debug 3(средний уровень); debug 10(максимальная детализация)
+[/QUOTE]
+
+[SIZE=4]Уровень функциональности домена[/SIZE]
+
+[SIZE=3]Просмотр уровня домена[/SIZE]
+
+[CODE]
+samba-tool domain level show                                                                          
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Повышение уровня домена и леса[/SIZE]
+
+[CODE]
+samba-tool domain level raise --domain-level=2008_R2                                                  
+  samba-tool domain level raise --forest-level=2008_R2                                                     
+ 
+[/CODE]
+
+[QUOTE]
+2008_R2(Windows Server 2008 R2)
+[/QUOTE]
+
+[SIZE=4]Проверка политики[/SIZE]
+
+[SIZE=3]Просмотр всех настроек политики паролей[/SIZE]
+
+[CODE]
+samba-tool domain passwordsettings show                                                               
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=4]Управление DNS[/SIZE]
+
+[SIZE=3]Добавление A-записи в DNS[/SIZE]
+
+[CODE]
+samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
+ 
+[/CODE]
+
+[QUOTE]
+пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator
+[/QUOTE]
+
+[SIZE=4]Создание организационных единиц[/SIZE]
+
+[SIZE=3]Создание OU[/SIZE]
+
+[CODE]
+samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=4]Массовое создание пользователей[/SIZE]
+
+[SIZE=3]Создание нескольких пользователей циклом[/SIZE]
+
+[CODE]
+for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Создание группы[/SIZE]
+
+[CODE]
+samba-tool group add hq                                                                               
+                                                                                                           
+ 
+[/CODE]
+
+[SIZE=3]Массовое добавление пользователей в группу[/SIZE]
+
+[CODE]
+for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
+ 
+[/CODE]
+
+[QUOTE]
+цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
+[/QUOTE]

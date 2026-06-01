@@ -1,0 +1,248 @@
+
+[SIZE=4]Установка[/SIZE]
+
+[SIZE=3]Установка пакетов OpenSSH[/SIZE]
+
+[CODE]
+sudo apt-get install openssh-server
+ 
+[/CODE]
+
+[QUOTE]
+openssh-server(SSH-сервер, включает openssh-common автоматически)
+[/QUOTE]
+
+[SIZE=3]Запуск и автозагрузка службы[/SIZE]
+
+[CODE]
+sudo systemctl enable --now sshd                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка статуса службы[/SIZE]
+
+[CODE]
+systemctl status sshd
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка прослушиваемого порта[/SIZE]
+
+[CODE]
+ss -tulpn | grep ssh                                                                     
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка конфигурации[/SIZE]
+
+[CODE]
+sshd -t                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Необязательно, проверяет синтаксис /etc/openssh/sshd_config перед перезапуском
+[/QUOTE]
+
+[SIZE=3]Просмотр активных подключений[/SIZE]
+
+[CODE]
+who                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Необязательно, показывает текущие SSH-сессии
+[/QUOTE]
+
+[SIZE=3]Просмотр логов SSH[/SIZE]
+
+[CODE]
+journalctl -u sshd                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Необязательно, для диагностики проблем подключения
+[/QUOTE]
+
+[SIZE=4]Настройка сервера[/SIZE]
+
+[SIZE=3]Основной конфигурационный файл[/SIZE]
+
+[CODE]
+/etc/openssh/sshd_config
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Настройка /etc/openssh/sshd_config[/SIZE]
+
+[CODE]
+Port 22                                                                                  
+  PasswordAuthentication yes                                                                  
+  PermitRootLogin no                                                                          
+  AllowUsers sshuser adminuser                                                                
+  MaxAuthTries 3                                                                              
+  PubkeyAuthentication yes                                                                    
+ 
+ AuthorizedKeysFile .ssh/authorized_keys                                                     
+  Banner /etc/ssh/banner.txt                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Port(обычно 22, изменение необязательно); PasswordAuthentication(yes для начальной настройки, no после настройки ключей); PermitRootLogin no(рекомендуется); AllowUsers(необязательно, белый список); MaxAuthTries(необязательно, обычно 3-6); PubkeyAuthentication yes(обычно включено по умолчанию); AuthorizedKeysFile(стандартное расположение); Banner(необязательно)
+[/QUOTE]
+
+[SIZE=3]Создание файла баннера /etc/ssh/banner.txt[/SIZE]
+
+[CODE]
+************************************
+  - Authorized Access Only          *                                                         
+  - All activity is monitored        *                                                        
+  ---
+ 
+[/CODE]
+
+[QUOTE]
+Необязательно, содержимое баннера произвольное
+[/QUOTE]
+
+[SIZE=3]Перезапуск службы после изменений[/SIZE]
+
+[CODE]
+sudo systemctl restart sshd                                                              
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Настройка аутентификации по ключам[/SIZE]
+
+[SIZE=3]Генерация SSH-ключа на клиенте[/SIZE]
+
+[CODE]
+ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
+ 
+[/CODE]
+
+[QUOTE]
+-t ed25519(современный стандарт, быстрее и безопаснее RSA); -f(имя файла, по умолчанию id_ed25519)
+[/QUOTE]
+
+[SIZE=3]Копирование публичного ключа на сервер[/SIZE]
+
+[CODE]
+ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
+ 
+[/CODE]
+
+[QUOTE]
+Публичный ключ добавляется в ~/.ssh/authorized_keys на сервере
+[/QUOTE]
+
+[SIZE=4]Настройка клиента[/SIZE]
+
+[SIZE=3]Настройка ~/.ssh/config для упрощения подключения[/SIZE]
+
+[CODE]
+Host srv-hq  
+      HostName 192.168.11.67                                                                  
+      User sshuser                                                                            
+      IdentityFile ~/.ssh/srv_ssh_key
+      Port 22                                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Необязательно, упрощает подключение. Port(указывать только если не 22)
+[/QUOTE]
+
+[SIZE=3]Установка прав на config[/SIZE]
+
+[CODE]
+chmod 600 ~/.ssh/config                                                                  
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Подключение к серверу по псевдониму[/SIZE]
+
+[CODE]
+ssh srv-hq                                                                               
+ 
+[/CODE]
+
+[QUOTE]
+Работает только при настроенном ~/.ssh/config
+[/QUOTE]
+
+[SIZE=3]Подключение к серверу напрямую[/SIZE]
+
+[CODE]
+ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67                                          
+ 
+[/CODE]
+
+[QUOTE]
+Стандартный способ подключения с указанием ключа, для нестандартного порта использовать -p {8022]
+[/QUOTE]
+
+[SIZE=3]Подключение по паролю[/SIZE]
+
+[CODE]
+ssh sshuser@192.168.11.67                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Работает если PasswordAuthentication yes на сервере
+[/QUOTE]
+
+[SIZE=4]Создание пользователя[/SIZE]
+
+[SIZE=3]Создание пользователя[/SIZE]
+
+[CODE]
+useradd -u 2026 -m -g users -G wheel sshuser
+ 
+[/CODE]
+
+[QUOTE]
+-u(UID, необязательно); -m(создать домашний каталог); -g(основная группа, обычно users); -G wheel(для sudo)
+[/QUOTE]
+
+[SIZE=3]Установка пароля[/SIZE]
+
+[CODE]
+passwd sshuser
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Настройка sudo без пароля[/SIZE]
+
+[CODE]
+visudo                                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Добавить: %wheel ALL=(ALL:ALL) NOPASSWD: ALL. Необязательно, обычно sudo требует пароль
+[/QUOTE]
+
+[SIZE=3]Проверка sudo[/SIZE]
+
+[CODE]
+sudo whoami                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Результат: root
+[/QUOTE]

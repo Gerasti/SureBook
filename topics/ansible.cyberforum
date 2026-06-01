@@ -1,0 +1,155 @@
+
+[H3]Установка пакетов[/H3]
+
+[CODE]
+apt-get install ansible sshpass                                                          
+ 
+[/CODE]
+
+[QUOTE]
+ansible(система управления конфигурациями); sshpass(передача паролей SSH)
+[/QUOTE]
+
+[H3]Настройка Ansible[/H3]
+
+[H4]В /etc/ansible/ansible.cfg основные параметры[/H4]
+
+[CODE]
+[defaults]                                                                               
+  retries = 3                                                                                 
+  timeout = 10                                                                                
+  inventory = /etc/ansible/inventory                                                          
+ 
+[/CODE]
+
+[QUOTE]
+retries(количество повторов); timeout(таймаут подключения); inventory(путь к файлу инвентаря)
+[/QUOTE]
+
+[H4]Содержимое /etc/ansible/inventory[/H4]
+
+[CODE]
+[Networking] 
+  hq-rtr ansible_host=192.168.24.1                                                            
+  br-rtr ansible_host=192.168.2.1                                                             
+                                                                                              
+  [Networking:vars]                                                                           
+  ansible_user=net_admin                                                                      
+  ansible_password="Password"                                                                 
+                                                                                              
+  [Branch]                                                                                    
+  hq-srv ansible_host=192.168.24.2                                                            
+  hq-cli ansible_host=192.168.24.43                                                           
+                                                                                              
+  [Branch:vars]                                                                               
+  ansible_user=sshuser                                                                        
+  ansible_port=2626                                                                           
+  ansible_password="P@ssw0rd"                                                                 
+                                                                                              
+  [all:vars]                                                                                  
+  ansible_python_interpreter=/usr/bin/python3                                                 
+ 
+[/CODE]
+
+[QUOTE]
+ansible_host(IP адрес хоста); ansible_user(пользователь для подключения); ansible_port(порт SSH); ansible_password(пароль); ansible_python_interpreter(путь к Python); ansible_ssh_private_key_file(путь к приватному SSH-ключу для аутентификации по ключам вместо пароля)
+[/QUOTE]
+
+[H3]Преднастройка управляемых хостов[/H3]
+
+[H4]Установка необходимых пакетов[/H4]
+
+[CODE]
+apt-get install sudo python3 openssh                                                     
+ 
+[/CODE]
+
+[QUOTE]
+sudo(повышение привилегий); python3(интерпретатор для Ansible); openssh(SSH сервер)
+[/QUOTE]
+
+[H4]В /etc/openssh/sshd_config настройка SSH[/H4]
+
+[CODE]
+Port 2626                                                                                
+  AllowUsers sshuser                                                                          
+  MaxAuthTries 2                                                                              
+  PasswordAuthentication yes                                                                  
+  Banner /etc/openssh/banner                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Port(порт SSH); AllowUsers(разрешенные пользователи); MaxAuthTries(попытки аутентификации); PasswordAuthentication(аутентификация по паролю)
+[/QUOTE]
+
+[H4]Запуск SSH сервиса[/H4]
+
+[CODE]
+systemctl enable --now sshd
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка доступности всех хостов[/H4]
+
+[CODE]
+ansible all -m ping
+ 
+[/CODE]
+
+[QUOTE]
+-m(модуль); ping(модуль проверки доступности); SUCCESS(успешное подключение)
+[/QUOTE]
+
+[H3]Создание Ansible Playbook[/H3]
+
+[H4]Создание playbook для инвентаризации в /etc/ansible/playbook/inventory_pc.yml[/H4]
+
+[CODE]
+- name: Inventory HQ                                                                     
+    hosts: Branch                                                                             
+    gather_facts: yes                                                                         
+    tasks:                                                                                    
+      - name: Create PC-INFO                                                                  
+        local_action:                                                                         
+          module: file                                                                        
+          path: /etc/ansible/PC-INFO                                                          
+          state: directory                                                                    
+          mode: '0755'
+        run_once: true                                                                        
+                                                                                              
+      - name: Save to YAML                                                                    
+        local_action:                                                                         
+          module: copy                                                                        
+          dest: "/etc/ansible/PC-INFO/{{ ansible_hostname }}.yml"                             
+          content: |                                                                          
+            computer_name: {{ ansible_hostname }}                                             
+            ip_address: {{ ansible_default_ipv4.address }}                                    
+ 
+[/CODE]
+
+[QUOTE]
+name(название задачи); hosts(группа хостов); gather_facts(сбор информации о хостах); local_action(выполнение на управляющем хосте); run_once(выполнить один раз); ansible_hostname(имя хоста); ansible_default_ipv4.address(IP-адрес)
+[/QUOTE]
+
+[H4]Запуск playbook[/H4]
+
+[CODE]
+ansible-playbook playbook/inventory_pc.yml
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка созданных файлов[/H4]
+
+[CODE]
+ls /etc/ansible/PC-INFO                                                                  
+  cat /etc/ansible/PC-INFO/hq-cli.yml                                                         
+  cat /etc/ansible/PC-INFO/hq-srv.yml                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Файлы содержат имя компьютера и IP-адрес каждого хоста
+[/QUOTE]

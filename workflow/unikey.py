@@ -2,19 +2,19 @@ import sys
 
 HELP = """unikey preprocessor
 
-KEYS md; wikitext:
-  hd, /head       ### text <!-- HEAD -->; === text ===
-  ne, /name       #### text <!-- NAME -->; ==== text ====
-  ce, /code       ```CODE ... ```; <syntaxhighlight lang="bash"> ... </syntaxhighlight>
-  ct, /comment    > text; <blockquote> ... </blockquote>
-  lt, /list       #### text <!-- LIST -->  (enters list mode); ==== text ====
-  lk, /link       [text](#name); [[#name]] or [[#name|text]]
+KEYS md; wikitext, cyberforum, 4pda:
+  hd, /head       ### text <!-- HEAD -->; === text ===; [H3]text[/H3]; [SIZE=4]text[/SIZE]
+  ne, /name       #### text <!-- NAME -->; ==== text ====; [H4]text[/H4]; [SIZE=3]text[/SIZE]
+  ce, /code       ```CODE ... ```; <syntaxhighlight lang="bash"> ... </syntaxhighlight>; [CODE]...[/CODE]; [CODE]...[/CODE]
+  ct, /comment    > text; <blockquote> ... </blockquote>; [QUOTE]...[/QUOTE]; [QUOTE]...[/QUOTE]
+  lt, /list       #### text <!-- LIST -->  (enters list mode); ==== text ====; [H4]text[/H4]; [SIZE=4]text[/SIZE]
+  lk, /link       [text](#name); [[#name]] or [[#name|text]]; NONE; NONE
 
   Note: $$ prefix escapes keys (e.g., $$ct outputs plain text "ct", not a comment)
 
-LIST MODE (after lt, /list) md; wikitext:
-  -               - item; * item
-  --                  - subitem; ** subitem
+LIST MODE (after lt, /list) md; wikitext; cyberforum; 4pda:
+  -               - item; * item; [LIST][*]text[/LIST]; [LIST][*]text[/LIST]
+  --                  - subitem; ** subitem; [LIST][LIST][*]text[/LIST][/LIST]; [LIST][LIST][*]text[/LIST][/LIST]
   any other key   exits list mode
 
 EXAMPLE INPUT:
@@ -154,6 +154,54 @@ def format_output(key, data, ctx, fmt):
 
         return formats.get(key), ctx
 
+    if fmt == 'cyberforum':
+        if ctx['MODE_LIST_lt']:
+            if key == '-':
+                return f"[LIST][*]{joined}[/LIST]", ctx
+            if key == '--':
+                return f"[LIST][LIST][*]{joined}[/LIST][/LIST]", ctx
+            return None, ctx
+
+        if key == 'lk':
+            # cyberforum doesn't support internal links, skip
+            return None, ctx
+
+        formats = {
+            'hd': f"\n[H3]{joined}[/H3]",
+            'ce': f"\n[CODE]\n{''.join(data)}\n[/CODE]",
+            'ne': f"\n[H4]{joined}[/H4]",
+            'ct': f"\n[QUOTE]\n{joined}\n[/QUOTE]",
+        }
+        if key == 'lt':
+            ctx['MODE_LIST_lt'] = True
+            return f"\n[H4]{joined}[/H4]", ctx
+
+        return formats.get(key), ctx
+
+    if fmt == '4pda':
+        if ctx['MODE_LIST_lt']:
+            if key == '-':
+                return f"[LIST][*]{joined}[/LIST]", ctx
+            if key == '--':
+                return f"[LIST][LIST][*]{joined}[/LIST][/LIST]", ctx
+            return None, ctx
+
+        if key == 'lk':
+            # 4pda doesn't support internal links, skip
+            return None, ctx
+
+        formats = {
+            'hd': f"\n[SIZE=4]{joined}[/SIZE]",
+            'ce': f"\n[CODE]\n{''.join(data)}\n[/CODE]",
+            'ne': f"\n[SIZE=3]{joined}[/SIZE]",
+            'ct': f"\n[QUOTE]\n{joined}\n[/QUOTE]",
+        }
+        if key == 'lt':
+            ctx['MODE_LIST_lt'] = True
+            return f"\n[SIZE=4]{joined}[/SIZE]", ctx
+
+        return formats.get(key), ctx
+
     return None, ctx
 
 def process_tokens(tokens, fmt):
@@ -223,6 +271,8 @@ if __name__ == "__main__":
     FORMATS = {
         'md': lambda tokens: "\n".join(process_tokens(tokens, 'md')),
         'wikitext': lambda tokens: "\n".join(process_tokens(tokens, 'wikitext')),
+        'cyberforum': lambda tokens: "\n".join(process_tokens(tokens, 'cyberforum')),
+        '4pda': lambda tokens: "\n".join(process_tokens(tokens, '4pda')),
     }
 
     if fmt is None:

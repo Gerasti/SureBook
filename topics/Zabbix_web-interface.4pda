@@ -1,0 +1,110 @@
+
+[SIZE=3]Установка пакетов[/SIZE]
+
+[CODE]
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+ 
+[/CODE]
+
+[QUOTE]
+zabbix-phpfrontend-apache2(веб-интерфейс для Apache2); zabbix-phpfrontend-php8.2(поддержка PHP 8.2)
+[/QUOTE]
+
+[SIZE=3]Включение конфигурации Apache2[/SIZE]
+
+[CODE]
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
+ 
+[/CODE]
+
+[QUOTE]
+создает символическую ссылку для активации конфигурации Zabbix
+[/QUOTE]
+
+[SIZE=3]Перезапуск Apache2[/SIZE]
+
+[CODE]
+systemctl restart httpd2                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Изменение владельца для веб-установщика[/SIZE]
+
+[CODE]
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+ 
+[/CODE]
+
+[QUOTE]
+необходимо для записи конфигурации при установке
+[/QUOTE]
+
+[SIZE=4]Настройка через веб-интерфейс[/SIZE]
+
+[SIZE=3]Открытие веб-установщика[/SIZE]
+
+[CODE]
+http://<ip сервера>/zabbix
+ 
+[/CODE]
+
+[QUOTE]
+открыть в браузере
+[/QUOTE]
+
+[SIZE=4]Параметры подключения к базе данных[/SIZE]
+[LIST][*]type database: PostgreSQL{MySQL}[/LIST]
+[LIST][*]host: localhost[/LIST]
+[LIST][*]port: 0[/LIST]
+[LIST][*]name: zabbix[/LIST]
+[LIST][*]scheme: public[/LIST]
+[LIST][*]user: zabbix[/LIST]
+[LIST][*]password: zabbixpwd[/LIST]
+
+[QUOTE]
+port 0(автоматически использует порт по умолчанию: PostgreSQL 5432, MySQL 3306); scheme(схема базы данных)
+[/QUOTE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Вход в веб-интерфейс[/SIZE]
+
+[CODE]
+http://<ip сервера>/zabbix
+
+ 
+[/CODE]
+
+[QUOTE]
+открыть страницу входа
+[/QUOTE]
+
+[SIZE=3]Учетные данные по умолчанию[/SIZE]
+
+[CODE]
+username: Admin                                                                          
+  password: zabbix                                                                            
+ 
+[/CODE]
+
+[QUOTE]
+Admin с заглавной буквы; рекомендуется сменить пароль после первого входа
+[/QUOTE]
+
+[SIZE=3]Проверка статуса Apache2[/SIZE]
+
+[CODE]
+systemctl status httpd2                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+служба должна быть active (running)
+[/QUOTE]
+
+[SIZE=3]Проверка прав на каталог конфигурации[/SIZE]
+
+[CODE]
+ls -la /var/www/webapps/zabbix/ui/conf
+[/CODE]

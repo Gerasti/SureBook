@@ -1,0 +1,96 @@
+
+[H3]Настройка[/H3]
+
+[H4]Просмотр текущей конфигурации[/H4]
+
+[CODE]
+cat /etc/resolv.conf                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+показывает текущие DNS-серверы
+[/QUOTE]
+
+[H4]Добавление одного DNS-сервера[/H4]
+
+[CODE]
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+ 
+[/CODE]
+
+[QUOTE]
+перезаписывает файл; 77.88.8.8(Яндекс DNS)
+[/QUOTE]
+
+[H4]Добавление нескольких DNS-серверов[/H4]
+
+[CODE]
+echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+  echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
+ 
+[/CODE]
+
+[QUOTE]
+добавляет в конец файла; 8.8.8.8(Google DNS)
+[/QUOTE]
+
+[H4]Настройка с доменом поиска[/H4]
+
+[CODE]
+nameserver 192.168.1.1                                                                   
+  search example.local                                                                        
+  domain example.local                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+search(список доменов для поиска); domain(локальный домен)
+[/QUOTE]
+
+[H4]Настройка с опциями[/H4]
+
+[CODE]
+nameserver 77.88.8.8                                                                     
+  options timeout:2 attempts:3 rotate                                                         
+ 
+[/CODE]
+
+[QUOTE]
+timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование серверов)
+[/QUOTE]
+
+[H3]Проверка DNS[/H3]
+
+[H4]Проверка разрешения имен[/H4]
+
+[CODE]
+nslookup ya.ru
+ 
+[/CODE]
+
+[QUOTE]
+должен вернуть IP-адрес
+[/QUOTE]
+
+[H4]Проверка через dig(bind-utils)[/H4]
+
+[CODE]
+dig ya.ru                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+показывает подробную информацию о DNS-запросе
+[/QUOTE]
+
+[H4]Проверка через host[/H4]
+
+[CODE]
+host ya.ru                                                                               
+ 
+[/CODE]
+
+[QUOTE]
+простая проверка разрешения имени
+[/QUOTE]

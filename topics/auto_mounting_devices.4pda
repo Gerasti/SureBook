@@ -1,0 +1,88 @@
+
+[SIZE=4]Форматирование диска[/SIZE]
+
+[SIZE=3]Создание файловой системы ext4[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/sda                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+создает файловую систему ext4 на устройстве /dev/sda
+[/QUOTE]
+
+[SIZE=4]Подготовка точки монтирования[/SIZE]
+
+[SIZE=3]Создание директории[/SIZE]
+
+[CODE]
+mkdir -p /opt/data                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+-p(создание родительских директорий)
+[/QUOTE]
+
+[SIZE=4]Монтирование[/SIZE]
+
+[SIZE=3]Монтирование диска[/SIZE]
+
+[CODE]
+mount /dev/sda /opt/data                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+временное монтирование до перезагрузки
+[/QUOTE]
+
+[SIZE=4]Автоматическое монтирование[/SIZE]
+
+[SIZE=3]Добавление записи в /etc/fstab[/SIZE]
+
+[CODE]
+/dev/sda /opt/data ext4 defaults 0 2                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+/dev/sda(устройство); /opt/data(точка монтирования); ext4(тип ФС); defaults(опции монтирования); 0(резервное копирование dump); 2(порядок проверки fsck)
+[/QUOTE]
+
+[SIZE=4]Параметры /etc/fstab[/SIZE]
+
+[SIZE=4]Структура записи[/SIZE]
+[LIST][*]/dev/sda: устройство[/LIST]
+[LIST][*]/opt/data: точка монтирования[/LIST]
+[LIST][*]ext4: тип файловой системы[/LIST]
+[LIST][*]defaults: обобщенные опции[/LIST]
+[LIST][LIST][*]rw(чтение-запись), suid(SUID биты), dev(файлы устройств), exec(выполнение), auto(автомонтирование), nouser(только root), async(асинхронная запись)[/LIST][/LIST]
+[LIST][*]0: управление резервным копированием (dump-flag)[/LIST]
+[LIST][LIST][*]0(не создавать резервные копии), 1(обычно root /), 2(другие разделы /home, /opt, /var)[/LIST][/LIST]
+[LIST][*]2: порядок проверки файловой системы (fsck)[/LIST]
+[LIST][LIST][*]0(не проверять), 1(первым, обычно root), 2(после root для /home, /opt, /var)[/LIST][/LIST]
+
+[SIZE=3]Применение[/SIZE]
+
+[CODE]
+mount -a
+[/CODE]
+
+[QUOTE]
+-a(монтирование всего из fstab)
+[/QUOTE]
+
+[SIZE=4]Проверка монтирования[/SIZE]
+
+[SIZE=3]Просмотр смонтированных разделов[/SIZE]
+
+[CODE]
+df -h                                                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+-h(человекочитаемый формат)
+[/QUOTE]

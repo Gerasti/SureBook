@@ -1,0 +1,65 @@
+
+[SIZE=4]Настройка базовой HTTP-аутентификации[/SIZE]
+
+[QUOTE]
+Для ограничения доступа к веб-приложению через встроенную HTTP-аутентификацию nginx
+[/QUOTE]
+
+[SIZE=3]Установка утилиты для создания файла паролей[/SIZE]
+
+[CODE]
+apt-get install apache2-utils                                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Создание файла с учётными записями[/SIZE]
+
+[CODE]
+htpasswd -c /etc/nginx/.htpasswd WEB                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Потребуется ввести пароль: P@ssw0rd
+[/QUOTE]
+
+[QUOTE]
+WEB(имя пользователя); P@ssw0rd(пароль); /etc/nginx/.htpasswd(файл хранения учётных записей)
+[/QUOTE]
+
+[SIZE=3]В блок location добавить параметры аутентификации[/SIZE]
+
+[CODE]
+location / { 
+      auth_basic "Restricted Area";                                                           
+      auth_basic_user_file /etc/nginx/.htpasswd;                                              
+                                                                                              
+      proxy_pass http://10.0.0.10:8080;                                                       
+                                                                                              
+      proxy_http_version 1.1;                                                                 
+                  
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка корректности настроек[/SIZE]
+
+[CODE]
+nginx -t                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Применение изменений[/SIZE]
+
+[CODE]
+systemctl reload nginx 
+[/CODE]

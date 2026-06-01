@@ -1,0 +1,112 @@
+
+[H3]Установка LVM[/H3]
+
+[H4]Определение диска для LVM[/H4]
+
+[CODE]
+lsblk
+ 
+[/CODE]
+
+[QUOTE]
+Определить диск для использования (в примере sdb - диск по iSCSI)
+[/QUOTE]
+
+[H4]Пометка диска для LVM[/H4]
+
+[CODE]
+pvcreate /dev/sdb                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Инициализирует физический том для использования в LVM
+[/QUOTE]
+
+[H4]Создание группы логических томов[/H4]
+
+[CODE]
+vgcreate VG /dev/sdb                                                              
+ 
+[/CODE]
+
+[QUOTE]
+VG - имя группы томов; /dev/sdb - физический том
+[/QUOTE]
+
+[H3]Настройка[/H3]
+
+[H4]Создание логического тома[/H4]
+
+[CODE]
+lvcreate -l 100%FREE -n DATA VG                                                   
+ 
+[/CODE]
+
+[QUOTE]
+-l 100%FREE (использовать всё свободное место); -n DATA (имя тома); VG (группа томов)
+[/QUOTE]
+
+[H4]Форматирование в XFS[/H4]
+
+[CODE]
+mkfs.xfs /dev/VG/DATA                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Создание файловой системы XFS на логическом томе
+[/QUOTE]
+
+[H4]Создание точки монтирования[/H4]
+
+[CODE]
+mkdir /opt/data                                                                   
+ 
+[/CODE]
+
+[H4]В /etc/fstab добавить строку[/H4]
+
+[CODE]
+/dev/VG/DATA /opt/data xfs defaults 0 0                                           
+ 
+[/CODE]
+
+[QUOTE]
+Альтернатива: UUID=<uuid> /opt/data xfs defaults 0 0
+[/QUOTE]
+
+[H4]Монтирование тома[/H4]
+
+[CODE]
+mount -av                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+-a (монтировать всё из fstab); -v (подробный вывод)
+[/QUOTE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка логических томов[/H4]
+
+[CODE]
+lvdisplay                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+Показывает информацию о логических томах
+[/QUOTE]
+
+[H4]Проверка монтирования[/H4]
+
+[CODE]
+lsblk                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Или команда df -h для просмотра смонтированных файловых систем
+[/QUOTE]

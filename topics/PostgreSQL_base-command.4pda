@@ -1,0 +1,817 @@
+
+[SIZE=4]Подключение к PostgreSQL[/SIZE]
+
+[SIZE=3]Подключение к БД от имени пользователя postgres[/SIZE]
+
+[CODE]
+psql -U postgres                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+-U(имя пользователя)
+[/QUOTE]
+
+[SIZE=3]Подключение к конкретной базе данных[/SIZE]
+
+[CODE]
+psql -U user01 -d db01                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+-d(имя базы данных)
+[/QUOTE]
+
+[SIZE=3]Удалённое подключение к БД[/SIZE]
+
+[CODE]
+psql -U user01 -h 192.168.1.10 -d db01                                                   
+ 
+[/CODE]
+
+[QUOTE]
+-h(IP-адрес или hostname сервера)
+[/QUOTE]
+
+[SIZE=3]Подключение с указанием порта[/SIZE]
+
+[CODE]
+psql -U user01 -h 192.168.1.10 -p 5432 -d db01                                           
+ 
+[/CODE]
+
+[QUOTE]
+-p(порт) по умолчанию 5432
+[/QUOTE]
+
+[SIZE=3]Выход из psql[/SIZE]
+
+[CODE]
+\q                                                                                       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Управление базами данных[/SIZE]
+
+[SIZE=3]Создание базы данных[/SIZE]
+
+[CODE]
+CREATE DATABASE mydb;                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+mydb(имя создаваемой БД)
+[/QUOTE]
+
+[SIZE=3]Создание БД с указанием владельца и кодировки[/SIZE]
+
+[CODE]
+CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';                                       
+ 
+[/CODE]
+
+[QUOTE]
+OWNER(владелец БД); ENCODING(кодировка) {UTF8, LATIN1}
+[/QUOTE]
+
+[SIZE=3]Удаление базы данных[/SIZE]
+
+[CODE]
+DROP DATABASE mydb;                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Удаляет БД безвозвратно
+[/QUOTE]
+
+[SIZE=3]Переименование базы данных[/SIZE]
+
+[CODE]
+ALTER DATABASE mydb RENAME TO newdb;                                                     
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Просмотр списка баз данных[/SIZE]
+
+[CODE]
+\l                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все БД с владельцами и кодировками
+[/QUOTE]
+
+[SIZE=3]Просмотр списка БД через SQL[/SIZE]
+
+[CODE]
+SELECT datname FROM pg_database;                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Подключение к другой БД внутри psql[/SIZE]
+
+[CODE]
+\c dbname                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Переключение между базами данных
+[/QUOTE]
+
+[SIZE=3]Просмотр размера базы данных[/SIZE]
+
+[CODE]
+SELECT pg_size_pretty(pg_database_size('mydb'));                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Управление пользователями[/SIZE]
+
+[SIZE=3]Создание пользователя[/SIZE]
+
+[CODE]
+CREATE USER username WITH PASSWORD 'P@ssw0rd';                                           
+ 
+[/CODE]
+
+[QUOTE]
+username(имя пользователя)
+[/QUOTE]
+
+[SIZE=3]Создание пользователя с правами суперпользователя[/SIZE]
+
+[CODE]
+CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';                                    
+ 
+[/CODE]
+
+[QUOTE]
+SUPERUSER(полные права на сервер)
+[/QUOTE]
+
+[SIZE=3]Создание пользователя с правами создания БД[/SIZE]
+
+[CODE]
+CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';                                 
+ 
+[/CODE]
+
+[QUOTE]
+CREATEDB(право создавать базы данных)
+[/QUOTE]
+
+[SIZE=3]Изменение пароля пользователя[/SIZE]
+
+[CODE]
+ALTER USER username WITH PASSWORD 'NewP@ssw0rd';                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление пользователя[/SIZE]
+
+[CODE]
+DROP USER username;                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Просмотр списка пользователей[/SIZE]
+
+[CODE]
+\du                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает пользователей с их ролями
+[/QUOTE]
+
+[SIZE=3]Просмотр списка пользователей через SQL[/SIZE]
+
+[CODE]
+SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                           
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Переименование пользователя[/SIZE]
+
+[CODE]
+ALTER USER oldname RENAME TO newname;                                                    
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Управление правами доступа[/SIZE]
+
+[SIZE=3]Предоставление всех прав на БД пользователю[/SIZE]
+
+[CODE]
+GRANT ALL PRIVILEGES ON DATABASE mydb TO username;                                       
+ 
+[/CODE]
+
+[QUOTE]
+ALL PRIVILEGES(все права на БД)
+[/QUOTE]
+
+[SIZE=3]Предоставление прав на подключение к БД[/SIZE]
+
+[CODE]
+GRANT CONNECT ON DATABASE mydb TO username;                                              
+ 
+[/CODE]
+
+[QUOTE]
+CONNECT(право подключаться к БД)
+[/QUOTE]
+
+[SIZE=3]Предоставление прав на схему[/SIZE]
+
+[CODE]
+GRANT ALL ON SCHEMA public TO username;                                                  
+ 
+[/CODE]
+
+[QUOTE]
+public(схема по умолчанию)
+[/QUOTE]
+
+[SIZE=3]Предоставление прав на все таблицы в схеме[/SIZE]
+
+[CODE]
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username;                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Предоставление прав на конкретную таблицу[/SIZE]
+
+[CODE]
+GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;                           
+ 
+[/CODE]
+
+[QUOTE]
+SELECT, INSERT, UPDATE, DELETE(типы операций)
+[/QUOTE]
+
+[SIZE=3]Отзыв прав у пользователя[/SIZE]
+
+[CODE]
+REVOKE ALL PRIVILEGES ON DATABASE mydb FROM username;                                    
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Изменение владельца базы данных[/SIZE]
+
+[CODE]
+ALTER DATABASE mydb OWNER TO newowner;                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Изменение владельца таблицы[/SIZE]
+
+[CODE]
+ALTER TABLE tablename OWNER TO newowner;                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Управление таблицами[/SIZE]
+
+[SIZE=3]Просмотр списка таблиц[/SIZE]
+
+[CODE]
+\dt                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает таблицы в текущей БД
+[/QUOTE]
+
+[SIZE=3]Просмотр списка таблиц с размерами[/SIZE]
+
+[CODE]
+\dt+                                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Показывает таблицы с размерами и описанием
+[/QUOTE]
+
+[SIZE=3]Просмотр структуры таблицы[/SIZE]
+
+[CODE]
+\d tablename                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Показывает столбцы, типы данных, индексы
+[/QUOTE]
+
+[SIZE=3]Создание таблицы[/SIZE]
+
+[CODE]
+CREATE TABLE users (                                                                     
+      id SERIAL PRIMARY KEY,                                                                  
+      username VARCHAR(50) NOT NULL,                                                          
+      email VARCHAR(100) UNIQUE,                                                              
+      created_at TIMESTAMP DEFAULT NOW()                                                      
+  );                                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+SERIAL(автоинкремент); PRIMARY KEY(первичный ключ); NOT NULL(обязательное поле); UNIQUE(уникальное значение)
+[/QUOTE]
+
+[SIZE=3]Удаление таблицы[/SIZE]
+
+[CODE]
+DROP TABLE tablename;
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Переименование таблицы[/SIZE]
+
+[CODE]
+ALTER TABLE oldname RENAME TO newname;                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Добавление столбца в таблицу[/SIZE]
+
+[CODE]
+ALTER TABLE tablename ADD COLUMN columnname VARCHAR(50);                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление столбца из таблицы[/SIZE]
+
+[CODE]
+ALTER TABLE tablename DROP COLUMN columnname;                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Изменение типа данных столбца[/SIZE]
+
+[CODE]
+ALTER TABLE tablename ALTER COLUMN columnname TYPE INTEGER;                              
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Очистка таблицы[/SIZE]
+
+[CODE]
+TRUNCATE TABLE tablename;                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Удаляет все строки, но сохраняет структуру
+[/QUOTE]
+
+[SIZE=4]Работа с данными[/SIZE]
+
+[SIZE=3]Вставка данных в таблицу[/SIZE]
+
+[CODE]
+INSERT INTO users (username, email) VALUES ('john', 'john@example.com');                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Вставка нескольких строк[/SIZE]
+
+[CODE]
+INSERT INTO users (username, email) VALUES                                               
+  ('alice', 'alice@example.com'),                                                             
+  ('bob', 'bob@example.com');                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Выборка всех данных из таблицы[/SIZE]
+
+[CODE]
+SELECT * FROM users;                                                                     
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Выборка конкретных столбцов[/SIZE]
+
+[CODE]
+SELECT username, email FROM users;                                                       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Выборка с условием[/SIZE]
+
+[CODE]
+SELECT * FROM users WHERE id = 1;                                                        
+ 
+[/CODE]
+
+[QUOTE]
+WHERE(условие фильтрации)
+[/QUOTE]
+
+[SIZE=3]Выборка с сортировкой[/SIZE]
+
+[CODE]
+SELECT * FROM users ORDER BY created_at DESC;                                            
+ 
+[/CODE]
+
+[QUOTE]
+ORDER BY(сортировка); DESC(по убыванию) {ASC, DESC}
+[/QUOTE]
+
+[SIZE=3]Выборка с ограничением количества строк[/SIZE]
+
+[CODE]
+SELECT * FROM users LIMIT 10;                                                            
+ 
+[/CODE]
+
+[QUOTE]
+LIMIT(ограничение количества строк)
+[/QUOTE]
+
+[SIZE=3]Обновление данных[/SIZE]
+
+[CODE]
+UPDATE users SET email = 'newemail@example.com' WHERE id = 1;                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Удаление данных[/SIZE]
+
+[CODE]
+DELETE FROM users WHERE id = 1;                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Подсчёт количества строк[/SIZE]
+
+[CODE]
+SELECT COUNT(*) FROM users;                                                              
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Резервное копирование и восстановление[/SIZE]
+
+[SIZE=3]Создание резервной копии БД[/SIZE]
+
+[CODE]
+pg_dump -U postgres -d mydb -f backup.sql                                                
+ 
+[/CODE]
+
+[QUOTE]
+-f(файл для сохранения резервной копии)
+[/QUOTE]
+
+[SIZE=3]Создание резервной копии в сжатом формате[/SIZE]
+
+[CODE]
+pg_dump -U postgres -d mydb -F c -f backup.dump                                          
+ 
+[/CODE]
+
+[QUOTE]
+-F c(custom format, сжатый формат)
+[/QUOTE]
+
+[SIZE=3]Создание резервной копии всех БД[/SIZE]
+
+[CODE]
+pg_dumpall -U postgres -f all_databases.sql                                              
+ 
+[/CODE]
+
+[QUOTE]
+pg_dumpall(резервное копирование всех БД и пользователей)
+[/QUOTE]
+
+[SIZE=3]Восстановление БД из SQL файла[/SIZE]
+
+[CODE]
+psql -U postgres -d mydb -f backup.sql                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Восстановление из текстового SQL файла
+[/QUOTE]
+
+[SIZE=3]Восстановление БД из сжатого формата[/SIZE]
+
+[CODE]
+pg_restore -U postgres -d mydb backup.dump                                               
+ 
+[/CODE]
+
+[QUOTE]
+pg_restore(восстановление из custom format)
+[/QUOTE]
+
+[SIZE=3]Восстановление с созданием новой БД[/SIZE]
+
+[CODE]
+pg_restore -U postgres -C -d postgres backup.dump                                        
+ 
+[/CODE]
+
+[QUOTE]
+-C(создать БД перед восстановлением)
+[/QUOTE]
+
+[SIZE=4]Информационные команды psql[/SIZE]
+
+[SIZE=3]Список всех команд psql[/SIZE]
+
+[CODE]
+\?                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все доступные команды psql
+[/QUOTE]
+
+[SIZE=3]Список SQL команд[/SIZE]
+
+[CODE]
+\h                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Показывает справку по SQL командам
+[/QUOTE]
+
+[SIZE=3]Справка по конкретной SQL команде[/SIZE]
+
+[CODE]
+\h CREATE TABLE                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Показывает синтаксис команды CREATE TABLE
+[/QUOTE]
+
+[SIZE=3]Просмотр текущей БД и пользователя[/SIZE]
+
+[CODE]
+\conninfo                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Показывает информацию о текущем подключении
+[/QUOTE]
+
+[SIZE=3]Просмотр всех схем[/SIZE]
+
+[CODE]
+\dn                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список схем в текущей БД
+[/QUOTE]
+
+[SIZE=3]Просмотр всех представлений[/SIZE]
+
+[CODE]
+\dv                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список представлений (views)
+[/QUOTE]
+
+[SIZE=3]Просмотр всех индексов[/SIZE]
+
+[CODE]
+\di                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список индексов
+[/QUOTE]
+
+[SIZE=3]Просмотр всех последовательностей[/SIZE]
+
+[CODE]
+\ds                                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список sequences
+[/QUOTE]
+
+[SIZE=3]Включение расширенного вывода[/SIZE]
+
+[CODE]
+\x                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Переключает между обычным и расширенным форматом вывода
+[/QUOTE]
+
+[SIZE=3]Выполнение команд из файла[/SIZE]
+
+[CODE]
+\i /path/to/file.sql                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Выполняет SQL команды из файла
+[/QUOTE]
+
+[SIZE=3]Вывод результата запроса в файл[/SIZE]
+
+[CODE]
+\o /path/to/output.txt                                                                   
+  SELECT * FROM users;                                                                        
+  \o                                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+\o(перенаправление вывода в файл); \o без параметра(отключение перенаправления)
+[/QUOTE]
+
+[SIZE=3]Измерение времени выполнения запросов[/SIZE]
+
+[CODE]
+\timing                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Включает/выключает отображение времени выполнения
+[/QUOTE]
+
+[SIZE=4]Управление индексами[/SIZE]
+
+[SIZE=3]Создание индекса[/SIZE]
+
+[CODE]
+CREATE INDEX idx_username ON users(username);                                            
+ 
+[/CODE]
+
+[QUOTE]
+idx_username(имя индекса); users(таблица); username(столбец)
+[/QUOTE]
+
+[SIZE=3]Создание уникального индекса[/SIZE]
+
+[CODE]
+CREATE UNIQUE INDEX idx_email ON users(email);                                           
+ 
+[/CODE]
+
+[QUOTE]
+UNIQUE(индекс с уникальными значениями)
+[/QUOTE]
+
+[SIZE=3]Удаление индекса[/SIZE]
+
+[CODE]
+DROP INDEX idx_username;                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Просмотр индексов таблицы[/SIZE]
+
+[CODE]
+\d tablename                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Показывает индексы в описании таблицы
+[/QUOTE]
+
+[SIZE=4]Управление транзакциями[/SIZE]
+
+[SIZE=3]Начало транзакции[/SIZE]
+
+[CODE]
+BEGIN;                                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Фиксация транзакции[/SIZE]
+
+[CODE]
+COMMIT;                                                                                  
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Откат транзакции[/SIZE]
+
+[CODE]
+ROLLBACK;
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Пример использования транзакции[/SIZE]
+
+[CODE]
+BEGIN;                                                                                   
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
+  COMMIT;                                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Транзакция для атомарного выполнения нескольких операций
+[/QUOTE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка версии PostgreSQL[/SIZE]
+
+[CODE]
+SELECT version();                                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка текущего времени на сервере[/SIZE]
+
+[CODE]
+SELECT NOW();                                                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка активных подключений[/SIZE]
+
+[CODE]
+SELECT * FROM pg_stat_activity;                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все активные подключения к серверу
+[/QUOTE]
+
+[SIZE=3]Проверка размера всех БД[/SIZE]
+
+[CODE]
+SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;              
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка размера всех таблиц в БД[/SIZE]
+
+[CODE]
+SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))     
+  FROM pg_tables WHERE schemaname = 'public'; 
+[/CODE]

@@ -1,0 +1,157 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка пакетов на всех устройствах[/H4]
+
+[CODE]
+apt-get install rsyslog logrotate                                                        
+ 
+[/CODE]
+
+[QUOTE]
+rsyslog(сбор и пересылка логов); logrotate(ротация и сжатие логов)
+[/QUOTE]
+
+[QUOTE]
+Обычно работают в связке
+[/QUOTE]
+
+[H3]Настройка сервера сбора логов[/H3]
+
+[H4]В /etc/rsyslog.conf[/H4]
+
+[CODE]
+module(load="imuxsock")                                                                  
+  module(load="imklog")                                                                       
+  module(load="imudp")                                                                        
+  input(type="imudp" port="514")                                                              
+  module(load="imtcp")                                                                        
+  input(type="imtcp" port="514")                                                              
+                                                                                              
+  $template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
+                  
+  if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
+  & stop          
+ 
+[/CODE]
+
+[QUOTE]
+imuxsock(локальные сообщения); imklog(логи ядра); imudp/imtcp(приём по UDP/TCP); $syslogseverity <= 4(warning и выше); & stop(остановка обработки)
+[/QUOTE]
+
+[H4]Создание каталогов для логов[/H4]
+
+[CODE]
+mkdir -p /opt/client1
+  mkdir -p /opt/client2                                                                       
+  mkdir -p /opt/client3                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+создаются каталоги для каждого клиента
+[/QUOTE]
+
+[H4]Установка прав на каталоги[/H4]
+
+[CODE]
+chown -R root:root /opt                                                                  
+  chmod -R 755 /opt                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+права для записи логов службой rsyslog
+[/QUOTE]
+
+[H4]Перезапуск службы на сервере[/H4]
+
+[CODE]
+systemctl restart rsyslog                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка клиента[/H3]
+
+[H4]В /etc/rsyslog.conf на клиенте[/H4]
+
+[CODE]
+*.warning action(type="omfwd"                                                            
+      target="<HQ-SRV_IP>"                                                                    
+      port="514"                                                                              
+      protocol="tcp"                                                                          
+      action.resumeRetryCount="-1"                                                            
+      queue.type="linkedList"                                                                 
+      queue.size="10000")                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+*.warning(уровень warning и выше); target(IP сервера логов); protocol(tcp для надежности); resumeRetryCount=-1(бесконечные попытки); queue.size(размер очереди сообщений)
+[/QUOTE]
+
+[H4]Перезапуск службы на клиенте[/H4]
+
+[CODE]
+systemctl restart rsyslog
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка открытого порта на сервере[/H4]
+
+[CODE]
+ss -tulpn | grep 514                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+должен показать порты 514 TCP и UDP
+[/QUOTE]
+
+[H4]Проверка каталогов логов на сервере[/H4]
+
+[CODE]
+ls -la /opt/                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+должны появиться каталоги с именами клиентов
+[/QUOTE]
+
+[H4]Проверка содержимого логов[/H4]
+
+[CODE]
+ls -la /opt/client1/                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+должны появиться файлы логов от клиента
+[/QUOTE]
+
+[H4]Тестовая отправка сообщения с клиента[/H4]
+
+[CODE]
+logger -p user.warning "Test message from client"                                        
+ 
+[/CODE]
+
+[QUOTE]
+отправляет тестовое сообщение уровня warning
+[/QUOTE]
+
+[H4]Проверка получения на сервере[/H4]
+
+[CODE]
+tail -f /opt/client1/*.log                                                               
+ 
+[/CODE]
+
+[QUOTE]
+должно появиться тестовое сообщение
+[/QUOTE]

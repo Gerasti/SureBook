@@ -1,0 +1,160 @@
+
+[SIZE=4]Установка и настройка CUPS[/SIZE]
+
+[SIZE=3]Установка пакетов на сервере[/SIZE]
+
+[CODE]
+apt-get install cups cups-pdf                                                            
+   
+ 
+[/CODE]
+
+[SIZE=4]Настройка CUPS-сервера[/SIZE]
+
+[SIZE=3]Изменение конфигурации в /etc/cups/cupsd.conf[/SIZE]
+
+[CODE]
+Listen *:631                                                                             
+                                                                                              
+  <Location />                                                                                
+  Order allow,deny                                                                            
+  Allow all                                                                                   
+  </Location>                                                                                 
+   
+  <Location /admin>                                                                           
+  Order allow,deny
+  Allow all                                                                                   
+  </Location>     
+ 
+[/CODE]
+
+[QUOTE]
+Listen *:631(слушать порт 631 на всех интерфейсах); <Location />(доступ к основной странице); <Location /admin>(доступ к панели администратора); Allow all(разрешить всем клиентам)
+[/QUOTE]
+
+[QUOTE]
+Для ограничения доступа по подсетям замените Allow all на Allow from 192.168.1.0/24
+[/QUOTE]
+
+[SIZE=3]Запуск и включение службы[/SIZE]
+
+[CODE]
+systemctl enable cups                                                                    
+  systemctl restart cups                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка доступных принтеров[/SIZE]
+
+[CODE]
+lpstat -p                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список принтеров и их статус
+[/QUOTE]
+
+[SIZE=4]Подключение клиента к CUPS[/SIZE]
+
+[SIZE=3]Установка пакетов на клиенте[/SIZE]
+
+[CODE]
+apt-get install cups                                                                     
+                  
+ 
+[/CODE]
+
+[SIZE=3]Подключение сетевого принтера[/SIZE]
+
+[CODE]
+lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
+ 
+[/CODE]
+
+[QUOTE]
+-p(имя принтера); -E(включить принтер); -v(URI принтера); -m everywhere(автоматический драйвер)
+[/QUOTE]
+
+[QUOTE]
+Формат URI: ipp://IP_СЕРВЕРА:631/printers/ИМЯ_ПРИНТЕРА
+[/QUOTE]
+
+[SIZE=3]Назначение принтера по умолчанию[/SIZE]
+
+[CODE]
+lpoptions -d PDF                                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка подключения[/SIZE]
+
+[CODE]
+lpstat -t                                                                                
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список принтеров, очередь печати, принтер по умолчанию, состояние службы
+[/QUOTE]
+
+[SIZE=4]Работа с CUPS[/SIZE]
+
+[SIZE=3]Печать документа[/SIZE]
+
+[CODE]
+echo "Тест печати" | lp -t "Example"                                                     
+ 
+[/CODE]
+
+[QUOTE]
+lp(команда печати); -t(название задания)
+[/QUOTE]
+
+[SIZE=3]Проверка PDF-файлов на сервере[/SIZE]
+
+[CODE]
+ls -l /home/USERNAME/                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+При использовании cups-pdf документы сохраняются в домашнем каталоге пользователя клиента
+[/QUOTE]
+
+[SIZE=3]Web-интерфейс[/SIZE]
+
+[CODE]
+http://IP_СЕРВЕРА:631                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Управление принтерами, очередью и заданиями
+[/QUOTE]
+
+[SIZE=4]Полезные команды[/SIZE]
+
+[SIZE=3]Просмотр очереди печати[/SIZE]
+
+[CODE]
+lpq                                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Отмена задания[/SIZE]
+
+[CODE]
+cancel ID_ЗАДАНИЯ                                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Список устройств[/SIZE]
+
+[CODE]
+lpinfo -v
+[/CODE]

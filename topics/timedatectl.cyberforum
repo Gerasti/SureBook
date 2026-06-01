@@ -1,0 +1,224 @@
+
+[H3]Управление временем через timedatectl[/H3]
+
+[H4]Просмотр текущего времени и настроек[/H4]
+
+[CODE]
+timedatectl  
+ 
+[/CODE]
+
+[QUOTE]
+Показывает локальное время, UTC, часовой пояс, синхронизацию NTP
+[/QUOTE]
+
+[H4]Просмотр статуса синхронизации времени[/H4]
+
+[CODE]
+timedatectl status                                                           
+ 
+[/CODE]
+
+[QUOTE]
+Показывает полную информацию
+[/QUOTE]
+
+[H3]Настройка времени[/H3]
+
+[H4]Установка текущей даты и времени[/H4]
+
+[CODE]
+timedatectl set-time "2026-05-31 10:30:00"
+ 
+[/CODE]
+
+[QUOTE]
+Формат: YYYY-MM-DD HH:MM:SS
+[/QUOTE]
+
+[H4]Установка только даты[/H4]
+
+[CODE]
+timedatectl set-time "2026-05-31"                                            
+                                                                                  
+ 
+[/CODE]
+
+[H4]Установка только времени[/H4]
+
+[CODE]
+timedatectl set-time "10:30:00"                                              
+                                                                                  
+ 
+[/CODE]
+
+[H3]Настройка часового пояса[/H3]
+
+[H4]Просмотр текущего часового пояса[/H4]
+
+[CODE]
+timedatectl show-timezones
+ 
+[/CODE]
+
+[QUOTE]
+Показывает список всех доступных часовых поясов
+[/QUOTE]
+
+[H4]Поиск часового пояса[/H4]
+
+[CODE]
+timedatectl list-timezones | grep Moscow                                     
+                                                                                  
+ 
+[/CODE]
+
+[H4]Установка часового пояса[/H4]
+
+[CODE]
+timedatectl set-timezone Europe/Moscow                                       
+ 
+[/CODE]
+
+[QUOTE]
+Часовой пояс Москвы
+[/QUOTE]
+
+[H4]Установка UTC[/H4]
+
+[CODE]
+timedatectl set-timezone UTC                                                 
+                                                                                  
+ 
+[/CODE]
+
+[H3]Настройка NTP-синхронизации[/H3]
+
+[H4]Включение NTP-синхронизации[/H4]
+
+[CODE]
+timedatectl set-ntp true
+ 
+[/CODE]
+
+[QUOTE]
+Включает автоматическую синхронизацию времени через systemd-timesyncd
+[/QUOTE]
+
+[H4]Отключение NTP-синхронизации[/H4]
+
+[CODE]
+timedatectl set-ntp false                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Отключает автоматическую синхронизацию, позволяет устанавливать время вручную
+[/QUOTE]
+
+[H4]Проверка статуса NTP-синхронизации[/H4]
+
+[CODE]
+timedatectl timesync-status                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Показывает сервер, stratum, задержку, смещение времени
+[/QUOTE]
+
+[H3]Настройка аппаратных часов[/H3]
+
+[H4]Синхронизация системного времени с аппаратными часами[/H4]
+
+[CODE]
+hwclock --systohc
+ 
+[/CODE]
+
+[QUOTE]
+Записывает системное время в аппаратные часы (RTC)
+[/QUOTE]
+
+[H4]Синхронизация аппаратных часов с системным временем[/H4]
+
+[CODE]
+hwclock --hctosys                                                            
+ 
+[/CODE]
+
+[QUOTE]
+Устанавливает системное время из аппаратных часов
+[/QUOTE]
+
+[H4]Просмотр аппаратных часов[/H4]
+
+[CODE]
+hwclock --show                                                               
+ 
+[/CODE]
+
+[QUOTE]
+Показывает время из RTC
+[/QUOTE]
+
+[H4]Установка аппаратных часов в UTC[/H4]
+
+[CODE]
+timedatectl set-local-rtc 0                                                  
+ 
+[/CODE]
+
+[QUOTE]
+0(RTC в UTC), рекомендуется для Linux
+[/QUOTE]
+
+[H4]Установка аппаратных часов в локальное время[/H4]
+
+[CODE]
+timedatectl set-local-rtc 1                                                  
+ 
+[/CODE]
+
+[QUOTE]
+1(RTC в локальном времени), используется для совместимости с Windows
+[/QUOTE]
+
+[H3]Проверка[/H3]
+
+[H4]Просмотр всех свойств[/H4]
+
+[CODE]
+timedatectl show
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все параметры в формате ключ=значение
+[/QUOTE]
+
+[H4]Просмотр конкретного свойства[/H4]
+
+[CODE]
+timedatectl show -p Timezone                                                 
+ 
+[/CODE]
+
+[QUOTE]
+-p(конкретное свойство): Timezone, NTPSynchronized, LocalRTC
+[/QUOTE]
+
+[H4]Просмотр логов службы времени[/H4]
+
+[CODE]
+journalctl -u systemd-timesyncd                                              
+                                                                                  
+ 
+[/CODE]
+
+[H4]Примеры часовых поясов[/H4]
+[LIST][*]Europe/Moscow (Москва, UTC+3)[/LIST]
+[LIST][*]Asia/Yekaterinburg (Екатеринбург, UTC+5)[/LIST]
+[LIST][*]Asia/Novosibirsk (Новосибирск, UTC+7)[/LIST]
+[LIST][*]Asia/Vladivostok (Владивосток, UTC+10)[/LIST]
+[LIST][*]UTC (Всемирное координированное время)[/LIST]

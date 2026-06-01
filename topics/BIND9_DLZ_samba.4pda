@@ -1,0 +1,272 @@
+
+[SIZE=4]Установка Samba AD DC с BIND9_DLZ[/SIZE]
+
+[SIZE=3]Установка пакетов[/SIZE]
+
+[CODE]
+apt-get install -y task-samba-dc bind                                                    
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Отключение chroot для BIND[/SIZE]
+
+[CODE]
+control bind-chroot disabled                                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Подключение конфигурации BIND9_DLZ[/SIZE]
+
+[CODE]
+grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
+  "/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
+                  
+ 
+[/CODE]
+
+[SIZE=3]В /etc/bind/options.conf добавить[/SIZE]
+
+[CODE]
+tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
+  minimal-responses yes;                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(минимальные ответы DNS)
+[/QUOTE]
+
+[SIZE=3]Остановка BIND перед настройкой[/SIZE]
+
+[CODE]
+systemctl stop bind                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]В /etc/sysconfig/network[/SIZE]
+
+[CODE]
+NETWORKING=yes                                                                           
+  CONFMETHOD=etcnet                                                                           
+  HOSTNAME=srv-hq.ad.team                                                                     
+  RESOLV_MODS=yes                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(разрешить изменение resolv.conf)
+[/QUOTE]
+
+[SIZE=3]Установка hostname[/SIZE]
+
+[CODE]
+hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
+  domainname ad.team                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+exec bash перезагружает оболочку для применения изменений
+[/QUOTE]
+
+[SIZE=4]Очистка старых конфигураций[/SIZE]
+
+[SIZE=3]Удаление старых файлов Samba[/SIZE]
+
+[CODE]
+rm -f /etc/samba/smb.conf                                                                
+  rm -rf /var/lib/samba                                                                       
+  rm -rf /var/cache/samba                                                                     
+  mkdir -p /var/lib/samba/sysvol                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Конфликты зон возникают при одинаковых доменах в BIND и SAMBA BIND9_DLZ
+[/QUOTE]
+
+[SIZE=3]В /etc/resolv.conf указать локальный DNS[/SIZE]
+
+[CODE]
+nameserver 127.0.0.1                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Контроллер домена должен использовать себя как DNS-сервер
+[/QUOTE]
+
+[SIZE=4]Создание домена[/SIZE]
+
+[SIZE=3]Провижининг домена Samba AD[/SIZE]
+
+[CODE]
+samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
+  --dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
+ 
+[/CODE]
+
+[QUOTE]
+--realm(полное имя домена); --domain(NetBIOS имя); --dns-backend(BIND9_DLZ или SAMBA_INTERNAL); --server-role(dc - контроллер домена); --use-rfc2307(поддержка POSIX атрибутов)
+[/QUOTE]
+
+[SIZE=3]Запуск служб[/SIZE]
+
+[CODE]
+systemctl enable --now samba
+  systemctl enable --now bind                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Копирование конфигурации Kerberos[/SIZE]
+
+[CODE]
+cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка контроллера домена[/SIZE]
+
+[SIZE=3]Проверка информации о домене[/SIZE]
+
+[CODE]
+samba-tool domain info 127.0.0.1                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка DNS SRV-записей[/SIZE]
+
+[CODE]
+host -t SRV _kerberos._udp.ad.team                                                       
+  host -t SRV _ldap._tcp.ad.team                                                              
+  host -t A srv-hq.ad.team                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+SRV-записи должны указывать на контроллер домена
+[/QUOTE]
+
+[SIZE=3]Проверка Kerberos[/SIZE]
+
+[CODE]
+kinit administrator@AD.TEAM                                                              
+  klist                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами
+[/QUOTE]
+
+[SIZE=4]Присоединение клиента к домену[/SIZE]
+
+[SIZE=3]Установка пакетов на клиенте[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y task-auth-ad-sssd                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Запуск служб на клиенте[/SIZE]
+
+[CODE]
+systemctl enable --now smb winbind sssd                                                  
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Содержимое /etc/krb5.conf на клиенте[/SIZE]
+
+[CODE]
+[libdefaults]                                                                            
+  default_realm = AD.TEAM                                                                     
+  dns_lookup_kdc = true
+  dns_lookup_realm = false                                                                    
+  ticket_lifetime = 24h                                                                       
+  renew_lifetime = 7d                                                                         
+  forwardable = true                                                                          
+  rdns = false                                                                                
+  default_ccache_name = KEYRING:persistent:%{uid}                                             
+                                                                                              
+  [realms]                                                                                    
+  AD.TEAM={                                                                                   
+          kdc = 192.168.11.67                                                                 
+          default_domain = ad.team                                                            
+          admin_server = 192.168.11.67                                                        
+  }                                                                                           
+                                                                                              
+  [domain_realm]                                                                              
+  .ad.team = AD.TEAM
+  ad.team = AD.TEAM                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+kdc(IP контроллера домена); ticket_lifetime(время жизни билета); renew_lifetime(время обновления); forwardable(передача билета)
+[/QUOTE]
+
+[SIZE=3]В /etc/resolv.conf на клиенте[/SIZE]
+
+[CODE]
+domain ad.team
+  nameserver 192.168.11.67                                                                    
+  nameserver 192.168.33.67                                                                    
+  nameserver 8.8.8.8                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Первым указывать IP контроллера домена
+[/QUOTE]
+
+[SIZE=3]Проверка Kerberos на клиенте[/SIZE]
+
+[CODE]
+kinit administrator                                                                      
+  klist                                                                                       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Присоединение к домену[/SIZE]
+
+[CODE]
+net ads join -U administrator@AD.TEAM -S 192.168.11.67                                   
+ 
+[/CODE]
+
+[QUOTE]
+-U(пользователь); -S(IP сервера)
+[/QUOTE]
+
+[SIZE=3]Проверка DNS на клиенте[/SIZE]
+
+[CODE]
+host srv-hq                                                                              
+  host $(hostname)                                                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Перезагрузка клиента[/SIZE]
+
+[CODE]
+reboot                                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Вход под доменным пользователем[/SIZE]
+
+[CODE]
+su -
+  id
+[/CODE]

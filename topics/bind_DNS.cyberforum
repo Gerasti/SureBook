@@ -1,0 +1,221 @@
+
+[H3]Установка DNS-сервера[/H3]
+
+[H4]Установка пакетов[/H4]
+
+[CODE]
+apt-get install bind bind-utils
+
+
+[/CODE]
+
+[H3]Настройка options.conf[/H3]
+
+[H4]Базовые параметры в /etc/bind/options.conf[/H4]
+
+[CODE]
+listen-on { any; };
+ allow-query { any; };
+ allow-recursion { any; };
+ forwarders { 77.88.8.8; };
+ recursion yes;
+
+[/CODE]
+
+[QUOTE]
+listen-on(интерфейсы); allow-query(разрешение запросов); allow-recursion(рекурсивные запросы); forwarders(DNS для пересылки); recursion(включение рекурсии)
+[/QUOTE]
+
+[H4]Опциональная настройка slave-сервера в /etc/bind/options.conf[/H4]
+
+[CODE]
+allow-transfer { 192.168.33.67; };
+
+[/CODE]
+
+[QUOTE]
+allow-transfer(разрешение передачи зон на slave-сервер) - опционально, только если используется slave
+[/QUOTE]
+
+[H4]Отключение логирования lame-servers в /etc/bind/options.conf[/H4]
+
+[CODE]
+logging {
+     category lame-servers {null;};
+ };
+
+
+[/CODE]
+
+[H3]Настройка local.conf[/H3]
+
+[H4]Шаблон зоны[/H4]
+
+[CODE]
+zone "ZONE_NAME" {
+     type TYPE;
+     file "ZONE_FILE_PATH";
+ };
+
+[/CODE]
+
+[QUOTE]
+ZONE_NAME(имя DNS-зоны); TYPE(тип зоны) {master, slave}; ZONE_FILE_PATH(путь к файлу зоны относительно /etc/bind/)
+[/QUOTE]
+
+[QUOTE]
+slave опционален - используется только для вторичных DNS-серверов
+[/QUOTE]
+
+[H4]Пример прямой зоны в /etc/bind/local.conf[/H4]
+
+[CODE]
+zone "bind.domain" {
+     type master;
+     file "bind.domain.db";
+ };
+
+
+[/CODE]
+
+[H4]Пример обратных зон в /etc/bind/local.conf[/H4]
+
+[CODE]
+zone "11.168.192.in-addr.arpa" {
+     type master;
+     file "11.168.192.in-addr.arpa.db";
+ };
+
+
+[/CODE]
+
+[H3]Создание файлов зон[/H3]
+
+[H4]Копирование шаблонов[/H4]
+
+[CODE]
+cp /etc/bind/zone/{localhost,bind.domain.db}
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[H4]Назначение прав[/H4]
+
+[CODE]
+chown named:named /etc/bind/zone/bind.domain.db
+ chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
+ chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[H3]Настройка зон[/H3]
+
+[H4]Содержимое прямой зоны /etc/bind/zone/bind.domain.db[/H4]
+
+[CODE]
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   srv-hq.bind.domain.
+         IN NS   srv-dt.bind.domain.
+
+         IN A    192.168.11.67
+ srv  IN A    192.168.11.67
+ rtr  IN A    192.168.11.81
+ sw   IN A    192.168.11.82
+
+[/CODE]
+
+[QUOTE]
+SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый сервер); CNAME(псевдоним); TXT(текстовые записи)
+[/QUOTE]
+
+[H4]Содержимое обратной зоны /etc/bind/zone/11.168.192.in-addr.arpa.db[/H4]
+
+[CODE]
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   bind.domain.
+
+ 81      IN PTR  rtr.bind.domain.
+ 67      IN PTR  srv.bind.domain.
+ 82      IN PTR  sw.bind.domain.
+
+
+[/CODE]
+
+[H3]Настройка resolv.conf[/H3]
+
+[H4]Содержимое /etc/net/ifaces/ens33/resolv.conf[/H4]
+
+[CODE]
+search bind.domain
+ nameserver 192.168.11.67
+ nameserver 192.168.33.67
+ nameserver 8.8.8.8
+
+[/CODE]
+
+[QUOTE]
+nameserver(DNS-сервер); search(домен поиска по умолчанию)
+[/QUOTE]
+
+[H4]Перезапуск сети[/H4]
+
+[CODE]
+systemctl restart network
+
+
+[/CODE]
+
+[H3]Проверка конфигурации[/H3]
+
+[H4]Проверка всех зон[/H4]
+
+[CODE]
+named-checkconf -z
+
+
+[/CODE]
+
+[H4]Проверка отдельной прямой зоны[/H4]
+
+[CODE]
+named-checkzone bind.domain /etc/bind/zone/bind.domain.db
+
+
+[/CODE]
+
+[H4]Проверка отдельной обратной зоны[/H4]
+
+[CODE]
+named-checkzone 11.168.192.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[H3]Запуск BIND[/H3]
+
+[H4]Включение и запуск сервиса[/H4]
+
+[CODE]
+systemctl enable --now bind
+[/CODE]

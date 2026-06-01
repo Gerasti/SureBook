@@ -1,0 +1,83 @@
+
+[SIZE=4]Установка на сервере[/SIZE]
+
+[SIZE=3]Установка NFS-сервера[/SIZE]
+
+[CODE]
+apt-get install nfs-server                                                               
+ 
+[/CODE]
+
+[SIZE=3]Создание каталога для экспорта chown 777 /nfs[/SIZE]
+
+[SIZE=3]Содержимое файла /etc/exports[/SIZE]
+
+[CODE]
+/nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
+ 
+[/CODE]
+
+[QUOTE]
+/nfs (экспортируемый каталог); 192.168.20.0/26 (разрешенная подсеть); rw (чтение-запись); sync (синхронная запись); no_subtree_check (отключить проверку подкаталогов)
+[/QUOTE]
+
+[SIZE=3]Применение изменений[/SIZE]
+
+[CODE]
+exportfs -ra                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Перечитывает /etc/exports и применяет изменения
+[/QUOTE]
+
+[SIZE=4]Установка на клиенте[/SIZE]
+
+[SIZE=3]Установка NFS-клиента[/SIZE]
+
+[CODE]
+apt-get install nfs-clients                                                              
+ 
+[/CODE]
+
+[SIZE=3]В /etc/fstab добавить строку[/SIZE]
+
+[CODE]
+192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
+ 
+[/CODE]
+
+[QUOTE]
+192.168.30.3:/nfs (удаленный каталог); /mnt/nfs (точка монтирования); nfs (тип ФС)
+[/QUOTE]
+
+[SIZE=3]Монтирование[/SIZE]
+
+[CODE]
+mount -a                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Создание тестового файла на клиенте[/SIZE]
+
+[CODE]
+cd /mnt/nfs                                                                              
+  touch txt                                                                                   
+  ls                                                                                          
+ 
+[/CODE]
+
+[SIZE=3]Проверка на сервере[/SIZE]
+
+[CODE]
+ls -l /nfs                                                                               
+ 
+[/CODE]
+
+[QUOTE]
+Файл txt должен быть виден с владельцем nobody:nobody [](#Установка на сервере)
+[/QUOTE]

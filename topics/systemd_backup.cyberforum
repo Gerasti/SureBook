@@ -1,0 +1,146 @@
+
+[H3]Настройка службы резервного копирования[/H3]
+
+[H4]Создание директории для резервных копий[/H4]
+
+[CODE]
+mkdir -p /var/backup
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание службы /etc/systemd/system/backup.service[/H4]
+
+[CODE]
+[Unit]                                                                                   
+  Description=Backup shared folder to /var/backup                                             
+  After=network.target                                                                        
+                                                                                              
+  [Service]                                                                                   
+  Type=oneshot                                                                                
+  ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
+  /path/to/shared/folder'                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Type=oneshot(служба завершается после выполнения команды); ExecStart(команда создания архива с датой и временем); %%(двойной процент для экранирования в systemd)
+[/QUOTE]
+
+[H4]Создание таймера /etc/systemd/system/backup.timer[/H4]
+
+[CODE]
+[Unit]       
+  Description=Run backup.service daily at 20:00                                               
+                                                                                              
+  [Timer]                                                                                     
+  OnCalendar=20:00                                                                            
+  Persistent=true                                                                             
+                                                                                              
+  [Install]                                                                                   
+  WantedBy=timers.target                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+OnCalendar=20:00(запуск каждый день в 20:00); Persistent=true(выполнить пропущенную задачу при загрузке, если система была выключена)
+[/QUOTE]
+
+[H3]Запуск[/H3]
+
+[H4]Перезагрузка конфигурации systemd[/H4]
+
+[CODE]
+systemctl daemon-reload
+ 
+[/CODE]
+
+[QUOTE]
+Применяет изменения после создания или редактирования unit-файлов
+[/QUOTE]
+
+[H4]Включение и запуск таймера[/H4]
+
+[CODE]
+systemctl enable --now backup.timer                                                      
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Просмотр активных таймеров[/H4]
+
+[CODE]
+systemctl list-timers
+ 
+[/CODE]
+
+[QUOTE]
+Показывает все таймеры, время следующего запуска и последнего выполнения
+[/QUOTE]
+
+[H4]Проверка статуса таймера[/H4]
+
+[CODE]
+systemctl status backup.timer                                                            
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка статуса службы[/H4]
+
+[CODE]
+systemctl status backup.service                                                          
+                                                                                              
+ 
+[/CODE]
+
+[H4]Ручной запуск службы резервного копирования[/H4]
+
+[CODE]
+systemctl start backup.service                                                           
+ 
+[/CODE]
+
+[QUOTE]
+Для проверки работы службы без ожидания таймера
+[/QUOTE]
+
+[H4]Просмотр созданных архивов[/H4]
+
+[CODE]
+ls -lh /var/backup                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+-lh(список с размерами в читаемом формате)
+[/QUOTE]
+
+[H4]Просмотр логов службы[/H4]
+
+[CODE]
+journalctl -u backup.service                                                             
+ 
+[/CODE]
+
+[QUOTE]
+Показывает логи выполнения резервного копирования
+[/QUOTE]
+
+[H4]Просмотр логов таймера[/H4]
+
+[CODE]
+journalctl -u backup.timer                                                               
+                                                                                              
+ 
+[/CODE]
+
+[H4]Дополнительные варианты OnCalendar[/H4]
+[LIST][*]OnCalendar=daily (каждый день в 00:00)[/LIST]
+[LIST][*]OnCalendar=weekly (каждую неделю в понедельник 00:00)[/LIST]
+[LIST][*]OnCalendar=--* 02:00:00 (каждый день в 02:00)[/LIST]
+[LIST][*]OnCalendar=Mon,Fri 18:00 (понедельник и пятница в 18:00)[/LIST]
+[LIST][*]OnCalendar=*:0/15 (каждые 15 минут)[/LIST]
+[LIST][*]OnCalendar=hourly (каждый час)[/LIST]

@@ -1,0 +1,52 @@
+
+[SIZE=4]Настройка[/SIZE]
+
+[SIZE=3]Изменение параметра в /etc/net/sysctl.conf[/SIZE]
+
+[CODE]
+net.ipv4.ip_forward=1                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Разрешает маршрутизацию пакетов между интерфейсами
+[/QUOTE]
+
+[SIZE=3]Применение изменений из файла[/SIZE]
+
+[CODE]
+sysctl -p                                                                                
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Временное включение до перезагрузки[/SIZE]
+
+[CODE]
+echo 1 > /proc/sys/net/ipv4/ip_forward                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Включение через sysctl напрямую[/SIZE]
+
+[CODE]
+sysctl -w net.ipv4.ip_forward=1                                                          
+ 
+[/CODE]
+
+[QUOTE]
+Изменения через echo и sysctl -w не сохраняются после перезагрузки
+[/QUOTE]
+
+[SIZE=3]Проверка текущего значения[/SIZE]
+
+[CODE]
+cat /proc/sys/net/ipv4/ip_forward                                                        
+  sysctl net.ipv4.ip_forward                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Должно вернуть 1 если включено, 0 если выключено
+[/QUOTE]

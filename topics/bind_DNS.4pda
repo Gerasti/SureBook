@@ -1,0 +1,221 @@
+
+[SIZE=4]Установка DNS-сервера[/SIZE]
+
+[SIZE=3]Установка пакетов[/SIZE]
+
+[CODE]
+apt-get install bind bind-utils
+
+
+[/CODE]
+
+[SIZE=4]Настройка options.conf[/SIZE]
+
+[SIZE=3]Базовые параметры в /etc/bind/options.conf[/SIZE]
+
+[CODE]
+listen-on { any; };
+ allow-query { any; };
+ allow-recursion { any; };
+ forwarders { 77.88.8.8; };
+ recursion yes;
+
+[/CODE]
+
+[QUOTE]
+listen-on(интерфейсы); allow-query(разрешение запросов); allow-recursion(рекурсивные запросы); forwarders(DNS для пересылки); recursion(включение рекурсии)
+[/QUOTE]
+
+[SIZE=3]Опциональная настройка slave-сервера в /etc/bind/options.conf[/SIZE]
+
+[CODE]
+allow-transfer { 192.168.33.67; };
+
+[/CODE]
+
+[QUOTE]
+allow-transfer(разрешение передачи зон на slave-сервер) - опционально, только если используется slave
+[/QUOTE]
+
+[SIZE=3]Отключение логирования lame-servers в /etc/bind/options.conf[/SIZE]
+
+[CODE]
+logging {
+     category lame-servers {null;};
+ };
+
+
+[/CODE]
+
+[SIZE=4]Настройка local.conf[/SIZE]
+
+[SIZE=3]Шаблон зоны[/SIZE]
+
+[CODE]
+zone "ZONE_NAME" {
+     type TYPE;
+     file "ZONE_FILE_PATH";
+ };
+
+[/CODE]
+
+[QUOTE]
+ZONE_NAME(имя DNS-зоны); TYPE(тип зоны) {master, slave}; ZONE_FILE_PATH(путь к файлу зоны относительно /etc/bind/)
+[/QUOTE]
+
+[QUOTE]
+slave опционален - используется только для вторичных DNS-серверов
+[/QUOTE]
+
+[SIZE=3]Пример прямой зоны в /etc/bind/local.conf[/SIZE]
+
+[CODE]
+zone "bind.domain" {
+     type master;
+     file "bind.domain.db";
+ };
+
+
+[/CODE]
+
+[SIZE=3]Пример обратных зон в /etc/bind/local.conf[/SIZE]
+
+[CODE]
+zone "11.168.192.in-addr.arpa" {
+     type master;
+     file "11.168.192.in-addr.arpa.db";
+ };
+
+
+[/CODE]
+
+[SIZE=4]Создание файлов зон[/SIZE]
+
+[SIZE=3]Копирование шаблонов[/SIZE]
+
+[CODE]
+cp /etc/bind/zone/{localhost,bind.domain.db}
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+ cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[SIZE=3]Назначение прав[/SIZE]
+
+[CODE]
+chown named:named /etc/bind/zone/bind.domain.db
+ chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
+ chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[SIZE=4]Настройка зон[/SIZE]
+
+[SIZE=3]Содержимое прямой зоны /etc/bind/zone/bind.domain.db[/SIZE]
+
+[CODE]
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   srv-hq.bind.domain.
+         IN NS   srv-dt.bind.domain.
+
+         IN A    192.168.11.67
+ srv  IN A    192.168.11.67
+ rtr  IN A    192.168.11.81
+ sw   IN A    192.168.11.82
+
+[/CODE]
+
+[QUOTE]
+SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый сервер); CNAME(псевдоним); TXT(текстовые записи)
+[/QUOTE]
+
+[SIZE=3]Содержимое обратной зоны /etc/bind/zone/11.168.192.in-addr.arpa.db[/SIZE]
+
+[CODE]
+$TTL 1d
+
+ @       IN SOA  bind.domain. root.bind.domain. (
+                 2021102900
+                 12h
+                 1h
+                 1w
+                 1h
+ )
+
+         IN NS   bind.domain.
+
+ 81      IN PTR  rtr.bind.domain.
+ 67      IN PTR  srv.bind.domain.
+ 82      IN PTR  sw.bind.domain.
+
+
+[/CODE]
+
+[SIZE=4]Настройка resolv.conf[/SIZE]
+
+[SIZE=3]Содержимое /etc/net/ifaces/ens33/resolv.conf[/SIZE]
+
+[CODE]
+search bind.domain
+ nameserver 192.168.11.67
+ nameserver 192.168.33.67
+ nameserver 8.8.8.8
+
+[/CODE]
+
+[QUOTE]
+nameserver(DNS-сервер); search(домен поиска по умолчанию)
+[/QUOTE]
+
+[SIZE=3]Перезапуск сети[/SIZE]
+
+[CODE]
+systemctl restart network
+
+
+[/CODE]
+
+[SIZE=4]Проверка конфигурации[/SIZE]
+
+[SIZE=3]Проверка всех зон[/SIZE]
+
+[CODE]
+named-checkconf -z
+
+
+[/CODE]
+
+[SIZE=3]Проверка отдельной прямой зоны[/SIZE]
+
+[CODE]
+named-checkzone bind.domain /etc/bind/zone/bind.domain.db
+
+
+[/CODE]
+
+[SIZE=3]Проверка отдельной обратной зоны[/SIZE]
+
+[CODE]
+named-checkzone 11.168.192.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+
+
+[/CODE]
+
+[SIZE=4]Запуск BIND[/SIZE]
+
+[SIZE=3]Включение и запуск сервиса[/SIZE]
+
+[CODE]
+systemctl enable --now bind
+[/CODE]

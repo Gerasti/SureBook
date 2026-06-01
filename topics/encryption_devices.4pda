@@ -1,0 +1,113 @@
+
+[SIZE=4]Шифрование раздела с LUKS[/SIZE]
+
+[SIZE=3]Создание ключа шифрования[/SIZE]
+
+[CODE]
+dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
+ 
+[/CODE]
+
+[QUOTE]
+Генерация случайного ключа размером 4 КБ
+[/QUOTE]
+
+[SIZE=3]Шифрование раздела с указанным ключом[/SIZE]
+
+[CODE]
+cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
+ 
+[/CODE]
+
+[QUOTE]
+Инициализация LUKS-шифрования на разделе
+[/QUOTE]
+
+[SIZE=3]Открытие зашифрованного раздела[/SIZE]
+
+[CODE]
+cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
+ 
+[/CODE]
+
+[QUOTE]
+Открывает зашифрованный раздел как /dev/mapper/data_crypt
+[/QUOTE]
+
+[SIZE=3]Форматирование раздела[/SIZE]
+
+[CODE]
+mkfs.ext4 /dev/mapper/data_crypt                                                         
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Автоматическая разблокировка при загрузке[/SIZE]
+
+[SIZE=3]Настройка автоматической разблокировки в /etc/crypttab[/SIZE]
+
+[CODE]
+data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
+ 
+[/CODE]
+
+[QUOTE]
+Формат: имя устройство ключ тип
+[/QUOTE]
+
+[SIZE=3]Проверка синтаксиса[/SIZE]
+
+[CODE]
+systemctl daemon-reexec                                                                  
+  systemctl restart systemd-cryptsetup@data_crypt                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Монтирование раздела[/SIZE]
+
+[SIZE=3]Настройка автомонтирования в /etc/fstab[/SIZE]
+
+[CODE]
+/dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
+ 
+[/CODE]
+
+[QUOTE]
+Формат: устройство точка_монтирования файловая_система опции dump fsck
+[/QUOTE]
+
+[SIZE=4]Защита ключа шифрования[/SIZE]
+
+[SIZE=3]Установка прав доступа на ключ[/SIZE]
+
+[CODE]
+chmod 600 /root/ext4.key                                                                 
+  chown root:root /root/ext4.key                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Только root может читать и записывать ключ
+[/QUOTE]
+
+[SIZE=4]Применение настроек[/SIZE]
+
+[SIZE=3]Перезагрузка системы[/SIZE]
+
+[CODE]
+reboot                                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка монтирования[/SIZE]
+
+[CODE]
+df -h                                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Проверка, что зашифрованный раздел смонтирован
+[/QUOTE]

@@ -70,6 +70,8 @@ address=/br-srv.domain.example/192.168.5.2
   bind-interfaces
   no-resolv
   dhcp-range=192.168.0.50,192.168.0.150,12h
+  dhcp-host=ignored,192.168.1.50,ignore
+  dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
 
   dhcp-option=3,192.168.0.1
   dhcp-option=6,192.168.0.1
@@ -82,7 +84,7 @@ address=/br-srv.domain.example/192.168.5.2
   ce user=nobody
   group=nogroup
   ct user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс
-   из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf)
+   из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf); dhcp-host(исключить адрес из выдачи)
 
   ne Применение конфигурации
   ce systemctl restart dnsmasq

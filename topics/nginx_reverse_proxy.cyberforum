@@ -1,0 +1,224 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка nginx[/H4]
+
+[CODE]
+apt-get install nginx                                                                    
+ 
+[/CODE]
+
+[H4]Включение автозапуска[/H4]
+
+[CODE]
+systemctl enable --now nginx                                                             
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка обратного прокси[/H3]
+
+[QUOTE]
+Для настройки необходима ip-адресация и работа DNS(или hosts)
+[/QUOTE]
+
+[H4]Создание файла конфигурации[/H4]
+
+[CODE]
+nano /etc/nginx/sites-available.d/some.domain.conf                                       
+                                                                                              
+ 
+[/CODE]
+
+[H4]Базовая конфигурация обратного прокси[/H4]
+
+[CODE]
+server {                                                                                 
+      listen 80;                                                                              
+      server_name some.domain;                                                                
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://10.0.0.10:8080;                                                       
+      proxy_http_version 1.1;                                                                 
+                                                                                              
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+      proxy_set_header Connection "";                                                         
+  }                                                                                           
+  }                                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+listen(порт прослушивания); server_name(имя виртуального хоста); location(обработка запросов к корню)
+[/QUOTE]
+
+[QUOTE]
+proxy_pass(адрес внутреннего веб-приложения); proxy_http_version(версия HTTP-протокола)
+[/QUOTE]
+
+[QUOTE]
+proxy_set_header Host(передача оригинального заголовка Host); X-Real-IP(реальный IP клиента)
+[/QUOTE]
+
+[QUOTE]
+X-Forwarded-For(цепочка IP-адресов); X-Forwarded-Proto(протокол http или https); Connection(управление соединением)
+[/QUOTE]
+
+[H4]Конфигурация для нескольких приложений[/H4]
+
+[CODE]
+server {                                                                                 
+      listen 80;  
+      server_name app1.some.domain;                                                           
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://10.0.0.10:8080;                                                       
+      proxy_http_version 1.1;                                                                 
+                                                                                              
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+  }                                                                                           
+                                                                                              
+  server {        
+      listen 80;                                                                              
+      server_name app2.some.domain;                                                           
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://10.0.0.20:8080;                                                       
+      proxy_http_version 1.1;                                                                 
+                                                                                              
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+  }                                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+app1.some.domain перенаправляет на 10.0.0.10:8080; app2.some.domain перенаправляет на 10.0.0.20:8080
+[/QUOTE]
+
+[H4]Конфигурация с SSL-сертификатом[/H4]
+
+[CODE]
+server {                                                                                 
+      listen 443 ssl;
+      server_name some.domain;                                                                
+                                                                                              
+  ssl_certificate /etc/letsencrypt/some.domain/cert.cer;                                      
+  ssl_certificate_key /etc/letsencrypt/some.domain/cert.key;                                  
+  ssl_protocols TLSv1.2 TLSv1.3;                                                              
+  ssl_prefer_server_ciphers on;                                                               
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://10.0.0.10:8080;                                                       
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+  }                                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+listen 443 ssl(прослушивание порта 443 с поддержкой SSL/TLS)
+[/QUOTE]
+
+[QUOTE]
+ssl_certificate(путь к SSL-сертификату); ssl_certificate_key(путь к приватному ключу)
+[/QUOTE]
+
+[QUOTE]
+ssl_protocols(разрешенные версии TLS); ssl_prefer_server_ciphers(приоритет шифров сервера)
+[/QUOTE]
+
+[H4]Конфигурация с таймаутами[/H4]
+
+[CODE]
+server {                                                                                 
+      listen 80;  
+      server_name some.domain;                                                                
+                                                                                              
+  location / {                                                                                
+      proxy_pass http://10.0.0.10:8080;                                                       
+      proxy_http_version 1.1;                                                                 
+                                                                                              
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;                                                
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+                                                                                              
+      proxy_connect_timeout 5s;                                                               
+      proxy_send_timeout 30s;                                                                 
+      proxy_read_timeout 30s;                                                                 
+  }                                                                                           
+  }                                                                                           
+ 
+[/CODE]
+
+[QUOTE]
+proxy_connect_timeout(время ожидания подключения к backend); proxy_send_timeout(время отправки запроса)
+[/QUOTE]
+
+[QUOTE]
+proxy_read_timeout(время ожидания ответа от backend)
+[/QUOTE]
+
+[H4]Создание символической ссылки[/H4]
+
+[CODE]
+ln -s /etc/nginx/sites-available.d/some.domain.conf /etc/nginx/sites-enabled.d/          
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка синтаксиса конфигурации[/H4]
+
+[CODE]
+nginx -t                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Применение настроек[/H4]
+
+[CODE]
+systemctl restart nginx                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+можно использовать systemctl reload nginx
+[/QUOTE]
+
+[H4]Проверка открытых портов[/H4]
+
+[CODE]
+ss -tulpn | grep nginx                                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка доступности backend-сервера[/H4]
+
+[CODE]
+curl -I http://10.0.0.10:8080                                                            
+                                                                                              
+ 
+[/CODE]
+
+[H4]Просмотр логов nginx[/H4]
+
+[CODE]
+journalctl -u nginx --no-pager
+[/CODE]

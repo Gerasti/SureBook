@@ -1,0 +1,59 @@
+
+[SIZE=4]Установка[/SIZE]
+
+[SIZE=3]Скачивание пакетов[/SIZE]
+
+[CODE]
+apt-get install fail2ban
+[/CODE]
+
+[SIZE=4]Преднастройка ALT Linux[/SIZE]
+
+[SIZE=3]Скачивание модуля python[/SIZE]
+
+[CODE]
+apt-get install python3-module-systemd
+[/CODE]
+
+[SIZE=3]В /etc/fail2ban/jail.conf в секции INCLUDES[/SIZE]
+
+[CODE]
+before = paths-altlinux-systemd.conf
+[/CODE]
+
+[QUOTE]
+Замена before = paths-altlinux.conf
+[/QUOTE]
+
+[SIZE=4]Настройка[/SIZE]
+
+[SIZE=3]Содержимое файла /etc/fail2ban/jail.d/sshd.conf[/SIZE]
+
+[CODE]
+[sshd]
+enabled = true
+port = 22
+maxretry = 3
+bantime = 10
+findtime = 60
+[/CODE]
+
+[QUOTE]
+enabled(отслеживание sshd); bantime(время бана); findtime(время запоминания)
+[/QUOTE]
+
+[SIZE=3]Запуск systemd-сервиса[/SIZE]
+
+[CODE]
+systemctl enable --now fail2ban
+[/CODE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[CODE]
+sudo fail2ban-client status sshd
+[/CODE]
+
+[QUOTE]
+выводит забанненые адреса
+[/QUOTE]

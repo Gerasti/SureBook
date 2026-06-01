@@ -1,0 +1,65 @@
+
+[H3]Настройка базовой HTTP-аутентификации[/H3]
+
+[QUOTE]
+Для ограничения доступа к веб-приложению через встроенную HTTP-аутентификацию nginx
+[/QUOTE]
+
+[H4]Установка утилиты для создания файла паролей[/H4]
+
+[CODE]
+apt-get install apache2-utils                                                            
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание файла с учётными записями[/H4]
+
+[CODE]
+htpasswd -c /etc/nginx/.htpasswd WEB                                                     
+ 
+[/CODE]
+
+[QUOTE]
+Потребуется ввести пароль: P@ssw0rd
+[/QUOTE]
+
+[QUOTE]
+WEB(имя пользователя); P@ssw0rd(пароль); /etc/nginx/.htpasswd(файл хранения учётных записей)
+[/QUOTE]
+
+[H4]В блок location добавить параметры аутентификации[/H4]
+
+[CODE]
+location / { 
+      auth_basic "Restricted Area";                                                           
+      auth_basic_user_file /etc/nginx/.htpasswd;                                              
+                                                                                              
+      proxy_pass http://10.0.0.10:8080;                                                       
+                                                                                              
+      proxy_http_version 1.1;                                                                 
+                  
+      proxy_set_header Host $host;                                                            
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;                            
+      proxy_set_header X-Forwarded-Proto $scheme;                                             
+  }                                                                                           
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка[/H3]
+
+[H4]Проверка корректности настроек[/H4]
+
+[CODE]
+nginx -t                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Применение изменений[/H4]
+
+[CODE]
+systemctl reload nginx 
+[/CODE]

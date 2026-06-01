@@ -124,6 +124,8 @@ interface=ens3
   bind-interfaces
   no-resolv
   dhcp-range=192.168.0.50,192.168.0.150,12h
+  dhcp-host=ignored,192.168.1.50,ignore
+  dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
 
   dhcp-option=3,192.168.0.1
   dhcp-option=6,192.168.0.1
@@ -141,7 +143,7 @@ user=nobody
  
 ```
 
-> user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf)
+> user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf); dhcp-host(исключить адрес из выдачи)
 
 #### Применение конфигурации <!-- NAME -->
 

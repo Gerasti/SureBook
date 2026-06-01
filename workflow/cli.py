@@ -68,6 +68,7 @@ Commands:
   table show            View source table
 
   cleanup               Remove duplicate topics from TOML
+  cleanup force         Remove orphaned files not in current topics
   sort                  Sort alphabetically
   count                 Show statistics
   compare               Compare input vs lists

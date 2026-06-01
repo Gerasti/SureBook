@@ -1,0 +1,136 @@
+
+[SIZE=4]Установка[/SIZE]
+
+[SIZE=3]Установка StrongSwan[/SIZE]
+
+[CODE]
+apt-get install strongswan
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Настройка первого маршрутизатора[/SIZE]
+
+[SIZE=3]Основной конфигурационный файл[/SIZE]
+
+[CODE]
+/etc/strongswan/ipsec.conf
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.1[/SIZE]
+
+[CODE]
+config setup                                                                             
+                                                                                              
+  conn nameConnect                                                                            
+      authby=psk                                                                              
+      keyexchange=ikev2                                                                       
+                                                                                              
+  leftid=10.10.10.1                                                                           
+  left=10.10.10.1                                                                             
+  leftsubnet=10.10.10.0/30                                                                    
+                                                                                              
+  rightid=10.10.10.2                                                                          
+  right=10.10.10.2                                                                            
+  rightsubnet=10.10.10.0/30                                                                   
+                                                                                              
+  auto=start                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+authby=psk(аутентификация по общему ключу); keyexchange=ikev2(протокол обмена ключами); leftid(публичный идентификатор локального узла); left(локальный IP-адрес); leftsubnet(локальная подсеть); rightid(публичный идентификатор удалённого узла); right(удалённый IP-адрес); rightsubnet(удалённая подсеть); auto=start(автоматический запуск туннеля)
+[/QUOTE]
+
+[SIZE=3]Файл с общими ключами[/SIZE]
+
+[CODE]
+/etc/strongswan/ipsec.secrets                                                            
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.1[/SIZE]
+
+[CODE]
+10.10.10.1 10.10.10.2 : PSK "P@ssw0rd"                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Формат: локальный_IP удалённый_IP : PSK "пароль"
+[/QUOTE]
+
+[SIZE=4]Настройка второго маршрутизатора[/SIZE]
+
+[SIZE=3]Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.2[/SIZE]
+
+[CODE]
+config setup 
+                                                                                              
+  conn nameConnect                                                                            
+      authby=psk
+      keyexchange=ikev2                                                                       
+                                                                                              
+  leftid=10.10.10.2                                                                           
+  left=10.10.10.2                                                                             
+  leftsubnet=10.10.10.0/30                                                                    
+                                                                                              
+  rightid=10.10.10.1                                                                          
+  right=10.10.10.1                                                                            
+  rightsubnet=10.10.10.0/30                                                                   
+                                                                                              
+  auto=start                                                                                  
+ 
+[/CODE]
+
+[QUOTE]
+Зеркальная конфигурация: left и right меняются местами
+[/QUOTE]
+
+[SIZE=3]Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.2[/SIZE]
+
+[CODE]
+10.10.10.2 10.10.10.1 : PSK "P@ssw0rd"                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Тот же пароль, адреса в обратном порядке
+[/QUOTE]
+
+[SIZE=4]Запуск[/SIZE]
+
+[SIZE=3]Запуск и автозагрузка службы на обоих маршрутизаторах[/SIZE]
+
+[CODE]
+systemctl enable --now strongswan-starter ipsec
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка статуса туннеля[/SIZE]
+
+[CODE]
+ipsec status
+ 
+[/CODE]
+
+[QUOTE]
+Показывает состояние IPsec соединений
+[/QUOTE]
+
+[SIZE=3]Проверка связности через туннель[/SIZE]
+
+[CODE]
+ping 10.10.10.2                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+С первого маршрутизатора, с второго ping 10.10.10.1
+[/QUOTE]

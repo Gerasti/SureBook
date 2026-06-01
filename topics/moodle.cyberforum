@@ -1,0 +1,172 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка MariaDB[/H4]
+
+[CODE]
+apt-get update && apt-get install -y mariadb-server                               
+ 
+[/CODE]
+
+[H4]Включение службы MariaDB[/H4]
+
+[CODE]
+systemctl enable --now mariadb                                                    
+ 
+[/CODE]
+
+[H4]Создание базы данных и пользователя[/H4]
+
+[CODE]
+mariadb                                                                           
+  CREATE DATABASE moodle;                                                              
+  CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'moodle';                             
+  GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON 
+  moodle.* TO 'moodle'@'localhost';                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Создание БД moodle, пользователя moodle с паролем moodle и выдача необходимых прав
+[/QUOTE]
+
+[H4]Установка Apache2[/H4]
+
+[CODE]
+apt-get install -y apache2 apache2-{base,httpd-prefork,mod_php8.0,mods}           
+ 
+[/CODE]
+
+[H4]Установка PHP и модулей[/H4]
+
+[CODE]
+apt-get install -y php8.0 php8.0-{curl,fileinfo,fpm-fcgi,gd,intl,ldap,mbstring,mys
+  qlnd,mysqlnd-mysqli,opcache,soap,sodium,xmlreader,xmlrpc,zip,openssl}                
+ 
+[/CODE]
+
+[H4]Запуск веб-сервера[/H4]
+
+[CODE]
+systemctl enable --now httpd2                                                     
+ 
+[/CODE]
+
+[H4]Установка git[/H4]
+
+[CODE]
+apt-get install -y git                                                            
+ 
+[/CODE]
+
+[H4]Загрузка Moodle[/H4]
+
+[CODE]
+git clone git://git.moodle.org/moodle.git                                         
+  cd moodle                                                                            
+ 
+[/CODE]
+
+[H4]Просмотр доступных веток[/H4]
+
+[CODE]
+git branch -a                                                                     
+ 
+[/CODE]
+
+[H4]Выбор версии Moodle[/H4]
+
+[CODE]
+git branch --track MOODLE_403_STABLE origin/MOODLE_403_STABLE                     
+  git checkout MOODLE_403_STABLE                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Переключение на стабильную ветку 4.03
+[/QUOTE]
+
+[H4]Копирование в веб-каталог[/H4]
+
+[CODE]
+cd ../                                                                            
+  cp -R moodle /var/www/html/                                                          
+ 
+[/CODE]
+
+[H4]Создание каталога данных[/H4]
+
+[CODE]
+mkdir /var/moodledata                                                             
+  chown -R apache2 /var/moodledata                                                     
+  chmod -R 777 /var/moodledata                                                         
+  chmod -R 0755 /var/www/html/moodle                                                   
+  chown -R apache2:apache2 /var/www/html/moodle                                        
+                                                                                       
+ 
+[/CODE]
+
+[H3]Настройка[/H3]
+
+[H4]Содержимое файла /etc/httpd2/conf/sites-available/moodle.conf[/H4]
+
+[CODE]
+<VirtualHost *:80>                                                                
+      ServerName moodle.champ.first                                                    
+      DocumentRoot /var/www/html/moodle                                                
+      <Directory "/var/www/html/moodle">                                               
+          AllowOverride All                                                            
+          Options -Indexes +FollowSymLinks                                             
+      </Directory>                                                                     
+  </VirtualHost>                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+ServerName (доменное имя); DocumentRoot (путь к Moodle)
+[/QUOTE]
+
+[H4]Активация конфигурации[/H4]
+
+[CODE]
+ln -s /etc/httpd2/conf/sites-available/moodle.conf /etc/httpd2/conf/sites-enabled/
+ 
+[/CODE]
+
+[H4]Настройка PHP[/H4]
+
+[CODE]
+sed -i "s/; max_input_vars = 1000/max_input_vars = 5000/g"                        
+  /etc/php/8.0/apache2-mod_php/php.ini                                                 
+ 
+[/CODE]
+
+[QUOTE]
+Увеличение max_input_vars до 5000
+[/QUOTE]
+
+[H4]Перезапуск Apache[/H4]
+
+[CODE]
+systemctl restart httpd2                                                          
+                                                                                       
+ 
+[/CODE]
+
+[H3]Веб-установщик[/H3]
+
+[H4]Параметры установки[/H4]
+[LIST][*]Язык: Русский[/LIST]
+[LIST][*]Каталог данных: /var/moodledata[/LIST]
+[LIST][*]Тип БД: MariaDB (родной/mariadb)[/LIST]
+[LIST][*]Сервер БД: localhost[/LIST]
+[LIST][*]Название БД: moodle[/LIST]
+[LIST][*]Пользователь БД: moodle[/LIST]
+[LIST][*]Пароль БД: moodle[/LIST]
+[LIST][*]Префикс таблиц: mdl_[/LIST]
+[LIST][*]Порт БД: 3306[/LIST]
+[LIST][*]Логин администратора: admin[/LIST]
+[LIST][*]Пароль, имя, фамилия: указать свои[/LIST]
+[LIST][*]Электронная почта: любая[/LIST]
+[LIST][*]Страна: выбрать[/LIST]
+[LIST][*]Самостоятельная регистрация: Отключить[/LIST]

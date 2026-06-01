@@ -1,0 +1,212 @@
+
+[SIZE=4]Установка Samba DC[/SIZE]
+
+[SIZE=3]Установка пакетов[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y task-samba-dc                                       
+ 
+[/CODE]
+
+[QUOTE]
+task-samba-dc(Samba DC на базе Heimdal Kerberos)
+[/QUOTE]
+
+[SIZE=3]Остановка конфликтующих служб[/SIZE]
+
+[CODE]
+for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
+ 
+[/CODE]
+
+[QUOTE]
+Samba DC использует собственные LDAP и Kerberos
+[/QUOTE]
+
+[SIZE=4]Настройка имени узла и домена[/SIZE]
+
+[SIZE=3]В /etc/sysconfig/network[/SIZE]
+
+[CODE]
+HOSTNAME=dc.domain.sample
+ 
+[/CODE]
+
+[QUOTE]
+dc.domain.sample(FQDN сервера); domain.sample(имя домена)
+[/QUOTE]
+
+[SIZE=3]Установка имени узла[/SIZE]
+
+[CODE]
+hostnamectl set-hostname dc.domain.sample                                                  
+  exec bash                                                                                   
+  domainname domain.sample                                                                      
+ 
+[/CODE]
+
+[QUOTE]
+exec bash(перезагрузка оболочки для применения)
+[/QUOTE]
+
+[SIZE=3]В /etc/resolvconf.conf[/SIZE]
+
+[CODE]
+nameserver 127.0.0.1                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+для корректного распознавания локальных DNS-запросов
+[/QUOTE]
+
+[SIZE=4]Подготовка к созданию домена[/SIZE]
+
+[SIZE=3]Очистка баз и конфигурации Samba[/SIZE]
+
+[CODE]
+rm -f /etc/samba/smb.conf
+  rm -rf /var/lib/samba                                                                       
+  rm -rf /var/cache/samba                                                                     
+  mkdir -p /var/lib/samba/sysvol                                                              
+ 
+[/CODE]
+
+[QUOTE]
+удаляет предыдущую конфигурацию домена
+[/QUOTE]
+
+[SIZE=4]Создание домена[/SIZE]
+
+[SIZE=3]Интерактивное создание домена[/SIZE]
+
+[CODE]
+samba-tool domain provision
+ 
+[/CODE]
+
+[QUOTE]
+указать: доменное имя, рабочую группу, роль dc, бэкенд SAMBA_INTERNAL, DNS forwarder 77.88.8.8, пароль администратора
+[/QUOTE]
+
+[SIZE=3]Пакетное создание домена[/SIZE]
+
+[CODE]
+samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
+  --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
+  --use-rfc2307   
+ 
+[/CODE]
+
+[QUOTE]
+--realm(имя области Kerberos и DNS домена); --domain(имя рабочей группы); --dns-backend(бэкенд DNS); --use-rfc2307(поддержка UID/GID и ACL)
+[/QUOTE]
+
+[SIZE=3]Запуск службы Samba[/SIZE]
+
+[CODE]
+systemctl enable --now samba
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Копирование конфигурации Kerberos[/SIZE]
+
+[CODE]
+cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+ 
+[/CODE]
+
+[QUOTE]
+Samba создает шаблон krb5.conf при создании домена
+[/QUOTE]
+
+[SIZE=4]Проверка[/SIZE]
+
+[SIZE=3]Проверка статуса службы[/SIZE]
+
+[CODE]
+systemctl status samba
+ 
+[/CODE]
+
+[QUOTE]
+служба должна быть active (running)
+[/QUOTE]
+
+[SIZE=3]Просмотр информации о домене[/SIZE]
+
+[CODE]
+samba-tool domain info 127.0.0.1                                                         
+ 
+[/CODE]
+
+[QUOTE]
+показывает общую информацию о домене
+[/QUOTE]
+
+[SIZE=3]Просмотр общих ресурсов[/SIZE]
+
+[CODE]
+smbclient -L localhost -U administrator                                                  
+ 
+[/CODE]
+
+[QUOTE]
+должны быть netlogon и sysvol
+[/QUOTE]
+
+[SIZE=3]Проверка DNS в /etc/resolv.conf[/SIZE]
+
+[CODE]
+cat /etc/resolv.conf                                                                     
+ 
+[/CODE]
+
+[QUOTE]
+должен быть nameserver 127.0.0.1
+[/QUOTE]
+
+[SIZE=3]Проверка SRV-записи Kerberos[/SIZE]
+
+[CODE]
+host -t SRV _kerberos._udp.domain.sample.                                                  
+ 
+[/CODE]
+
+[QUOTE]
+утилита host из пакета bind-utils
+[/QUOTE]
+
+[SIZE=3]Проверка SRV-записи LDAP[/SIZE]
+
+[CODE]
+host -t SRV _ldap._tcp.domain.sample.                                                      
+ 
+[/CODE]
+
+[QUOTE]
+проверяет доступность LDAP
+[/QUOTE]
+
+[SIZE=3]Проверка A-записи хоста[/SIZE]
+
+[CODE]
+host -t A dc.domain.sample.                                                                
+ 
+[/CODE]
+
+[QUOTE]
+должен вернуть IP-адрес контроллера домена
+[/QUOTE]
+
+[SIZE=3]Проверка Kerberos[/SIZE]
+
+[CODE]
+kinit administrator@DOMAIN.SAMPLE                                                          
+ 
+[/CODE]
+
+[QUOTE]
+имя домена в верхнем регистре; запрашивает пароль администратора
+[/QUOTE]

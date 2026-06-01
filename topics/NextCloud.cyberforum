@@ -1,0 +1,136 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка MariaDB[/H4]
+
+[CODE]
+apt-get update && apt-get install -y mariadb-server                                      
+ 
+[/CODE]
+
+[H4]Включение службы MariaDB[/H4]
+
+[CODE]
+systemctl enable --now mariadb                                                           
+ 
+[/CODE]
+
+[H4]Создание базы данных и пользователя[/H4]
+
+[CODE]
+mariadb                                                                                  
+  CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'P@ssw0rd';                               
+  CREATE DATABASE nextcloud DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;               
+  GRANT ALL PRIVILEGES ON nextcloud.* to nextcloud@localhost;                                 
+  EXIT;                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+Создание БД nextcloud, пользователя nextcloud с паролем P@ssw0rd
+[/QUOTE]
+
+[H4]Установка Apache2[/H4]
+
+[CODE]
+apt-get install -y apache2 apache2-mod_{ssl,php8.2} tzdata                               
+ 
+[/CODE]
+
+[H4]Установка PHP8.2 и модулей[/H4]
+
+[CODE]
+apt-get install -y php8.2 php8.2-{pdo_mysql,curl,dom,exif,fileinfo,gd2,gmp,imagick,intl,l
+  ibs,mbstring,memcached,opcache,openssl,pcntl,pdo,xmlreader,zip}                             
+ 
+[/CODE]
+
+[H4]Включение модулей Apache2[/H4]
+
+[CODE]
+for i in dir env headers mime rewrite;do a2enmod $i;done                                 
+ 
+[/CODE]
+
+[H4]Запуск веб-сервера[/H4]
+
+[CODE]
+systemctl enable --now httpd2                                                            
+ 
+[/CODE]
+
+[H4]Установка wget[/H4]
+
+[CODE]
+apt-get install -y wget                                                                  
+ 
+[/CODE]
+
+[H4]Загрузка Nextcloud[/H4]
+
+[CODE]
+wget https://download.nextcloud.com/server/releases/latest.zip                           
+ 
+[/CODE]
+
+[H4]Распаковка и перемещение[/H4]
+
+[CODE]
+unzip latest.zip; rm -f latest.zip                                                       
+  cp -r nextcloud /var/www/html; rm -rf nextcloud                                             
+ 
+[/CODE]
+
+[H4]Настройка прав доступа[/H4]
+
+[CODE]
+chown -R root /var/www/html/nextcloud                                                    
+  mkdir /var/www/html/nextcloud/data                                                          
+  chown -R apache2 /var/www/html/nextcloud/{apps,config,data}/                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка[/H3]
+
+[H4]Содержимое файла /etc/httpd2/conf/sites-available/nextcloud.conf[/H4]
+
+[CODE]
+<VirtualHost *:80>                                                                       
+    DocumentRoot /var/www/html/nextcloud/                                                     
+    ServerName  nextcloud.champ.first                                                         
+                                                                                              
+    <Directory /var/www/html/nextcloud/>                                                      
+      Require all granted                                                                     
+      AllowOverride All                                                                       
+      Options FollowSymLinks MultiViews                                                       
+                                                                                              
+      <IfModule mod_dav.c>                                                                    
+        Dav off                                                                               
+      </IfModule>                                                                             
+    </Directory>                                                                              
+  </VirtualHost>                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+ServerName (доменное имя); DocumentRoot (путь к Nextcloud)
+[/QUOTE]
+
+[H4]Активация конфигурации и перезапуск[/H4]
+
+[CODE]
+ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-enabled/    
+  systemctl restart httpd2                                                                    
+                                                                                              
+ 
+[/CODE]
+
+[H3]Веб-установщик[/H3]
+
+[H4]Параметры установки[/H4]
+[LIST][*]Создать учётную запись администратора[/LIST]
+[LIST][*]Пользователь БД: nextcloud[/LIST]
+[LIST][*]Пароль БД: P@ssw0rd[/LIST]
+[LIST][*]Название БД: nextcloud[/LIST]
+[LIST][*]Сервер БД: localhost[/LIST]

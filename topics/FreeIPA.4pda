@@ -1,0 +1,184 @@
+
+[SIZE=4]Установка FreeIPA-сервера[/SIZE]
+
+[SIZE=3]Установка генератора энтропии[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y haveged                                             
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Включение и запуск haveged[/SIZE]
+
+[CODE]
+systemctl enable --now haveged                                                           
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Установка пакета FreeIPA[/SIZE]
+
+[CODE]
+apt-get install -y freeipa-server                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Запуск интерактивной установки[/SIZE]
+
+[CODE]
+ipa-server-install --setup-dns                                                           
+ 
+[/CODE]
+
+[QUOTE]
+--setup-dns опционально, если нужна интеграция с DNS
+[/QUOTE]
+
+[SIZE=4]Параметры установки[/SIZE]
+[LIST][*]Server host name: имя узла FreeIPA-сервера[/LIST]
+[LIST][*]Domain name: доменное имя[/LIST]
+[LIST][*]Realm name: пространство Kerberos (обычно домен в верхнем регистре)[/LIST]
+[LIST][*]Directory Manager password: пароль для LDAP-администратора (минимум 8 символов)[/LIST]
+[LIST][*]IPA admin password: пароль администратора FreeIPA[/LIST]
+[LIST][*]NetBIOS name: имя NetBIOS[/LIST]
+[LIST][*]DNS forwarders: внешние DNS-серверы (например 8.8.8.8)[/LIST]
+[LIST][*]Reverse DNS zone: обратная DNS-зона[/LIST]
+
+[QUOTE]
+Имена узла, домена и realm нельзя изменить после установки
+[/QUOTE]
+
+[SIZE=4]Создание пользователей и групп[/SIZE]
+
+[SIZE=3]Получение билета Kerberos[/SIZE]
+
+[CODE]
+kinit admin                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+Ввести пароль администратора FreeIPA
+[/QUOTE]
+
+[SIZE=3]Создание 30 пользователей с паролем[/SIZE]
+
+[CODE]
+for i in {1..30}; do                                                                     
+      echo "P@ssw0rd" | ipa user-add user$i --first=User --last=$i --password;                
+      ipa user-mod user$i --setattr=krbPasswordExpiration=20251225011529Z;                    
+  done                                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+Устанавливает срок действия пароля до 2025 года, чтобы не требовалась смена при первом входе
+[/QUOTE]
+
+[SIZE=3]Создание групп[/SIZE]
+
+[CODE]
+for i in {1..3}; do
+      ipa group-add group$i;                                                                  
+  done                                                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Добавление пользователей в группы[/SIZE]
+
+[CODE]
+for i in {1..10}; do                                                                     
+      ipa group-add-member group1 --users=user$i;                                             
+  done                                                                                        
+                                                                                              
+  for i in {11..20}; do                                                                       
+      ipa group-add-member group2 --users=user$i;
+  done                                                                                        
+                  
+  for i in {21..30}; do                                                                       
+      ipa group-add-member group3 --users=user$i;
+  done                                                                                        
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Подключение клиента к FreeIPA[/SIZE]
+
+[SIZE=3]Установка пакетов на клиенте[/SIZE]
+
+[CODE]
+apt-get update && apt-get install -y freeipa-client zip                                  
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Запуск настройки клиента[/SIZE]
+
+[CODE]
+ipa-client-install --server=srv-hq.your.domain --domain=your.domain --mkhomedir          
+ 
+[/CODE]
+
+[QUOTE]
+--mkhomedir автоматически создаёт домашние каталоги для доменных пользователей
+[/QUOTE]
+
+[QUOTE]
+Скрипт автоматически найдёт настройки FreeIPA-сервера и запросит имя пользователя с правом ввода машин в домен
+[/QUOTE]
+
+[SIZE=3]Перезагрузка клиента[/SIZE]
+
+[CODE]
+reboot       
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Установка CA-сертификата на клиенте[/SIZE]
+
+[SIZE=3]Копирование сертификата с сервера[/SIZE]
+
+[CODE]
+scp /etc/ipa/ca.crt root@CLI-HQ:/etc/pki/ca-trust/source/anchors/                        
+ 
+[/CODE]
+
+[QUOTE]
+Выполняется на FreeIPA-сервере
+[/QUOTE]
+
+[SIZE=3]Обновление доверенных сертификатов на клиенте[/SIZE]
+
+[CODE]
+update-ca-trust                                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=4]Проверка FreeIPA[/SIZE]
+
+[SIZE=3]Проверка пользователя[/SIZE]
+
+[CODE]
+ipa user-find admin                                                                      
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка HTTPS-соединения[/SIZE]
+
+[CODE]
+curl https://srv-hq.your.domain                                                          
+                                                                                              
+ 
+[/CODE]
+
+[SIZE=3]Проверка запущенных служб[/SIZE]
+
+[CODE]
+ipactl status 
+[/CODE]

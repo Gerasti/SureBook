@@ -1,0 +1,99 @@
+
+[H3]Базовые команды[/H3]
+
+[H4]Очистка старых правил[/H4]
+
+[CODE]
+iptables -F                                                                              
+  iptables -t nat -F                                                                          
+ 
+[/CODE]
+
+[QUOTE]
+iptables -F(очистка таблицы filter); iptables -t nat -F(очистка таблицы nat)
+[/QUOTE]
+
+[H4]Сохранение правил[/H4]
+
+[CODE]
+iptables-save > /etc/sysconfig/iptables                                                  
+  systemctl enable iptables                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+Без сохранения правила будут потеряны после перезагрузки
+[/QUOTE]
+
+[H3]Включение IP Forwarding[/H3]
+
+[H4]Временное включение[/H4]
+
+[CODE]
+echo 1 > /proc/sys/net/ipv4/ip_forward                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Постоянное включение в /etc/sysctl.conf[/H4]
+
+[CODE]
+net.ipv4.ip_forward = 1                                                                  
+                                                                                              
+ 
+[/CODE]
+
+[H4]Применение изменений[/H4]
+
+[CODE]
+sysctl -p                                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка NAT[/H3]
+
+[H4]Базовая настройка маскарадинга[/H4]
+
+[CODE]
+iptables -t nat -A POSTROUTING -o ИНТЕРФЕЙС_ИНТЕРНЕТ -j MASQUERADE                       
+  iptables -A FORWARD -i ИНТЕРФЕЙС_ИНТЕРНЕТ -o ИНТЕРФЕЙС_ЛОКАЛЬНЫЙ -j ACCEPT                  
+  iptables -A FORWARD -i ИНТЕРФЕЙС_ЛОКАЛЬНЫЙ -o ИНТЕРФЕЙС_ИНТЕРНЕТ -m state --state           
+  ESTABLISHED,RELATED -j ACCEPT                                                               
+ 
+[/CODE]
+
+[QUOTE]
+MASQUERADE(подменяет внутренние IP внешним IP маршрутизатора); FORWARD(разрешает пересылку трафика); state ESTABLISHED,RELATED(разрешает только ответы на установленные соединения)
+[/QUOTE]
+
+[H4]Безопасная настройка NAT с ограничением по сети[/H4]
+
+[CODE]
+iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o ens33 -j MASQUERADE
+  iptables -A FORWARD -i ens33 -o ens37 -s 192.168.1.0/24 -j ACCEPT                           
+ 
+[/CODE]
+
+[QUOTE]
+-s(ограничение по исходной сети); только указанная сеть получает доступ в интернет
+[/QUOTE]
+
+[H3]Проверка правил[/H3]
+
+[H4]Просмотр текущих правил[/H4]
+
+[CODE]
+iptables -L -n -v                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+-L(показать правила); -n(вывод IP без DNS); -v(подробный вывод)
+[/QUOTE]
+
+[H4]Просмотр NAT-таблицы[/H4]
+
+[CODE]
+iptables -t nat -L -n -v 
+[/CODE]

@@ -1,0 +1,182 @@
+
+[H3]Установка и настройка dnsmasq[/H3]
+
+[H4]Установка пакета[/H4]
+
+[CODE]
+apt-get install dnsmasq
+
+ 
+[/CODE]
+
+[H4]Включение автозапуска[/H4]
+
+[CODE]
+systemctl enable --now dnsmasq
+
+ 
+[/CODE]
+
+[H3]Настройка DNS в dnsmasq[/H3]
+
+[H4]Конфигурация DNS в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+domain=domain.example
+
+server=/domain.example/192.168.5.2
+server=77.88.8.8
+
+interface=*
+
+address=/hq-rtr.domain.example/192.168.1.1
+ptr-record=1.1.168.192.in-addr.arpa,hq-rtr.domain.example
+
+address=/docker.domain.example/172.16.1.1
+address=/web.domain.example/172.16.2.1
+
+address=/br-rtr.domain.example/192.168.5.1
+
+address=/hq-srv.domain.example/192.168.1.2
+ptr-record=2.1.168.192.in-addr.arpa,hq-srv.domain.example
+
+address=/hq-cli.domain.example/192.168.5.3
+ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.example
+
+address=/br-srv.domain.example/192.168.5.2 
+ 
+ 
+[/CODE]
+
+[QUOTE]
+listen-address(IP-адреса для приёма DNS-запросов); domain(локальный домен сети); local(запрет пересылки локальной зоны во внешний DNS); cache-size(размер DNS-кэша); server(внешний DNS-сервер для пересылки); expand-hosts(использовать /etc/hosts); log-queries(логирование DNS-запросов); log-facility(файл логов)
+[/QUOTE]
+
+[H3]Типы DNS-записей в dnsmasq[/H3]
+
+[H4]A-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+address=/host.example.com/192.168.0.10
+ 
+[/CODE]
+
+[QUOTE]
+Соответствие доменного имени IPv4-адресу
+[/QUOTE]
+
+[H4]AAAA-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+address=/host.example.com/2001:db8::1
+ 
+[/CODE]
+
+[QUOTE]
+Соответствие доменного имени IPv6-адресу
+[/QUOTE]
+
+[H4]CNAME-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+cname=alias.example.com,host.example.com
+ 
+[/CODE]
+
+[QUOTE]
+Псевдоним для существующего доменного имени
+[/QUOTE]
+
+[H4]MX-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+mx-host=example.com,mail.example.com,10
+ 
+[/CODE]
+
+[QUOTE]
+Почтовый сервер для домена, цифра указывает приоритет
+[/QUOTE]
+
+[H4]TXT-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+txt-record=example.com,"v=spf1 mx a -all"
+ 
+[/CODE]
+
+[QUOTE]
+Текстовые записи для SPF, DMARC, верификации
+[/QUOTE]
+
+[H4]SRV-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+srv-host=_service._tcp.example.com,target.example.com,443,10,10
+ 
+[/CODE]
+
+[QUOTE]
+Указание сервиса, порта и приоритета
+[/QUOTE]
+
+[H4]PTR-запись в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+ptr-record=10.0.168.192.in-addr.arpa,host.example.com
+ 
+[/CODE]
+
+[QUOTE]
+Обратное преобразование IP-адреса в доменное имя
+[/QUOTE]
+
+[H3]Настройка DHCP в dnsmasq[/H3]
+
+[H4]Конфигурация DHCP в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+interface=ens3
+  bind-interfaces
+  no-resolv
+  dhcp-range=192.168.0.50,192.168.0.150,12h
+  dhcp-host=ignored,192.168.1.50,ignore
+  dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
+
+  dhcp-option=3,192.168.0.1
+  dhcp-option=6,192.168.0.1
+  dhcp-option=15,no.do
+ 
+[/CODE]
+
+[QUOTE]
+interface(интерфейс для работы DHCP); bind-interfaces(работать только на указанном интерфейсе); dhcp-range(диапазон IP-адресов и время аренды); dhcp-option=3(шлюз по умолчанию); dhcp-option=6(DNS-сервер); dhcp-option=15(доменное имя сети)
+[/QUOTE]
+
+[H4]Дополнительные параметры в /etc/dnsmasq.conf[/H4]
+
+[CODE]
+user=nobody
+  group=nogroup
+ 
+[/CODE]
+
+[QUOTE]
+user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf); dhcp-host(исключить адрес из выдачи)
+[/QUOTE]
+
+[H4]Применение конфигурации[/H4]
+
+[CODE]
+systemctl restart dnsmasq
+
+ 
+[/CODE]
+
+[H3]Проверка dnsmasq[/H3]
+
+[H4]Проверка статуса службы[/H4]
+
+[CODE]
+systemctl status dnsmasq
+[/CODE]

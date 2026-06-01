@@ -1,0 +1,129 @@
+
+[H3]Настройка HTTPS с ГОСТ-сертификатами[/H3]
+
+[QUOTE]
+Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для веб-ресурсов, настройка доверия
+[/QUOTE]
+
+[H3]Установка поддержки ГОСТ[/H3]
+
+[H4]Установка пакета[/H4]
+
+[CODE]
+apt-get install -y openssl-gost-engine                                                   
+                                                                                              
+ 
+[/CODE]
+
+[H4]Включение поддержки ГОСТ[/H4]
+
+[CODE]
+control openssl-gost enabled                                                             
+                                                                                              
+ 
+[/CODE]
+
+[H4]Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf[/H4]
+
+[CODE]
+openssl_conf = openssl_def                                                               
+                                                                                              
+  [openssl_def]                                                                               
+  engines = engine_section                                                                    
+                                                                                              
+  [engine_section]                                                                            
+  gost = gost_section                                                                         
+                                                                                              
+  [gost_section]  
+  engine_id = gost                                                                            
+  dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
+  default_algorithms = ALL                                                                    
+ 
+[/CODE]
+
+[QUOTE]
+Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, корректной работы Nginx с ГОСТ-криптографией
+[/QUOTE]
+
+[H3]Создание корневого сертификата УЦ[/H3]
+
+[H4]Создание закрытого ключа УЦ[/H4]
+
+[CODE]
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание самоподписанного сертификата УЦ[/H4]
+
+[CODE]
+openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
+ 
+[/CODE]
+
+[QUOTE]
+В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ); ca.cer(корневой сертификат УЦ)
+[/QUOTE]
+
+[H3]Создание сертификатов для доменов[/H3]
+
+[H4]Создание закрытого ключа для домена[/H4]
+
+[CODE]
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
+  openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
+                                                                                              
+ 
+[/CODE]
+
+[H4]Создание запроса на подпись (CSR)[/H4]
+
+[CODE]
+openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
+  -md_gost12_256                                                                              
+  openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
+  -md_gost12_256                                                                              
+ 
+[/CODE]
+
+[QUOTE]
+В Common Name указать IP или домен(ы), например *.some.domain
+[/QUOTE]
+
+[H4]Подпись сертификатов УЦ[/H4]
+
+[CODE]
+openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
+  web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
+  openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
+  docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
+                  
+ 
+[/CODE]
+
+[H4]Проверка сертификата[/H4]
+
+[CODE]
+openssl x509 -in web.some.domain.cer -text -noout
+                                                                                              
+ 
+[/CODE]
+
+[H3]Установка сертификатов в систему[/H3]
+
+[H4]Копирование сертификатов в доверенные[/H4]
+
+[CODE]
+cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
+  cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
+  cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
+                                                                                              
+ 
+[/CODE]
+
+[H4]Обновление доверенных сертификатов[/H4]
+
+[CODE]
+update-ca-trust         
+[/CODE]

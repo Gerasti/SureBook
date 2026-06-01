@@ -107,13 +107,17 @@ The post file will contain:
         # Build unikey content
         unikey_lines = []
 
+        # Check if format needs TOC and links
+        no_toc_formats = ['wikitext', 'cyberforum', '4pda']
+        needs_toc = fmt not in no_toc_formats
+
         # Generate each topic section
         for topic in topics:
             # Add topic header (always 'hd' for both formats)
             unikey_lines.append(f"hd {topic}")
 
-            # For markdown: add link back to contents
-            if fmt != 'wikitext':
+            # Add link back to contents only for formats that support it
+            if needs_toc:
                 unikey_lines.append("lk Содержание Содержание")
 
             # Read topic content from .unikey file
@@ -121,9 +125,9 @@ The post file will contain:
             if FileManager.exists(topic_path):
                 topic_content = FileManager.read_text(topic_path).strip()
                 if topic_content:
-                    # For wikitext: replace 'hd' with 'ne' and remove 'lk' in content only
-                    if fmt == 'wikitext':
-                        topic_content = self._process_wikitext_content(topic_content)
+                    # For formats without links: replace 'hd' with 'ne' and remove 'lk'
+                    if fmt in no_toc_formats:
+                        topic_content = self._process_no_link_content(topic_content)
                     unikey_lines.append(topic_content)
 
         unikey_content = "\n".join(unikey_lines) + "\n"
@@ -131,8 +135,8 @@ The post file will contain:
         # Convert through unikey preprocessor
         converted_content = self._convert_unikey(unikey_content, fmt)
 
-        # For markdown: prepend table of contents
-        if fmt != 'wikitext':
+        # Prepend table of contents only for formats that support it
+        if needs_toc:
             toc = self._generate_toc(topics)
             return toc + "\n\n" + converted_content
 
@@ -158,8 +162,8 @@ The post file will contain:
 
         return "\n".join(toc_lines)
 
-    def _process_wikitext_content(self, content: str) -> str:
-        """Process topic content for wikitext: replace 'hd' with 'ne' and remove 'lk' lines."""
+    def _process_no_link_content(self, content: str) -> str:
+        """Process topic content for formats without links: replace 'hd' with 'ne' and remove 'lk' lines."""
         lines = []
         for line in content.split('\n'):
             stripped = line.lstrip()

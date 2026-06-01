@@ -1,0 +1,129 @@
+
+[H3]Настройка сетевых интерфейсов в ALT Linux[/H3]
+
+[QUOTE]
+Конфигурация интерфейсов хранится в /etc/net/ifaces/
+[/QUOTE]
+
+[QUOTE]
+Рекомендуется добавлять интерфейсы по одному, чтобы избежать изменения имён
+[/QUOTE]
+
+[H3]Создание конфигурации интерфейса[/H3]
+
+[H4]Создание каталога интерфейса[/H4]
+
+[CODE]
+mkdir -p /etc/net/ifaces/ens32                                                           
+                                                                                              
+ 
+[/CODE]
+
+[H4]Копирование конфигурации существующего интерфейса[/H4]
+
+[CODE]
+cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/                                  
+ 
+[/CODE]
+
+[QUOTE]
+Опционально, если уже есть настроенный интерфейс
+[/QUOTE]
+
+[H3]Настройка параметров интерфейса[/H3]
+
+[H4]Базовая конфигурация в /etc/net/ifaces/ens32/options[/H4]
+
+[CODE]
+TYPE=eth                                                                                 
+  BOOTPROTO=static                                                                            
+  CONFIG_IPV4=yes                                                                             
+ 
+[/CODE]
+
+[QUOTE]
+TYPE=eth(тип интерфейса Ethernet); BOOTPROTO(протокол получения IP) {static, dhcp}; CONFIG_IPV4=yes(включение IPv4)
+[/QUOTE]
+
+[H4]Настройка IP-адреса в /etc/net/ifaces/ens32/ipv4address[/H4]
+
+[CODE]
+192.168.11.67/28
+  192.168.33.67/32                                                                            
+ 
+[/CODE]
+
+[QUOTE]
+IP-адрес обязательно указывается с маской сети, можно указать несколько адресов
+[/QUOTE]
+
+[H4]Настройка шлюза в /etc/net/ifaces/ens32/ipv4route[/H4]
+
+[CODE]
+default via 192.168.11.1                                                                 
+ 
+[/CODE]
+
+[QUOTE]
+default(маршрут по умолчанию); via(IP-адрес маршрутизатора)
+[/QUOTE]
+
+[H4]Применение изменений[/H4]
+
+[CODE]
+systemctl restart network                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Ручное управление интерфейсами[/H3]
+
+[H4]Запуск интерфейса[/H4]
+
+[CODE]
+ifup ens32                                                                               
+                                                                                              
+ 
+[/CODE]
+
+[H4]Остановка интерфейса[/H4]
+
+[CODE]
+ifdown ens32                                                                             
+                                                                                              
+ 
+[/CODE]
+
+[H3]Ручное управление маршрутами[/H3]
+
+[H4]Добавление шлюза[/H4]
+
+[CODE]
+ip route add default via 192.168.11.1                                                    
+                                                                                              
+ 
+[/CODE]
+
+[H4]Удаление шлюза[/H4]
+
+[CODE]
+ip route del default via 192.168.11.1                                                    
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка маршрутов[/H4]
+
+[CODE]
+ip route                                                                                 
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка интерфейсов[/H3]
+
+[H4]Просмотр интерфейсов[/H4]
+
+[CODE]
+ip a 
+[/CODE]

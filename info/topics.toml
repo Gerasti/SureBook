@@ -5,7 +5,7 @@ topic_save = "~/SureBook/topics"
 post_save = "~/SureBook/posting"
 source_table_file = "~/SureBook/info/src_table.md"
 auto_alphabetic_sort = "true"
-auto_save = "true"
+auto_save = "false"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
@@ -572,4 +572,5 @@ lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 title = "sudo-schema-samba"
 path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
 lists = []
+
 

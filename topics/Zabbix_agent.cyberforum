@@ -1,0 +1,51 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка пакета на клиенте[/H4]
+
+[CODE]
+apt-get install zabbix-agent                                                             
+   
+ 
+[/CODE]
+
+[H3]Настройка[/H3]
+
+[H4]Настройка в /etc/zabbix/zabbix_agentd.conf[/H4]
+
+[CODE]
+Server=IP_ZABBIX_SERVER
+  ServerActive=IP_ZABBIX_SERVER
+  Hostname=HOST_CLIENT
+ 
+[/CODE]
+
+[QUOTE]
+Server(IP или hostname сервера); ServerActive(IP для активных проверок); Hostname(имя хоста как в веб-интерфейсе)
+[/QUOTE]
+
+[H4]Перезапуск и включение службы[/H4]
+
+[CODE]
+systemctl restart zabbix-agentd
+  systemctl enable zabbix-agentd                                                              
+                                                                                              
+ 
+[/CODE]
+
+[H3]Добавление хоста в веб-интерфейсе[/H3]
+
+[H4]Действия[/H4]
+[LIST][*]Monitoring -> Hosts[/LIST]
+[LIST][*]Create host[/LIST]
+[LIST][*]Host name: указать как в zabbix_agentd.conf[/LIST]
+[LIST][*]Templates: в поиске найти Linux by Zabbix agent[/LIST]
+[LIST][*]Host groups: выбрать Discovered hosts[/LIST]
+[LIST][*]Add interface: Agent[/LIST]
+[LIST][LIST][*]IP address: IP-адрес агента[/LIST][/LIST]
+[LIST][LIST][*]Port: 10050[/LIST][/LIST]
+[LIST][*]Сохранить[/LIST]
+
+[QUOTE]
+После добавления хост можно добавить в Dashboards для мониторинга
+[/QUOTE]

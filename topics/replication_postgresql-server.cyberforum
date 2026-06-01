@@ -1,0 +1,123 @@
+
+[H3]Установка PostgreSQL на резервном сервере[/H3]
+
+[H4]На SRV-BR установка пакетов[/H4]
+
+[CODE]
+apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+ 
+[/CODE]
+
+[QUOTE]
+SRV-BR(резервный сервер); SRV-HQ(основной сервер)
+[/QUOTE]
+
+[H3]Настройка основного сервера[/H3]
+
+[H4]На SRV-HQ в /var/lib/pgsql/data/postgresql.conf[/H4]
+
+[CODE]
+wal_level = replica                                                                      
+  max_wal_senders = 2                                                                         
+  max_replication_slots = 2                                                                   
+  hot_standby = on                                                                            
+  hot_standby_feedback = on                                                                   
+ 
+[/CODE]
+
+[QUOTE]
+wal_level(уровень журналирования); max_wal_senders(количество процессов репликации); hot_standby(чтение на реплике)
+[/QUOTE]
+
+[H4]Перезапуск службы на SRV-HQ[/H4]
+
+[CODE]
+systemctl restart postgresql
+                                                                                              
+ 
+[/CODE]
+
+[H3]Настройка репликации на резервном сервере[/H3]
+
+[H4]На SRV-BR остановка службы[/H4]
+
+[CODE]
+systemctl stop postgresql                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H4]Очистка директории данных[/H4]
+
+[CODE]
+rm -rf /var/lib/pgsql/data/*                                                             
+ 
+[/CODE]
+
+[QUOTE]
+удаляет существующие данные для создания реплики
+[/QUOTE]
+
+[H4]Создание базовой копии с SRV-HQ[/H4]
+
+[CODE]
+pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
+  --write-recovery-conf                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+-h(IP основного сервера); -U(пользователь); -D(директория данных); --wal-method(метод передачи WAL); --write-recovery-conf(создание конфига репликации)
+[/QUOTE]
+
+[H4]Установка прав доступа[/H4]
+
+[CODE]
+chown -R postgres:postgres /var/lib/pgsql/data/
+                                                                                              
+ 
+[/CODE]
+
+[H4]Запуск службы на SRV-BR[/H4]
+
+[CODE]
+systemctl start postgresql                                                               
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка репликации[/H3]
+
+[H4]Подключение к базе данных[/H4]
+
+[CODE]
+psql -U postgres                                                                         
+ 
+[/CODE]
+
+[QUOTE]
+подключение к PostgreSQL
+[/QUOTE]
+
+[H4]Проверка статуса репликации на SRV-HQ[/H4]
+
+[CODE]
+SELECT * FROM pg_stat_replication;                                                       
+ 
+[/CODE]
+
+[QUOTE]
+показывает подключенные реплики
+[/QUOTE]
+
+[H4]Проверка данных на SRV-BR[/H4]
+
+[CODE]
+\c one                                                                                   
+  \dt+                                                                                        
+ 
+[/CODE]
+
+[QUOTE]
+\c(подключение к БД); \dt+(список таблиц с размерами)
+[/QUOTE]

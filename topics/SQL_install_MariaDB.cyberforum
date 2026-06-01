@@ -1,0 +1,131 @@
+
+[H3]Установка[/H3]
+
+[H4]Установка пакета[/H4]
+
+[CODE]
+apt-get install -y mariadb-server                                                        
+   
+ 
+[/CODE]
+
+[H4]Включение и запуск службы[/H4]
+
+[CODE]
+systemctl enable --now mariadb
+
+ 
+[/CODE]
+
+[H3]Настройка MariaDB[/H3]
+
+[H4]Установка пароля root[/H4]
+
+[CODE]
+mariadb -u root
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+  EXIT;
+
+ 
+[/CODE]
+
+[H4]Разрешение доступа из сети в /etc/my.cnf.d/server.cnf[/H4]
+
+[CODE]
+sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
+                                                                                              
+ 
+[/CODE]
+
+[H4]Перезапуск службы[/H4]
+
+[CODE]
+systemctl restart mariadb                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H4]Разрешение доступа для root по сети[/H4]
+
+[CODE]
+mariadb -u root -p                                                                       
+  GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
+  UPDATE mysql.user SET host='%' WHERE user='root';                                           
+  FLUSH PRIVILEGES;                                                                           
+  EXIT;                                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+host='%' разрешает подключение с любого узла
+[/QUOTE]
+
+[H4]Перезапуск службы[/H4]
+
+[CODE]
+systemctl restart mariadb                                                                
+                                                                                              
+ 
+[/CODE]
+
+[H3]Проверка MariaDB[/H3]
+
+[H4]Проверка пользователей на сервере[/H4]
+
+[CODE]
+mariadb -u root -p                                                                       
+  SELECT user, HOST FROM mysql.user;                                                          
+  EXIT;                                                                                       
+                                                                                              
+ 
+[/CODE]
+
+[H4]Удаленное подключение с клиента[/H4]
+
+[CODE]
+mariadb -h IP_СЕРВЕРА -u root -p
+                                                                                              
+ 
+[/CODE]
+
+[H3]Создание БД и пользователей[/H3]
+
+[H4]Создание базы данных[/H4]
+
+[CODE]
+mariadb -u root -p                                                                       
+  CREATE DATABASE db01;                                                                       
+ 
+[/CODE]
+
+[QUOTE]
+db01 - имя создаваемой БД
+[/QUOTE]
+
+[H4]Создание пользователя[/H4]
+
+[CODE]
+CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
+ 
+[/CODE]
+
+[QUOTE]
+'%' означает подключение с любого хоста
+[/QUOTE]
+
+[H4]Предоставление прав пользователю[/H4]
+
+[CODE]
+GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
+  FLUSH PRIVILEGES;                                                                           
+                                                                                              
+ 
+[/CODE]
+
+[H4]Проверка существования БД и пользователей[/H4]
+
+[CODE]
+SHOW DATABASES;                                                                          
+  SELECT user, HOST FROM mysql.user;                                                          
+  EXIT;           
+[/CODE]
