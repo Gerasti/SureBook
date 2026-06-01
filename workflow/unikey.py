@@ -8,7 +8,7 @@ KEYS md; wikitext, cyberforum, 4pda:
   ce, /code       ```CODE ... ```; <syntaxhighlight lang="bash"> ... </syntaxhighlight>; [CODE]...[/CODE]; [CODE]...[/CODE]
   ct, /comment    > text; <blockquote> ... </blockquote>; [QUOTE]...[/QUOTE]; [QUOTE]...[/QUOTE]
   lt, /list       #### text <!-- LIST -->  (enters list mode); ==== text ====; [H4]text[/H4]; [SIZE=4]text[/SIZE]
-  lk, /link       [text](#name); [[#name]] or [[#name|text]]; NONE; NONE
+  lk, /link       [text](#name-); [[#name]] or [[#name|text]]; NONE; NONE
 
   Note: $$ prefix escapes keys (e.g., $$ct outputs plain text "ct", not a comment)
 
@@ -99,16 +99,16 @@ def format_output(key, data, ctx, fmt):
             return None, ctx
 
         if key == 'lk':
-            # Parse: first word is name, rest is text
+            # Parse: first word is anchor name, rest is link text
             parts = joined.split(None, 1)
             if len(parts) == 1:
-                # Only name, use name as text
-                name = parts[0]
-                return f"\n[{name}](#{name})", ctx
+                # Only anchor name, use it as text too
+                anchor = parts[0]
+                return f"[{anchor}](#{anchor}-)", ctx
             else:
-                # name and text
-                name, text = parts
-                return f"\n[{text}](#{name})", ctx
+                # anchor and text
+                anchor, text = parts
+                return f"[{text}](#{anchor}-)", ctx
 
         formats = {
             'hd': f"\n### {joined} <!-- HEAD -->",

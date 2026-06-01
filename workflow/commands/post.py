@@ -156,7 +156,7 @@ The post file will contain:
         toc_lines = ["### Содержание <!-- HEAD -->", ""]
 
         for letter in sorted(by_letter.keys()):
-            links = "; ".join([f"[{topic}](#{topic})" for topic in by_letter[letter]])
+            links = "; ".join([f"[{topic}](#{topic}-)" for topic in by_letter[letter]])
             toc_lines.append(f"{letter}) {links}")
             toc_lines.append("")  # Empty line after each letter
 

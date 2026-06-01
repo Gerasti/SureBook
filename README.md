@@ -1,48 +1,47 @@
 ### Содержание <!-- HEAD -->
 
-A) [alt_fail2ban](#alt_fail2ban); [alt_samba_ADMC](#alt_samba_ADMC); [ansible](#ansible); [ansible_NextCloud](#ansible_NextCloud); [ansible_OTRS](#ansible_OTRS); [ansible_OwnCloud](#ansible_OwnCloud); [apt](#apt); [attach_samba_reserve_domain_controller](#attach_samba_reserve_domain_controller); [auto_mounting_devices](#auto_mounting_devices)
+A) [alt_fail2ban](#alt_fail2ban-); [alt_samba_ADMC](#alt_samba_ADMC-); [ansible](#ansible-); [ansible_NextCloud](#ansible_NextCloud-); [ansible_OTRS](#ansible_OTRS-); [ansible_OwnCloud](#ansible_OwnCloud-); [apt](#apt-); [attach_samba_reserve_domain_controller](#attach_samba_reserve_domain_controller-); [auto_mounting_devices](#auto_mounting_devices-)
 
-B) [base_samba-command](#base_samba-command); [bash_script_for_samba](#bash_script_for_samba); [BIND9_DLZ_samba](#BIND9_DLZ_samba); [bind_DNS](#bind_DNS); [bind_slave_DNS](#bind_slave_DNS)
+B) [base_samba-command](#base_samba-command-); [bash_script_for_samba](#bash_script_for_samba-); [BIND9_DLZ_samba](#BIND9_DLZ_samba-); [bind_DNS](#bind_DNS-); [bind_slave_DNS](#bind_slave_DNS-)
 
-C) [chrony](#chrony); [cups-pdf](#cups-pdf)
+C) [chrony](#chrony-); [cups-pdf](#cups-pdf-)
 
-D) [dhcpd](#dhcpd); [dhcpd_failover](#dhcpd_failover); [dnsmasq](#dnsmasq)
+D) [dhcpd](#dhcpd-); [dhcpd_failover](#dhcpd_failover-); [dnsmasq](#dnsmasq-)
 
-E) [encryption_devices](#encryption_devices); [etcnet_gre_tunnel](#etcnet_gre_tunnel); [etcnet_ip](#etcnet_ip); [etcnet_ip_forward](#etcnet_ip_forward); [etcnet_vlan](#etcnet_vlan)
+E) [encryption_devices](#encryption_devices-); [etcnet_gre_tunnel](#etcnet_gre_tunnel-); [etcnet_ip](#etcnet_ip-); [etcnet_ip_forward](#etcnet_ip_forward-); [etcnet_vlan](#etcnet_vlan-)
 
-F) [FreeIPA](#FreeIPA); [frr_and_quagga_OSPF](#frr_and_quagga_OSPF)
+F) [FreeIPA](#FreeIPA-); [frr_and_quagga_OSPF](#frr_and_quagga_OSPF-)
 
-G) [GOST_OpenSSL](#GOST_OpenSSL)
+G) [GOST_OpenSSL](#GOST_OpenSSL-)
 
-H) [HAProxy_balance_of_servers](#HAProxy_balance_of_servers); [hostname](#hostname)
+H) [HAProxy_balance_of_servers](#HAProxy_balance_of_servers-); [hostname](#hostname-)
 
-I) [install_MariaDB_Zabbix](#install_MariaDB_Zabbix); [install_PostgreSQL_Zabbix](#install_PostgreSQL_Zabbix); [install_SSL_certificate_RedHat-like](#install_SSL_certificate_RedHat-like); [iptables_NAT](#iptables_NAT); [iptables_port_forwarding](#iptables_port_forwarding); [iscsi](#iscsi); [iscsi_attach](#iscsi_attach)
+I) [install_MariaDB_Zabbix](#install_MariaDB_Zabbix-); [install_PostgreSQL_Zabbix](#install_PostgreSQL_Zabbix-); [install_SSL_certificate_RedHat-like](#install_SSL_certificate_RedHat-like-); [iptables_NAT](#iptables_NAT-); [iptables_port_forwarding](#iptables_port_forwarding-); [iscsi](#iscsi-); [iscsi_attach](#iscsi_attach-)
 
-L) [logrotate](#logrotate); [LVM](#LVM)
+L) [logrotate](#logrotate-); [LVM](#LVM-)
 
-M) [mdadm_options](#mdadm_options); [moodle](#moodle)
+M) [mdadm_options](#mdadm_options-); [moodle](#moodle-)
 
-N) [NextCloud](#NextCloud); [NFS](#NFS); [nftables_firewall](#nftables_firewall); [nftables_NAT](#nftables_NAT); [nftables_port_forwarding](#nftables_port_forwarding); [nginx_reverse_proxy](#nginx_reverse_proxy); [nginx_server_balance](#nginx_server_balance); [nginx_Web-based_authentication](#nginx_Web-based_authentication)
+N) [NextCloud](#NextCloud-); [NFS](#NFS-); [nftables_firewall](#nftables_firewall-); [nftables_NAT](#nftables_NAT-); [nftables_port_forwarding](#nftables_port_forwarding-); [nginx_reverse_proxy](#nginx_reverse_proxy-); [nginx_server_balance](#nginx_server_balance-); [nginx_Web-based_authentication](#nginx_Web-based_authentication-)
 
-O) [open-vm-tools](#open-vm-tools); [OpenSSL_certificate_center](#OpenSSL_certificate_center); [OTRS](#OTRS); [OwnCloud](#OwnCloud)
+O) [open-vm-tools](#open-vm-tools-); [OpenSSL_certificate_center](#OpenSSL_certificate_center-); [OTRS](#OTRS-); [OwnCloud](#OwnCloud-)
 
-P) [partitions_of_devices](#partitions_of_devices); [phpMyAdmin](#phpMyAdmin); [PostgreSQL_base-command](#PostgreSQL_base-command)
+P) [partitions_of_devices](#partitions_of_devices-); [phpMyAdmin](#phpMyAdmin-); [PostgreSQL_base-command](#PostgreSQL_base-command-)
 
-R) [RADIUS](#RADIUS); [replication_postgresql-server](#replication_postgresql-server); [resolve_options](#resolve_options); [rsyslog](#rsyslog)
+R) [RADIUS](#RADIUS-); [replication_postgresql-server](#replication_postgresql-server-); [resolve_options](#resolve_options-); [rsyslog](#rsyslog-)
 
-S) [SAMBA_INTERNAL_samba](#SAMBA_INTERNAL_samba); [samba_share_folder](#samba_share_folder); [SQL_install_MariaDB](#SQL_install_MariaDB); [SQL_install_MySQL](#SQL_install_MySQL); [SQL_install_PostgreSQL](#SQL_install_PostgreSQL); [squid_base_options](#squid_base_options); [SSH](#SSH); [strongswan_ipsec](#strongswan_ipsec); [sudo](#sudo); [sudo-schema-samba](#sudo-schema-samba); [systemd-timesyncd](#systemd-timesyncd); [systemd_backup](#systemd_backup)
+S) [SAMBA_INTERNAL_samba](#SAMBA_INTERNAL_samba-); [samba_share_folder](#samba_share_folder-); [SQL_install_MariaDB](#SQL_install_MariaDB-); [SQL_install_MySQL](#SQL_install_MySQL-); [SQL_install_PostgreSQL](#SQL_install_PostgreSQL-); [squid_base_options](#squid_base_options-); [SSH](#SSH-); [strongswan_ipsec](#strongswan_ipsec-); [sudo](#sudo-); [sudo-schema-samba](#sudo-schema-samba-); [systemd-timesyncd](#systemd-timesyncd-); [systemd_backup](#systemd_backup-)
 
-T) [timedatectl](#timedatectl)
+T) [timedatectl](#timedatectl-)
 
-W) [wireguard](#wireguard)
+W) [wireguard](#wireguard-)
 
-Z) [Zabbix_agent](#Zabbix_agent); [Zabbix_web-interface](#Zabbix_web-interface)
+Z) [Zabbix_agent](#Zabbix_agent-); [Zabbix_web-interface](#Zabbix_web-interface-)
 
 
 
 ### alt_fail2ban <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -98,8 +97,7 @@ sudo fail2ban-client status sshd
 > выводит забанненые адреса
 
 ### alt_samba_ADMC <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -161,8 +159,7 @@ apt-get install -y gpui
 > Указать путь(локальный или сетевая папка), блокировать настройку изображения; Способ подгонки: Wallpaper
 
 ### ansible <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка пакетов <!-- HEAD -->
 
@@ -304,8 +301,7 @@ ls /etc/ansible/PC-INFO
 > Файлы содержат имя компьютера и IP-адрес каждого хоста
 
 ### ansible_NextCloud <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Ansible <!-- HEAD -->
 
@@ -583,8 +579,7 @@ ansible-playbook -i inventory playbook.yml
 ```
 
 ### ansible_OTRS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Ansible <!-- HEAD -->
 
@@ -802,8 +797,7 @@ ansible-playbook -i inventory playbook.yml
 ```
 
 ### ansible_OwnCloud <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Ansible <!-- HEAD -->
 
@@ -1062,8 +1056,7 @@ ansible-playbook -i inventory playbook.yml
 ```
 
 ### apt <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -1086,8 +1079,7 @@ apt-get update
 > Должен работать DNS и возможно Интернет, NAT
 
 ### attach_samba_reserve_domain_controller <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Samba DC <!-- HEAD -->
 
@@ -1195,8 +1187,7 @@ systemctl enable --now samba
 ```
 
 ### auto_mounting_devices <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Форматирование диска <!-- HEAD -->
 
@@ -1275,8 +1266,7 @@ df -h
 > -h(человекочитаемый формат)
 
 ### base_samba-command <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Управление пользователями и группами <!-- HEAD -->
 
@@ -1493,8 +1483,7 @@ for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done
 > цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
 
 ### bash_script_for_samba <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Массовый импорт пользователей в Samba AD <!-- HEAD -->
 
@@ -1593,8 +1582,7 @@ samba-tool ou listobjects OU=IT
 > Можно проверять любые подразделения {OU=Sales, OU=IT}
 
 ### BIND9_DLZ_samba <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Samba AD DC с BIND9_DLZ <!-- HEAD -->
 
@@ -1847,8 +1835,7 @@ su -
 ```
 
 ### bind_DNS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка DNS-сервера <!-- HEAD -->
 
@@ -2060,8 +2047,7 @@ systemctl enable --now bind
 ```
 
 ### bind_slave_DNS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка slave DNS-сервера <!-- HEAD -->
 
@@ -2148,8 +2134,7 @@ ls -l /etc/bind/zone/slave/
 > Должны появиться файлы зон, скопированные с master-сервера
 
 ### chrony <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка и настройка Chrony NTP-сервера <!-- HEAD -->
 
@@ -2330,8 +2315,7 @@ chronyc sourcestats
 ```
 
 ### cups-pdf <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка и настройка CUPS <!-- HEAD -->
 
@@ -2476,8 +2460,7 @@ lpinfo -v
 ```
 
 ### dhcpd <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка DHCP-сервера <!-- HEAD -->
 
@@ -2570,8 +2553,7 @@ dhcpcd
 > Клиент получит IP-адрес, шлюз и DNS-серверы из конфигурации сервера
 
 ### dhcpd_failover <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка DHCP failover <!-- HEAD -->
 
@@ -2679,8 +2661,7 @@ dhcpd -t -cf /etc/dhcp/dhcpd.conf
 ```
 
 ### dnsmasq <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка и настройка dnsmasq <!-- HEAD -->
 
@@ -2845,8 +2826,7 @@ systemctl status dnsmasq
 ```
 
 ### encryption_devices <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Шифрование раздела с LUKS <!-- HEAD -->
 
@@ -2948,8 +2928,7 @@ df -h
 > Проверка, что зашифрованный раздел смонтирован
 
 ### etcnet_gre_tunnel <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка GRE-туннеля <!-- HEAD -->
 
@@ -3013,8 +2992,7 @@ systemctl restart network
 > Аналогичную настройку необходимо выполнить на втором роутере с зеркальными параметрами TUNLOCAL и TUNREMOTE
 
 ### etcnet_ip <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка сетевых интерфейсов в ALT Linux <!-- HEAD -->
 
@@ -3134,8 +3112,7 @@ ip a
 ```
 
 ### etcnet_ip_forward <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -3184,8 +3161,7 @@ cat /proc/sys/net/ipv4/ip_forward
 > Должно вернуть 1 если включено, 0 если выключено
 
 ### etcnet_vlan <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка VLAN-интерфейсов <!-- HEAD -->
 
@@ -3256,8 +3232,7 @@ ip a
 ```
 
 ### FreeIPA <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка FreeIPA-сервера <!-- HEAD -->
 
@@ -3430,8 +3405,7 @@ ipactl status
 ```
 
 ### frr_and_quagga_OSPF <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка FRR <!-- HEAD -->
 
@@ -3559,8 +3533,7 @@ show running-config
 ```
 
 ### GOST_OpenSSL <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка HTTPS с ГОСТ-сертификатами <!-- HEAD -->
 
@@ -3684,8 +3657,7 @@ update-ca-trust
 ```
 
 ### HAProxy_balance_of_servers <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -3788,8 +3760,7 @@ http://IP_СЕРВЕРА:8989/haproxy_stats
 > Логин и пароль из параметра stats auth
 
 ### hostname <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка hostname <!-- HEAD -->
 
@@ -3903,8 +3874,7 @@ hostnamectl status
 > Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System, Kernel, Architecture
 
 ### install_MariaDB_Zabbix <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -4056,8 +4026,7 @@ http://IP_СЕРВЕРА/zabbix
 > Логин: Admin; Пароль: zabbix
 
 ### install_PostgreSQL_Zabbix <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -4218,8 +4187,7 @@ http://IP_СЕРВЕРА/zabbix
 > Логин: Admin; Пароль: zabbix
 
 ### install_SSL_certificate_RedHat-like <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Передача сертификатов на удаленный сервер <!-- HEAD -->
 
@@ -4279,8 +4247,7 @@ update-ca-trust
 ```
 
 ### iptables_NAT <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Базовые команды <!-- HEAD -->
 
@@ -4372,8 +4339,7 @@ iptables -t nat -L -n -v
 ```
 
 ### iptables_port_forwarding <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Проброс портов (Port Forwarding) <!-- HEAD -->
 
@@ -4407,8 +4373,7 @@ iptables -t nat -A PREROUTING -p tcp -i ens33 --dport 80 -j DNAT --to-destinatio
 ```
 
 ### iscsi <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -4552,8 +4517,7 @@ lsblk
 > Должен появиться новый блочный диск (в примере 5 ГБ)
 
 ### iscsi_attach <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка LVM <!-- HEAD -->
 
@@ -4650,8 +4614,7 @@ lsblk
 > Или команда df -h для просмотра смонтированных файловых систем
 
 ### logrotate <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -4708,8 +4671,7 @@ systemctl enable --now rsyslog
 ```
 
 ### LVM <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Основы LVM <!-- HEAD -->
 
@@ -5147,8 +5109,7 @@ lvs -a -o +snap_percent
 > Показывает процент использования снапшота
 
 ### mdadm_options <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -5528,8 +5489,7 @@ sed -i '/\/dev\/md0/d' /etc/mdadm.conf
 > Удаление конфигурации массива
 
 ### moodle <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -5696,8 +5656,7 @@ systemctl restart httpd2
 - Самостоятельная регистрация: Отключить
 
 ### NextCloud <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -5832,8 +5791,7 @@ ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-ena
 - Сервер БД: localhost
 
 ### NFS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка на сервере <!-- HEAD -->
 
@@ -5911,8 +5869,7 @@ ls -l /nfs
 > Файл txt должен быть виден с владельцем nobody:nobody [](#Установка на сервере)
 
 ### nftables_firewall <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -5992,8 +5949,7 @@ ping 77.88.8.8
 ```
 
 ### nftables_NAT <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -6044,8 +6000,7 @@ systemctl enable nftables
 ```
 
 ### nftables_port_forwarding <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Проброс портов в nftables <!-- HEAD -->
 
@@ -6077,8 +6032,7 @@ nft add rule ip nat PREROUTING iifname "ens33" tcp dport 80 dnat to 192.168.1.20
 ```
 
 ### nginx_reverse_proxy <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -6281,8 +6235,7 @@ journalctl -u nginx --no-pager
 ```
 
 ### nginx_server_balance <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Балансировка нагрузки <!-- HEAD -->
 
@@ -6404,8 +6357,7 @@ upstream backend_site1 {
 > least_conn с весами и проверкой доступности; proxy_http_version 1.1 и Connection "" для keepalive
 
 ### nginx_Web-based_authentication <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка базовой HTTP-аутентификации <!-- HEAD -->
 
@@ -6467,8 +6419,7 @@ systemctl reload nginx
 ```
 
 ### open-vm-tools <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка VMware Tools <!-- HEAD -->
 
@@ -6565,8 +6516,7 @@ xrandr
 ```
 
 ### OpenSSL_certificate_center <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -6734,8 +6684,7 @@ openssl verify cacert.crt
 > Должен вывести: cacert.crt: OK
 
 ### OTRS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -6844,8 +6793,7 @@ rm /var/www/webapps/otrs/var/cron/otrs_daemin dist
 > Доступ пользователей: http://IP_адрес_сервера/otrs/customer.pl
 
 ### OwnCloud <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -7097,8 +7045,7 @@ systemctl enable --now nginx
 > Доступ к веб-интерфейсу: https://IP_адрес_или_доменное_имя
 
 ### partitions_of_devices <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 #### Создание GPT разметки на диске /dev/sda <!-- NAME -->
 
@@ -7423,8 +7370,7 @@ pvdisplay
 > Показывает физические тома, группы томов и логические тома LVM Исправления: - primary заменено на осмысленные названия разделов (boot, root, swap, data) - Для BIOS Legacy использую msdos, не gpt - Добавлено объяснение LVM: технология для гибкого управления разделами (изменение размера, снапшоты, объединение дисков) - Добавлен пример создания LVM томов после разметки
 
 ### phpMyAdmin <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -7749,8 +7695,7 @@ mariadb -h IP_адрес_сервера -u root -p
 > Вход под пользователем root с паролем P@ssw0rd
 
 ### PostgreSQL_base-command <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Подключение к PostgreSQL <!-- HEAD -->
 
@@ -8474,8 +8419,7 @@ SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablena
 ```
 
 ### RADIUS <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка RADIUS сервера <!-- HEAD -->
 
@@ -8596,8 +8540,7 @@ ssh netuser@<ip клиента>
 > вход должен пройти с паролем P@ssw0rd через RADIUS-сервер
 
 ### replication_postgresql-server <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка PostgreSQL на резервном сервере <!-- HEAD -->
 
@@ -8709,8 +8652,7 @@ SELECT * FROM pg_stat_replication;
 > \c(подключение к БД); \dt+(список таблиц с размерами)
 
 ### resolve_options <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
 
@@ -8793,8 +8735,7 @@ host ya.ru
 > простая проверка разрешения имени
 
 ### rsyslog <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -8932,8 +8873,7 @@ tail -f /opt/client1/*.log
 > должно появиться тестовое сообщение
 
 ### SAMBA_INTERNAL_samba <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка Samba DC <!-- HEAD -->
 
@@ -9114,8 +9054,7 @@ kinit administrator@DOMAIN.SAMPLE
 > имя домена в верхнем регистре; запрашивает пароль администратора
 
 ### samba_share_folder <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка Samba для анонимного доступа <!-- HEAD -->
 
@@ -9288,8 +9227,7 @@ smb://192.168.1.1/samba
 > в файловом менеджере или через smbclient
 
 ### SQL_install_MariaDB <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -9417,8 +9355,7 @@ SHOW DATABASES;
 ```
 
 ### SQL_install_MySQL <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -9546,8 +9483,7 @@ SHOW DATABASES;
 ```
 
 ### SQL_install_PostgreSQL <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -9731,8 +9667,7 @@ psql -U user01 -h IP_сервера -d db01
 > -h(хост сервера); -d(имя базы данных)
 
 ### squid_base_options <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -9836,8 +9771,7 @@ tail -f /var/log/squid/access.log
 > показывает запросы в реальном времени
 
 ### SSH <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -10058,8 +9992,7 @@ sudo whoami
 > Результат: root
 
 ### strongswan_ipsec <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -10186,8 +10119,7 @@ ping 10.10.10.2
 > С первого маршрутизатора, с второго ping 10.10.10.1
 
 ### sudo <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -10432,8 +10364,7 @@ cat /etc/group
 > Список всех групп и их членов
 
 ### sudo-schema-samba <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка sudo-samba-schema <!-- HEAD -->
 
@@ -10592,8 +10523,7 @@ sudo cat /etc/passwd | sudo grep root && sudo id root
 > Должны выполниться команды без запроса пароля благодаря !authenticate
 
 ### systemd-timesyncd <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка и настройка systemd-timesyncd <!-- HEAD -->
 
@@ -10793,8 +10723,7 @@ ntpdate -q 192.168.11.67
 > -q(запрос без изменения времени), показывает смещение времени
 
 ### systemd_backup <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Настройка службы резервного копирования <!-- HEAD -->
 
@@ -10929,8 +10858,7 @@ journalctl -u backup.timer
 - OnCalendar=hourly (каждый час)
 
 ### timedatectl <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Управление временем через timedatectl <!-- HEAD -->
 
@@ -11127,8 +11055,7 @@ journalctl -u systemd-timesyncd
 - UTC (Всемирное координированное время)
 
 ### wireguard <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка WireGuard <!-- HEAD -->
 
@@ -11487,8 +11414,7 @@ vtysh -c "show ip ospf interface"
 ```
 
 ### Zabbix_agent <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
@@ -11538,8 +11464,7 @@ systemctl restart zabbix-agentd
 > После добавления хост можно добавить в Dashboards для мониторинга
 
 ### Zabbix_web-interface <!-- HEAD -->
-
-[Содержание](#Содержание)
+[Содержание](#Содержание-)
 
 #### Установка пакетов <!-- NAME -->
 
