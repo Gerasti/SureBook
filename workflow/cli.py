@@ -215,7 +215,7 @@ def main():
     add_cmd = AddCommand(input_repo, list_repo)
     delete_cmd = DeleteCommand(input_repo, list_repo, topic_repo)
     search_cmd = SearchCommand(input_repo, list_repo, topic_repo)
-    rename_cmd = RenameCommand(input_repo, list_repo, topic_repo)
+    rename_cmd = RenameCommand(input_repo, list_repo, topic_repo, config_repo)
     save_cmd = SaveCommand(input_repo, list_repo, topic_repo, config_repo)
     settings_cmd = SettingsCommand(config_repo)
     link_cmd = LinkCommand(list_repo)
@@ -300,7 +300,7 @@ Examples:
     add_cmd = AddCommand(input_repo, list_repo)
     delete_cmd = DeleteCommand(input_repo, list_repo, topic_repo)
     search_cmd = SearchCommand(input_repo, list_repo, topic_repo)
-    rename_cmd = RenameCommand(input_repo, list_repo, topic_repo)
+    rename_cmd = RenameCommand(input_repo, list_repo, topic_repo, config_repo)
     save_cmd = SaveCommand(input_repo, list_repo, topic_repo, config_repo)
     settings_cmd = SettingsCommand(config_repo)
     link_cmd = LinkCommand(list_repo)
@@ -519,7 +519,7 @@ Examples:
     finally:
         # Auto save if enabled and not in read-only commands
         # Exclude show and its subcommands (show, show save, show input, etc.)
-        if settings.auto_save and command not in ["config", "show", "search", "count", "compare"]:
+        if settings.auto_save and command not in ["config", "show", "search", "count", "compare", "rename"]:
             try:
                 save_cmd.execute([], {"auto": True})
             except Exception as e:

@@ -60,6 +60,7 @@ Examples:
 
         # Check if this is auto save
         is_auto_save = flags.get("auto", False)
+        exclude_topics = flags.get("exclude_topics", [])
 
         settings = self.config_repo.get_settings()
 
@@ -69,6 +70,10 @@ Examples:
         topics_i = self.input_repo.get_all()
         topics_l = self.list_repo.get_all_topics()
         topics = uniq_keep_order(topics_i + topics_l)
+
+        # Exclude topics if specified (for rename command)
+        if exclude_topics:
+            topics = [t for t in topics if strip_link(t) not in exclude_topics]
 
         if args:
             # Save specific topics

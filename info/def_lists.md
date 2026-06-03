@@ -1,39 +1,7 @@
 ## sysahelper list:
-alt samba ADMC [BIND9_DLZ samba && alt samba ADMC](https://sysahelper.ru/mod/page/view.php?id=735)
-
-ansible NextCloud [ansible NextCloud](https://sysahelper.ru/mod/page/view.php?id=28)
-
-ansible OTRS [ansible OTRS](https://sysahelper.ru/mod/page/view.php?id=25)
-
-ansible OwnCloud [ansible OwnCloud](https://sysahelper.ru/mod/page/view.php?id=26)
-
 bind DNS [bind DNS](https://sysahelper.ru/mod/page/view.php?id=734)
 
-BIND9_DLZ samba [BIND9_DLZ samba && alt samba ADMC](https://sysahelper.ru/mod/page/view.php?id=735)
-
 DBeaver [SQL install PostgreSQL && DBeaver](https://sysahelper.ru/mod/page/view.php?id=772)
-
-docker OTRS [docker OTRS](https://sysahelper.ru/mod/page/view.php?id=22)
-
-docker OwnCloud [docker OwnCloud](https://sysahelper.ru/mod/page/view.php?id=24)
-
-docker phpMyAdmin [docker phpMyAdmin](https://sysahelper.ru/mod/page/view.php?id=33)
-
-docker Zabbix [docker Zabbix](https://sysahelper.ru/mod/page/view.php?id=20)
-
-ecorouter bgp [ecorouter bgp](https://sysahelper.ru/mod/page/view.php?id=722)
-
-ecorouter DHCP-retranslation [ecorouter DHCP-retranslation](https://sysahelper.ru/mod/page/view.php?id=325)
-
-ecorouter NAT [ecorouter NAT](https://sysahelper.ru/mod/page/view.php?id=725)
-
-ecorouter port forwarding [ecorouter port forwarding](https://sysahelper.ru/mod/page/view.php?id=327)
-
-ecorouter RADIUS [ecorouter RADIUS](https://sysahelper.ru/mod/page/view.php?id=732)
-
-ecorouter ssh [ecorouter ssh](https://sysahelper.ru/mod/page/view.php?id=322)
-
-ecorouter vlan [ecorouter vlan](https://sysahelper.ru/mod/page/view.php?id=720)
 
 Ideco admin [Ideco admin && Ideco LAN interface](https://sysahelper.ru/mod/page/view.php?id=724)
 
@@ -41,17 +9,7 @@ Ideco LAN interface [Ideco admin && Ideco LAN interface](https://sysahelper.ru/m
 
 Ideco license [Ideco license](https://sysahelper.ru/mod/page/view.php?id=728)
 
-install PostgreSQL Zabbix [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
-
-install SSL certificate Debian-like [SSL certificate center && install SSL certificate Debian-like](https://sysahelper.ru/mod/page/view.php?id=134)
-
 IP-телефония SNG7 [Ip-телефония SNG7](https://sysahelper.ru/mod/page/view.php?id=777)
-
-iscsi [iscsi](https://sysahelper.ru/mod/page/view.php?id=773)
-
-iscsi attach [iscsi attach](https://sysahelper.ru/mod/page/view.php?id=774)
-
-moodle [moodle](https://sysahelper.ru/mod/book/view.php?id=34)
 
 NextCloud [NextCloud](https://sysahelper.ru/mod/book/view.php?id=27)
 
@@ -63,184 +21,166 @@ OwnCloud [OwnCloud](https://sysahelper.ru/mod/book/view.php?id=23)
 
 phpMyAdmin [phpMyAdmin](https://sysahelper.ru/mod/book/view.php?id=29)
 
-SAMBA_INTERNAL samba [SAMBA_INTERNAL samba](https://sysahelper.ru/mod/page/view.php?id=164)
-
-SQL install MariaDB [SQL install MariaDB](https://sysahelper.ru/mod/page/view.php?id=191)
-
-SQL install MySQL [SQL install MySQL](https://sysahelper.ru/mod/page/view.php?id=190)
-
-SQL install PostgreSQL
-
-wireguard [wireguard](https://sysahelper.ru/mod/page/view.php?id=128)
+PostgreSQL install
 
 Zabbix agent
 
 Zabbix web-interface [install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent](https://sysahelper.ru/mod/book/view.php?id=18)
 
 ## notesk list:
-ansible
+Ansible
 
 apt
-
-attach samba reserve domain controller
-
-auto mounting devices
-
-bash script for samba
 
 bind DNS
 
 bind slave DNS
 
-BIND9_DLZ samba
-
 chrony
 
-console-debian samba
+CUPS PDF
 
-cups-pdf
+Debian GRE tunnel
 
-debian gre tunnel
+Debian IP
 
-debian ip
+Debian IP forward
 
-debian ip forward
+Debian VLAN
 
-debian vlan
+devices automount
+
+devices encryption
+
+devices partitions
 
 dhcpd
 
 dnsmasq
 
-docker `Hello-app`
+Docker Hello-app
 
-docker Elasticsearch - Logstash - Kibana (ELK)
+Docker install
 
-docker Grafana-Prometheus-NodeExporter
+Docker Local Registry
 
-docker install
+ELK Elasticsearch Logstash Kibana Docker
 
-docker Local Registry
+etcnet GRE tunnel
 
-docker MediaWiki
+etcnet IP
 
-docker single-mode Open WebUI
+etcnet IP forward
 
-docker WordPress
-
-encryption devices
-
-etcnet gre tunnel
-
-etcnet ip
-
-etcnet ip forward
-
-etcnet vlan
+etcnet VLAN
 
 FreeIPA
 
-frr and quagga OSPF
-
-GOST OpenSSL
+Grafana-Prometheus-NodeExporter Docker
 
 GRUB password recovery
 
 HAProxy balance of servers
 
-install PostgreSQL Zabbix
-
-install SSL certificate RedHat-like
+IPsec strongswan
 
 LVM
+
+MediaWiki Docker
 
 NFS
 
 nftables NAT
 
-nginx reverse proxy
+Nginx reverse proxy
 
-nginx server balance
+Nginx server balance
 
-partitions of devices
+Open WebUI single-mode Docker
+
+OpenSSL certificate install RedHat-like
+
+OpenSSL GOST
+
+OSPF frr quagga
 
 PostgreSQL base-command
 
-replication postgresql-server
+PostgreSQL install
 
-resolve options
+PostgreSQL replication server
 
-samba share folder
+resolve.conf
 
-SQL install PostgreSQL
+Samba controller BIND9 DLZ
+
+Samba Debian
+
+Samba import script
+
+Samba reserve controller
+
+Samba share folder
 
 squid base options
 
 SSH
 
-strongswan ipsec
-
 sudo
 
 systemd backup
 
+WordPress Docker
+
 Zabbix agent
+
+Zabbix install PostgreSQL
 
 Zabbix web-interface
 
 Кибер Бэкап
 
 ## сетевикон list:
-alt samba ADMC
-
 apt
-
-bash script for samba
-
-BIND9_DLZ samba
 
 chrony
 
-moodle
-
 NFS
 
-nginx reverse proxy
+Nginx reverse proxy
+
+Samba ALT ADMC
+
+Samba controller BIND9 DLZ
+
+Samba import script
 
 sudo
 
 systemd-timesyncd
 
 ## SuroTools list:
-alt fail2ban
-
-auto mounting devices
-
-base samba-command
-
 bind DNS
 
 chrony
 
+devices automount
+
+devices mdadm
+
+devices partitions
+
 dhcpd
 
-etcnet gre tunnel
+etcnet GRE tunnel
 
-etcnet ip
+etcnet IP
 
-etcnet ip forward
+etcnet IP forward
 
-etcnet vlan
+etcnet VLAN
 
-frr and quagga OSPF
-
-install MariaDB Zabbix
-
-install PostgreSQL Zabbix
-
-install SSL certificate Debian-like
-
-install SSL certificate RedHat-like
+fail2ban ALT
 
 iptables NAT
 
@@ -248,62 +188,62 @@ iptables port forwarding
 
 logrotate
 
-mdadm options
+MariaDB install
 
-moodle
+MySQL install
 
 NFS
 
-nginx reverse proxy
+Nginx reverse proxy
 
-nginx Web-based authentication
-
-open-vm-tools
+Nginx Web-based authentication
 
 OpenSSL certificate center
 
-partitions of devices
+OpenSSL certificate install Debian-like
+
+OpenSSL certificate install RedHat-like
+
+OSPF frr quagga
+
+PostgreSQL install
 
 rsyslog
 
-SQL install MariaDB
-
-SQL install MySQL
-
-SQL install PostgreSQL
+Samba base command
 
 sudo
 
+VMware open-vm-tools
+
 Zabbix agent
+
+Zabbix install MariaDB
+
+Zabbix install PostgreSQL
 
 Zabbix web-interface
 
 ## DEMO-208-2 list:
-ansible
+Ansible
 
 apt
 
-base samba-command
-
 bind DNS
-
-BIND9_DLZ samba
 
 chrony
 
-cups-pdf
+CUPS PDF
 
-etcnet gre tunnel
+devices partitions
 
-etcnet vlan
+etcnet GRE tunnel
 
-frr and quagga OSPF
-
-GOST OpenSSL
+etcnet VLAN
 
 hostname
 
-install SSL certificate RedHat-like
+IPsec strongswan
 
 logrotate
 
@@ -313,15 +253,21 @@ nftables firewall
 
 nftables NAT
 
-nginx reverse proxy
+Nginx reverse proxy
 
-partitions of devices
+OpenSSL certificate install RedHat-like
 
-resolve options
+OpenSSL GOST
+
+OSPF frr quagga
+
+resolve.conf
 
 rsyslog
 
-strongswan ipsec
+Samba base command
+
+Samba controller BIND9 DLZ
 
 sudo
 
@@ -330,21 +276,15 @@ Zabbix agent
 ## DEMO-208 list:
 bind DNS
 
-BIND9_DLZ samba
+Debian IP
 
-console-debian samba
+Debian VLAN
 
-debian ip
+etcnet GRE tunnel
 
-debian vlan
+etcnet IP
 
-etcnet gre tunnel
-
-etcnet ip
-
-etcnet vlan
-
-frr and quagga OSPF
+etcnet VLAN
 
 hostname
 
@@ -352,43 +292,45 @@ NFS
 
 nftables NAT
 
+OSPF frr quagga
+
+Samba controller BIND9 DLZ
+
+Samba Debian
+
 sudo
 
 ## AltLabs list:
-attach samba reserve domain controller
+etcnet IP
 
-bash script for samba
+Samba controller BIND9 DLZ
 
-BIND9_DLZ samba
+Samba import script
 
-etcnet ip
+Samba reserve controller
 
-samba share folder
+Samba share folder
 
 ## DemoScreens list:
-ansible
+Ansible
 
 bind DNS
 
-BIND9_DLZ samba
-
 chrony
 
-cups-pdf
+CUPS PDF
 
 dhcpd
 
-docker install
+Docker install
 
-etcnet gre tunnel
+etcnet GRE tunnel
 
-etcnet vlan
-
-frr and quagga OSPF
-
-GOST OpenSSL
+etcnet VLAN
 
 hostname
+
+IPsec strongswan
 
 NFS
 
@@ -396,15 +338,19 @@ nftables firewall
 
 nftables NAT
 
-nginx reverse proxy
+Nginx reverse proxy
 
-resolve options
+OpenSSL GOST
+
+OSPF frr quagga
+
+resolve.conf
 
 rsyslog
 
-SAMBA_INTERNAL samba
+Samba controller BIND9 DLZ
 
-strongswan ipsec
+Samba controller SAMBA INTERNAL
 
 Zabbix agent
 
@@ -413,60 +359,46 @@ apt
 
 bind DNS
 
-BIND9_DLZ samba
+CUPS PDF
 
-console-debian samba
-
-cups-pdf
-
-debian ip
+Debian IP
 
 dhcpd
 
-etcnet gre tunnel
+etcnet GRE tunnel
 
-etcnet ip
-
-frr and quagga OSPF
+etcnet IP
 
 NFS
 
 nftables NAT
 
-resolve options
+OSPF frr quagga
+
+resolve.conf
+
+Samba controller BIND9 DLZ
+
+Samba Debian
 
 sudo
 
 ## yesterday-it-worked list:
-alt samba ADMC
-
-base samba-command
-
-BIND9_DLZ samba
-
 chrony
 
 DBeaver
 
-ecorouter bgp
+EcoRouter DHCP-server
 
-ecorouter DHCP-server
+EcoRouter GRE tunnel
 
-ecorouter gre tunnel
+EcoRouter IP
 
-ecorouter ip
+EcoRouter NTP
 
-ecorouter NAT
+EcoRouter OSPF
 
-ecorouter NTP
-
-ecorouter OSPF
-
-ecorouter RADIUS
-
-ecorouter vlan
-
-ecorouter Zabbix
+EcoRouter Zabbix
 
 etcnet OVS install
 
@@ -486,38 +418,36 @@ OVS STP
 
 OVS vlan
 
+PostgreSQL install
+
 RADIUS
 
-SQL install PostgreSQL
+Samba ALT ADMC
+
+Samba base command
+
+Samba controller BIND9 DLZ
 
 timedatectl
 
 ## surowiki list:
-base samba-command
-
-bash script for samba
-
 bind DNS
 
 chrony
 
-cups-pdf
+CUPS PDF
 
 dhcpd
 
 dnsmasq
 
-docker install
+Docker install
 
-etcnet gre tunnel
+etcnet GRE tunnel
 
-etcnet ip
+etcnet IP
 
-etcnet vlan
-
-frr and quagga OSPF
-
-GOST OpenSSL
+etcnet VLAN
 
 iptables NAT
 
@@ -525,9 +455,17 @@ iptables port forwarding
 
 NFS
 
-nginx reverse proxy
+Nginx reverse proxy
+
+OpenSSL GOST
+
+OSPF frr quagga
 
 rsyslog
+
+Samba base command
+
+Samba import script
 
 SSH
 

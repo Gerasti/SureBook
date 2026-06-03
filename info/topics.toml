@@ -9,53 +9,14 @@ auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-06-03 02:42:43"
+last_saved = "2026-06-03 22:21:24"
 viewer_md = "inlyne"
 
-[topics."alt_fail2ban"]
-title = "alt fail2ban"
-path = "~/SureBook/info/src_table.md/alt_fail2ban.md"
-lists = [{list = "SuroTools"}]
-
-[topics."alt_samba_ADMC"]
-title = "alt samba ADMC"
-path = "~/SureBook/info/src_table.md/alt_samba_ADMC.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "сетевикон"}, {list = "yesterday-it-worked"}]
-[topics."ansible_NextCloud"]
-title = "ansible NextCloud"
-path = "~/SureBook/info/src_table.md/ansible_NextCloud.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=28", link_look = "ansible NextCloud"}]
-[topics."ansible_OTRS"]
-title = "ansible OTRS"
-path = "~/SureBook/info/src_table.md/ansible_OTRS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=25", link_look = "ansible OTRS"}]
-[topics."ansible_OwnCloud"]
-title = "ansible OwnCloud"
-path = "~/SureBook/info/src_table.md/ansible_OwnCloud.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=26", link_look = "ansible OwnCloud"}]
 [topics."apt"]
 title = "apt"
 path = "~/SureBook/info/src_table.md/apt.md"
 lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "setting_screens"}]
 
-[topics."attach_samba_reserve_domain_controller"]
-title = "attach samba reserve domain controller"
-path = "~/SureBook/info/src_table.md/attach_samba_reserve_domain_controller.md"
-lists = [{list = "notesk"}, {list = "AltLabs"}]
-
-[topics."auto_mounting_devices"]
-title = "auto mounting devices"
-path = "~/SureBook/info/src_table.md/auto_mounting_devices.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}]
-
-[topics."base_samba-command"]
-title = "base samba-command"
-path = "/home/stip/SureBook/topics/base_samba-command.md"
-lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "yesterday-it-worked"}, {list = "surowiki"}]
-[topics."bash_script_for_samba"]
-title = "bash script for samba"
-path = "/home/stip/SureBook/topics/bash_script_for_samba.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "AltLabs"}, {list = "surowiki"}]
 [topics."bind_DNS"]
 title = "bind DNS"
 path = "/home/stip/SureBook/topics/bind_DNS.md"
@@ -64,183 +25,18 @@ lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?i
 title = "bind slave DNS"
 path = "~/SureBook/info/src_table.md/bind_slave_DNS.md"
 lists = [{list = "notesk"}]
-
-[topics."BIND9_DLZ_samba"]
-title = "BIND9_DLZ samba"
-path = "~/SureBook/info/src_table.md/BIND9_DLZ_samba.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=735", link_look = "BIND9_DLZ samba && alt samba ADMC"}, {list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "yesterday-it-worked"}]
 [topics."chrony"]
 title = "chrony"
 path = "/home/stip/SureBook/topics/chrony.md"
 lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "yesterday-it-worked"}, {list = "surowiki"}]
-[topics."console-debian_samba"]
-title = "console-debian samba"
-path = "~/SureBook/info/src_table.md/console-debian_samba.md"
-lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
-
-[topics."cups-pdf"]
-title = "cups-pdf"
-path = "/home/stip/SureBook/topics/cups-pdf.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
 [topics."DBeaver"]
 title = "DBeaver"
 path = "~/SureBook/info/src_table.md/DBeaver.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=772", link_look = "SQL install PostgreSQL && DBeaver"}, {list = "yesterday-it-worked"}]
-[topics."debian_gre_tunnel"]
-title = "debian gre tunnel"
-path = "~/SureBook/info/src_table.md/debian_gre_tunnel.md"
-lists = [{list = "notesk"}]
-
-[topics."debian_ip"]
-title = "debian ip"
-path = "~/SureBook/info/src_table.md/debian_ip.md"
-lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
-
-[topics."debian_ip_forward"]
-title = "debian ip forward"
-path = "~/SureBook/info/src_table.md/debian_ip_forward.md"
-lists = [{list = "notesk"}]
-
-[topics."debian_vlan"]
-title = "debian vlan"
-path = "~/SureBook/info/src_table.md/debian_vlan.md"
-lists = [{list = "notesk"}, {list = "DEMO-208"}]
-
 [topics."dhcpd"]
 title = "dhcpd"
 path = "/home/stip/SureBook/topics/dhcpd.md"
 lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
-[topics."docker_`Hello-app`"]
-title = "docker `Hello-app`"
-path = "~/SureBook/info/src_table.md/docker_`Hello-app`.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_Elasticsearch_-_Logstash_-_Kibana_(ELK)"]
-title = "docker Elasticsearch - Logstash - Kibana (ELK)"
-path = "~/SureBook/info/src_table.md/docker_Elasticsearch_-_Logstash_-_Kibana_(ELK).md"
-lists = [{list = "notesk"}]
-
-[topics."docker_Grafana-Prometheus-NodeExporter"]
-title = "docker Grafana-Prometheus-NodeExporter"
-path = "~/SureBook/info/src_table.md/docker_Grafana-Prometheus-NodeExporter.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_install"]
-title = "docker install"
-path = "/home/stip/SureBook/topics/docker_install.md"
-lists = [{list = "notesk"}, {list = "DemoScreens"}, {list = "surowiki"}]
-[topics."docker_Local_Registry"]
-title = "docker Local Registry"
-path = "~/SureBook/info/src_table.md/docker_Local_Registry.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_MediaWiki"]
-title = "docker MediaWiki"
-path = "~/SureBook/info/src_table.md/docker_MediaWiki.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_OTRS"]
-title = "docker OTRS"
-path = "~/SureBook/info/src_table.md/docker_OTRS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=22", link_look = "docker OTRS"}]
-[topics."docker_OwnCloud"]
-title = "docker OwnCloud"
-path = "~/SureBook/info/src_table.md/docker_OwnCloud.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=24", link_look = "docker OwnCloud"}]
-[topics."docker_phpMyAdmin"]
-title = "docker phpMyAdmin"
-path = "~/SureBook/info/src_table.md/docker_phpMyAdmin.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=33", link_look = "docker phpMyAdmin"}]
-[topics."docker_single-mode_Open_WebUI"]
-title = "docker single-mode Open WebUI"
-path = "~/SureBook/info/src_table.md/docker_single-mode_Open_WebUI.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_WordPress"]
-title = "docker WordPress"
-path = "~/SureBook/info/src_table.md/docker_WordPress.md"
-lists = [{list = "notesk"}]
-
-[topics."docker_Zabbix"]
-title = "docker Zabbix"
-path = "~/SureBook/info/src_table.md/docker_Zabbix.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=20", link_look = "docker Zabbix"}]
-[topics."ecorouter_bgp"]
-title = "ecorouter bgp"
-path = "~/SureBook/info/src_table.md/ecorouter_bgp.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=722", link_look = "ecorouter bgp"}, {list = "yesterday-it-worked"}]
-[topics."ecorouter_DHCP-retranslation"]
-title = "ecorouter DHCP-retranslation"
-path = "~/SureBook/info/src_table.md/ecorouter_DHCP-retranslation.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=325", link_look = "ecorouter DHCP-retranslation"}]
-[topics."ecorouter_DHCP-server"]
-title = "ecorouter DHCP-server"
-path = "~/SureBook/info/src_table.md/ecorouter_DHCP-server.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."ecorouter_gre_tunnel"]
-title = "ecorouter gre tunnel"
-path = "~/SureBook/info/src_table.md/ecorouter_gre_tunnel.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."ecorouter_ip"]
-title = "ecorouter ip"
-path = "~/SureBook/info/src_table.md/ecorouter_ip.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."ecorouter_NAT"]
-title = "ecorouter NAT"
-path = "~/SureBook/info/src_table.md/ecorouter_NAT.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=725", link_look = "ecorouter NAT"}, {list = "yesterday-it-worked"}]
-[topics."ecorouter_NTP"]
-title = "ecorouter NTP"
-path = "~/SureBook/info/src_table.md/ecorouter_NTP.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."ecorouter_OSPF"]
-title = "ecorouter OSPF"
-path = "~/SureBook/info/src_table.md/ecorouter_OSPF.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."ecorouter_port_forwarding"]
-title = "ecorouter port forwarding"
-path = "~/SureBook/info/src_table.md/ecorouter_port_forwarding.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=327", link_look = "ecorouter port forwarding"}]
-[topics."ecorouter_RADIUS"]
-title = "ecorouter RADIUS"
-path = "~/SureBook/info/src_table.md/ecorouter_RADIUS.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=732", link_look = "ecorouter RADIUS"}, {list = "yesterday-it-worked"}]
-[topics."ecorouter_ssh"]
-title = "ecorouter ssh"
-path = "~/SureBook/info/src_table.md/ecorouter_ssh.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=322", link_look = "ecorouter ssh"}]
-[topics."ecorouter_vlan"]
-title = "ecorouter vlan"
-path = "~/SureBook/info/src_table.md/ecorouter_vlan.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=720", link_look = "ecorouter vlan"}, {list = "yesterday-it-worked"}]
-[topics."ecorouter_Zabbix"]
-title = "ecorouter Zabbix"
-path = "~/SureBook/info/src_table.md/ecorouter_Zabbix.md"
-lists = [{list = "yesterday-it-worked"}]
-
-[topics."encryption_devices"]
-title = "encryption devices"
-path = "~/SureBook/info/src_table.md/encryption_devices.md"
-lists = [{list = "notesk"}]
-
-[topics."etcnet_gre_tunnel"]
-title = "etcnet gre tunnel"
-path = "/home/stip/SureBook/topics/etcnet_gre_tunnel.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
-[topics."etcnet_ip"]
-title = "etcnet ip"
-path = "/home/stip/SureBook/topics/etcnet_ip.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "setting_screens"}, {list = "surowiki"}]
-[topics."etcnet_ip_forward"]
-title = "etcnet ip forward"
-path = "~/SureBook/info/src_table.md/etcnet_ip_forward.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}]
-
 [topics."etcnet_OVS_install"]
 title = "etcnet OVS install"
 path = "~/SureBook/info/src_table.md/etcnet_OVS_install.md"
@@ -256,28 +52,14 @@ title = "etcnet OVS settings"
 path = "~/SureBook/info/src_table.md/etcnet_OVS_settings.md"
 lists = [{list = "yesterday-it-worked"}]
 
-[topics."etcnet_vlan"]
-title = "etcnet vlan"
-path = "/home/stip/SureBook/topics/etcnet_vlan.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "surowiki"}]
-[topics."frr_and_quagga_OSPF"]
-title = "frr and quagga OSPF"
-path = "/home/stip/SureBook/topics/frr_and_quagga_OSPF.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
-[topics."GOST_OpenSSL"]
-title = "GOST OpenSSL"
-path = "/home/stip/SureBook/topics/GOST_OpenSSL.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
 [topics."GRUB_password_recovery"]
 title = "GRUB password recovery"
 path = "~/SureBook/info/src_table.md/GRUB_password_recovery.md"
 lists = [{list = "notesk"}]
-
 [topics."HAProxy_balance_of_servers"]
 title = "HAProxy balance of servers"
 path = "~/SureBook/info/src_table.md/HAProxy_balance_of_servers.md"
 lists = [{list = "notesk"}]
-
 [topics."hostname"]
 title = "hostname"
 path = "~/SureBook/info/src_table.md/hostname.md"
@@ -305,24 +87,6 @@ title = "Ideco Zabbix agent"
 path = "~/SureBook/info/src_table.md/Ideco_Zabbix_agent.md"
 lists = [{list = "yesterday-it-worked"}]
 
-[topics."install_MariaDB_Zabbix"]
-title = "install MariaDB Zabbix"
-path = "~/SureBook/info/src_table.md/install_MariaDB_Zabbix.md"
-lists = [{list = "SuroTools"}]
-
-[topics."install_PostgreSQL_Zabbix"]
-title = "install PostgreSQL Zabbix"
-path = "~/SureBook/info/src_table.md/install_PostgreSQL_Zabbix.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=18", link_look = "install PostgreSQL Zabbix && Zabbix web-interface && Zabbix agent"}, {list = "notesk"}, {list = "SuroTools"}]
-[topics."install_SSL_certificate_Debian-like"]
-title = "install SSL certificate Debian-like"
-path = "~/SureBook/info/src_table.md/install_SSL_certificate_Debian-like.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=134", link_look = "SSL certificate center && install SSL certificate Debian-like"}, {list = "SuroTools"}]
-[topics."install_SSL_certificate_RedHat-like"]
-title = "install SSL certificate RedHat-like"
-path = "~/SureBook/info/src_table.md/install_SSL_certificate_RedHat-like.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
-
 [topics."IP-телефония_SNG7"]
 title = "IP-телефония SNG7"
 path = "~/SureBook/info/src_table.md/IP-телефония_SNG7.md"
@@ -335,23 +99,11 @@ lists = [{list = "SuroTools"}, {list = "surowiki"}]
 title = "iptables port forwarding"
 path = "/home/stip/SureBook/topics/iptables_port_forwarding.md"
 lists = [{list = "SuroTools"}, {list = "surowiki"}]
-[topics."iscsi"]
-title = "iscsi"
-path = "~/SureBook/info/src_table.md/iscsi.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=773", link_look = "iscsi"}]
-[topics."iscsi_attach"]
-title = "iscsi attach"
-path = "~/SureBook/info/src_table.md/iscsi_attach.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=774", link_look = "iscsi attach"}]
 [topics."logrotate"]
 title = "logrotate"
 path = "~/SureBook/info/src_table.md/logrotate.md"
 lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}]
 
-[topics."moodle"]
-title = "moodle"
-path = "~/SureBook/info/src_table.md/moodle.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=34", link_look = "moodle"}, {list = "сетевикон"}, {list = "SuroTools"}]
 [topics."NextCloud"]
 title = "NextCloud"
 path = "~/SureBook/info/src_table.md/NextCloud.md"
@@ -369,20 +121,6 @@ lists = [{list = "DEMO-208-2"}, {list = "DemoScreens"}]
 title = "nftables NAT"
 path = "~/SureBook/info/src_table.md/nftables_NAT.md"
 lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
-[topics."nginx_reverse_proxy"]
-title = "nginx reverse proxy"
-path = "/home/stip/SureBook/topics/nginx_reverse_proxy.md"
-lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
-[topics."nginx_server_balance"]
-title = "nginx server balance"
-path = "~/SureBook/info/src_table.md/nginx_server_balance.md"
-lists = [{list = "notesk"}]
-
-[topics."nginx_Web-based_authentication"]
-title = "nginx Web-based authentication"
-path = "~/SureBook/info/src_table.md/nginx_Web-based_authentication.md"
-lists = [{list = "SuroTools"}]
 
 [topics."OTRS"]
 title = "OTRS"
@@ -407,11 +145,6 @@ lists = [{list = "yesterday-it-worked"}]
 title = "OwnCloud"
 path = "~/SureBook/info/src_table.md/OwnCloud.md"
 lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/book/view.php?id=23", link_look = "OwnCloud"}]
-[topics."partitions_of_devices"]
-title = "partitions of devices"
-path = "~/SureBook/info/src_table.md/partitions_of_devices.md"
-lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
-
 [topics."phpMyAdmin"]
 title = "phpMyAdmin"
 path = "~/SureBook/info/src_table.md/phpMyAdmin.md"
@@ -421,47 +154,10 @@ title = "PostgreSQL base-command"
 path = "~/SureBook/info/src_table.md/PostgreSQL_base-command.md"
 lists = [{list = "notesk"}]
 
-[topics."replication_postgresql-server"]
-title = "replication postgresql-server"
-path = "~/SureBook/info/src_table.md/replication_postgresql-server.md"
-lists = [{list = "notesk"}]
-
-[topics."resolve_options"]
-title = "resolve options"
-path = "~/SureBook/info/src_table.md/resolve_options.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
-
 [topics."rsyslog"]
 title = "rsyslog"
 path = "/home/stip/SureBook/topics/rsyslog.md"
 lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
-[topics."samba_share_folder"]
-title = "samba share folder"
-path = "~/SureBook/info/src_table.md/samba_share_folder.md"
-lists = [{list = "notesk"}, {list = "AltLabs"}]
-
-[topics."SAMBA_INTERNAL_samba"]
-title = "SAMBA_INTERNAL samba"
-path = "~/SureBook/info/src_table.md/SAMBA_INTERNAL_samba.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=164", link_look = "SAMBA_INTERNAL samba"}, {list = "DemoScreens"}]
-[topics."SQL_install_MariaDB"]
-title = "SQL install MariaDB"
-path = "~/SureBook/info/src_table.md/SQL_install_MariaDB.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=191", link_look = "SQL install MariaDB"}, {list = "SuroTools"}]
-[topics."SQL_install_MySQL"]
-title = "SQL install MySQL"
-path = "~/SureBook/info/src_table.md/SQL_install_MySQL.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=190", link_look = "SQL install MySQL"}, {list = "SuroTools"}]
-[topics."SQL_install_PostgreSQL"]
-title = "SQL install PostgreSQL"
-path = "~/SureBook/info/src_table.md/SQL_install_PostgreSQL.md"
-lists = [{list = "sysahelper"}, {list = "notesk"}, {list = "SuroTools"}, {list = "yesterday-it-worked"}]
-
-[topics."strongswan_ipsec"]
-title = "strongswan ipsec"
-path = "~/SureBook/info/src_table.md/strongswan_ipsec.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
 [topics."systemd_backup"]
 title = "systemd backup"
 path = "~/SureBook/info/src_table.md/systemd_backup.md"
@@ -476,10 +172,6 @@ lists = [{list = "сетевикон"}]
 title = "timedatectl"
 path = "/home/stip/SureBook/topics/timedatectl.md"
 lists = [{list = "yesterday-it-worked"}, {list = "surowiki"}]
-[topics."wireguard"]
-title = "wireguard"
-path = "~/SureBook/info/src_table.md/wireguard.md"
-lists = [{list = "sysahelper", link = "https://sysahelper.ru/mod/page/view.php?id=128", link_look = "wireguard"}]
 [topics."Zabbix_agent"]
 title = "Zabbix agent"
 path = "~/SureBook/info/src_table.md/Zabbix_agent.md"
@@ -523,11 +215,6 @@ lists = []
 title = "dhcpd failover"
 path = "/home/stip/SureBook/topics/dhcpd_failover.md"
 lists = []
-[topics."mdadm_options"]
-title = "mdadm options"
-path = "/home/stip/SureBook/topics/mdadm_options.md"
-lists = [{list = "SuroTools"}]
-
 [topics."LVM"]
 title = "LVM"
 path = "/home/stip/SureBook/topics/LVM.md"
@@ -547,8 +234,6 @@ lists = [{list = "notesk"}, {list = "surowiki"}]
 title = "squid base options"
 path = "/home/stip/SureBook/topics/squid_base_options.md"
 lists = [{list = "notesk"}]
-
-
 [topics."OpenSSL_certificate_center"]
 title = "OpenSSL certificate center"
 path = "/home/stip/SureBook/topics/OpenSSL_certificate_center.md"
@@ -558,38 +243,360 @@ title = "sudo"
 path = "~/SureBook/info/src_table.md/sudo.md"
 lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "setting_screens"}]
 
-[topics."open-vm-tools"]
-title = "open-vm-tools"
-path = "~/SureBook/info/src_table.md/open-vm-tools.md"
-lists = [{list = "SuroTools"}]
-
-[topics."ansible"]
-title = "ansible"
-path = "~/SureBook/info/src_table.md/ansible.md"
-lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
-
-[topics."sudo-schema-samba"]
-title = "sudo-schema-samba"
-path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
-lists = []
-
-
-
-
-[topics."LAMP_Linux_Apache_MariaDB_PHP"]
-title = "LAMP_Linux_Apache_MariaDB_PHP"
-path = "/home/stip/SureBook/topics/LAMP_Linux_Apache_MariaDB_PHP.md"
-lists = []
-
-
-[topics."docker_testapp_from_tar"]
-title = "docker_testapp_from_tar"
-path = "/home/stip/SureBook/topics/docker_testapp_from_tar.md"
-lists = []
-
-
 [topics."Samba_attach_client"]
-title = "Samba_attach_client"
+title = "Samba attach client"
 path = "/home/stip/SureBook/topics/Samba_attach_client.md"
 lists = []
+[topics."Ansible"]
+title = "Ansible"
+path = "~/SureBook/info/src_table.md/Ansible.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
 
+[topics."NextCloud_Ansible"]
+title = "NextCloud Ansible"
+path = "~/SureBook/info/src_table.md/NextCloud_Ansible.md"
+lists = []
+
+[topics."OTRS_Ansible"]
+title = "OTRS Ansible"
+path = "/home/stip/SureBook/topics/OTRS_Ansible.md"
+lists = []
+[topics."Samba_controller_BIND9_DLZ"]
+title = "Samba controller BIND9 DLZ"
+path = "~/SureBook/info/src_table.md/Samba_controller_BIND9_DLZ.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "yesterday-it-worked"}]
+
+[topics."Samba_Debian"]
+title = "Samba Debian"
+path = "~/SureBook/info/src_table.md/Samba_Debian.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
+
+[topics."CUPS_PDF"]
+title = "CUPS PDF"
+path = "/home/stip/SureBook/topics/CUPS_PDF.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
+
+[topics."Debian_GRE_tunnel"]
+title = "Debian GRE tunnel"
+path = "~/SureBook/info/src_table.md/Debian_GRE_tunnel.md"
+lists = [{list = "notesk"}]
+
+[topics."Debian_IP"]
+title = "Debian IP"
+path = "~/SureBook/info/src_table.md/Debian_IP.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}, {list = "setting_screens"}]
+
+[topics."Debian_IP_forward"]
+title = "Debian IP forward"
+path = "~/SureBook/info/src_table.md/Debian_IP_forward.md"
+lists = [{list = "notesk"}]
+
+[topics."Debian_VLAN"]
+title = "Debian VLAN"
+path = "~/SureBook/info/src_table.md/Debian_VLAN.md"
+lists = [{list = "notesk"}, {list = "DEMO-208"}]
+
+[topics."devices_automount"]
+title = "devices automount"
+path = "~/SureBook/info/src_table.md/devices_automount.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}]
+
+[topics."devices_encryption"]
+title = "devices encryption"
+path = "~/SureBook/info/src_table.md/devices_encryption.md"
+lists = [{list = "notesk"}]
+
+[topics."devices_mdadm"]
+title = "devices mdadm"
+path = "/home/stip/SureBook/topics/devices_mdadm.md"
+lists = [{list = "SuroTools"}]
+
+[topics."devices_partitions"]
+title = "devices partitions"
+path = "~/SureBook/info/src_table.md/devices_partitions.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
+
+[topics."Docker_Hello-app"]
+title = "Docker Hello-app"
+path = "~/SureBook/info/src_table.md/Docker_Hello-app.md"
+lists = [{list = "notesk"}]
+
+[topics."ELK_Elasticsearch_Logstash_Kibana_Docker"]
+title = "ELK Elasticsearch Logstash Kibana Docker"
+path = "~/SureBook/info/src_table.md/ELK_Elasticsearch_Logstash_Kibana_Docker.md"
+lists = [{list = "notesk"}]
+
+[topics."Grafana-Prometheus-NodeExporter_Docker"]
+title = "Grafana-Prometheus-NodeExporter Docker"
+path = "~/SureBook/info/src_table.md/Grafana-Prometheus-NodeExporter_Docker.md"
+lists = [{list = "notesk"}]
+
+[topics."Docker_install"]
+title = "Docker install"
+path = "/home/stip/SureBook/topics/Docker_install.md"
+lists = [{list = "notesk"}, {list = "DemoScreens"}, {list = "surowiki"}]
+
+[topics."Docker_load_from_tar"]
+title = "Docker load from tar"
+path = "/home/stip/SureBook/topics/Docker_load_from_tar.md"
+lists = []
+
+[topics."Docker_Local_Registry"]
+title = "Docker Local Registry"
+path = "~/SureBook/info/src_table.md/Docker_Local_Registry.md"
+lists = [{list = "notesk"}]
+
+[topics."MediaWiki_Docker"]
+title = "MediaWiki Docker"
+path = "~/SureBook/info/src_table.md/MediaWiki_Docker.md"
+lists = [{list = "notesk"}]
+
+[topics."OTRS_Docker"]
+title = "OTRS Docker"
+path = "~/SureBook/info/src_table.md/OTRS_Docker.md"
+lists = []
+
+[topics."OwnCloud_Docker"]
+title = "OwnCloud Docker"
+path = "~/SureBook/info/src_table.md/OwnCloud_Docker.md"
+lists = []
+
+[topics."phpMyAdmin_Docker"]
+title = "phpMyAdmin Docker"
+path = "~/SureBook/info/src_table.md/phpMyAdmin_Docker.md"
+lists = []
+
+[topics."Open_WebUI_single-mode_Docker"]
+title = "Open WebUI single-mode Docker"
+path = "~/SureBook/info/src_table.md/Open_WebUI_single-mode_Docker.md"
+lists = [{list = "notesk"}]
+
+[topics."WordPress_Docker"]
+title = "WordPress Docker"
+path = "~/SureBook/info/src_table.md/WordPress_Docker.md"
+lists = [{list = "notesk"}]
+
+[topics."Zabbix_install_Docker"]
+title = "Zabbix install Docker"
+path = "~/SureBook/info/src_table.md/Zabbix_install_Docker.md"
+lists = []
+
+[topics."EcoRouter_BGP"]
+title = "EcoRouter BGP"
+path = "/home/stip/SureBook/topics/EcoRouter_BGP.md"
+lists = [{list = "yesterday-it-worked"}]
+[topics."EcoRouter_DHCP-retranslation"]
+title = "EcoRouter DHCP-retranslation"
+path = "/home/stip/SureBook/topics/EcoRouter_DHCP-retranslation.md"
+lists = []
+[topics."EcoRouter_DHCP-server"]
+title = "EcoRouter DHCP-server"
+path = "~/SureBook/info/src_table.md/EcoRouter_DHCP-server.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."EcoRouter_GRE_tunnel"]
+title = "EcoRouter GRE tunnel"
+path = "~/SureBook/info/src_table.md/EcoRouter_GRE_tunnel.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."EcoRouter_IP"]
+title = "EcoRouter IP"
+path = "~/SureBook/info/src_table.md/EcoRouter_IP.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."EcoRouter_NAT"]
+title = "EcoRouter NAT"
+path = "/home/stip/SureBook/topics/EcoRouter_NAT.md"
+lists = [{list = "yesterday-it-worked"}]
+[topics."EcoRouter_NTP"]
+title = "EcoRouter NTP"
+path = "~/SureBook/info/src_table.md/EcoRouter_NTP.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."EcoRouter_OSPF"]
+title = "EcoRouter OSPF"
+path = "~/SureBook/info/src_table.md/EcoRouter_OSPF.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."EcoRouter_port_forwarding"]
+title = "EcoRouter port forwarding"
+path = "/home/stip/SureBook/topics/EcoRouter_port_forwarding.md"
+lists = []
+[topics."EcoRouter_RADIUS"]
+title = "EcoRouter RADIUS"
+path = "/home/stip/SureBook/topics/EcoRouter_RADIUS.md"
+lists = [{list = "yesterday-it-worked"}]
+[topics."EcoRouter_SSH"]
+title = "EcoRouter SSH"
+path = "/home/stip/SureBook/topics/EcoRouter_SSH.md"
+lists = []
+[topics."EcoRouter_VLAN"]
+title = "EcoRouter VLAN"
+path = "/home/stip/SureBook/topics/EcoRouter_VLAN.md"
+lists = [{list = "yesterday-it-worked"}]
+[topics."EcoRouter_Zabbix"]
+title = "EcoRouter Zabbix"
+path = "~/SureBook/info/src_table.md/EcoRouter_Zabbix.md"
+lists = [{list = "yesterday-it-worked"}]
+
+[topics."etcnet_GRE_tunnel"]
+title = "etcnet GRE tunnel"
+path = "/home/stip/SureBook/topics/etcnet_GRE_tunnel.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
+
+[topics."etcnet_IP"]
+title = "etcnet IP"
+path = "/home/stip/SureBook/topics/etcnet_IP.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208"}, {list = "AltLabs"}, {list = "setting_screens"}, {list = "surowiki"}]
+
+[topics."etcnet_IP_forward"]
+title = "etcnet IP forward"
+path = "~/SureBook/info/src_table.md/etcnet_IP_forward.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}]
+
+[topics."etcnet_VLAN"]
+title = "etcnet VLAN"
+path = "/home/stip/SureBook/topics/etcnet_VLAN.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "surowiki"}]
+
+[topics."fail2ban_ALT"]
+title = "fail2ban ALT"
+path = "~/SureBook/info/src_table.md/fail2ban_ALT.md"
+lists = [{list = "SuroTools"}]
+
+[topics."OSPF_frr_quagga"]
+title = "OSPF frr quagga"
+path = "/home/stip/SureBook/topics/OSPF_frr_quagga.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DEMO-208"}, {list = "DemoScreens"}, {list = "setting_screens"}, {list = "surowiki"}]
+
+[topics."OpenSSL_GOST"]
+title = "OpenSSL GOST"
+path = "/home/stip/SureBook/topics/OpenSSL_GOST.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
+
+[topics."IPsec_strongswan"]
+title = "IPsec strongswan"
+path = "~/SureBook/info/src_table.md/IPsec_strongswan.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}]
+
+[topics."MariaDB_install"]
+title = "MariaDB install"
+path = "~/SureBook/info/src_table.md/MariaDB_install.md"
+lists = [{list = "SuroTools"}]
+
+[topics."MySQL_install"]
+title = "MySQL install"
+path = "~/SureBook/info/src_table.md/MySQL_install.md"
+lists = [{list = "SuroTools"}]
+
+[topics."PostgreSQL_install"]
+title = "PostgreSQL install"
+path = "~/SureBook/info/src_table.md/PostgreSQL_install.md"
+lists = [{list = "sysahelper"}, {list = "notesk"}, {list = "SuroTools"}, {list = "yesterday-it-worked"}]
+
+[topics."Zabbix_install_MariaDB"]
+title = "Zabbix install MariaDB"
+path = "~/SureBook/info/src_table.md/Zabbix_install_MariaDB.md"
+lists = [{list = "SuroTools"}]
+
+[topics."Zabbix_install_PostgreSQL"]
+title = "Zabbix install PostgreSQL"
+path = "~/SureBook/info/src_table.md/Zabbix_install_PostgreSQL.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}]
+
+[topics."OpenSSL_certificate_install_Debian-like"]
+title = "OpenSSL certificate install Debian-like"
+path = "~/SureBook/info/src_table.md/OpenSSL_certificate_install_Debian-like.md"
+lists = [{list = "SuroTools"}]
+
+[topics."OpenSSL_certificate_install_RedHat-like"]
+title = "OpenSSL certificate install RedHat-like"
+path = "~/SureBook/info/src_table.md/OpenSSL_certificate_install_RedHat-like.md"
+lists = [{list = "notesk"}, {list = "SuroTools"}, {list = "DEMO-208-2"}]
+
+[topics."PostgreSQL_replication_server"]
+title = "PostgreSQL replication server"
+path = "~/SureBook/info/src_table.md/PostgreSQL_replication_server.md"
+lists = [{list = "notesk"}]
+
+[topics."Nginx_reverse_proxy"]
+title = "Nginx reverse proxy"
+path = "/home/stip/SureBook/topics/Nginx_reverse_proxy.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "surowiki"}]
+
+[topics."Nginx_server_balance"]
+title = "Nginx server balance"
+path = "~/SureBook/info/src_table.md/Nginx_server_balance.md"
+lists = [{list = "notesk"}]
+
+[topics."Nginx_Web-based_authentication"]
+title = "Nginx Web-based authentication"
+path = "~/SureBook/info/src_table.md/Nginx_Web-based_authentication.md"
+lists = [{list = "SuroTools"}]
+
+[topics."VMware_open-vm-tools"]
+title = "VMware open-vm-tools"
+path = "~/SureBook/info/src_table.md/VMware_open-vm-tools.md"
+lists = [{list = "SuroTools"}]
+
+[topics."WireGuard"]
+title = "WireGuard"
+path = "/home/stip/SureBook/topics/WireGuard.md"
+lists = []
+[topics."resolve.conf"]
+title = "resolve.conf"
+path = "~/SureBook/info/src_table.md/resolve.conf.md"
+lists = [{list = "notesk"}, {list = "DEMO-208-2"}, {list = "DemoScreens"}, {list = "setting_screens"}]
+
+[topics."Samba_ALT_ADMC"]
+title = "Samba ALT ADMC"
+path = "~/SureBook/info/src_table.md/Samba_ALT_ADMC.md"
+lists = [{list = "сетевикон"}, {list = "yesterday-it-worked"}]
+
+[topics."Samba_reserve_controller"]
+title = "Samba reserve controller"
+path = "~/SureBook/info/src_table.md/Samba_reserve_controller.md"
+lists = [{list = "notesk"}, {list = "AltLabs"}]
+
+[topics."Samba_base_command"]
+title = "Samba base command"
+path = "/home/stip/SureBook/topics/Samba_base_command.md"
+lists = [{list = "SuroTools"}, {list = "DEMO-208-2"}, {list = "yesterday-it-worked"}, {list = "surowiki"}]
+
+[topics."Samba_import_script"]
+title = "Samba import script"
+path = "/home/stip/SureBook/topics/Samba_import_script.md"
+lists = [{list = "notesk"}, {list = "сетевикон"}, {list = "AltLabs"}, {list = "surowiki"}]
+
+[topics."Samba_share_folder"]
+title = "Samba share folder"
+path = "~/SureBook/info/src_table.md/Samba_share_folder.md"
+lists = [{list = "notesk"}, {list = "AltLabs"}]
+
+[topics."Samba_controller_SAMBA_INTERNAL"]
+title = "Samba controller SAMBA INTERNAL"
+path = "~/SureBook/info/src_table.md/Samba_controller_SAMBA_INTERNAL.md"
+lists = [{list = "DemoScreens"}]
+
+[topics."Samba_sudo-schema"]
+title = "Samba sudo-schema"
+path = "/home/stip/SureBook/topics/Samba_sudo-schema.md"
+lists = []
+
+[topics."iSCSI"]
+title = "iSCSI"
+path = "/home/stip/SureBook/topics/iSCSI.md"
+lists = []
+
+[topics."iSCSI_attach"]
+title = "iSCSI attach"
+path = "/home/stip/SureBook/topics/iSCSI_attach.md"
+lists = []
+[topics."Moodle"]
+title = "Moodle"
+path = "/home/stip/SureBook/topics/Moodle.md"
+lists = [{list = "сетевикон"}, {list = "SuroTools"}]
+[topics."OwnCloud_Ansible"]
+title = "OwnCloud_Ansible"
+path = "~/SureBook/info/src_table.md/OwnCloud_Ansible.md"
+lists = []
