@@ -5,7 +5,6 @@
 
 ```CODE
 systemctl status systemd-timesyncd
- 
 ```
 
 > systemd-timesyncd(встроенный NTP-клиент/сервер systemd, обычно уже установлен)
@@ -14,8 +13,7 @@ systemctl status systemd-timesyncd
 
 ```CODE
 systemctl stop chronyd
-  systemctl disable chronyd
- 
+systemctl disable chronyd
 ```
 
 > systemd-timesyncd и chrony несовместимы на одной машине, работает только один NTP-сервис
@@ -27,16 +25,14 @@ systemctl stop chronyd
 ```CODE
 /etc/systemd/timesyncd.conf
 
- 
 ```
 
 #### Настройка /etc/systemd/timesyncd.conf для сервера <!-- NAME -->
 
 ```CODE
 [Time]
-  NTP=ntp2.vniiftri.ru
-  FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
- 
+NTP=ntp2.vniiftri.ru
+FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
 ```
 
 > NTP(основные NTP-серверы через пробел); FallbackNTP(резервные серверы)
@@ -46,7 +42,6 @@ systemctl stop chronyd
 ```CODE
 systemctl restart systemd-timesyncd
 
- 
 ```
 
 #### Включение службы <!-- NAME -->
@@ -54,7 +49,6 @@ systemctl restart systemd-timesyncd
 ```CODE
 systemctl enable systemd-timesyncd
 
- 
 ```
 
 ### Разрешение NTP в firewall <!-- HEAD -->
@@ -63,8 +57,7 @@ systemctl enable systemd-timesyncd
 
 ```CODE
 iptables -A INPUT -p udp --dport 123 -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
- 
+iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
 ```
 
 > UDP порт 123 используется для NTP
@@ -73,9 +66,8 @@ iptables -A INPUT -p udp --dport 123 -j ACCEPT
 
 ```CODE
 nft add rule inet filter input udp dport 123 accept
-  nft add rule inet filter output udp sport 123 accept
+nft add rule inet filter output udp sport 123 accept
 
- 
 ```
 
 ### Проверка NTP-сервера <!-- HEAD -->
@@ -84,7 +76,6 @@ nft add rule inet filter input udp dport 123 accept
 
 ```CODE
 timedatectl status
- 
 ```
 
 > Показывает System clock synchronized, NTP service
@@ -94,14 +85,12 @@ timedatectl status
 ```CODE
 systemctl status systemd-timesyncd
 
- 
 ```
 
 #### Подробная информация о синхронизации <!-- NAME -->
 
 ```CODE
 timedatectl timesync-status
- 
 ```
 
 > Показывает сервер, stratum, задержку, смещение
@@ -111,7 +100,6 @@ timedatectl timesync-status
 ```CODE
 ss -ulnp | grep 123
 
- 
 ```
 
 #### Просмотр логов <!-- NAME -->
@@ -119,7 +107,6 @@ ss -ulnp | grep 123
 ```CODE
 journalctl -u systemd-timesyncd
 
- 
 ```
 
 ### Настройка NTP-клиента <!-- HEAD -->
@@ -128,18 +115,16 @@ journalctl -u systemd-timesyncd
 
 ```CODE
 systemctl stop chronyd
-  systemctl disable chronyd
+systemctl disable chronyd
 
- 
 ```
 
 #### Настройка /etc/systemd/timesyncd.conf для клиента <!-- NAME -->
 
 ```CODE
 [Time]
-  NTP=192.168.11.67
-  FallbackNTP=ntp2.vniiftri.ru
- 
+NTP=192.168.11.67
+FallbackNTP=ntp2.vniiftri.ru
 ```
 
 > NTP(локальный NTP-сервер); FallbackNTP(резервный внешний сервер)
@@ -149,7 +134,6 @@ systemctl stop chronyd
 ```CODE
 systemctl restart systemd-timesyncd
 
- 
 ```
 
 #### Включение службы <!-- NAME -->
@@ -157,7 +141,6 @@ systemctl restart systemd-timesyncd
 ```CODE
 systemctl enable systemd-timesyncd
 
- 
 ```
 
 ### Проверка клиента <!-- HEAD -->
@@ -167,7 +150,6 @@ systemctl enable systemd-timesyncd
 ```CODE
 timedatectl status
 
- 
 ```
 
 #### Подробная информация <!-- NAME -->
@@ -175,14 +157,12 @@ timedatectl status
 ```CODE
 timedatectl timesync-status
 
- 
 ```
 
 #### Включение NTP-синхронизации <!-- NAME -->
 
 ```CODE
 timedatectl set-ntp true
- 
 ```
 
 > Включает автоматическую синхронизацию времени
@@ -191,7 +171,6 @@ timedatectl set-ntp true
 
 ```CODE
 ntpdate -q 192.168.11.67
- 
 ```
 
 > -q(запрос без изменения времени), показывает смещение времени

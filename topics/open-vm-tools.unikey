@@ -1,43 +1,43 @@
 hd Установка VMware Tools                                                       
-   
-  ne Установка пакетов open-vm-tools                                              
-  ce apt-get install open-vm-tools open-vm-tools-desktop xrandr
-  ct open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер
-  обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция     
-  мыши, графика); xrandr(утилита для управления разрешением экрана)
-                                                                                  
-  ne Включение службы в автозагрузку                                              
-  ce systemctl enable vmtoolsd
-                                                                                  
-  ne Запуск службы                                                                
-  ce systemctl start vmtoolsd                                                     
-                                                                                  
-  hd Проверка                                                                     
-                                                                                  
-  ne Проверка статуса службы                                                      
-  ce systemctl status vmtoolsd
-                                                                                  
-  ne Проверка версии VMware Tools                                                 
-  ce vmware-toolbox-cmd -v                                                        
-                                                                                  
-  ne Проверка работы буфера обмена                                                
-  ce vmware-toolbox-cmd stat clipboard                                            
-                                                                                  
-  ne Проверка синхронизации времени                                               
-  ce vmware-toolbox-cmd timesync status                                           
-                                                                                  
-  hd Настройка                                                                    
-                                                                                  
-  ne Включение синхронизации времени с хостом                                     
-  ce vmware-toolbox-cmd timesync enable
-                                                                                  
-  ne Отключение синхронизации времени с хостом                                    
-  ce vmware-toolbox-cmd timesync disable                                          
-                                                                                  
-  ne Ручная настройка разрешения экрана                                           
-  ce xrandr --output Virtual1 --mode 1920x1080                                    
-  ct Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение       
-  экрана)                                                                         
-                                                                                  
-  ne Просмотр доступных разрешений                                                
-  ce xrandr
+
+ne Установка пакетов open-vm-tools                                              
+ce apt-get install open-vm-tools open-vm-tools-desktop xrandr
+ct open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер
+обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция     
+мыши, графика); xrandr(утилита для управления разрешением экрана)
+
+ne Включение службы в автозагрузку                                              
+ce systemctl enable vmtoolsd
+
+ne Запуск службы                                                                
+ce systemctl start vmtoolsd                                                     
+
+hd Проверка                                                                     
+
+ne Проверка статуса службы                                                      
+ce systemctl status vmtoolsd
+
+ne Проверка версии VMware Tools                                                 
+ce vmware-toolbox-cmd -v                                                        
+
+ne Проверка работы буфера обмена                                                
+ce vmware-toolbox-cmd stat clipboard                                            
+
+ne Проверка синхронизации времени                                               
+ce vmware-toolbox-cmd timesync status                                           
+
+hd Настройка                                                                    
+
+ne Включение синхронизации времени с хостом                                     
+ce vmware-toolbox-cmd timesync enable
+
+ne Отключение синхронизации времени с хостом                                    
+ce vmware-toolbox-cmd timesync disable                                          
+
+ne Ручная настройка разрешения экрана                                           
+ce xrandr --output Virtual1 --mode 1920x1080                                    
+ct Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение       
+экрана)                                                                         
+
+ne Просмотр доступных разрешений                                                
+ce xrandr

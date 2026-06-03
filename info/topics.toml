@@ -5,11 +5,11 @@ topic_save = "~/SureBook/topics"
 post_save = "~/SureBook/posting"
 source_table_file = "~/SureBook/info/src_table.md"
 auto_alphabetic_sort = "true"
-auto_save = "false"
+auto_save = "true"
 auto_cast = "true"
 auto_cast_format = "md"
 editor = "nvim"
-last_saved = "2026-05-31 18:27:20"
+last_saved = "2026-06-03 02:42:43"
 viewer_md = "inlyne"
 
 [topics."alt_fail2ban"]
@@ -573,4 +573,23 @@ title = "sudo-schema-samba"
 path = "/home/stip/SureBook/topics/sudo-schema-samba.md"
 lists = []
 
+
+
+
+[topics."LAMP_Linux_Apache_MariaDB_PHP"]
+title = "LAMP_Linux_Apache_MariaDB_PHP"
+path = "/home/stip/SureBook/topics/LAMP_Linux_Apache_MariaDB_PHP.md"
+lists = []
+
+
+[topics."docker_testapp_from_tar"]
+title = "docker_testapp_from_tar"
+path = "/home/stip/SureBook/topics/docker_testapp_from_tar.md"
+lists = []
+
+
+[topics."Samba_attach_client"]
+title = "Samba_attach_client"
+path = "/home/stip/SureBook/topics/Samba_attach_client.md"
+lists = []
 

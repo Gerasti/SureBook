@@ -5,25 +5,22 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y mariadb-server                               
- 
 </syntaxhighlight>
 
 ==== Включение службы MariaDB ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now mariadb                                                    
- 
 </syntaxhighlight>
 
 ==== Создание базы данных и пользователя ====
 
 <syntaxhighlight lang="bash">
 mariadb                                                                           
-  CREATE DATABASE moodle;                                                              
-  CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'moodle';                             
-  GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON 
-  moodle.* TO 'moodle'@'localhost';                                                    
- 
+CREATE DATABASE moodle;                                                              
+CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'moodle';                             
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON 
+moodle.* TO 'moodle'@'localhost';                                                    
 </syntaxhighlight>
 
 <blockquote>
@@ -34,52 +31,45 @@ mariadb
 
 <syntaxhighlight lang="bash">
 apt-get install -y apache2 apache2-{base,httpd-prefork,mod_php8.0,mods}           
- 
 </syntaxhighlight>
 
 ==== Установка PHP и модулей ====
 
 <syntaxhighlight lang="bash">
 apt-get install -y php8.0 php8.0-{curl,fileinfo,fpm-fcgi,gd,intl,ldap,mbstring,mys
-  qlnd,mysqlnd-mysqli,opcache,soap,sodium,xmlreader,xmlrpc,zip,openssl}                
- 
+qlnd,mysqlnd-mysqli,opcache,soap,sodium,xmlreader,xmlrpc,zip,openssl}                
 </syntaxhighlight>
 
 ==== Запуск веб-сервера ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now httpd2                                                     
- 
 </syntaxhighlight>
 
 ==== Установка git ====
 
 <syntaxhighlight lang="bash">
 apt-get install -y git                                                            
- 
 </syntaxhighlight>
 
 ==== Загрузка Moodle ====
 
 <syntaxhighlight lang="bash">
 git clone git://git.moodle.org/moodle.git                                         
-  cd moodle                                                                            
- 
+cd moodle                                                                            
 </syntaxhighlight>
 
 ==== Просмотр доступных веток ====
 
 <syntaxhighlight lang="bash">
 git branch -a                                                                     
- 
 </syntaxhighlight>
 
 ==== Выбор версии Moodle ====
 
 <syntaxhighlight lang="bash">
 git branch --track MOODLE_403_STABLE origin/MOODLE_403_STABLE                     
-  git checkout MOODLE_403_STABLE                                                       
- 
+git checkout MOODLE_403_STABLE                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -90,20 +80,18 @@ git branch --track MOODLE_403_STABLE origin/MOODLE_403_STABLE
 
 <syntaxhighlight lang="bash">
 cd ../                                                                            
-  cp -R moodle /var/www/html/                                                          
- 
+cp -R moodle /var/www/html/                                                          
 </syntaxhighlight>
 
 ==== Создание каталога данных ====
 
 <syntaxhighlight lang="bash">
 mkdir /var/moodledata                                                             
-  chown -R apache2 /var/moodledata                                                     
-  chmod -R 777 /var/moodledata                                                         
-  chmod -R 0755 /var/www/html/moodle                                                   
-  chown -R apache2:apache2 /var/www/html/moodle                                        
-                                                                                       
- 
+chown -R apache2 /var/moodledata                                                     
+chmod -R 777 /var/moodledata                                                         
+chmod -R 0755 /var/www/html/moodle                                                   
+chown -R apache2:apache2 /var/www/html/moodle                                        
+
 </syntaxhighlight>
 
 === Настройка ===
@@ -112,14 +100,13 @@ mkdir /var/moodledata
 
 <syntaxhighlight lang="bash">
 <VirtualHost *:80>                                                                
-      ServerName moodle.champ.first                                                    
-      DocumentRoot /var/www/html/moodle                                                
-      <Directory "/var/www/html/moodle">                                               
-          AllowOverride All                                                            
-          Options -Indexes +FollowSymLinks                                             
-      </Directory>                                                                     
-  </VirtualHost>                                                                       
- 
+ServerName moodle.champ.first                                                    
+DocumentRoot /var/www/html/moodle                                                
+<Directory "/var/www/html/moodle">                                               
+AllowOverride All                                                            
+Options -Indexes +FollowSymLinks                                             
+</Directory>                                                                     
+</VirtualHost>                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -130,15 +117,13 @@ ServerName (доменное имя); DocumentRoot (путь к Moodle)
 
 <syntaxhighlight lang="bash">
 ln -s /etc/httpd2/conf/sites-available/moodle.conf /etc/httpd2/conf/sites-enabled/
- 
 </syntaxhighlight>
 
 ==== Настройка PHP ====
 
 <syntaxhighlight lang="bash">
 sed -i "s/; max_input_vars = 1000/max_input_vars = 5000/g"                        
-  /etc/php/8.0/apache2-mod_php/php.ini                                                 
- 
+/etc/php/8.0/apache2-mod_php/php.ini                                                 
 </syntaxhighlight>
 
 <blockquote>
@@ -149,8 +134,7 @@ sed -i "s/; max_input_vars = 1000/max_input_vars = 5000/g"
 
 <syntaxhighlight lang="bash">
 systemctl restart httpd2                                                          
-                                                                                       
- 
+
 </syntaxhighlight>
 
 === Веб-установщик ===

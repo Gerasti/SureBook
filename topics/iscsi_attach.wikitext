@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 lsblk
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,7 +15,6 @@ lsblk
 
 <syntaxhighlight lang="bash">
 pvcreate /dev/sdb                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -27,7 +25,6 @@ pvcreate /dev/sdb
 
 <syntaxhighlight lang="bash">
 vgcreate VG /dev/sdb                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -40,7 +37,6 @@ VG - имя группы томов; /dev/sdb - физический том
 
 <syntaxhighlight lang="bash">
 lvcreate -l 100%FREE -n DATA VG                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -51,7 +47,6 @@ lvcreate -l 100%FREE -n DATA VG
 
 <syntaxhighlight lang="bash">
 mkfs.xfs /dev/VG/DATA                                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -62,14 +57,12 @@ mkfs.xfs /dev/VG/DATA
 
 <syntaxhighlight lang="bash">
 mkdir /opt/data                                                                   
- 
 </syntaxhighlight>
 
 ==== В /etc/fstab добавить строку ====
 
 <syntaxhighlight lang="bash">
 /dev/VG/DATA /opt/data xfs defaults 0 0                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -80,7 +73,6 @@ mkdir /opt/data
 
 <syntaxhighlight lang="bash">
 mount -av                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -93,7 +85,6 @@ mount -av
 
 <syntaxhighlight lang="bash">
 lvdisplay                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -104,7 +95,6 @@ lvdisplay
 
 <syntaxhighlight lang="bash">
 lsblk                                                                             
- 
 </syntaxhighlight>
 
 <blockquote>

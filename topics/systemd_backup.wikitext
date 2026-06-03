@@ -5,22 +5,20 @@
 
 <syntaxhighlight lang="bash">
 mkdir -p /var/backup
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание службы /etc/systemd/system/backup.service ====
 
 <syntaxhighlight lang="bash">
 [Unit]                                                                                   
-  Description=Backup shared folder to /var/backup                                             
-  After=network.target                                                                        
-                                                                                              
-  [Service]                                                                                   
-  Type=oneshot                                                                                
-  ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
-  /path/to/shared/folder'                                                                     
- 
+Description=Backup shared folder to /var/backup                                             
+After=network.target                                                                        
+
+[Service]                                                                                   
+Type=oneshot                                                                                
+ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
+/path/to/shared/folder'                                                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -31,15 +29,14 @@ Type=oneshot(служба завершается после выполнения
 
 <syntaxhighlight lang="bash">
 [Unit]       
-  Description=Run backup.service daily at 20:00                                               
-                                                                                              
-  [Timer]                                                                                     
-  OnCalendar=20:00                                                                            
-  Persistent=true                                                                             
-                                                                                              
-  [Install]                                                                                   
-  WantedBy=timers.target                                                                      
- 
+Description=Run backup.service daily at 20:00                                               
+
+[Timer]                                                                                     
+OnCalendar=20:00                                                                            
+Persistent=true                                                                             
+
+[Install]                                                                                   
+WantedBy=timers.target                                                                      
 </syntaxhighlight>
 
 <blockquote>
@@ -52,7 +49,6 @@ OnCalendar=20:00(запуск каждый день в 20:00); Persistent=true(�
 
 <syntaxhighlight lang="bash">
 systemctl daemon-reload
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -63,8 +59,7 @@ systemctl daemon-reload
 
 <syntaxhighlight lang="bash">
 systemctl enable --now backup.timer                                                      
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -73,7 +68,6 @@ systemctl enable --now backup.timer
 
 <syntaxhighlight lang="bash">
 systemctl list-timers
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -84,23 +78,20 @@ systemctl list-timers
 
 <syntaxhighlight lang="bash">
 systemctl status backup.timer                                                            
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка статуса службы ====
 
 <syntaxhighlight lang="bash">
 systemctl status backup.service                                                          
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Ручной запуск службы резервного копирования ====
 
 <syntaxhighlight lang="bash">
 systemctl start backup.service                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -111,7 +102,6 @@ systemctl start backup.service
 
 <syntaxhighlight lang="bash">
 ls -lh /var/backup                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -122,7 +112,6 @@ ls -lh /var/backup
 
 <syntaxhighlight lang="bash">
 journalctl -u backup.service                                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -133,8 +122,7 @@ journalctl -u backup.service
 
 <syntaxhighlight lang="bash">
 journalctl -u backup.timer                                                               
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Дополнительные варианты OnCalendar ====

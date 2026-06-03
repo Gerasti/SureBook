@@ -11,15 +11,13 @@
 
 ```CODE
 mkdir -p /etc/net/ifaces/ens32                                                           
-                                                                                              
- 
+
 ```
 
 #### Копирование конфигурации существующего интерфейса <!-- NAME -->
 
 ```CODE
 cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/                                  
- 
 ```
 
 > Опционально, если уже есть настроенный интерфейс
@@ -30,9 +28,8 @@ cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/
 
 ```CODE
 TYPE=eth                                                                                 
-  BOOTPROTO=static                                                                            
-  CONFIG_IPV4=yes                                                                             
- 
+BOOTPROTO=static                                                                            
+CONFIG_IPV4=yes                                                                             
 ```
 
 > TYPE=eth(тип интерфейса Ethernet); BOOTPROTO(протокол получения IP) {static, dhcp}; CONFIG_IPV4=yes(включение IPv4)
@@ -41,8 +38,7 @@ TYPE=eth
 
 ```CODE
 192.168.11.67/28
-  192.168.33.67/32                                                                            
- 
+192.168.33.67/32                                                                            
 ```
 
 > IP-адрес обязательно указывается с маской сети, можно указать несколько адресов
@@ -51,7 +47,6 @@ TYPE=eth
 
 ```CODE
 default via 192.168.11.1                                                                 
- 
 ```
 
 > default(маршрут по умолчанию); via(IP-адрес маршрутизатора)
@@ -60,8 +55,7 @@ default via 192.168.11.1
 
 ```CODE
 systemctl restart network                                                                
-                                                                                              
- 
+
 ```
 
 ### Ручное управление интерфейсами <!-- HEAD -->
@@ -70,16 +64,14 @@ systemctl restart network
 
 ```CODE
 ifup ens32                                                                               
-                                                                                              
- 
+
 ```
 
 #### Остановка интерфейса <!-- NAME -->
 
 ```CODE
 ifdown ens32                                                                             
-                                                                                              
- 
+
 ```
 
 ### Ручное управление маршрутами <!-- HEAD -->
@@ -88,24 +80,21 @@ ifdown ens32
 
 ```CODE
 ip route add default via 192.168.11.1                                                    
-                                                                                              
- 
+
 ```
 
 #### Удаление шлюза <!-- NAME -->
 
 ```CODE
 ip route del default via 192.168.11.1                                                    
-                                                                                              
- 
+
 ```
 
 #### Проверка маршрутов <!-- NAME -->
 
 ```CODE
 ip route                                                                                 
-                                                                                              
- 
+
 ```
 
 ### Проверка интерфейсов <!-- HEAD -->

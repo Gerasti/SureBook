@@ -1,199 +1,199 @@
 hd Установка WireGuard                                                          
-   
-  ne Установка пакетов                                                            
-  ce apt-get update && apt-get install -y wireguard-tools wireguard-tools-wg-quick
-  ct wireguard-tools(утилиты для управления WireGuard);
-  wireguard-tools-wg-quick(утилита wg-quick для быстрой настройки)                
-   
-  hd Настройка сервера FW-L                                                       
-                  
-  ne Создание директории для ключей                                               
-  ce mkdir -p /etc/wireguard/keys
-                                                                                  
-  ne Генерация ключей сервера и клиента                                           
-  ce cd /etc/wireguard/keys                                                       
-  wg genkey | tee srv-sec.key | wg pubkey > srv-pub.key                           
-  wg genkey | tee cli-sec.key | wg pubkey > cli-pub.key                           
-  ct wg genkey(генерация приватного ключа); wg pubkey(генерация публичного ключа  
-  из приватного); srv-sec.key(приватный ключ сервера); srv-pub.key(публичный ключ 
-  сервера); cli-sec.key(приватный ключ клиента); cli-pub.key(публичный ключ       
-  клиента)                                                                        
-                  
-  ne Создание конфигурационного файла /etc/wireguard/wg0.conf                     
-  ce [Interface]
-  Address = 10.20.30.1/30                                                         
-  ListenPort = 51820                                                              
-  PrivateKey = <содержимое srv-sec.key>                                           
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое cli-pub.key>                                            
-  AllowedIPs = 10.20.30.2/32, 172.16.100.0/24                                     
-  ct [Interface](настройки сервера); Address(адрес в VPN-сети); ListenPort(порт   
-  сервера, обычно 51820); PrivateKey(приватный ключ сервера); [Peer](настройки    
-  клиента); PublicKey(публичный ключ клиента); AllowedIPs(разрешённые маршруты от 
-  клиента)                                                                        
-                  
-  ne Включение и автозагрузка туннельного интерфейса                              
-  ce systemctl enable --now wg-quick@wg0
-                                                                                  
-  hd Настройка клиента FW-R                                                       
-                                                                                  
-  ne Создание директории для ключей                                               
-  ce mkdir -p /etc/wireguard/keys
-                                                                                  
-  ne Копирование ключей с сервера                                                 
-  ce cd /etc/wireguard/keys
-  scp root@4.4.4.2:/etc/wireguard/keys/cli-sec.key ./                             
-  scp root@4.4.4.2:/etc/wireguard/keys/srv-pub.key ./                             
-  ct Копируем приватный ключ клиента и публичный ключ сервера                     
-                                                                                  
-  ne Создание конфигурационного файла /etc/wireguard/wg0.conf                     
-  ce [Interface]                                                                  
-  Address = 10.20.30.2/30                                                         
-  PrivateKey = <содержимое cli-sec.key>                                           
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое srv-pub.key>                                            
-  Endpoint = 4.4.4.2:51820                                                        
-  AllowedIPs = 10.20.30.1/32, 192.168.100.0/24                                    
-  PersistentKeepalive = 25                                                        
-  ct Endpoint(адрес и порт сервера); AllowedIPs(разрешённые маршруты к серверу);  
-  PersistentKeepalive(интервал проверки соединения в секундах, обычно 25)         
-                                                                                  
-  ne Включение и автозагрузка туннельного интерфейса                              
-  ce systemctl enable --now wg-quick@wg0
-                                                                                  
-  hd Разрешение WireGuard в firewall                                              
-                                                                                  
-  ne Разрешение UDP 51820 в iptables на сервере                                   
-  ce iptables -A INPUT -p udp --dport 51820 -j ACCEPT
-  ct UDP порт 51820 используется для WireGuard                                    
-                                                                                  
-  ne Разрешение UDP 51820 в nftables на сервере                                   
-  ce nft add rule inet filter input udp dport 51820 accept                        
-                                                                                  
-  hd Проверка                                                                     
-                                                                                  
-  ne Проверка статуса туннеля                                                     
-  ce wg show wg0  
-  ct Показывает информацию о туннеле, пиры, передачу данных                       
-                                                                                  
-  ne Проверка интерфейса wg0                                                      
-  ce ip -c a | grep wg0                                                           
-                                                                                  
-  ne Проверка статуса службы                                                      
-  ce systemctl status wg-quick@wg0                                                
-                                                                                  
-  ne Проверка связности через туннель                                             
-  ce ping 10.20.30.2                                                              
-  ct С сервера пинг клиента, с клиента ping 10.20.30.1                            
-                                                                                  
-  ne Проверка связности из LAN LEFT в LAN RIGHT                                   
-  ce ping 172.16.100.10                                                           
-  ct С машины в сети 192.168.100.0/24 пинг в сеть 172.16.100.0/24                 
-                                                                                  
-  hd Управление туннелем                                                          
-                                                                                  
-  ne Остановка туннеля                                                            
-  ce systemctl stop wg-quick@wg0
-                                                                                  
-  ne Запуск туннеля                                                               
-  ce systemctl start wg-quick@wg0                                                 
-                                                                                  
-  ne Перезапуск туннеля                                                           
-  ce systemctl restart wg-quick@wg0                                               
-                                                                                  
-  ne Ручное поднятие интерфейса                                                   
-  ce wg-quick up wg0                                                              
-                                                                                  
-  ne Ручное отключение интерфейса                                                 
-  ce wg-quick down wg0                                                            
-                                                                                  
-  hd Настройка динамической маршрутизации OSPF                                    
-                                                                                  
-  ne Установка FRR на обоих серверах                                              
-  ce apt-get install -y frr
-  ct FRR(Free Range Routing, пакет для динамической маршрутизации OSPF, BGP)      
-                                                                                  
-  ne Изменение конфигурации WireGuard на сервере                                  
-  ce [Interface]                                                                  
-  Address = 10.20.30.1/30                                                         
-  ListenPort = 51820                                                              
-  PrivateKey = <содержимое srv-sec.key>                                           
-  Table = off                                                                     
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое cli-pub.key>
-  AllowedIPs = 10.20.30.2/32                                                      
-  ct Table = off(отключить автоматическое управление маршрутами, маршруты будут   
-  управляться через OSPF); AllowedIPs(только адрес клиента, без сетей)            
-                                                                                  
-  ne Изменение конфигурации WireGuard на клиенте                                  
-  ce [Interface]  
-  Address = 10.20.30.2/30                                                         
-  PrivateKey = <содержимое cli-sec.key>                                           
-  Table = off                                                                     
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое srv-pub.key>                                            
-  Endpoint = 4.4.4.2:51820                                                        
-  AllowedIPs = 10.20.30.1/32                                                      
-  PersistentKeepalive = 25                                                        
-                                                                                  
-  ne Перезапуск туннеля на обоих серверах                                         
-  ce systemctl restart wg-quick@wg0                                               
-                                                                                  
-  ne Включение демона OSPF на обоих серверах                                      
-  ce sed -i 's/ospfd=no/ospfd=yes/g' /etc/frr/daemons                             
-                                                                                  
-  ne Запуск и автозагрузка FRR на обоих серверах                                  
-  ce systemctl enable --now frr                                                   
-                                                                                  
-  ne Настройка OSPF на сервере FW-L                                               
-  ce vtysh                                                                        
-  configure terminal                                                              
-  router ospf     
-  passive-interface default                                                       
-  network 10.20.30.0/30 area 0
-  network 192.168.100.0/24 area 0                                                 
-  exit                                                                            
-  interface wg0                                                                   
-  no ip ospf passive                                                              
-  exit                                                                            
-  end                                                                             
-  wr mem                                                                          
-  ct vtysh(интерактивная оболочка FRR); router ospf(включить OSPF);               
-  passive-interface default(все интерфейсы пассивные по умолчанию);               
-  network(объявить сети в OSPF area 0); no ip ospf passive(сделать wg0 активным   
-  для OSPF); wr mem(сохранить конфигурацию)                                       
-                  
-  ne Настройка OSPF на клиенте FW-R                                               
-  ce vtysh
-  configure terminal                                                              
-  router ospf                                                                     
-  passive-interface default
-  network 10.20.30.0/30 area 0                                                    
-  network 172.16.100.0/24 area 0                                                  
-  exit                                                                            
-  interface wg0                                                                   
-  no ip ospf passive                                                              
-  exit            
-  end                                                                             
-  wr mem          
-                                                                                  
-  ne Проверка OSPF соседей                                                        
-  ce vtysh -c "show ip ospf neighbor"                                             
-  ct Должен показать соседа в состоянии Full                                      
-                                                                                  
-  ne Проверка маршрутов OSPF                                                      
-  ce ip -c r | grep ospf                                                          
-  ct Показывает маршруты, полученные через OSPF                                   
-                                                                                  
-  ne Проверка таблицы маршрутизации OSPF                                          
-  ce vtysh -c "show ip route ospf"                                                
-                                                                                  
-  ne Проверка статуса OSPF
-  ce vtysh -c "show ip ospf"                                                      
-                  
-  ne Проверка интерфейсов OSPF
-  ce vtysh -c "show ip ospf interface"
+
+ne Установка пакетов                                                            
+ce apt-get update && apt-get install -y wireguard-tools wireguard-tools-wg-quick
+ct wireguard-tools(утилиты для управления WireGuard);
+wireguard-tools-wg-quick(утилита wg-quick для быстрой настройки)                
+
+hd Настройка сервера FW-L                                                       
+
+ne Создание директории для ключей                                               
+ce mkdir -p /etc/wireguard/keys
+
+ne Генерация ключей сервера и клиента                                           
+ce cd /etc/wireguard/keys                                                       
+wg genkey | tee srv-sec.key | wg pubkey > srv-pub.key                           
+wg genkey | tee cli-sec.key | wg pubkey > cli-pub.key                           
+ct wg genkey(генерация приватного ключа); wg pubkey(генерация публичного ключа  
+из приватного); srv-sec.key(приватный ключ сервера); srv-pub.key(публичный ключ 
+сервера); cli-sec.key(приватный ключ клиента); cli-pub.key(публичный ключ       
+клиента)                                                                        
+
+ne Создание конфигурационного файла /etc/wireguard/wg0.conf                     
+ce [Interface]
+Address = 10.20.30.1/30                                                         
+ListenPort = 51820                                                              
+PrivateKey = <содержимое srv-sec.key>                                           
+
+[Peer]                                                                          
+PublicKey = <содержимое cli-pub.key>                                            
+AllowedIPs = 10.20.30.2/32, 172.16.100.0/24                                     
+ct [Interface](настройки сервера); Address(адрес в VPN-сети); ListenPort(порт   
+сервера, обычно 51820); PrivateKey(приватный ключ сервера); [Peer](настройки    
+клиента); PublicKey(публичный ключ клиента); AllowedIPs(разрешённые маршруты от 
+клиента)                                                                        
+
+ne Включение и автозагрузка туннельного интерфейса                              
+ce systemctl enable --now wg-quick@wg0
+
+hd Настройка клиента FW-R                                                       
+
+ne Создание директории для ключей                                               
+ce mkdir -p /etc/wireguard/keys
+
+ne Копирование ключей с сервера                                                 
+ce cd /etc/wireguard/keys
+scp root@4.4.4.2:/etc/wireguard/keys/cli-sec.key ./                             
+scp root@4.4.4.2:/etc/wireguard/keys/srv-pub.key ./                             
+ct Копируем приватный ключ клиента и публичный ключ сервера                     
+
+ne Создание конфигурационного файла /etc/wireguard/wg0.conf                     
+ce [Interface]                                                                  
+Address = 10.20.30.2/30                                                         
+PrivateKey = <содержимое cli-sec.key>                                           
+
+[Peer]                                                                          
+PublicKey = <содержимое srv-pub.key>                                            
+Endpoint = 4.4.4.2:51820                                                        
+AllowedIPs = 10.20.30.1/32, 192.168.100.0/24                                    
+PersistentKeepalive = 25                                                        
+ct Endpoint(адрес и порт сервера); AllowedIPs(разрешённые маршруты к серверу);  
+PersistentKeepalive(интервал проверки соединения в секундах, обычно 25)         
+
+ne Включение и автозагрузка туннельного интерфейса                              
+ce systemctl enable --now wg-quick@wg0
+
+hd Разрешение WireGuard в firewall                                              
+
+ne Разрешение UDP 51820 в iptables на сервере                                   
+ce iptables -A INPUT -p udp --dport 51820 -j ACCEPT
+ct UDP порт 51820 используется для WireGuard                                    
+
+ne Разрешение UDP 51820 в nftables на сервере                                   
+ce nft add rule inet filter input udp dport 51820 accept                        
+
+hd Проверка                                                                     
+
+ne Проверка статуса туннеля                                                     
+ce wg show wg0  
+ct Показывает информацию о туннеле, пиры, передачу данных                       
+
+ne Проверка интерфейса wg0                                                      
+ce ip -c a | grep wg0                                                           
+
+ne Проверка статуса службы                                                      
+ce systemctl status wg-quick@wg0                                                
+
+ne Проверка связности через туннель                                             
+ce ping 10.20.30.2                                                              
+ct С сервера пинг клиента, с клиента ping 10.20.30.1                            
+
+ne Проверка связности из LAN LEFT в LAN RIGHT                                   
+ce ping 172.16.100.10                                                           
+ct С машины в сети 192.168.100.0/24 пинг в сеть 172.16.100.0/24                 
+
+hd Управление туннелем                                                          
+
+ne Остановка туннеля                                                            
+ce systemctl stop wg-quick@wg0
+
+ne Запуск туннеля                                                               
+ce systemctl start wg-quick@wg0                                                 
+
+ne Перезапуск туннеля                                                           
+ce systemctl restart wg-quick@wg0                                               
+
+ne Ручное поднятие интерфейса                                                   
+ce wg-quick up wg0                                                              
+
+ne Ручное отключение интерфейса                                                 
+ce wg-quick down wg0                                                            
+
+hd Настройка динамической маршрутизации OSPF                                    
+
+ne Установка FRR на обоих серверах                                              
+ce apt-get install -y frr
+ct FRR(Free Range Routing, пакет для динамической маршрутизации OSPF, BGP)      
+
+ne Изменение конфигурации WireGuard на сервере                                  
+ce [Interface]                                                                  
+Address = 10.20.30.1/30                                                         
+ListenPort = 51820                                                              
+PrivateKey = <содержимое srv-sec.key>                                           
+Table = off                                                                     
+
+[Peer]                                                                          
+PublicKey = <содержимое cli-pub.key>
+AllowedIPs = 10.20.30.2/32                                                      
+ct Table = off(отключить автоматическое управление маршрутами, маршруты будут   
+управляться через OSPF); AllowedIPs(только адрес клиента, без сетей)            
+
+ne Изменение конфигурации WireGuard на клиенте                                  
+ce [Interface]  
+Address = 10.20.30.2/30                                                         
+PrivateKey = <содержимое cli-sec.key>                                           
+Table = off                                                                     
+
+[Peer]                                                                          
+PublicKey = <содержимое srv-pub.key>                                            
+Endpoint = 4.4.4.2:51820                                                        
+AllowedIPs = 10.20.30.1/32                                                      
+PersistentKeepalive = 25                                                        
+
+ne Перезапуск туннеля на обоих серверах                                         
+ce systemctl restart wg-quick@wg0                                               
+
+ne Включение демона OSPF на обоих серверах                                      
+ce sed -i 's/ospfd=no/ospfd=yes/g' /etc/frr/daemons                             
+
+ne Запуск и автозагрузка FRR на обоих серверах                                  
+ce systemctl enable --now frr                                                   
+
+ne Настройка OSPF на сервере FW-L                                               
+ce vtysh                                                                        
+configure terminal                                                              
+router ospf     
+passive-interface default                                                       
+network 10.20.30.0/30 area 0
+network 192.168.100.0/24 area 0                                                 
+exit                                                                            
+interface wg0                                                                   
+no ip ospf passive                                                              
+exit                                                                            
+end                                                                             
+wr mem                                                                          
+ct vtysh(интерактивная оболочка FRR); router ospf(включить OSPF);               
+passive-interface default(все интерфейсы пассивные по умолчанию);               
+network(объявить сети в OSPF area 0); no ip ospf passive(сделать wg0 активным   
+для OSPF); wr mem(сохранить конфигурацию)                                       
+
+ne Настройка OSPF на клиенте FW-R                                               
+ce vtysh
+configure terminal                                                              
+router ospf                                                                     
+passive-interface default
+network 10.20.30.0/30 area 0                                                    
+network 172.16.100.0/24 area 0                                                  
+exit                                                                            
+interface wg0                                                                   
+no ip ospf passive                                                              
+exit            
+end                                                                             
+wr mem          
+
+ne Проверка OSPF соседей                                                        
+ce vtysh -c "show ip ospf neighbor"                                             
+ct Должен показать соседа в состоянии Full                                      
+
+ne Проверка маршрутов OSPF                                                      
+ce ip -c r | grep ospf                                                          
+ct Показывает маршруты, полученные через OSPF                                   
+
+ne Проверка таблицы маршрутизации OSPF                                          
+ce vtysh -c "show ip route ospf"                                                
+
+ne Проверка статуса OSPF
+ce vtysh -c "show ip ospf"                                                      
+
+ne Проверка интерфейсов OSPF
+ce vtysh -c "show ip ospf interface"

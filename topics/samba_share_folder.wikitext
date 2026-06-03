@@ -5,8 +5,7 @@
 
 <syntaxhighlight lang="bash">
 mkdir /opt/data                                                                          
-  chmod 777 /opt/data                                                                         
- 
+chmod 777 /opt/data                                                                         
 </syntaxhighlight>
 
 <blockquote>
@@ -17,13 +16,12 @@ mkdir /opt/data
 
 <syntaxhighlight lang="bash">
 [samba]                                                                                  
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  guest ok = yes                                                                              
-  read only = no                                                                              
-  force user = nobody                                                                         
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+guest ok = yes                                                                              
+read only = no                                                                              
+force user = nobody                                                                         
 </syntaxhighlight>
 
 <blockquote>
@@ -34,8 +32,7 @@ guest ok = yes(анонимный доступ); force user(все действ�
 
 <syntaxhighlight lang="bash">
 systemctl restart smbd                                                                   
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка Samba для пользователей домена ===
@@ -44,9 +41,8 @@ systemctl restart smbd
 
 <syntaxhighlight lang="bash">
 mkdir /opt/data
-  chmod 770 /opt/data                                                                         
-  chown root:domain_users /opt/data                                                           
- 
+chmod 770 /opt/data                                                                         
+chown root:domain_users /opt/data                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -57,14 +53,13 @@ mkdir /opt/data
 
 <syntaxhighlight lang="bash">
 [samba]                                                                                  
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  valid users = @domain_users                                                                 
-  read only = no                                                                              
-  create mask = 0660                                                                          
-  directory mask = 0770                                                                       
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+valid users = @domain_users                                                                 
+read only = no                                                                              
+create mask = 0660                                                                          
+directory mask = 0770                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -75,7 +70,6 @@ valid users = @domain_users(доступ только группе домена)
 
 <syntaxhighlight lang="bash">
 smbpasswd -a username
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -88,13 +82,12 @@ smbpasswd -a username
 
 <syntaxhighlight lang="bash">
 [samba]      
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  valid users = user1, user2, user3                                                           
-  read only = no                                                                              
-  write list = user1, user2                                                                   
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+valid users = user1, user2, user3                                                           
+read only = no                                                                              
+write list = user1, user2                                                                   
 </syntaxhighlight>
 
 <blockquote>
@@ -107,14 +100,13 @@ valid users(список разрешенных пользователей); wri
 
 <syntaxhighlight lang="bash">
 browseable = yes
-  guest ok = yes                                                                              
-  valid users = user1, @group1                                                                
-  invalid users = user2                                                                       
-  read only = no                                                                              
-  writable = yes                                                                              
-  write list = user1, @group1                                                                 
-  read list = user2                                                                           
- 
+guest ok = yes                                                                              
+valid users = user1, @group1                                                                
+invalid users = user2                                                                       
+read only = no                                                                              
+writable = yes                                                                              
+write list = user1, @group1                                                                 
+read list = user2                                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -125,11 +117,10 @@ browseable(видимость в сети); guest ok(гостевой досту
 
 <syntaxhighlight lang="bash">
 create mask = 0660
-  directory mask = 0770                                                                       
-  force user = nobody                                                                         
-  force group = nogroup                                                                       
-  inherit permissions = yes                                                                   
- 
+directory mask = 0770                                                                       
+force user = nobody                                                                         
+force group = nogroup                                                                       
+inherit permissions = yes                                                                   
 </syntaxhighlight>
 
 <blockquote>
@@ -140,9 +131,8 @@ create mask(права на файлы); directory mask(права на ката
 
 <syntaxhighlight lang="bash">
 hosts allow = 192.168.1.0/24
-  hosts deny = 192.168.2.0/24                                                                 
-  max connections = 10                                                                        
- 
+hosts deny = 192.168.2.0/24                                                                 
+max connections = 10                                                                        
 </syntaxhighlight>
 
 <blockquote>
@@ -155,7 +145,6 @@ hosts allow(разрешенные сети); hosts deny(запрещенные 
 
 <syntaxhighlight lang="bash">
 testparm     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -166,7 +155,6 @@ testparm
 
 <syntaxhighlight lang="bash">
 smbstatus                                                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -177,7 +165,6 @@ smbstatus
 
 <syntaxhighlight lang="bash">
 \\192.168.1.1\samba                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -188,7 +175,6 @@ smbstatus
 
 <syntaxhighlight lang="bash">
 smb://192.168.1.1/samba                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>

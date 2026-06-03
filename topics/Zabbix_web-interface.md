@@ -3,7 +3,6 @@
 
 ```CODE
 apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
- 
 ```
 
 > zabbix-phpfrontend-apache2(веб-интерфейс для Apache2); zabbix-phpfrontend-php8.2(поддержка PHP 8.2)
@@ -12,7 +11,6 @@ apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2
 
 ```CODE
 ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
- 
 ```
 
 > создает символическую ссылку для активации конфигурации Zabbix
@@ -21,15 +19,13 @@ ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
 
 ```CODE
 systemctl restart httpd2                                                                 
-                                                                                              
- 
+
 ```
 
 #### Изменение владельца для веб-установщика <!-- NAME -->
 
 ```CODE
 chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
- 
 ```
 
 > необходимо для записи конфигурации при установке
@@ -40,7 +36,6 @@ chown apache2:apache2 /var/www/webapps/zabbix/ui/conf
 
 ```CODE
 http://<ip сервера>/zabbix
- 
 ```
 
 > открыть в браузере
@@ -63,7 +58,6 @@ http://<ip сервера>/zabbix
 ```CODE
 http://<ip сервера>/zabbix
 
- 
 ```
 
 > открыть страницу входа
@@ -72,8 +66,7 @@ http://<ip сервера>/zabbix
 
 ```CODE
 username: Admin                                                                          
-  password: zabbix                                                                            
- 
+password: zabbix                                                                            
 ```
 
 > Admin с заглавной буквы; рекомендуется сменить пароль после первого входа
@@ -82,7 +75,6 @@ username: Admin
 
 ```CODE
 systemctl status httpd2                                                                  
- 
 ```
 
 > служба должна быть active (running)

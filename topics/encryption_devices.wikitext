@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,7 +15,6 @@ dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4
 
 <syntaxhighlight lang="bash">
 cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -27,7 +25,6 @@ cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key
 
 <syntaxhighlight lang="bash">
 cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -38,8 +35,7 @@ cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.k
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/mapper/data_crypt                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Автоматическая разблокировка при загрузке ===
@@ -48,7 +44,6 @@ mkfs.ext4 /dev/mapper/data_crypt
 
 <syntaxhighlight lang="bash">
 data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -59,9 +54,8 @@ data_crypt /dev/data_striped/lv_data /root/ext4.key luks
 
 <syntaxhighlight lang="bash">
 systemctl daemon-reexec                                                                  
-  systemctl restart systemd-cryptsetup@data_crypt                                             
-                                                                                              
- 
+systemctl restart systemd-cryptsetup@data_crypt                                             
+
 </syntaxhighlight>
 
 === Монтирование раздела ===
@@ -70,7 +64,6 @@ systemctl daemon-reexec
 
 <syntaxhighlight lang="bash">
 /dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -83,8 +76,7 @@ systemctl daemon-reexec
 
 <syntaxhighlight lang="bash">
 chmod 600 /root/ext4.key                                                                 
-  chown root:root /root/ext4.key                                                              
- 
+chown root:root /root/ext4.key                                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -97,15 +89,13 @@ chmod 600 /root/ext4.key
 
 <syntaxhighlight lang="bash">
 reboot                                                                                   
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка монтирования ====
 
 <syntaxhighlight lang="bash">
 df -h                                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>

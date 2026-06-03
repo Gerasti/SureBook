@@ -45,7 +45,6 @@ LVM может striping и mirroring, но mdadm лучше для RAID (про�
 
 <syntaxhighlight lang="bash">
 apt-get install -y lvm2                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -56,10 +55,9 @@ lvm2(пакет для работы с LVM)
 
 <syntaxhighlight lang="bash">
 parted /dev/sda                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%
-  set 1 lvm on                                                                                
- 
+mklabel gpt                                                                                 
+mkpart primary 0% 100%
+set 1 lvm on                                                                                
 </syntaxhighlight>
 
 <blockquote>
@@ -70,18 +68,16 @@ set 1 lvm on(установка флага LVM на раздел)
 
 <syntaxhighlight lang="bash">
 parted /dev/sdb                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%                                                                      
-  set 1 lvm on                                                                                
-                                                                                              
- 
+mklabel gpt                                                                                 
+mkpart primary 0% 100%                                                                      
+set 1 lvm on                                                                                
+
 </syntaxhighlight>
 
 ==== Создание Physical Volume ====
 
 <syntaxhighlight lang="bash">
 pvcreate /dev/sda1 /dev/sdb1                                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -92,7 +88,6 @@ pvcreate(инициализация физических томов для LVM)
 
 <syntaxhighlight lang="bash">
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -107,7 +102,6 @@ vgcreate(создание группы томов) vg01(имя группы)
 
 <syntaxhighlight lang="bash">
 lvcreate -L 10G -n lv_data vg01                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -122,7 +116,6 @@ lvcreate(создание логического тома) -L(размер) -n(�
 
 <syntaxhighlight lang="bash">
 lvcreate -l 100%FREE -n lv_data vg01                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -133,7 +126,6 @@ lvcreate -l 100%FREE -n lv_data vg01
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/vg01/lv_data                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -144,16 +136,14 @@ mkfs.ext4 /dev/vg01/lv_data
 
 <syntaxhighlight lang="bash">
 mkdir /mnt/data                                                                          
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Монтирование LV ====
 
 <syntaxhighlight lang="bash">
 mount /dev/vg01/lv_data /mnt/data                                                        
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка striped (RAID 0) ===
@@ -170,23 +160,20 @@ striped(чередование) - данные распределяются по
 
 <syntaxhighlight lang="bash">
 pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание VG для striped ====
 
 <syntaxhighlight lang="bash">
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание striped LV ====
 
 <syntaxhighlight lang="bash">
 lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -201,17 +188,15 @@ lvcreate -l 100%FREE -n lv_data -i2 vg01
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/vg01/lv_data                                                              
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Монтирование ====
 
 <syntaxhighlight lang="bash">
 mkdir /mnt/data                                                                          
-  mount /dev/vg01/lv_data /mnt/data                                                           
-                                                                                              
- 
+mount /dev/vg01/lv_data /mnt/data                                                           
+
 </syntaxhighlight>
 
 === Настройка mirroring (RAID 1) ===
@@ -228,23 +213,20 @@ mirroring(зеркалирование) - данные дублируются н
 
 <syntaxhighlight lang="bash">
 pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание VG для mirroring ====
 
 <syntaxhighlight lang="bash">
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание mirrored LV ====
 
 <syntaxhighlight lang="bash">
 lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -259,17 +241,15 @@ lvcreate -l 100%FREE -n lvmirror -m1 vg01
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/vg01/lvmirror                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Монтирование ====
 
 <syntaxhighlight lang="bash">
 mkdir /mnt/mirror                                                                        
-  mount /dev/vg01/lvmirror /mnt/mirror                                                        
-                                                                                              
- 
+mount /dev/vg01/lvmirror /mnt/mirror                                                        
+
 </syntaxhighlight>
 
 === Управление LVM ===
@@ -278,7 +258,6 @@ mkdir /mnt/mirror
 
 <syntaxhighlight lang="bash">
 lvextend -L +5G /dev/vg01/lv_data                                                        
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -293,7 +272,6 @@ lvextend -L +5G /dev/vg01/lv_data
 
 <syntaxhighlight lang="bash">
 resize2fs /dev/vg01/lv_data                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -308,11 +286,10 @@ resize2fs(для ext4); xfs_growfs(для xfs)
 
 <syntaxhighlight lang="bash">
 umount /mnt/data                                                                         
-  e2fsck -f /dev/vg01/lv_data                                                                 
-  resize2fs /dev/vg01/lv_data 5G                                                              
-  lvreduce -L 5G /dev/vg01/lv_data                                                            
-  mount /dev/vg01/lv_data /mnt/data                                                           
- 
+e2fsck -f /dev/vg01/lv_data                                                                 
+resize2fs /dev/vg01/lv_data 5G                                                              
+lvreduce -L 5G /dev/vg01/lv_data                                                            
+mount /dev/vg01/lv_data /mnt/data                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -323,8 +300,7 @@ umount /mnt/data
 
 <syntaxhighlight lang="bash">
 pvcreate /dev/sdc1                                                                       
-  vgextend vg01 /dev/sdc1                                                                     
- 
+vgextend vg01 /dev/sdc1                                                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -335,8 +311,7 @@ vgextend(расширение группы томов новым диском)
 
 <syntaxhighlight lang="bash">
 pvmove /dev/sda1                                                                         
-  vgreduce vg01 /dev/sda1                                                                     
- 
+vgreduce vg01 /dev/sda1                                                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -347,7 +322,6 @@ pvmove(перемещение данных с диска); vgreduce(удален
 
 <syntaxhighlight lang="bash">
 lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -362,7 +336,6 @@ lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data
 
 <syntaxhighlight lang="bash">
 lvconvert --merge /dev/vg01/lv_data_snap                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -373,33 +346,29 @@ lvconvert --merge /dev/vg01/lv_data_snap
 
 <syntaxhighlight lang="bash">
 lvremove /dev/vg01/lv_data_snap                                                          
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Удаление LV ====
 
 <syntaxhighlight lang="bash">
 umount /mnt/data                                                                         
-  lvremove /dev/vg01/lv_data                                                                  
-                                                                                              
- 
+lvremove /dev/vg01/lv_data                                                                  
+
 </syntaxhighlight>
 
 ==== Удаление VG ====
 
 <syntaxhighlight lang="bash">
 vgremove vg01                                                                            
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Удаление PV ====
 
 <syntaxhighlight lang="bash">
 pvremove /dev/sda1                                                                       
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Автомонтирование ===
@@ -408,7 +377,6 @@ pvremove /dev/sda1
 
 <syntaxhighlight lang="bash">
 /dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -419,7 +387,6 @@ pvremove /dev/sda1
 
 <syntaxhighlight lang="bash">
 mount -a                                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -432,8 +399,7 @@ mount -a(монтирует все из /etc/fstab, что ещё не смон�
 
 <syntaxhighlight lang="bash">
 pvdisplay                                                                                
-  pvs
- 
+pvs
 </syntaxhighlight>
 
 <blockquote>
@@ -444,8 +410,7 @@ pvdisplay(детальная информация); pvs(краткая табл�
 
 <syntaxhighlight lang="bash">
 vgdisplay                                                                                
-  vgs                                                                                         
- 
+vgs                                                                                         
 </syntaxhighlight>
 
 <blockquote>
@@ -456,8 +421,7 @@ vgdisplay
 
 <syntaxhighlight lang="bash">
 lvdisplay                                                                                
-  lvs                                                                                         
- 
+lvs                                                                                         
 </syntaxhighlight>
 
 <blockquote>
@@ -468,7 +432,6 @@ lvdisplay
 
 <syntaxhighlight lang="bash">
 lsblk                                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -479,7 +442,6 @@ lsblk
 
 <syntaxhighlight lang="bash">
 df -h                                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -490,8 +452,7 @@ df -h
 
 <syntaxhighlight lang="bash">
 reboot                                                                                   
-  df -h                                                                                       
- 
+df -h                                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -506,7 +467,6 @@ reboot
 
 <syntaxhighlight lang="bash">
 lvs -a -o +devices                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -517,7 +477,6 @@ lvs -a -o +devices
 
 <syntaxhighlight lang="bash">
 lvs -a -o +snap_percent                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>

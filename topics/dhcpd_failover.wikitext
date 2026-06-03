@@ -13,37 +13,34 @@ Failover обеспечивает отказоустойчивость DHCP: е�
 
 <syntaxhighlight lang="bash">
 mkdir /etc/dhcp/dhcpd.conf.d
-  cat /etc/dhcp/dhcpd.conf > /etc/dhcp/dhcpd.conf.d/subnets.conf                              
-                                                                                              
- 
+cat /etc/dhcp/dhcpd.conf > /etc/dhcp/dhcpd.conf.d/subnets.conf                              
+
 </syntaxhighlight>
 
 ==== Настройка include в /etc/dhcp/dhcpd.conf на primary ====
 
 <syntaxhighlight lang="bash">
 echo include \"/etc/dhcp/dhcpd.conf.d/subnets.conf\"\; > /etc/dhcp/dhcpd.conf            
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Настройка failover primary в /etc/dhcp/dhcpd.conf ====
 
 <syntaxhighlight lang="bash">
 failover peer "dhcp-failover" {                                                          
-       primary;                                                                               
-       address 10.10.10.101;                                                                  
-       port 519;                                                                              
-       peer address 10.10.10.102;                                                             
-       peer port 520;                                                                         
-       max-response-delay 60;                                                                 
-       max-unacked-updates 10;                                                                
-       mclt 3600;                                                                             
-       split 128;                                                                             
-       load balance max seconds 3;                                                            
-  }                                                                                           
-                                                                                              
-  include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
- 
+primary;                                                                               
+address 10.10.10.101;                                                                  
+port 519;                                                                              
+peer address 10.10.10.102;                                                             
+peer port 520;                                                                         
+max-response-delay 60;                                                                 
+max-unacked-updates 10;                                                                
+mclt 3600;                                                                             
+split 128;                                                                             
+load balance max seconds 3;                                                            
+}                                                                                           
+
+include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -54,13 +51,12 @@ primary(основной сервер); address(адрес текущего се
 
 <syntaxhighlight lang="bash">
 subnet 10.10.20.0 netmask 255.255.255.0 {
-    option routers 10.10.20.1;                                                                
-    pool {                                                                                    
-      failover peer "dhcp-failover";                                                          
-      range 10.10.20.50 10.10.20.200;                                                         
-    }                                                                                         
-  }                                                                                           
- 
+option routers 10.10.20.1;                                                                
+pool {                                                                                    
+failover peer "dhcp-failover";                                                          
+range 10.10.20.50 10.10.20.200;                                                         
+}                                                                                         
+}                                                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -71,16 +67,14 @@ pool(пул адресов с failover); failover peer(указание пира
 
 <syntaxhighlight lang="bash">
 dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
-  systemctl restart dhcpd                                                                     
-                                                                                              
- 
+systemctl restart dhcpd                                                                     
+
 </syntaxhighlight>
 
 ==== Копирование конфигурации на secondary ====
 
 <syntaxhighlight lang="bash">
 scp -r /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.d root@10.10.10.102:/etc/dhcp/          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -91,18 +85,17 @@ scp -r /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.d root@10.10.10.102:/etc/dhcp/
 
 <syntaxhighlight lang="bash">
 failover peer "dhcp-failover" {                                                          
-      secondary;                                                                              
-      address 10.10.10.102;                                                                   
-      port 520;                                                                               
-      peer address 10.10.10.101;                                                              
-      peer port 519;                                                                          
-      max-response-delay 60;                                                                  
-      max-unacked-updates 10;                                                                 
-      load balance max seconds 3;                                                             
-  }                                                                                           
-                                                                                              
-  include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
- 
+secondary;                                                                              
+address 10.10.10.102;                                                                   
+port 520;                                                                               
+peer address 10.10.10.101;                                                              
+peer port 519;                                                                          
+max-response-delay 60;                                                                  
+max-unacked-updates 10;                                                                 
+load balance max seconds 3;                                                             
+}                                                                                           
+
+include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -113,5 +106,5 @@ secondary(вторичный сервер); без параметров mclt и 
 
 <syntaxhighlight lang="bash">
 dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
-  systemctl restart dhcpd 
+systemctl restart dhcpd 
 </syntaxhighlight>

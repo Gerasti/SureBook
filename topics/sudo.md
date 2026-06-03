@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get install sudo
- 
 ```
 
 > sudo(выполнение команд от имени другого пользователя, обычно root)
@@ -16,7 +15,6 @@ apt-get install sudo
 
 ```CODE
 useradd -m -g users -G wheel -s /bin/bash username
- 
 ```
 
 > -m(создать домашний каталог); -g(основная группа); -G(дополнительные группы); -s(оболочка по умолчанию /bin/bash)
@@ -25,7 +23,6 @@ useradd -m -g users -G wheel -s /bin/bash username
 
 ```CODE
 useradd -u 2026 -m -g users -G wheel username
- 
 ```
 
 > -u(указать конкретный UID)
@@ -34,15 +31,13 @@ useradd -u 2026 -m -g users -G wheel username
 
 ```CODE
 passwd username                                                                          
-                                                                                              
- 
+
 ```
 
 #### Создание пользователя интерактивно <!-- NAME -->
 
 ```CODE
 adduser username                                                                         
- 
 ```
 
 > Либо интерактивный режим с запросом всех параметров
@@ -53,15 +48,13 @@ adduser username
 
 ```CODE
 /etc/sudoers 
-                                                                                              
- 
+
 ```
 
 #### Редактирование конфигурации sudo <!-- NAME -->
 
 ```CODE
 visudo                                                                                   
- 
 ```
 
 > Безопасное редактирование /etc/sudoers с проверкой синтаксиса
@@ -70,7 +63,6 @@ visudo
 
 ```CODE
 %wheel ALL=(ALL:ALL) ALL                                                                 
- 
 ```
 
 > Пользователи группы wheel могут выполнять любые команды через sudo с вводом пароля
@@ -79,7 +71,6 @@ visudo
 
 ```CODE
 %wheel ALL=(ALL:ALL) NOPASSWD: ALL                                                       
- 
 ```
 
 > Пользователи группы wheel могут выполнять sudo без ввода пароля
@@ -88,7 +79,6 @@ visudo
 
 ```CODE
 username ALL=(ALL:ALL) ALL                                                               
- 
 ```
 
 > Конкретный пользователь может выполнять любые команды через sudo
@@ -97,7 +87,6 @@ username ALL=(ALL:ALL) ALL
 
 ```CODE
 username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get                                  
- 
 ```
 
 > Пользователь может выполнять только указанные команды через sudo
@@ -106,7 +95,6 @@ username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get
 
 ```CODE
 usermod -aG wheel username                                                               
- 
 ```
 
 > -aG(добавить в дополнительные группы, не удаляя из существующих)
@@ -117,7 +105,6 @@ usermod -aG wheel username
 
 ```CODE
 usermod -s /bin/bash username
- 
 ```
 
 > -s(изменить оболочку по умолчанию)
@@ -126,7 +113,6 @@ usermod -s /bin/bash username
 
 ```CODE
 usermod -d /home/newdir username                                                         
- 
 ```
 
 > -d(изменить домашний каталог)
@@ -135,7 +121,6 @@ usermod -d /home/newdir username
 
 ```CODE
 usermod -L username                                                                      
- 
 ```
 
 > -L(заблокировать учётную запись, запретить вход)
@@ -144,7 +129,6 @@ usermod -L username
 
 ```CODE
 usermod -U username                                                                      
- 
 ```
 
 > -U(разблокировать учётную запись)
@@ -153,7 +137,6 @@ usermod -U username
 
 ```CODE
 userdel username                                                                         
- 
 ```
 
 > Удаляет пользователя, но сохраняет домашний каталог
@@ -162,7 +145,6 @@ userdel username
 
 ```CODE
 userdel -r username                                                                      
- 
 ```
 
 > -r(удалить вместе с домашним каталогом)
@@ -171,7 +153,6 @@ userdel -r username
 
 ```CODE
 groups username                                                                          
- 
 ```
 
 > Показывает все группы пользователя
@@ -180,7 +161,6 @@ groups username
 
 ```CODE
 id username                                                                              
- 
 ```
 
 > Показывает UID, GID и группы пользователя
@@ -191,7 +171,6 @@ id username
 
 ```CODE
 sudo whoami  
- 
 ```
 
 > Результат: root
@@ -200,7 +179,6 @@ sudo whoami
 
 ```CODE
 sudo -u username whoami                                                                  
- 
 ```
 
 > -u(выполнить от имени указанного пользователя), результат: username
@@ -209,7 +187,6 @@ sudo -u username whoami
 
 ```CODE
 sudo -l                                                                                  
- 
 ```
 
 > Показывает какие команды может выполнять пользователь через sudo
@@ -218,7 +195,6 @@ sudo -l
 
 ```CODE
 journalctl -u sudo                                                                       
- 
 ```
 
 > Показывает логи выполнения команд через sudo
@@ -227,7 +203,6 @@ journalctl -u sudo
 
 ```CODE
 cat /etc/passwd                                                                          
- 
 ```
 
 > Список всех пользователей с их параметрами
@@ -236,7 +211,6 @@ cat /etc/passwd
 
 ```CODE
 cat /etc/group                                                                           
- 
 ```
 
 > Список всех групп и их членов

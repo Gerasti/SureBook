@@ -5,7 +5,6 @@
 
 ```CODE
 psql -U postgres                                                                         
- 
 ```
 
 > -U(имя пользователя)
@@ -14,7 +13,6 @@ psql -U postgres
 
 ```CODE
 psql -U user01 -d db01                                                                   
- 
 ```
 
 > -d(имя базы данных)
@@ -23,7 +21,6 @@ psql -U user01 -d db01
 
 ```CODE
 psql -U user01 -h 192.168.1.10 -d db01                                                   
- 
 ```
 
 > -h(IP-адрес или hostname сервера)
@@ -32,7 +29,6 @@ psql -U user01 -h 192.168.1.10 -d db01
 
 ```CODE
 psql -U user01 -h 192.168.1.10 -p 5432 -d db01                                           
- 
 ```
 
 > -p(порт) по умолчанию 5432
@@ -41,8 +37,7 @@ psql -U user01 -h 192.168.1.10 -p 5432 -d db01
 
 ```CODE
 \q                                                                                       
-                                                                                              
- 
+
 ```
 
 ### Управление базами данных <!-- HEAD -->
@@ -51,7 +46,6 @@ psql -U user01 -h 192.168.1.10 -p 5432 -d db01
 
 ```CODE
 CREATE DATABASE mydb;                                                                    
- 
 ```
 
 > mydb(имя создаваемой БД)
@@ -60,7 +54,6 @@ CREATE DATABASE mydb;
 
 ```CODE
 CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';                                       
- 
 ```
 
 > OWNER(владелец БД); ENCODING(кодировка) {UTF8, LATIN1}
@@ -69,7 +62,6 @@ CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';
 
 ```CODE
 DROP DATABASE mydb;                                                                      
- 
 ```
 
 > Удаляет БД безвозвратно
@@ -78,15 +70,13 @@ DROP DATABASE mydb;
 
 ```CODE
 ALTER DATABASE mydb RENAME TO newdb;                                                     
-                                                                                              
- 
+
 ```
 
 #### Просмотр списка баз данных <!-- NAME -->
 
 ```CODE
 \l                                                                                       
- 
 ```
 
 > Показывает все БД с владельцами и кодировками
@@ -95,15 +85,13 @@ ALTER DATABASE mydb RENAME TO newdb;
 
 ```CODE
 SELECT datname FROM pg_database;                                                         
-                                                                                              
- 
+
 ```
 
 #### Подключение к другой БД внутри psql <!-- NAME -->
 
 ```CODE
 \c dbname                                                                                
- 
 ```
 
 > Переключение между базами данных
@@ -112,8 +100,7 @@ SELECT datname FROM pg_database;
 
 ```CODE
 SELECT pg_size_pretty(pg_database_size('mydb'));                                         
-                                                                                              
- 
+
 ```
 
 ### Управление пользователями <!-- HEAD -->
@@ -122,7 +109,6 @@ SELECT pg_size_pretty(pg_database_size('mydb'));
 
 ```CODE
 CREATE USER username WITH PASSWORD 'P@ssw0rd';                                           
- 
 ```
 
 > username(имя пользователя)
@@ -131,7 +117,6 @@ CREATE USER username WITH PASSWORD 'P@ssw0rd';
 
 ```CODE
 CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';                                    
- 
 ```
 
 > SUPERUSER(полные права на сервер)
@@ -140,7 +125,6 @@ CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';
 
 ```CODE
 CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';                                 
- 
 ```
 
 > CREATEDB(право создавать базы данных)
@@ -149,23 +133,20 @@ CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';
 
 ```CODE
 ALTER USER username WITH PASSWORD 'NewP@ssw0rd';                                         
-                                                                                              
- 
+
 ```
 
 #### Удаление пользователя <!-- NAME -->
 
 ```CODE
 DROP USER username;                                                                      
-                                                                                              
- 
+
 ```
 
 #### Просмотр списка пользователей <!-- NAME -->
 
 ```CODE
 \du                                                                                      
- 
 ```
 
 > Показывает пользователей с их ролями
@@ -174,16 +155,14 @@ DROP USER username;
 
 ```CODE
 SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                           
-                                                                                              
- 
+
 ```
 
 #### Переименование пользователя <!-- NAME -->
 
 ```CODE
 ALTER USER oldname RENAME TO newname;                                                    
-                                                                                              
- 
+
 ```
 
 ### Управление правами доступа <!-- HEAD -->
@@ -192,7 +171,6 @@ ALTER USER oldname RENAME TO newname;
 
 ```CODE
 GRANT ALL PRIVILEGES ON DATABASE mydb TO username;                                       
- 
 ```
 
 > ALL PRIVILEGES(все права на БД)
@@ -201,7 +179,6 @@ GRANT ALL PRIVILEGES ON DATABASE mydb TO username;
 
 ```CODE
 GRANT CONNECT ON DATABASE mydb TO username;                                              
- 
 ```
 
 > CONNECT(право подключаться к БД)
@@ -210,7 +187,6 @@ GRANT CONNECT ON DATABASE mydb TO username;
 
 ```CODE
 GRANT ALL ON SCHEMA public TO username;                                                  
- 
 ```
 
 > public(схема по умолчанию)
@@ -219,15 +195,13 @@ GRANT ALL ON SCHEMA public TO username;
 
 ```CODE
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username;                         
-                                                                                              
- 
+
 ```
 
 #### Предоставление прав на конкретную таблицу <!-- NAME -->
 
 ```CODE
 GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;                           
- 
 ```
 
 > SELECT, INSERT, UPDATE, DELETE(типы операций)
@@ -236,24 +210,21 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;
 
 ```CODE
 REVOKE ALL PRIVILEGES ON DATABASE mydb FROM username;                                    
-                                                                                              
- 
+
 ```
 
 #### Изменение владельца базы данных <!-- NAME -->
 
 ```CODE
 ALTER DATABASE mydb OWNER TO newowner;                                                   
-                                                                                              
- 
+
 ```
 
 #### Изменение владельца таблицы <!-- NAME -->
 
 ```CODE
 ALTER TABLE tablename OWNER TO newowner;                                                 
-                                                                                              
- 
+
 ```
 
 ### Управление таблицами <!-- HEAD -->
@@ -262,7 +233,6 @@ ALTER TABLE tablename OWNER TO newowner;
 
 ```CODE
 \dt                                                                                      
- 
 ```
 
 > Показывает таблицы в текущей БД
@@ -271,7 +241,6 @@ ALTER TABLE tablename OWNER TO newowner;
 
 ```CODE
 \dt+                                                                                     
- 
 ```
 
 > Показывает таблицы с размерами и описанием
@@ -280,7 +249,6 @@ ALTER TABLE tablename OWNER TO newowner;
 
 ```CODE
 \d tablename                                                                             
- 
 ```
 
 > Показывает столбцы, типы данных, индексы
@@ -289,12 +257,11 @@ ALTER TABLE tablename OWNER TO newowner;
 
 ```CODE
 CREATE TABLE users (                                                                     
-      id SERIAL PRIMARY KEY,                                                                  
-      username VARCHAR(50) NOT NULL,                                                          
-      email VARCHAR(100) UNIQUE,                                                              
-      created_at TIMESTAMP DEFAULT NOW()                                                      
-  );                                                                                          
- 
+id SERIAL PRIMARY KEY,                                                                  
+username VARCHAR(50) NOT NULL,                                                          
+email VARCHAR(100) UNIQUE,                                                              
+created_at TIMESTAMP DEFAULT NOW()                                                      
+);                                                                                          
 ```
 
 > SERIAL(автоинкремент); PRIMARY KEY(первичный ключ); NOT NULL(обязательное поле); UNIQUE(уникальное значение)
@@ -303,47 +270,41 @@ CREATE TABLE users (
 
 ```CODE
 DROP TABLE tablename;
-                                                                                              
- 
+
 ```
 
 #### Переименование таблицы <!-- NAME -->
 
 ```CODE
 ALTER TABLE oldname RENAME TO newname;                                                   
-                                                                                              
- 
+
 ```
 
 #### Добавление столбца в таблицу <!-- NAME -->
 
 ```CODE
 ALTER TABLE tablename ADD COLUMN columnname VARCHAR(50);                                 
-                                                                                              
- 
+
 ```
 
 #### Удаление столбца из таблицы <!-- NAME -->
 
 ```CODE
 ALTER TABLE tablename DROP COLUMN columnname;                                            
-                                                                                              
- 
+
 ```
 
 #### Изменение типа данных столбца <!-- NAME -->
 
 ```CODE
 ALTER TABLE tablename ALTER COLUMN columnname TYPE INTEGER;                              
-                                                                                              
- 
+
 ```
 
 #### Очистка таблицы <!-- NAME -->
 
 ```CODE
 TRUNCATE TABLE tablename;                                                                
- 
 ```
 
 > Удаляет все строки, но сохраняет структуру
@@ -354,41 +315,36 @@ TRUNCATE TABLE tablename;
 
 ```CODE
 INSERT INTO users (username, email) VALUES ('john', 'john@example.com');                 
-                                                                                              
- 
+
 ```
 
 #### Вставка нескольких строк <!-- NAME -->
 
 ```CODE
 INSERT INTO users (username, email) VALUES                                               
-  ('alice', 'alice@example.com'),                                                             
-  ('bob', 'bob@example.com');                                                                 
-                                                                                              
- 
+('alice', 'alice@example.com'),                                                             
+('bob', 'bob@example.com');                                                                 
+
 ```
 
 #### Выборка всех данных из таблицы <!-- NAME -->
 
 ```CODE
 SELECT * FROM users;                                                                     
-                                                                                              
- 
+
 ```
 
 #### Выборка конкретных столбцов <!-- NAME -->
 
 ```CODE
 SELECT username, email FROM users;                                                       
-                                                                                              
- 
+
 ```
 
 #### Выборка с условием <!-- NAME -->
 
 ```CODE
 SELECT * FROM users WHERE id = 1;                                                        
- 
 ```
 
 > WHERE(условие фильтрации)
@@ -397,7 +353,6 @@ SELECT * FROM users WHERE id = 1;
 
 ```CODE
 SELECT * FROM users ORDER BY created_at DESC;                                            
- 
 ```
 
 > ORDER BY(сортировка); DESC(по убыванию) {ASC, DESC}
@@ -406,7 +361,6 @@ SELECT * FROM users ORDER BY created_at DESC;
 
 ```CODE
 SELECT * FROM users LIMIT 10;                                                            
- 
 ```
 
 > LIMIT(ограничение количества строк)
@@ -415,24 +369,21 @@ SELECT * FROM users LIMIT 10;
 
 ```CODE
 UPDATE users SET email = 'newemail@example.com' WHERE id = 1;                            
-                                                                                              
- 
+
 ```
 
 #### Удаление данных <!-- NAME -->
 
 ```CODE
 DELETE FROM users WHERE id = 1;                                                          
-                                                                                              
- 
+
 ```
 
 #### Подсчёт количества строк <!-- NAME -->
 
 ```CODE
 SELECT COUNT(*) FROM users;                                                              
-                                                                                              
- 
+
 ```
 
 ### Резервное копирование и восстановление <!-- HEAD -->
@@ -441,7 +392,6 @@ SELECT COUNT(*) FROM users;
 
 ```CODE
 pg_dump -U postgres -d mydb -f backup.sql                                                
- 
 ```
 
 > -f(файл для сохранения резервной копии)
@@ -450,7 +400,6 @@ pg_dump -U postgres -d mydb -f backup.sql
 
 ```CODE
 pg_dump -U postgres -d mydb -F c -f backup.dump                                          
- 
 ```
 
 > -F c(custom format, сжатый формат)
@@ -459,7 +408,6 @@ pg_dump -U postgres -d mydb -F c -f backup.dump
 
 ```CODE
 pg_dumpall -U postgres -f all_databases.sql                                              
- 
 ```
 
 > pg_dumpall(резервное копирование всех БД и пользователей)
@@ -468,7 +416,6 @@ pg_dumpall -U postgres -f all_databases.sql
 
 ```CODE
 psql -U postgres -d mydb -f backup.sql                                                   
- 
 ```
 
 > Восстановление из текстового SQL файла
@@ -477,7 +424,6 @@ psql -U postgres -d mydb -f backup.sql
 
 ```CODE
 pg_restore -U postgres -d mydb backup.dump                                               
- 
 ```
 
 > pg_restore(восстановление из custom format)
@@ -486,7 +432,6 @@ pg_restore -U postgres -d mydb backup.dump
 
 ```CODE
 pg_restore -U postgres -C -d postgres backup.dump                                        
- 
 ```
 
 > -C(создать БД перед восстановлением)
@@ -497,7 +442,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \?                                                                                       
- 
 ```
 
 > Показывает все доступные команды psql
@@ -506,7 +450,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \h                                                                                       
- 
 ```
 
 > Показывает справку по SQL командам
@@ -515,7 +458,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \h CREATE TABLE                                                                          
- 
 ```
 
 > Показывает синтаксис команды CREATE TABLE
@@ -524,7 +466,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \conninfo                                                                                
- 
 ```
 
 > Показывает информацию о текущем подключении
@@ -533,7 +474,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \dn                                                                                      
- 
 ```
 
 > Показывает список схем в текущей БД
@@ -542,7 +482,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \dv                                                                                      
- 
 ```
 
 > Показывает список представлений (views)
@@ -551,7 +490,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \di                                                                                      
- 
 ```
 
 > Показывает список индексов
@@ -560,7 +498,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \ds                                                                                      
- 
 ```
 
 > Показывает список sequences
@@ -569,7 +506,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \x                                                                                       
- 
 ```
 
 > Переключает между обычным и расширенным форматом вывода
@@ -578,7 +514,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \i /path/to/file.sql                                                                     
- 
 ```
 
 > Выполняет SQL команды из файла
@@ -587,9 +522,8 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \o /path/to/output.txt                                                                   
-  SELECT * FROM users;                                                                        
-  \o                                                                                          
- 
+SELECT * FROM users;                                                                        
+\o                                                                                          
 ```
 
 > \o(перенаправление вывода в файл); \o без параметра(отключение перенаправления)
@@ -598,7 +532,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 \timing                                                                                  
- 
 ```
 
 > Включает/выключает отображение времени выполнения
@@ -609,7 +542,6 @@ pg_restore -U postgres -C -d postgres backup.dump
 
 ```CODE
 CREATE INDEX idx_username ON users(username);                                            
- 
 ```
 
 > idx_username(имя индекса); users(таблица); username(столбец)
@@ -618,7 +550,6 @@ CREATE INDEX idx_username ON users(username);
 
 ```CODE
 CREATE UNIQUE INDEX idx_email ON users(email);                                           
- 
 ```
 
 > UNIQUE(индекс с уникальными значениями)
@@ -627,15 +558,13 @@ CREATE UNIQUE INDEX idx_email ON users(email);
 
 ```CODE
 DROP INDEX idx_username;                                                                 
-                                                                                              
- 
+
 ```
 
 #### Просмотр индексов таблицы <!-- NAME -->
 
 ```CODE
 \d tablename                                                                             
- 
 ```
 
 > Показывает индексы в описании таблицы
@@ -646,34 +575,30 @@ DROP INDEX idx_username;
 
 ```CODE
 BEGIN;                                                                                   
-                                                                                              
- 
+
 ```
 
 #### Фиксация транзакции <!-- NAME -->
 
 ```CODE
 COMMIT;                                                                                  
-                                                                                              
- 
+
 ```
 
 #### Откат транзакции <!-- NAME -->
 
 ```CODE
 ROLLBACK;
-                                                                                              
- 
+
 ```
 
 #### Пример использования транзакции <!-- NAME -->
 
 ```CODE
 BEGIN;                                                                                   
-  UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
-  UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
-  COMMIT;                                                                                     
- 
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
+COMMIT;                                                                                     
 ```
 
 > Транзакция для атомарного выполнения нескольких операций
@@ -684,23 +609,20 @@ BEGIN;
 
 ```CODE
 SELECT version();                                                                        
-                                                                                              
- 
+
 ```
 
 #### Проверка текущего времени на сервере <!-- NAME -->
 
 ```CODE
 SELECT NOW();                                                                            
-                                                                                              
- 
+
 ```
 
 #### Проверка активных подключений <!-- NAME -->
 
 ```CODE
 SELECT * FROM pg_stat_activity;                                                          
- 
 ```
 
 > Показывает все активные подключения к серверу
@@ -709,13 +631,12 @@ SELECT * FROM pg_stat_activity;
 
 ```CODE
 SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;              
-                                                                                              
- 
+
 ```
 
 #### Проверка размера всех таблиц в БД <!-- NAME -->
 
 ```CODE
 SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))     
-  FROM pg_tables WHERE schemaname = 'public'; 
+FROM pg_tables WHERE schemaname = 'public'; 
 ```

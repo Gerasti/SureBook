@@ -5,33 +5,29 @@
 
 <syntaxhighlight lang="bash">
 apt-get install -y task-samba-dc bind                                                    
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Отключение chroot для BIND ====
 
 <syntaxhighlight lang="bash">
 control bind-chroot disabled                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Подключение конфигурации BIND9_DLZ ====
 
 <syntaxhighlight lang="bash">
 grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
-  "/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
-                  
- 
+"/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
+
 </syntaxhighlight>
 
 ==== В /etc/bind/options.conf добавить ====
 
 <syntaxhighlight lang="bash">
 tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
-  minimal-responses yes;                                                                      
- 
+minimal-responses yes;                                                                      
 </syntaxhighlight>
 
 <blockquote>
@@ -42,18 +38,16 @@ tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(мини
 
 <syntaxhighlight lang="bash">
 systemctl stop bind                                                                      
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== В /etc/sysconfig/network ====
 
 <syntaxhighlight lang="bash">
 NETWORKING=yes                                                                           
-  CONFMETHOD=etcnet                                                                           
-  HOSTNAME=srv-hq.ad.team                                                                     
-  RESOLV_MODS=yes                                                                             
- 
+CONFMETHOD=etcnet                                                                           
+HOSTNAME=srv-hq.ad.team                                                                     
+RESOLV_MODS=yes                                                                             
 </syntaxhighlight>
 
 <blockquote>
@@ -64,8 +58,7 @@ HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(ра
 
 <syntaxhighlight lang="bash">
 hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
-  domainname ad.team                                                                          
- 
+domainname ad.team                                                                          
 </syntaxhighlight>
 
 <blockquote>
@@ -78,10 +71,9 @@ exec bash перезагружает оболочку для применени�
 
 <syntaxhighlight lang="bash">
 rm -f /etc/samba/smb.conf                                                                
-  rm -rf /var/lib/samba                                                                       
-  rm -rf /var/cache/samba                                                                     
-  mkdir -p /var/lib/samba/sysvol                                                              
- 
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -92,7 +84,6 @@ rm -f /etc/samba/smb.conf
 
 <syntaxhighlight lang="bash">
 nameserver 127.0.0.1                                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -105,8 +96,7 @@ nameserver 127.0.0.1
 
 <syntaxhighlight lang="bash">
 samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
-  --dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
- 
+--dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
 </syntaxhighlight>
 
 <blockquote>
@@ -117,17 +107,15 @@ samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'
 
 <syntaxhighlight lang="bash">
 systemctl enable --now samba
-  systemctl enable --now bind                                                                 
-                                                                                              
- 
+systemctl enable --now bind                                                                 
+
 </syntaxhighlight>
 
 ==== Копирование конфигурации Kerberos ====
 
 <syntaxhighlight lang="bash">
 cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка контроллера домена ===
@@ -136,17 +124,15 @@ cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
 
 <syntaxhighlight lang="bash">
 samba-tool domain info 127.0.0.1                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка DNS SRV-записей ====
 
 <syntaxhighlight lang="bash">
 host -t SRV _kerberos._udp.ad.team                                                       
-  host -t SRV _ldap._tcp.ad.team                                                              
-  host -t A srv-hq.ad.team                                                                    
- 
+host -t SRV _ldap._tcp.ad.team                                                              
+host -t A srv-hq.ad.team                                                                    
 </syntaxhighlight>
 
 <blockquote>
@@ -157,116 +143,9 @@ SRV-записи должны указывать на контроллер до�
 
 <syntaxhighlight lang="bash">
 kinit administrator@AD.TEAM                                                              
-  klist                                                                                       
- 
+klist                                                                                       
 </syntaxhighlight>
 
 <blockquote>
 kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами
 </blockquote>
-
-=== Присоединение клиента к домену ===
-
-==== Установка пакетов на клиенте ====
-
-<syntaxhighlight lang="bash">
-apt-get update && apt-get install -y task-auth-ad-sssd                                   
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Запуск служб на клиенте ====
-
-<syntaxhighlight lang="bash">
-systemctl enable --now smb winbind sssd                                                  
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Содержимое /etc/krb5.conf на клиенте ====
-
-<syntaxhighlight lang="bash">
-[libdefaults]                                                                            
-  default_realm = AD.TEAM                                                                     
-  dns_lookup_kdc = true
-  dns_lookup_realm = false                                                                    
-  ticket_lifetime = 24h                                                                       
-  renew_lifetime = 7d                                                                         
-  forwardable = true                                                                          
-  rdns = false                                                                                
-  default_ccache_name = KEYRING:persistent:%{uid}                                             
-                                                                                              
-  [realms]                                                                                    
-  AD.TEAM={                                                                                   
-          kdc = 192.168.11.67                                                                 
-          default_domain = ad.team                                                            
-          admin_server = 192.168.11.67                                                        
-  }                                                                                           
-                                                                                              
-  [domain_realm]                                                                              
-  .ad.team = AD.TEAM
-  ad.team = AD.TEAM                                                                           
- 
-</syntaxhighlight>
-
-<blockquote>
-kdc(IP контроллера домена); ticket_lifetime(время жизни билета); renew_lifetime(время обновления); forwardable(передача билета)
-</blockquote>
-
-==== В /etc/resolv.conf на клиенте ====
-
-<syntaxhighlight lang="bash">
-domain ad.team
-  nameserver 192.168.11.67                                                                    
-  nameserver 192.168.33.67                                                                    
-  nameserver 8.8.8.8                                                                          
- 
-</syntaxhighlight>
-
-<blockquote>
-Первым указывать IP контроллера домена
-</blockquote>
-
-==== Проверка Kerberos на клиенте ====
-
-<syntaxhighlight lang="bash">
-kinit administrator                                                                      
-  klist                                                                                       
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Присоединение к домену ====
-
-<syntaxhighlight lang="bash">
-net ads join -U administrator@AD.TEAM -S 192.168.11.67                                   
- 
-</syntaxhighlight>
-
-<blockquote>
--U(пользователь); -S(IP сервера)
-</blockquote>
-
-==== Проверка DNS на клиенте ====
-
-<syntaxhighlight lang="bash">
-host srv-hq                                                                              
-  host $(hostname)                                                                            
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Перезагрузка клиента ====
-
-<syntaxhighlight lang="bash">
-reboot                                                                                   
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Вход под доменным пользователем ====
-
-<syntaxhighlight lang="bash">
-su -
-  id
-</syntaxhighlight>

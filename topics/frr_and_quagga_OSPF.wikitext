@@ -82,8 +82,6 @@ vtysh
       no ip ospf passive                                                                      
       ip ospf message-digest-key 1 md5 P@ssw0rd                                               
       ip ospf network point-to-point                                                          
-  int ens35                                                                                   
-      no ip ospf passive                                                                      
   do wr mem                                                                                   
  
 </syntaxhighlight>

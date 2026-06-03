@@ -5,22 +5,19 @@
 
 <syntaxhighlight lang="bash">
 echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
-  /etc/apt/sources.list                                          
- 
+/etc/apt/sources.list                                          
 </syntaxhighlight>
 
 ==== Установка пакета ====
 
 <syntaxhighlight lang="bash">
 apt-get install sudo-samba-schema                           
- 
 </syntaxhighlight>
 
 ==== Удаление временного репозитория ====
 
 <syntaxhighlight lang="bash">
 sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
- 
 </syntaxhighlight>
 
 ==== Настройка DNS в /etc/resolv.conf ====
@@ -37,7 +34,6 @@ nameserver <ip_локального_сервера>
 
 <syntaxhighlight lang="bash">
 systemctl restart samba                                     
- 
 </syntaxhighlight>
 
 === Настройка схемы sudo в AD ===
@@ -46,7 +42,6 @@ systemctl restart samba
 
 <syntaxhighlight lang="bash">
 sudo-schema-apply                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -57,7 +52,6 @@ sudo-schema-apply
 
 <syntaxhighlight lang="bash">
 create-sudo-role                                            
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -86,21 +80,18 @@ sudoUser: %hq
 
 <syntaxhighlight lang="bash">
 apt-get install admc                                        
- 
 </syntaxhighlight>
 
 ==== Аутентификация ====
 
 <syntaxhighlight lang="bash">
 kinit administrator                                         
- 
 </syntaxhighlight>
 
 ==== Запуск ADMC ====
 
 <syntaxhighlight lang="bash">
 sudo admc                                                   
- 
 </syntaxhighlight>
 
 ==== Включение дополнительных возможностей ====
@@ -117,43 +108,38 @@ sudo admc
 
 <syntaxhighlight lang="bash">
 apt-get install sudo libsss_sudo                            
- 
 </syntaxhighlight>
 
 ==== Настройка прав sudo ====
 
 <syntaxhighlight lang="bash">
 control sudo public                                         
- 
 </syntaxhighlight>
 
 ==== Настройка SSSD в /etc/sssd/sssd.conf ====
 
 <syntaxhighlight lang="bash">
 [sssd]                                                      
-  services = nss, pam, sudo                                      
-                                                                 
-  [pam]                                                          
-                                                                 
-  [domain/DOMAIN.SAMPLE]                                          
-  sudo_provider = ad
- 
+services = nss, pam, sudo                                      
+
+[pam]                                                          
+
+[domain/DOMAIN.SAMPLE]                                          
+sudo_provider = ad
 </syntaxhighlight>
 
 ==== Настройка NSS в /etc/nsswitch.conf ====
 
 <syntaxhighlight lang="bash">
 sudoers: files sss                                          
- 
 </syntaxhighlight>
 
 ==== Очистка кэша и перезапуск ====
 
 <syntaxhighlight lang="bash">
 rm -rf /var/lib/sss/db/*                                    
-  sss_cache -E                                                   
-  systemctl restart sssd                                         
- 
+sss_cache -E                                                   
+systemctl restart sssd                                         
 </syntaxhighlight>
 
 <blockquote>
@@ -166,7 +152,6 @@ rm -rf /var/lib/sss/db/*
 
 <syntaxhighlight lang="bash">
 sudo cat /etc/passwd | sudo grep root && sudo id root       
- 
 </syntaxhighlight>
 
 <blockquote>

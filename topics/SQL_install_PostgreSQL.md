@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
- 
 ```
 
 > postgresql16-contrib(дополнительные модули и утилиты)
@@ -14,26 +13,23 @@ apt-get install -y postgresql16 postgresql16-server postgresql16-contrib
 
 ```CODE
 /etc/init.d/postgresql initdb
-                                                                                              
- 
+
 ```
 
 #### Запуск службы <!-- NAME -->
 
 ```CODE
 systemctl enable --now postgresql                                                        
-                                                                                              
- 
+
 ```
 
 #### Установка пароля для пользователя postgres <!-- NAME -->
 
 ```CODE
 psql -U postgres                                                                         
-  ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
-  \q                                                                                          
-                                                                                              
- 
+ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
+\q                                                                                          
+
 ```
 
 ### Настройка <!-- HEAD -->
@@ -42,7 +38,6 @@ psql -U postgres
 
 ```CODE
 listen_addresses = '*'                                                                   
- 
 ```
 
 > Найти listen_addresses = 'localhost' и заменить на '*'
@@ -53,16 +48,14 @@ listen_addresses = '*'
 
 ```CODE
 systemctl restart postgresql                                                             
-                                                                                              
- 
+
 ```
 
 #### Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf <!-- NAME -->
 
 ```CODE
 host    all             all             0.0.0.0/0               md5                      
-  host    replication     all             0.0.0.0/0               md5                         
- 
+host    replication     all             0.0.0.0/0               md5                         
 ```
 
 > Добавить строки в конец файла перед секцией IPv6
@@ -83,19 +76,17 @@ host    all             all             0.0.0.0/0               md5
 
 ```CODE
 systemctl restart postgresql                                                             
-                                                                                              
- 
+
 ```
 
 #### Создание базы данных и пользователя <!-- NAME -->
 
 ```CODE
 psql -U postgres                                                                         
-  CREATE DATABASE db01;                                                                       
-  CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
-  GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
-  \q                                                                                          
- 
+CREATE DATABASE db01;                                                                       
+CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
+GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
+\q                                                                                          
 ```
 
 > db01(имя создаваемой БД); user01(имя пользователя)
@@ -104,23 +95,21 @@ psql -U postgres
 
 ```CODE
 psql -U postgres                                                                         
-  CREATE DATABASE one;                                                                        
-  CREATE DATABASE two;                                                                        
-  CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
-  CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
-  GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
-  GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
-  \q                                                                                          
-                                                                                              
- 
+CREATE DATABASE one;                                                                        
+CREATE DATABASE two;                                                                        
+CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
+CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
+GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
+GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
+\q                                                                                          
+
 ```
 
 #### Заполнение базы данных тестовыми данными <!-- NAME -->
 
 ```CODE
 pgbench -U postgres -i one                                                               
-  pgbench -U postgres -i two                                                                  
- 
+pgbench -U postgres -i two                                                                  
 ```
 
 > Опционально, для тестирования производительности
@@ -131,7 +120,6 @@ pgbench -U postgres -i one
 
 ```CODE
 ss -tlpn | grep postgres                                                                 
- 
 ```
 
 > Показывает открытый порт 5432
@@ -140,10 +128,9 @@ ss -tlpn | grep postgres
 
 ```CODE
 psql -U postgres                                                                         
-  SELECT datname FROM pg_database;                                                            
-  SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
-  \q                                                                                          
- 
+SELECT datname FROM pg_database;                                                            
+SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
+\q                                                                                          
 ```
 
 > Показывает список баз данных и пользователей
@@ -152,12 +139,11 @@ psql -U postgres
 
 ```CODE
 psql -U postgres                                                                         
-  \c one                                                                                      
-  \dt+                                                                                        
-  \c two                                                                                      
-  \dt+                                                                                        
-  \q              
- 
+\c one                                                                                      
+\dt+                                                                                        
+\c two                                                                                      
+\dt+                                                                                        
+\q              
 ```
 
 > \c(подключение к БД); \dt+(список таблиц с размерами)
@@ -166,7 +152,6 @@ psql -U postgres
 
 ```CODE
 psql -U user01 db01                                                                      
- 
 ```
 
 > Подключение к БД db01 от имени user01
@@ -175,7 +160,6 @@ psql -U user01 db01
 
 ```CODE
 psql -U user01 -h IP_сервера -d db01                                                     
- 
 ```
 
 > -h(хост сервера); -d(имя базы данных)

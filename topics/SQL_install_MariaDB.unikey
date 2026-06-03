@@ -1,57 +1,57 @@
 hd Установка
-  ne Установка пакета
-  ce apt-get install -y mariadb-server                                                        
-   
-  ne Включение и запуск службы                                                                
-  ce systemctl enable --now mariadb
+ne Установка пакета
+ce apt-get install -y mariadb-server                                                        
 
-  hd Настройка MariaDB
-  ne Установка пароля root
-  ce mariadb -u root
-  ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-  EXIT;
+ne Включение и запуск службы                                                                
+ce systemctl enable --now mariadb
 
-  ne Разрешение доступа из сети в /etc/my.cnf.d/server.cnf                                    
-  ce sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
-                                                                                              
-  ne Перезапуск службы                                                                        
-  ce systemctl restart mariadb                                                                
-                                                                                              
-  ne Разрешение доступа для root по сети                                                      
-  ce mariadb -u root -p                                                                       
-  GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
-  UPDATE mysql.user SET host='%' WHERE user='root';                                           
-  FLUSH PRIVILEGES;                                                                           
-  EXIT;                                                                                       
-  ct host='%' разрешает подключение с любого узла                                             
-                                                                                              
-  ne Перезапуск службы                                                                        
-  ce systemctl restart mariadb                                                                
-                                                                                              
-  hd Проверка MariaDB                                                                         
-  ne Проверка пользователей на сервере                                                        
-  ce mariadb -u root -p                                                                       
-  SELECT user, HOST FROM mysql.user;                                                          
-  EXIT;                                                                                       
-                                                                                              
-  ne Удаленное подключение с клиента                                                          
-  ce mariadb -h IP_СЕРВЕРА -u root -p
-                                                                                              
-  hd Создание БД и пользователей                                                              
-  ne Создание базы данных                                                                     
-  ce mariadb -u root -p                                                                       
-  CREATE DATABASE db01;                                                                       
-  ct db01 - имя создаваемой БД                                                                
-                                                                                              
-  ne Создание пользователя                                                                    
-  ce CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
-  ct '%' означает подключение с любого хоста                                                  
-                                                                                              
-  ne Предоставление прав пользователю                                                         
-  ce GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
-  FLUSH PRIVILEGES;                                                                           
-                                                                                              
-  ne Проверка существования БД и пользователей                                                
-  ce SHOW DATABASES;                                                                          
-  SELECT user, HOST FROM mysql.user;                                                          
-  EXIT;           
+hd Настройка MariaDB
+ne Установка пароля root
+ce mariadb -u root
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+EXIT;
+
+ne Разрешение доступа из сети в /etc/my.cnf.d/server.cnf                                    
+ce sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
+
+ne Перезапуск службы                                                                        
+ce systemctl restart mariadb                                                                
+
+ne Разрешение доступа для root по сети                                                      
+ce mariadb -u root -p                                                                       
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
+UPDATE mysql.user SET host='%' WHERE user='root';                                           
+FLUSH PRIVILEGES;                                                                           
+EXIT;                                                                                       
+ct host='%' разрешает подключение с любого узла                                             
+
+ne Перезапуск службы                                                                        
+ce systemctl restart mariadb                                                                
+
+hd Проверка MariaDB                                                                         
+ne Проверка пользователей на сервере                                                        
+ce mariadb -u root -p                                                                       
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;                                                                                       
+
+ne Удаленное подключение с клиента                                                          
+ce mariadb -h IP_СЕРВЕРА -u root -p
+
+hd Создание БД и пользователей                                                              
+ne Создание базы данных                                                                     
+ce mariadb -u root -p                                                                       
+CREATE DATABASE db01;                                                                       
+ct db01 - имя создаваемой БД                                                                
+
+ne Создание пользователя                                                                    
+ce CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
+ct '%' означает подключение с любого хоста                                                  
+
+ne Предоставление прав пользователю                                                         
+ce GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
+FLUSH PRIVILEGES;                                                                           
+
+ne Проверка существования БД и пользователей                                                
+ce SHOW DATABASES;                                                                          
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;           

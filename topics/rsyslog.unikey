@@ -1,70 +1,70 @@
 hd Установка                                                                                
-  ne Установка пакетов на всех устройствах                                                    
-  ce apt-get install rsyslog logrotate                                                        
-  ct rsyslog(сбор и пересылка логов); logrotate(ротация и сжатие логов)                       ct Обычно работают в связке
-                                                                                              
-  hd Настройка сервера сбора логов                                                            
-  ne В /etc/rsyslog.conf                                                                      
-  ce module(load="imuxsock")                                                                  
-  module(load="imklog")                                                                       
-  module(load="imudp")                                                                        
-  input(type="imudp" port="514")                                                              
-  module(load="imtcp")                                                                        
-  input(type="imtcp" port="514")                                                              
-                                                                                              
-  $template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
-                  
-  if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
-  & stop          
-  ct imuxsock(локальные сообщения); imklog(логи ядра); imudp/imtcp(приём по UDP/TCP);         
-  $syslogseverity <= 4(warning и выше); & stop(остановка обработки)                           
-                                                                                              
-  ne Создание каталогов для логов                                                             
-  ce mkdir -p /opt/client1
-  mkdir -p /opt/client2                                                                       
-  mkdir -p /opt/client3                                                                       
-  ct создаются каталоги для каждого клиента                                                   
-                                                                                              
-  ne Установка прав на каталоги                                                               
-  ce chown -R root:root /opt                                                                  
-  chmod -R 755 /opt                                                                           
-  ct права для записи логов службой rsyslog                                                   
-                                                                                              
-  ne Перезапуск службы на сервере                                                             
-  ce systemctl restart rsyslog                                                                
-                                                                                              
-  hd Настройка клиента                                                                        
-  ne В /etc/rsyslog.conf на клиенте                                                           
-  ce *.warning action(type="omfwd"                                                            
-      target="<HQ-SRV_IP>"                                                                    
-      port="514"                                                                              
-      protocol="tcp"                                                                          
-      action.resumeRetryCount="-1"                                                            
-      queue.type="linkedList"                                                                 
-      queue.size="10000")                                                                     
-  ct *.warning(уровень warning и выше); target(IP сервера логов); protocol(tcp для            
-  надежности); resumeRetryCount=-1(бесконечные попытки); queue.size(размер очереди сообщений) 
-                                                                                              
-  ne Перезапуск службы на клиенте                                                             
-  ce systemctl restart rsyslog
-                                                                                              
-  hd Проверка                                                                                 
-  ne Проверка открытого порта на сервере                                                      
-  ce ss -tulpn | grep 514                                                                     
-  ct должен показать порты 514 TCP и UDP                                                      
-                                                                                              
-  ne Проверка каталогов логов на сервере                                                      
-  ce ls -la /opt/                                                                             
-  ct должны появиться каталоги с именами клиентов                                             
-                                                                                              
-  ne Проверка содержимого логов                                                               
-  ce ls -la /opt/client1/                                                                     
-  ct должны появиться файлы логов от клиента                                                  
-                                                                                              
-  ne Тестовая отправка сообщения с клиента                                                    
-  ce logger -p user.warning "Test message from client"                                        
-  ct отправляет тестовое сообщение уровня warning                                             
-                                                                                              
-  ne Проверка получения на сервере                                                            
-  ce tail -f /opt/client1/*.log                                                               
-  ct должно появиться тестовое сообщение
+ne Установка пакетов на всех устройствах                                                    
+ce apt-get install rsyslog logrotate                                                        
+ct rsyslog(сбор и пересылка логов); logrotate(ротация и сжатие логов)                       ct Обычно работают в связке
+
+hd Настройка сервера сбора логов                                                            
+ne В /etc/rsyslog.conf                                                                      
+ce module(load="imuxsock")                                                                  
+module(load="imklog")                                                                       
+module(load="imudp")                                                                        
+input(type="imudp" port="514")                                                              
+module(load="imtcp")                                                                        
+input(type="imtcp" port="514")                                                              
+
+$template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
+
+if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
+& stop          
+ct imuxsock(локальные сообщения); imklog(логи ядра); imudp/imtcp(приём по UDP/TCP);         
+$syslogseverity <= 4(warning и выше); & stop(остановка обработки)                           
+
+ne Создание каталогов для логов                                                             
+ce mkdir -p /opt/client1
+mkdir -p /opt/client2                                                                       
+mkdir -p /opt/client3                                                                       
+ct создаются каталоги для каждого клиента                                                   
+
+ne Установка прав на каталоги                                                               
+ce chown -R root:root /opt                                                                  
+chmod -R 755 /opt                                                                           
+ct права для записи логов службой rsyslog                                                   
+
+ne Перезапуск службы на сервере                                                             
+ce systemctl restart rsyslog                                                                
+
+hd Настройка клиента                                                                        
+ne В /etc/rsyslog.conf на клиенте                                                           
+ce *.warning action(type="omfwd"                                                            
+target="<HQ-SRV_IP>"                                                                    
+port="514"                                                                              
+protocol="tcp"                                                                          
+action.resumeRetryCount="-1"                                                            
+queue.type="linkedList"                                                                 
+queue.size="10000")                                                                     
+ct *.warning(уровень warning и выше); target(IP сервера логов); protocol(tcp для            
+надежности); resumeRetryCount=-1(бесконечные попытки); queue.size(размер очереди сообщений) 
+
+ne Перезапуск службы на клиенте                                                             
+ce systemctl restart rsyslog
+
+hd Проверка                                                                                 
+ne Проверка открытого порта на сервере                                                      
+ce ss -tulpn | grep 514                                                                     
+ct должен показать порты 514 TCP и UDP                                                      
+
+ne Проверка каталогов логов на сервере                                                      
+ce ls -la /opt/                                                                             
+ct должны появиться каталоги с именами клиентов                                             
+
+ne Проверка содержимого логов                                                               
+ce ls -la /opt/client1/                                                                     
+ct должны появиться файлы логов от клиента                                                  
+
+ne Тестовая отправка сообщения с клиента                                                    
+ce logger -p user.warning "Test message from client"                                        
+ct отправляет тестовое сообщение уровня warning                                             
+
+ne Проверка получения на сервере                                                            
+ce tail -f /opt/client1/*.log                                                               
+ct должно появиться тестовое сообщение

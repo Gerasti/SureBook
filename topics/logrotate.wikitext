@@ -5,19 +5,18 @@
 
 <syntaxhighlight lang="bash">
 /opt/*/*.log {                                                                    
-      weekly                                                                           
-      size 10M                                                                         
-      rotate 4                                                                         
-      compress                                                                         
-      missingok                                                                        
-      notifempty                                                                       
-      create 0640 root root                                                            
-      sharedscripts                                                                    
-      postrotate                                                                       
-          systemctl reload rsyslog > /dev/null 2>&1 || true                            
-      endscript                                                                        
-  }                                                                                    
- 
+weekly                                                                           
+size 10M                                                                         
+rotate 4                                                                         
+compress                                                                         
+missingok                                                                        
+notifempty                                                                       
+create 0640 root root                                                            
+sharedscripts                                                                    
+postrotate                                                                       
+systemctl reload rsyslog > /dev/null 2>&1 || true                            
+endscript                                                                        
+}                                                                                    
 </syntaxhighlight>
 
 <blockquote>
@@ -28,8 +27,7 @@
 
 <syntaxhighlight lang="bash">
 systemctl enable --now rsyslog logrotate                                          
-                                                                                       
- 
+
 </syntaxhighlight>
 
 === Настройка клиента ===
@@ -38,13 +36,12 @@ systemctl enable --now rsyslog logrotate
 
 <syntaxhighlight lang="bash">
 *.warning action(type="omfwd"                                                     
-      target="10.21.12.50"                                                             
-      port="514"                                                                       
-      protocol="tcp"                                                                   
-      action.resumeRetryCount="-1"                                                     
-      queue.type="linkedList"                                                          
-      queue.size="10000")                                                              
- 
+target="10.21.12.50"                                                             
+port="514"                                                                       
+protocol="tcp"                                                                   
+action.resumeRetryCount="-1"                                                     
+queue.type="linkedList"                                                          
+queue.size="10000")                                                              
 </syntaxhighlight>
 
 <blockquote>

@@ -6,7 +6,6 @@
 <syntaxhighlight lang="bash">
 apt-get install bind bind-utils
 
-
 </syntaxhighlight>
 
 === Настройка options.conf ===
@@ -15,11 +14,10 @@ apt-get install bind bind-utils
 
 <syntaxhighlight lang="bash">
 listen-on { any; };
- allow-query { any; };
- allow-recursion { any; };
- forwarders { 77.88.8.8; };
- recursion yes;
-
+allow-query { any; };
+allow-recursion { any; };
+forwarders { 77.88.8.8; };
+recursion yes;
 </syntaxhighlight>
 
 <blockquote>
@@ -30,7 +28,6 @@ listen-on(интерфейсы); allow-query(разрешение запросо
 
 <syntaxhighlight lang="bash">
 allow-transfer { 192.168.33.67; };
-
 </syntaxhighlight>
 
 <blockquote>
@@ -41,9 +38,8 @@ allow-transfer(разрешение передачи зон на slave-серв�
 
 <syntaxhighlight lang="bash">
 logging {
-     category lame-servers {null;};
- };
-
+category lame-servers {null;};
+};
 
 </syntaxhighlight>
 
@@ -53,10 +49,9 @@ logging {
 
 <syntaxhighlight lang="bash">
 zone "ZONE_NAME" {
-     type TYPE;
-     file "ZONE_FILE_PATH";
- };
-
+type TYPE;
+file "ZONE_FILE_PATH";
+};
 </syntaxhighlight>
 
 <blockquote>
@@ -71,10 +66,9 @@ slave опционален - используется только для вто
 
 <syntaxhighlight lang="bash">
 zone "bind.domain" {
-     type master;
-     file "bind.domain.db";
- };
-
+type master;
+file "bind.domain.db";
+};
 
 </syntaxhighlight>
 
@@ -82,10 +76,9 @@ zone "bind.domain" {
 
 <syntaxhighlight lang="bash">
 zone "11.168.192.in-addr.arpa" {
-     type master;
-     file "11.168.192.in-addr.arpa.db";
- };
-
+type master;
+file "11.168.192.in-addr.arpa.db";
+};
 
 </syntaxhighlight>
 
@@ -95,9 +88,8 @@ zone "11.168.192.in-addr.arpa" {
 
 <syntaxhighlight lang="bash">
 cp /etc/bind/zone/{localhost,bind.domain.db}
- cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
- cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
-
+cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
+cp /etc/bind/zone/127.in-addr.arpa /etc/bind/zone/33.168.192.in-addr.arpa.db
 
 </syntaxhighlight>
 
@@ -105,9 +97,8 @@ cp /etc/bind/zone/{localhost,bind.domain.db}
 
 <syntaxhighlight lang="bash">
 chown named:named /etc/bind/zone/bind.domain.db
- chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
- chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
-
+chown named:named /etc/bind/zone/11.168.192.in-addr.arpa.db
+chown named:named /etc/bind/zone/33.168.192.in-addr.arpa.db
 
 </syntaxhighlight>
 
@@ -118,26 +109,29 @@ chown named:named /etc/bind/zone/bind.domain.db
 <syntaxhighlight lang="bash">
 $TTL 1d
 
- @       IN SOA  bind.domain. root.bind.domain. (
-                 2021102900
-                 12h
-                 1h
-                 1w
-                 1h
- )
+@       IN SOA  bind.domain. root.bind.domain. (
+2021102900
+12h
+1h
+1w
+1h
+)
 
-         IN NS   srv-hq.bind.domain.
-         IN NS   srv-dt.bind.domain.
+IN NS   srv-hq.bind.domain.
+IN NS   srv-dt.bind.domain.
 
-         IN A    192.168.11.67
- srv  IN A    192.168.11.67
- rtr  IN A    192.168.11.81
- sw   IN A    192.168.11.82
-
+IN A    192.168.11.67
+srv  IN A    192.168.11.67
+rtr  IN A    192.168.11.81
+sw   IN A    192.168.11.82
 </syntaxhighlight>
 
 <blockquote>
-SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый сервер); CNAME(псевдоним); TXT(текстовые записи)
+@(текущая запись bind.domain.);SOA(главная запись зоны); NS(DNS-сервер зоны); A(соответствие домена IPv4); MX(почтовый сервер); CNAME(псевдоним); TXT(текстовые записи)
+</blockquote>
+
+<blockquote>
+Точка на конце (srv-hq.bind.domain.) означает, что имя абсолютное (fully qualified domain name, FQDN), не нужно добавлять текущую зону(bind.domain)
 </blockquote>
 
 ==== Содержимое обратной зоны /etc/bind/zone/11.168.192.in-addr.arpa.db ====
@@ -145,20 +139,19 @@ SOA(главная запись зоны); NS(DNS-сервер зоны); A(со
 <syntaxhighlight lang="bash">
 $TTL 1d
 
- @       IN SOA  bind.domain. root.bind.domain. (
-                 2021102900
-                 12h
-                 1h
-                 1w
-                 1h
- )
+@       IN SOA  bind.domain. root.bind.domain. (
+2021102900
+12h
+1h
+1w
+1h
+)
 
-         IN NS   bind.domain.
+IN NS   bind.domain.
 
- 81      IN PTR  rtr.bind.domain.
- 67      IN PTR  srv.bind.domain.
- 82      IN PTR  sw.bind.domain.
-
+81      IN PTR  rtr.bind.domain.
+67      IN PTR  srv.bind.domain.
+82      IN PTR  sw.bind.domain.
 
 </syntaxhighlight>
 
@@ -168,10 +161,9 @@ $TTL 1d
 
 <syntaxhighlight lang="bash">
 search bind.domain
- nameserver 192.168.11.67
- nameserver 192.168.33.67
- nameserver 8.8.8.8
-
+nameserver 192.168.11.67
+nameserver 192.168.33.67
+nameserver 8.8.8.8
 </syntaxhighlight>
 
 <blockquote>
@@ -183,7 +175,6 @@ nameserver(DNS-сервер); search(домен поиска по умолчан
 <syntaxhighlight lang="bash">
 systemctl restart network
 
-
 </syntaxhighlight>
 
 === Проверка конфигурации ===
@@ -193,7 +184,6 @@ systemctl restart network
 <syntaxhighlight lang="bash">
 named-checkconf -z
 
-
 </syntaxhighlight>
 
 ==== Проверка отдельной прямой зоны ====
@@ -201,14 +191,12 @@ named-checkconf -z
 <syntaxhighlight lang="bash">
 named-checkzone bind.domain /etc/bind/zone/bind.domain.db
 
-
 </syntaxhighlight>
 
 ==== Проверка отдельной обратной зоны ====
 
 <syntaxhighlight lang="bash">
 named-checkzone 11.168.192.in-addr.arpa /etc/bind/zone/11.168.192.in-addr.arpa.db
-
 
 </syntaxhighlight>
 

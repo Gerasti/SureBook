@@ -1,65 +1,65 @@
 hd Настройка HTTPS с ГОСТ-сертификатами                                                     
-  ct Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для          
-  веб-ресурсов, настройка доверия                                                             
-   
-  hd Установка поддержки ГОСТ                                                                 
-  ne Установка пакета
-  ce apt-get install -y openssl-gost-engine                                                   
-                                                                                              
-  ne Включение поддержки ГОСТ                                                                 
-  ce control openssl-gost enabled                                                             
-                                                                                              
-  ne Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf                                    
-  ce openssl_conf = openssl_def                                                               
-                                                                                              
-  [openssl_def]                                                                               
-  engines = engine_section                                                                    
-                                                                                              
-  [engine_section]                                                                            
-  gost = gost_section                                                                         
-                                                                                              
-  [gost_section]  
-  engine_id = gost                                                                            
-  dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
-  default_algorithms = ALL                                                                    
-  ct Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, 
-  корректной работы Nginx с ГОСТ-криптографией                                                
-                                                                                              
-  hd Создание корневого сертификата УЦ                                                        
-  ne Создание закрытого ключа УЦ
-  ce openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
-                                                                                              
-  ne Создание самоподписанного сертификата УЦ                                                 
-  ce openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
-  ct В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ);    
-  ca.cer(корневой сертификат УЦ)                                                              
-                                                                                              
-  hd Создание сертификатов для доменов                                                        
-  ne Создание закрытого ключа для домена
-  ce openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
-  openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
-                                                                                              
-  ne Создание запроса на подпись (CSR)                                                        
-  ce openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
-  -md_gost12_256                                                                              
-  openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
-  -md_gost12_256                                                                              
-  ct В Common Name указать IP или домен(ы), например *.some.domain
-                                                                                              
-  ne Подпись сертификатов УЦ                                                                  
-  ce openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
-  web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
-  openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
-  docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
-                  
-  ne Проверка сертификата                                                                     
-  ce openssl x509 -in web.some.domain.cer -text -noout
-                                                                                              
-  hd Установка сертификатов в систему                                                         
-  ne Копирование сертификатов в доверенные                                                    
-  ce cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
-  cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
-  cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
-                                                                                              
-  ne Обновление доверенных сертификатов                                                       
-  ce update-ca-trust         
+ct Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для          
+веб-ресурсов, настройка доверия                                                             
+
+hd Установка поддержки ГОСТ                                                                 
+ne Установка пакета
+ce apt-get install -y openssl-gost-engine                                                   
+
+ne Включение поддержки ГОСТ                                                                 
+ce control openssl-gost enabled                                                             
+
+ne Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf                                    
+ce openssl_conf = openssl_def                                                               
+
+[openssl_def]                                                                               
+engines = engine_section                                                                    
+
+[engine_section]                                                                            
+gost = gost_section                                                                         
+
+[gost_section]  
+engine_id = gost                                                                            
+dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
+default_algorithms = ALL                                                                    
+ct Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, 
+корректной работы Nginx с ГОСТ-криптографией                                                
+
+hd Создание корневого сертификата УЦ                                                        
+ne Создание закрытого ключа УЦ
+ce openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
+
+ne Создание самоподписанного сертификата УЦ                                                 
+ce openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
+ct В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ);    
+ca.cer(корневой сертификат УЦ)                                                              
+
+hd Создание сертификатов для доменов                                                        
+ne Создание закрытого ключа для домена
+ce openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
+
+ne Создание запроса на подпись (CSR)                                                        
+ce openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
+-md_gost12_256                                                                              
+openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
+-md_gost12_256                                                                              
+ct В Common Name указать IP или домен(ы), например *.some.domain
+
+ne Подпись сертификатов УЦ                                                                  
+ce openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
+web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
+openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
+docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
+
+ne Проверка сертификата                                                                     
+ce openssl x509 -in web.some.domain.cer -text -noout
+
+hd Установка сертификатов в систему                                                         
+ne Копирование сертификатов в доверенные                                                    
+ce cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
+cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
+cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
+
+ne Обновление доверенных сертификатов                                                       
+ce update-ca-trust         

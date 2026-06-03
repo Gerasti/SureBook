@@ -1,97 +1,97 @@
 hd Управление пользователями и группами
-  ne Создание группы
-  ce samba-tool group add <имя_группы>                                                                     
-                                                                                                           
-  ne Создание пользователя                                                                                 
-  ce samba-tool user create <имя_пользователя>                                                             
-                                                                                                           
-  ne Добавление пользователя в группу                                                                      
-  ce samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
-                                                                                                           
-  ne Список пользователей                                                                                  
-  ce samba-tool user list                                                                                  
-                                                                                                           
-  ne Список участников группы                                                                              
-  ce samba-tool group listmembers <имя_группы>                                                             
-                                                                                                           
-  hd Политика паролей                                                                                      
-  ne Настройка сложности и длины пароля                                                                    
-  ce samba-tool domain passwordsettings set --complexity=off                                               
-  samba-tool domain passwordsettings set --min-pwd-length=1                                                
-  samba-tool domain passwordsettings set --max-pwd-age=0                                                   
-  samba-tool domain passwordsettings set --min-pwd-age=0                                                   
-  samba-tool domain passwordsettings set --pwd-history-length=0                                            
-  ct --complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия     
-  пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)                
-                                                                                                           
-  hd Политика блокировки                                                                                   
-  ne Настройка блокировки учетных записей
-  ce samba-tool domain passwordsettings set --lockout-threshold=0                                          
-  samba-tool domain passwordsettings set --lockout-duration=30                                             
-  samba-tool domain passwordsettings set --reset-count=30                                                  
-  ct --lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки);                   
-  --reset-count(интервал сброса счетчика)                                                                  
-                                                                                                           
-  hd Kerberos-политика                                                                                     
-  ne Настройка времени жизни билетов
-  ce samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
-  samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
-  ct --krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)      
-                                                                                                           
-  hd Параметры учетных записей                                                                             
-  ne Хранение паролей в открытом виде                                                                      
-  ce samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
-  samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
-  ct только для тестовых стендов; не рекомендуется в продакшене                                            
-                                                                                                           
-  hd Параметры безопасности домена                                                                         
-  ne Настройка криптографии                                                                                
-  ce samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
-  samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
-  ct снижает безопасность; для совместимости со старыми устройствами                                       
-                                                                                                           
-  hd Политика времени Kerberos                                                                             
-  ne Настройка флагов политики                                                                             
-  ce samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
-                                                                                                           
-  hd Аудит и логирование                                                                                   
-  ne Просмотр уровня домена                                                                                
-  ce samba-tool domain level show                                                                          
-                                                                                                           
-  ne Увеличение детализации логов                                                                          
-  ce smbcontrol all debug 3                                                                                
-  smbcontrol all debug 10                                                                                  
-  ct debug 3(средний уровень); debug 10(максимальная детализация)                                          
-                                                                                                           
-  hd Уровень функциональности домена                                                                       
-  ne Просмотр уровня домена                                                                                
-  ce samba-tool domain level show                                                                          
-                                                                                                           
-  ne Повышение уровня домена и леса                                                                        
-  ce samba-tool domain level raise --domain-level=2008_R2                                                  
-  samba-tool domain level raise --forest-level=2008_R2                                                     
-  ct 2008_R2(Windows Server 2008 R2)                                                                       
-                                                                                                           
-  hd Проверка политики                                                                                     
-  ne Просмотр всех настроек политики паролей                                                               
-  ce samba-tool domain passwordsettings show                                                               
-                                                                                                           
-  hd Управление DNS                                                                                        
-  ne Добавление A-записи в DNS                                                                             
-  ce samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
-  ct пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator     
-                                                                                                           
-  hd Создание организационных единиц                                                                       
-  ne Создание OU                                                                                           
-  ce samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
-                                                                                                           
-  hd Массовое создание пользователей                                                                       
-  ne Создание нескольких пользователей циклом                                                              
-  ce for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
-                                                                                                           
-  ne Создание группы                                                                                       
-  ce samba-tool group add hq                                                                               
-                                                                                                           
-  ne Массовое добавление пользователей в группу                                                            
-  ce for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
-  ct цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
+ne Создание группы
+ce samba-tool group add <имя_группы>                                                                     
+
+ne Создание пользователя                                                                                 
+ce samba-tool user create <имя_пользователя>                                                             
+
+ne Добавление пользователя в группу                                                                      
+ce samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
+
+ne Список пользователей                                                                                  
+ce samba-tool user list                                                                                  
+
+ne Список участников группы                                                                              
+ce samba-tool group listmembers <имя_группы>                                                             
+
+hd Политика паролей                                                                                      
+ne Настройка сложности и длины пароля                                                                    
+ce samba-tool domain passwordsettings set --complexity=off                                               
+samba-tool domain passwordsettings set --min-pwd-length=1                                                
+samba-tool domain passwordsettings set --max-pwd-age=0                                                   
+samba-tool domain passwordsettings set --min-pwd-age=0                                                   
+samba-tool domain passwordsettings set --pwd-history-length=0                                            
+ct --complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия     
+пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)                
+
+hd Политика блокировки                                                                                   
+ne Настройка блокировки учетных записей
+ce samba-tool domain passwordsettings set --lockout-threshold=0                                          
+samba-tool domain passwordsettings set --lockout-duration=30                                             
+samba-tool domain passwordsettings set --reset-count=30                                                  
+ct --lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки);                   
+--reset-count(интервал сброса счетчика)                                                                  
+
+hd Kerberos-политика                                                                                     
+ne Настройка времени жизни билетов
+ce samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
+samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
+ct --krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)      
+
+hd Параметры учетных записей                                                                             
+ne Хранение паролей в открытом виде                                                                      
+ce samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
+samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
+ct только для тестовых стендов; не рекомендуется в продакшене                                            
+
+hd Параметры безопасности домена                                                                         
+ne Настройка криптографии                                                                                
+ce samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
+samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
+ct снижает безопасность; для совместимости со старыми устройствами                                       
+
+hd Политика времени Kerberos                                                                             
+ne Настройка флагов политики                                                                             
+ce samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
+
+hd Аудит и логирование                                                                                   
+ne Просмотр уровня домена                                                                                
+ce samba-tool domain level show                                                                          
+
+ne Увеличение детализации логов                                                                          
+ce smbcontrol all debug 3                                                                                
+smbcontrol all debug 10                                                                                  
+ct debug 3(средний уровень); debug 10(максимальная детализация)                                          
+
+hd Уровень функциональности домена                                                                       
+ne Просмотр уровня домена                                                                                
+ce samba-tool domain level show                                                                          
+
+ne Повышение уровня домена и леса                                                                        
+ce samba-tool domain level raise --domain-level=2008_R2                                                  
+samba-tool domain level raise --forest-level=2008_R2                                                     
+ct 2008_R2(Windows Server 2008 R2)                                                                       
+
+hd Проверка политики                                                                                     
+ne Просмотр всех настроек политики паролей                                                               
+ce samba-tool domain passwordsettings show                                                               
+
+hd Управление DNS                                                                                        
+ne Добавление A-записи в DNS                                                                             
+ce samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
+ct пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator     
+
+hd Создание организационных единиц                                                                       
+ne Создание OU                                                                                           
+ce samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
+
+hd Массовое создание пользователей                                                                       
+ne Создание нескольких пользователей циклом                                                              
+ce for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
+
+ne Создание группы                                                                                       
+ce samba-tool group add hq                                                                               
+
+ne Массовое добавление пользователей в группу                                                            
+ce for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
+ct цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq

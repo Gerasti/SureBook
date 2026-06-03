@@ -1,129 +1,72 @@
 hd Установка Samba AD DC с BIND9_DLZ
-  ne Установка пакетов                                                                        
-  ce apt-get install -y task-samba-dc bind                                                    
-                                                                                              
-  ne Отключение chroot для BIND                                                               
-  ce control bind-chroot disabled                                                             
-                                                                                              
-  ne Подключение конфигурации BIND9_DLZ                                                       
-  ce grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
-  "/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
-                  
-  ne В /etc/bind/options.conf добавить                                                        
-  ce tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
-  minimal-responses yes;                                                                      
-  ct tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(минимальные ответы DNS)  
-                                                                                              
-  ne Остановка BIND перед настройкой                                                          
-  ce systemctl stop bind                                                                      
-                                                                                              
-  ne В /etc/sysconfig/network                                                                 
-  ce NETWORKING=yes                                                                           
-  CONFMETHOD=etcnet                                                                           
-  HOSTNAME=srv-hq.ad.team                                                                     
-  RESOLV_MODS=yes                                                                             
-  ct HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(разрешить изменение resolv.conf)     
-                                                                                              
-  ne Установка hostname                                                                       
-  ce hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
-  domainname ad.team                                                                          
-  ct exec bash перезагружает оболочку для применения изменений                                
-                                                                                              
-  hd Очистка старых конфигураций                                                              
-  ne Удаление старых файлов Samba                                                             
-  ce rm -f /etc/samba/smb.conf                                                                
-  rm -rf /var/lib/samba                                                                       
-  rm -rf /var/cache/samba                                                                     
-  mkdir -p /var/lib/samba/sysvol                                                              
-  ct Конфликты зон возникают при одинаковых доменах в BIND и SAMBA BIND9_DLZ                  
-                                                                                              
-  ne В /etc/resolv.conf указать локальный DNS                                                 
-  ce nameserver 127.0.0.1                                                                     
-  ct Контроллер домена должен использовать себя как DNS-сервер                                
-                                                                                              
-  hd Создание домена                                                                          
-  ne Провижининг домена Samba AD                                                              
-  ce samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
-  --dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
-  ct --realm(полное имя домена); --domain(NetBIOS имя); --dns-backend(BIND9_DLZ или           
-  SAMBA_INTERNAL); --server-role(dc - контроллер домена); --use-rfc2307(поддержка POSIX       
-  атрибутов)      
-                                                                                              
-  ne Запуск служб                                                                             
-  ce systemctl enable --now samba
-  systemctl enable --now bind                                                                 
-                                                                                              
-  ne Копирование конфигурации Kerberos                                                        
-  ce cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
-                                                                                              
-  hd Проверка контроллера домена                                                              
-  ne Проверка информации о домене                                                             
-  ce samba-tool domain info 127.0.0.1                                                         
-                                                                                              
-  ne Проверка DNS SRV-записей                                                                 
-  ce host -t SRV _kerberos._udp.ad.team                                                       
-  host -t SRV _ldap._tcp.ad.team                                                              
-  host -t A srv-hq.ad.team                                                                    
-  ct SRV-записи должны указывать на контроллер домена                                         
-                                                                                              
-  ne Проверка Kerberos                                                                        
-  ce kinit administrator@AD.TEAM                                                              
-  klist                                                                                       
-  ct kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами
-                                                                                              
-  hd Присоединение клиента к домену                                                           
-  ne Установка пакетов на клиенте                                                             
-  ce apt-get update && apt-get install -y task-auth-ad-sssd                                   
-                                                                                              
-  ne Запуск служб на клиенте                                                                  
-  ce systemctl enable --now smb winbind sssd                                                  
-                                                                                              
-  ne Содержимое /etc/krb5.conf на клиенте                                                     
-  ce [libdefaults]                                                                            
-  default_realm = AD.TEAM                                                                     
-  dns_lookup_kdc = true
-  dns_lookup_realm = false                                                                    
-  ticket_lifetime = 24h                                                                       
-  renew_lifetime = 7d                                                                         
-  forwardable = true                                                                          
-  rdns = false                                                                                
-  default_ccache_name = KEYRING:persistent:%{uid}                                             
-                                                                                              
-  [realms]                                                                                    
-  AD.TEAM={                                                                                   
-          kdc = 192.168.11.67                                                                 
-          default_domain = ad.team                                                            
-          admin_server = 192.168.11.67                                                        
-  }                                                                                           
-                                                                                              
-  [domain_realm]                                                                              
-  .ad.team = AD.TEAM
-  ad.team = AD.TEAM                                                                           
-  ct kdc(IP контроллера домена); ticket_lifetime(время жизни билета); renew_lifetime(время    
-  обновления); forwardable(передача билета)                                                   
-                                                                                              
-  ne В /etc/resolv.conf на клиенте                                                            
-  ce domain ad.team
-  nameserver 192.168.11.67                                                                    
-  nameserver 192.168.33.67                                                                    
-  nameserver 8.8.8.8                                                                          
-  ct Первым указывать IP контроллера домена                                                   
-                                                                                              
-  ne Проверка Kerberos на клиенте                                                             
-  ce kinit administrator                                                                      
-  klist                                                                                       
-                                                                                              
-  ne Присоединение к домену                                                                   
-  ce net ads join -U administrator@AD.TEAM -S 192.168.11.67                                   
-  ct -U(пользователь); -S(IP сервера)                                                         
-                                                                                              
-  ne Проверка DNS на клиенте                                                                  
-  ce host srv-hq                                                                              
-  host $(hostname)                                                                            
-                                                                                              
-  ne Перезагрузка клиента                                                                     
-  ce reboot                                                                                   
-                                                                                              
-  ne Вход под доменным пользователем                                                          
-  ce su -
-  id
+ne Установка пакетов                                                                        
+ce apt-get install -y task-samba-dc bind                                                    
+
+ne Отключение chroot для BIND                                                               
+ce control bind-chroot disabled                                                             
+
+ne Подключение конфигурации BIND9_DLZ                                                       
+ce grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
+"/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
+
+ne В /etc/bind/options.conf добавить                                                        
+ce tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
+minimal-responses yes;                                                                      
+ct tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(минимальные ответы DNS)  
+
+ne Остановка BIND перед настройкой                                                          
+ce systemctl stop bind                                                                      
+
+ne В /etc/sysconfig/network                                                                 
+ce NETWORKING=yes                                                                           
+CONFMETHOD=etcnet                                                                           
+HOSTNAME=srv-hq.ad.team                                                                     
+RESOLV_MODS=yes                                                                             
+ct HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(разрешить изменение resolv.conf)     
+
+ne Установка hostname                                                                       
+ce hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
+domainname ad.team                                                                          
+ct exec bash перезагружает оболочку для применения изменений                                
+
+hd Очистка старых конфигураций                                                              
+ne Удаление старых файлов Samba                                                             
+ce rm -f /etc/samba/smb.conf                                                                
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
+ct Конфликты зон возникают при одинаковых доменах в BIND и SAMBA BIND9_DLZ                  
+
+ne В /etc/resolv.conf указать локальный DNS                                                 
+ce nameserver 127.0.0.1                                                                     
+ct Контроллер домена должен использовать себя как DNS-сервер                                
+
+hd Создание домена                                                                          
+ne Провижининг домена Samba AD                                                              
+ce samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
+--dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
+ct --realm(полное имя домена); --domain(NetBIOS имя); --dns-backend(BIND9_DLZ или           
+SAMBA_INTERNAL); --server-role(dc - контроллер домена); --use-rfc2307(поддержка POSIX       
+атрибутов)      
+
+ne Запуск служб                                                                             
+ce systemctl enable --now samba
+systemctl enable --now bind                                                                 
+
+ne Копирование конфигурации Kerberos                                                        
+ce cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+
+hd Проверка контроллера домена                                                              
+ne Проверка информации о домене                                                             
+ce samba-tool domain info 127.0.0.1                                                         
+
+ne Проверка DNS SRV-записей                                                                 
+ce host -t SRV _kerberos._udp.ad.team                                                       
+host -t SRV _ldap._tcp.ad.team                                                              
+host -t A srv-hq.ad.team                                                                    
+ct SRV-записи должны указывать на контроллер домена                                         
+
+ne Проверка Kerberos                                                                        
+ce kinit administrator@AD.TEAM                                                              
+klist                                                                                       
+ct kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами

@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -18,11 +17,10 @@ SRV-BR(резервный сервер); SRV-HQ(основной сервер)
 
 <syntaxhighlight lang="bash">
 wal_level = replica                                                                      
-  max_wal_senders = 2                                                                         
-  max_replication_slots = 2                                                                   
-  hot_standby = on                                                                            
-  hot_standby_feedback = on                                                                   
- 
+max_wal_senders = 2                                                                         
+max_replication_slots = 2                                                                   
+hot_standby = on                                                                            
+hot_standby_feedback = on                                                                   
 </syntaxhighlight>
 
 <blockquote>
@@ -33,8 +31,7 @@ wal_level(уровень журналирования); max_wal_senders(коли
 
 <syntaxhighlight lang="bash">
 systemctl restart postgresql
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка репликации на резервном сервере ===
@@ -43,15 +40,13 @@ systemctl restart postgresql
 
 <syntaxhighlight lang="bash">
 systemctl stop postgresql                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Очистка директории данных ====
 
 <syntaxhighlight lang="bash">
 rm -rf /var/lib/pgsql/data/*                                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -62,8 +57,7 @@ rm -rf /var/lib/pgsql/data/*
 
 <syntaxhighlight lang="bash">
 pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
-  --write-recovery-conf                                                                       
- 
+--write-recovery-conf                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -74,16 +68,14 @@ pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=s
 
 <syntaxhighlight lang="bash">
 chown -R postgres:postgres /var/lib/pgsql/data/
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Запуск службы на SRV-BR ====
 
 <syntaxhighlight lang="bash">
 systemctl start postgresql                                                               
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка репликации ===
@@ -92,7 +84,6 @@ systemctl start postgresql
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -103,7 +94,6 @@ psql -U postgres
 
 <syntaxhighlight lang="bash">
 SELECT * FROM pg_stat_replication;                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -114,8 +104,7 @@ SELECT * FROM pg_stat_replication;
 
 <syntaxhighlight lang="bash">
 \c one                                                                                   
-  \dt+                                                                                        
- 
+\dt+                                                                                        
 </syntaxhighlight>
 
 <blockquote>

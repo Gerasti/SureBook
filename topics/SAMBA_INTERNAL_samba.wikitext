@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y task-samba-dc                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,7 +15,6 @@ task-samba-dc(Samba DC на базе Heimdal Kerberos)
 
 <syntaxhighlight lang="bash">
 for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -29,7 +27,6 @@ Samba DC использует собственные LDAP и Kerberos
 
 <syntaxhighlight lang="bash">
 HOSTNAME=dc.domain.sample
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -40,9 +37,8 @@ dc.domain.sample(FQDN сервера); domain.sample(имя домена)
 
 <syntaxhighlight lang="bash">
 hostnamectl set-hostname dc.domain.sample                                                  
-  exec bash                                                                                   
-  domainname domain.sample                                                                      
- 
+exec bash                                                                                   
+domainname domain.sample                                                                      
 </syntaxhighlight>
 
 <blockquote>
@@ -53,7 +49,6 @@ exec bash(перезагрузка оболочки для применения)
 
 <syntaxhighlight lang="bash">
 nameserver 127.0.0.1                                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -66,10 +61,9 @@ nameserver 127.0.0.1
 
 <syntaxhighlight lang="bash">
 rm -f /etc/samba/smb.conf
-  rm -rf /var/lib/samba                                                                       
-  rm -rf /var/cache/samba                                                                     
-  mkdir -p /var/lib/samba/sysvol                                                              
- 
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -82,7 +76,6 @@ rm -f /etc/samba/smb.conf
 
 <syntaxhighlight lang="bash">
 samba-tool domain provision
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -93,9 +86,8 @@ samba-tool domain provision
 
 <syntaxhighlight lang="bash">
 samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
-  --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
-  --use-rfc2307   
- 
+--dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
+--use-rfc2307   
 </syntaxhighlight>
 
 <blockquote>
@@ -106,15 +98,13 @@ samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P
 
 <syntaxhighlight lang="bash">
 systemctl enable --now samba
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Копирование конфигурации Kerberos ====
 
 <syntaxhighlight lang="bash">
 cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -127,7 +117,6 @@ Samba создает шаблон krb5.conf при создании домена
 
 <syntaxhighlight lang="bash">
 systemctl status samba
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -138,7 +127,6 @@ systemctl status samba
 
 <syntaxhighlight lang="bash">
 samba-tool domain info 127.0.0.1                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -149,7 +137,6 @@ samba-tool domain info 127.0.0.1
 
 <syntaxhighlight lang="bash">
 smbclient -L localhost -U administrator                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -160,7 +147,6 @@ smbclient -L localhost -U administrator
 
 <syntaxhighlight lang="bash">
 cat /etc/resolv.conf                                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -171,7 +157,6 @@ cat /etc/resolv.conf
 
 <syntaxhighlight lang="bash">
 host -t SRV _kerberos._udp.domain.sample.                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -182,7 +167,6 @@ host -t SRV _kerberos._udp.domain.sample.
 
 <syntaxhighlight lang="bash">
 host -t SRV _ldap._tcp.domain.sample.                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -193,7 +177,6 @@ host -t SRV _ldap._tcp.domain.sample.
 
 <syntaxhighlight lang="bash">
 host -t A dc.domain.sample.                                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -204,7 +187,6 @@ host -t A dc.domain.sample.
 
 <syntaxhighlight lang="bash">
 kinit administrator@DOMAIN.SAMPLE                                                          
- 
 </syntaxhighlight>
 
 <blockquote>

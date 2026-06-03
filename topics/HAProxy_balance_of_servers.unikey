@@ -1,67 +1,67 @@
-  hd Установка
-  ne Установка пакета
-  ce apt-get install haproxy                                                                  
-   
-  ne Включение и запуск службы                                                                
-  ce systemctl enable --now haproxy
+hd Установка
+ne Установка пакета
+ce apt-get install haproxy                                                                  
 
-  hd Настройка HAProxy
-  ne Конфигурация в /etc/haproxy/haproxy.cfg
-  ce global                                                                                   
-      log /dev/log daemon                                                                     
-      chroot /var/lib/haproxy                                                                 
-      maxconn 4000                                                                            
-      user _haproxy                                                                           
-      group _haproxy                                                                          
-      daemon                                                                                  
-      stats socket /var/lib/haproxy/stats                                                     
-                                                                                              
-  defaults                                                                                    
-      mode http                                                                               
-      log global                                                                              
-      timeout connect 10s                                                                     
-      timeout client 1m                                                                       
-      timeout server 1m                                                                       
-                                                                                              
-  listen stats                                                                                
-      bind 0.0.0.0:8989
-      mode http                                                                               
-      stats enable
-      stats uri /haproxy_stats                                                                
-      stats realm HAProxy\ Statistics                                                         
-      stats auth admin:toor                                                                   
-      stats admin if TRUE                                                                     
-                                                                                              
-  frontend postgre                                                                            
-      bind 0.0.0.0:5432                                                                       
-      default_backend POSTGRE                                                                 
-                                                                                              
-  backend POSTGRE                                                                             
-      balance roundrobin                                                                      
-      server srv-hq 192.168.11.65:5432 check                                                  
-      server srv-br 192.168.33.67:5432 check                                                  
-  ct global(глобальные параметры); log(логирование); chroot(изоляция процесса);               
-  maxconn(максимум соединений); user/group(пользователь процесса); stats socket(сокет для     
-  статистики); defaults(параметры по умолчанию); mode(режим работы) {http, tcp};              
-  timeout(таймауты подключения); listen stats(веб-интерфейс статистики); stats                
-  auth(логин:пароль для доступа); frontend(входящие подключения); backend(серверы назначения);
-   balance(метод балансировки); server(адрес сервера); check(проверка доступности)
+ne Включение и запуск службы                                                                
+ce systemctl enable --now haproxy
 
-  hd Методы балансировки                                                                      
-  ct roundrobin(циклическое распределение запросов, все серверы равны)
-  ct leastconn(запросы на сервер с наименьшим количеством соединений, для долгих соединений)  
-  ct source(один IP клиента всегда на один сервер)                                            
-  ct uri(одинаковые URI на один сервер, для статики и API)                                    
-  ct url_param(балансировка по параметру URL, например ?session_id=123)                       
-  ct hdr(одинаковые HTTP-заголовки на один сервер, например User-Agent или Cookie)            
-  ct rdp-cookie(балансировка по RDP Cookie для RDP-серверов)                                  
-  ct random(случайный сервер, приоритет настраивается через random[start_weight])             
-  ct first(всегда первый доступный сервер, для failover)                                      
-                                                                                              
-  hd Проверка HAProxy                                                                         
-  ne Проверка статуса службы                                                                  
-  ce systemctl status haproxy                                                                 
-                                                                                              
-  ne Доступ к веб-статистике                                                                  
-  ce http://IP_СЕРВЕРА:8989/haproxy_stats                                                     
-  ct Логин и пароль из параметра stats auth 
+hd Настройка HAProxy
+ne Конфигурация в /etc/haproxy/haproxy.cfg
+ce global                                                                                   
+log /dev/log daemon                                                                     
+chroot /var/lib/haproxy                                                                 
+maxconn 4000                                                                            
+user _haproxy                                                                           
+group _haproxy                                                                          
+daemon                                                                                  
+stats socket /var/lib/haproxy/stats                                                     
+
+defaults                                                                                    
+mode http                                                                               
+log global                                                                              
+timeout connect 10s                                                                     
+timeout client 1m                                                                       
+timeout server 1m                                                                       
+
+listen stats                                                                                
+bind 0.0.0.0:8989
+mode http                                                                               
+stats enable
+stats uri /haproxy_stats                                                                
+stats realm HAProxy\ Statistics                                                         
+stats auth admin:toor                                                                   
+stats admin if TRUE                                                                     
+
+frontend postgre                                                                            
+bind 0.0.0.0:5432                                                                       
+default_backend POSTGRE                                                                 
+
+backend POSTGRE                                                                             
+balance roundrobin                                                                      
+server srv-hq 192.168.11.65:5432 check                                                  
+server srv-br 192.168.33.67:5432 check                                                  
+ct global(глобальные параметры); log(логирование); chroot(изоляция процесса);               
+maxconn(максимум соединений); user/group(пользователь процесса); stats socket(сокет для     
+статистики); defaults(параметры по умолчанию); mode(режим работы) {http, tcp};              
+timeout(таймауты подключения); listen stats(веб-интерфейс статистики); stats                
+auth(логин:пароль для доступа); frontend(входящие подключения); backend(серверы назначения);
+balance(метод балансировки); server(адрес сервера); check(проверка доступности)
+
+hd Методы балансировки                                                                      
+ct roundrobin(циклическое распределение запросов, все серверы равны)
+ct leastconn(запросы на сервер с наименьшим количеством соединений, для долгих соединений)  
+ct source(один IP клиента всегда на один сервер)                                            
+ct uri(одинаковые URI на один сервер, для статики и API)                                    
+ct url_param(балансировка по параметру URL, например ?session_id=123)                       
+ct hdr(одинаковые HTTP-заголовки на один сервер, например User-Agent или Cookie)            
+ct rdp-cookie(балансировка по RDP Cookie для RDP-серверов)                                  
+ct random(случайный сервер, приоритет настраивается через random[start_weight])             
+ct first(всегда первый доступный сервер, для failover)                                      
+
+hd Проверка HAProxy                                                                         
+ne Проверка статуса службы                                                                  
+ce systemctl status haproxy                                                                 
+
+ne Доступ к веб-статистике                                                                  
+ce http://IP_СЕРВЕРА:8989/haproxy_stats                                                     
+ct Логин и пароль из параметра stats auth 

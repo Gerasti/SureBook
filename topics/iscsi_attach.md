@@ -5,7 +5,6 @@
 
 ```CODE
 lsblk
- 
 ```
 
 > Определить диск для использования (в примере sdb - диск по iSCSI)
@@ -14,7 +13,6 @@ lsblk
 
 ```CODE
 pvcreate /dev/sdb                                                                 
- 
 ```
 
 > Инициализирует физический том для использования в LVM
@@ -23,7 +21,6 @@ pvcreate /dev/sdb
 
 ```CODE
 vgcreate VG /dev/sdb                                                              
- 
 ```
 
 > VG - имя группы томов; /dev/sdb - физический том
@@ -34,7 +31,6 @@ vgcreate VG /dev/sdb
 
 ```CODE
 lvcreate -l 100%FREE -n DATA VG                                                   
- 
 ```
 
 > -l 100%FREE (использовать всё свободное место); -n DATA (имя тома); VG (группа томов)
@@ -43,7 +39,6 @@ lvcreate -l 100%FREE -n DATA VG
 
 ```CODE
 mkfs.xfs /dev/VG/DATA                                                             
- 
 ```
 
 > Создание файловой системы XFS на логическом томе
@@ -52,14 +47,12 @@ mkfs.xfs /dev/VG/DATA
 
 ```CODE
 mkdir /opt/data                                                                   
- 
 ```
 
 #### В /etc/fstab добавить строку <!-- NAME -->
 
 ```CODE
 /dev/VG/DATA /opt/data xfs defaults 0 0                                           
- 
 ```
 
 > Альтернатива: UUID=<uuid> /opt/data xfs defaults 0 0
@@ -68,7 +61,6 @@ mkdir /opt/data
 
 ```CODE
 mount -av                                                                         
- 
 ```
 
 > -a (монтировать всё из fstab); -v (подробный вывод)
@@ -79,7 +71,6 @@ mount -av
 
 ```CODE
 lvdisplay                                                                         
- 
 ```
 
 > Показывает информацию о логических томах
@@ -88,7 +79,6 @@ lvdisplay
 
 ```CODE
 lsblk                                                                             
- 
 ```
 
 > Или команда df -h для просмотра смонтированных файловых систем

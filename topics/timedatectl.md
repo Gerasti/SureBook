@@ -5,7 +5,6 @@
 
 ```CODE
 timedatectl  
- 
 ```
 
 > Показывает локальное время, UTC, часовой пояс, синхронизацию NTP
@@ -14,7 +13,6 @@ timedatectl
 
 ```CODE
 timedatectl status                                                           
- 
 ```
 
 > Показывает полную информацию
@@ -25,7 +23,6 @@ timedatectl status
 
 ```CODE
 timedatectl set-time "2026-05-31 10:30:00"
- 
 ```
 
 > Формат: YYYY-MM-DD HH:MM:SS
@@ -34,16 +31,14 @@ timedatectl set-time "2026-05-31 10:30:00"
 
 ```CODE
 timedatectl set-time "2026-05-31"                                            
-                                                                                  
- 
+
 ```
 
 #### Установка только времени <!-- NAME -->
 
 ```CODE
 timedatectl set-time "10:30:00"                                              
-                                                                                  
- 
+
 ```
 
 ### Настройка часового пояса <!-- HEAD -->
@@ -52,7 +47,6 @@ timedatectl set-time "10:30:00"
 
 ```CODE
 timedatectl show-timezones
- 
 ```
 
 > Показывает список всех доступных часовых поясов
@@ -61,15 +55,13 @@ timedatectl show-timezones
 
 ```CODE
 timedatectl list-timezones | grep Moscow                                     
-                                                                                  
- 
+
 ```
 
 #### Установка часового пояса <!-- NAME -->
 
 ```CODE
 timedatectl set-timezone Europe/Moscow                                       
- 
 ```
 
 > Часовой пояс Москвы
@@ -78,8 +70,7 @@ timedatectl set-timezone Europe/Moscow
 
 ```CODE
 timedatectl set-timezone UTC                                                 
-                                                                                  
- 
+
 ```
 
 ### Настройка NTP-синхронизации <!-- HEAD -->
@@ -88,7 +79,6 @@ timedatectl set-timezone UTC
 
 ```CODE
 timedatectl set-ntp true
- 
 ```
 
 > Включает автоматическую синхронизацию времени через systemd-timesyncd
@@ -97,7 +87,6 @@ timedatectl set-ntp true
 
 ```CODE
 timedatectl set-ntp false                                                    
- 
 ```
 
 > Отключает автоматическую синхронизацию, позволяет устанавливать время вручную
@@ -106,7 +95,6 @@ timedatectl set-ntp false
 
 ```CODE
 timedatectl timesync-status                                                  
- 
 ```
 
 > Показывает сервер, stratum, задержку, смещение времени
@@ -117,7 +105,6 @@ timedatectl timesync-status
 
 ```CODE
 hwclock --systohc
- 
 ```
 
 > Записывает системное время в аппаратные часы (RTC)
@@ -126,7 +113,6 @@ hwclock --systohc
 
 ```CODE
 hwclock --hctosys                                                            
- 
 ```
 
 > Устанавливает системное время из аппаратных часов
@@ -135,7 +121,6 @@ hwclock --hctosys
 
 ```CODE
 hwclock --show                                                               
- 
 ```
 
 > Показывает время из RTC
@@ -144,7 +129,6 @@ hwclock --show
 
 ```CODE
 timedatectl set-local-rtc 0                                                  
- 
 ```
 
 > 0(RTC в UTC), рекомендуется для Linux
@@ -153,7 +137,6 @@ timedatectl set-local-rtc 0
 
 ```CODE
 timedatectl set-local-rtc 1                                                  
- 
 ```
 
 > 1(RTC в локальном времени), используется для совместимости с Windows
@@ -164,7 +147,6 @@ timedatectl set-local-rtc 1
 
 ```CODE
 timedatectl show
- 
 ```
 
 > Показывает все параметры в формате ключ=значение
@@ -173,7 +155,6 @@ timedatectl show
 
 ```CODE
 timedatectl show -p Timezone                                                 
- 
 ```
 
 > -p(конкретное свойство): Timezone, NTPSynchronized, LocalRTC
@@ -182,8 +163,7 @@ timedatectl show -p Timezone
 
 ```CODE
 journalctl -u systemd-timesyncd                                              
-                                                                                  
- 
+
 ```
 
 #### Примеры часовых поясов <!-- LIST -->

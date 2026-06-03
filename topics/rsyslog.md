@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get install rsyslog logrotate                                                        
- 
 ```
 
 > rsyslog(сбор и пересылка логов); logrotate(ротация и сжатие логов)
@@ -18,17 +17,16 @@ apt-get install rsyslog logrotate
 
 ```CODE
 module(load="imuxsock")                                                                  
-  module(load="imklog")                                                                       
-  module(load="imudp")                                                                        
-  input(type="imudp" port="514")                                                              
-  module(load="imtcp")                                                                        
-  input(type="imtcp" port="514")                                                              
-                                                                                              
-  $template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
-                  
-  if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
-  & stop          
- 
+module(load="imklog")                                                                       
+module(load="imudp")                                                                        
+input(type="imudp" port="514")                                                              
+module(load="imtcp")                                                                        
+input(type="imtcp" port="514")                                                              
+
+$template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
+
+if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
+& stop          
 ```
 
 > imuxsock(локальные сообщения); imklog(логи ядра); imudp/imtcp(приём по UDP/TCP); $syslogseverity <= 4(warning и выше); & stop(остановка обработки)
@@ -37,9 +35,8 @@ module(load="imuxsock")
 
 ```CODE
 mkdir -p /opt/client1
-  mkdir -p /opt/client2                                                                       
-  mkdir -p /opt/client3                                                                       
- 
+mkdir -p /opt/client2                                                                       
+mkdir -p /opt/client3                                                                       
 ```
 
 > создаются каталоги для каждого клиента
@@ -48,8 +45,7 @@ mkdir -p /opt/client1
 
 ```CODE
 chown -R root:root /opt                                                                  
-  chmod -R 755 /opt                                                                           
- 
+chmod -R 755 /opt                                                                           
 ```
 
 > права для записи логов службой rsyslog
@@ -58,8 +54,7 @@ chown -R root:root /opt
 
 ```CODE
 systemctl restart rsyslog                                                                
-                                                                                              
- 
+
 ```
 
 ### Настройка клиента <!-- HEAD -->
@@ -68,13 +63,12 @@ systemctl restart rsyslog
 
 ```CODE
 *.warning action(type="omfwd"                                                            
-      target="<HQ-SRV_IP>"                                                                    
-      port="514"                                                                              
-      protocol="tcp"                                                                          
-      action.resumeRetryCount="-1"                                                            
-      queue.type="linkedList"                                                                 
-      queue.size="10000")                                                                     
- 
+target="<HQ-SRV_IP>"                                                                    
+port="514"                                                                              
+protocol="tcp"                                                                          
+action.resumeRetryCount="-1"                                                            
+queue.type="linkedList"                                                                 
+queue.size="10000")                                                                     
 ```
 
 > *.warning(уровень warning и выше); target(IP сервера логов); protocol(tcp для надежности); resumeRetryCount=-1(бесконечные попытки); queue.size(размер очереди сообщений)
@@ -83,8 +77,7 @@ systemctl restart rsyslog
 
 ```CODE
 systemctl restart rsyslog
-                                                                                              
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -93,7 +86,6 @@ systemctl restart rsyslog
 
 ```CODE
 ss -tulpn | grep 514                                                                     
- 
 ```
 
 > должен показать порты 514 TCP и UDP
@@ -102,7 +94,6 @@ ss -tulpn | grep 514
 
 ```CODE
 ls -la /opt/                                                                             
- 
 ```
 
 > должны появиться каталоги с именами клиентов
@@ -111,7 +102,6 @@ ls -la /opt/
 
 ```CODE
 ls -la /opt/client1/                                                                     
- 
 ```
 
 > должны появиться файлы логов от клиента
@@ -120,7 +110,6 @@ ls -la /opt/client1/
 
 ```CODE
 logger -p user.warning "Test message from client"                                        
- 
 ```
 
 > отправляет тестовое сообщение уровня warning
@@ -129,7 +118,6 @@ logger -p user.warning "Test message from client"
 
 ```CODE
 tail -f /opt/client1/*.log                                                               
- 
 ```
 
 > должно появиться тестовое сообщение

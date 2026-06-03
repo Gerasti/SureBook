@@ -5,8 +5,7 @@
 
 ```CODE
 mkdir /opt/data                                                                          
-  chmod 777 /opt/data                                                                         
- 
+chmod 777 /opt/data                                                                         
 ```
 
 > 777(полные права для всех пользователей)
@@ -15,13 +14,12 @@ mkdir /opt/data
 
 ```CODE
 [samba]                                                                                  
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  guest ok = yes                                                                              
-  read only = no                                                                              
-  force user = nobody                                                                         
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+guest ok = yes                                                                              
+read only = no                                                                              
+force user = nobody                                                                         
 ```
 
 > guest ok = yes(анонимный доступ); force user(все действия от имени nobody)
@@ -30,8 +28,7 @@ mkdir /opt/data
 
 ```CODE
 systemctl restart smbd                                                                   
-                                                                                              
- 
+
 ```
 
 ### Настройка Samba для пользователей домена <!-- HEAD -->
@@ -40,9 +37,8 @@ systemctl restart smbd
 
 ```CODE
 mkdir /opt/data
-  chmod 770 /opt/data                                                                         
-  chown root:domain_users /opt/data                                                           
- 
+chmod 770 /opt/data                                                                         
+chown root:domain_users /opt/data                                                           
 ```
 
 > 770(доступ только владельцу и группе); domain_users(группа домена)
@@ -51,14 +47,13 @@ mkdir /opt/data
 
 ```CODE
 [samba]                                                                                  
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  valid users = @domain_users                                                                 
-  read only = no                                                                              
-  create mask = 0660                                                                          
-  directory mask = 0770                                                                       
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+valid users = @domain_users                                                                 
+read only = no                                                                              
+create mask = 0660                                                                          
+directory mask = 0770                                                                       
 ```
 
 > valid users = @domain_users(доступ только группе домена); create mask(права на новые файлы); directory mask(права на новые каталоги)
@@ -67,7 +62,6 @@ mkdir /opt/data
 
 ```CODE
 smbpasswd -a username
- 
 ```
 
 > создает пароль Samba для существующего системного пользователя
@@ -78,13 +72,12 @@ smbpasswd -a username
 
 ```CODE
 [samba]      
-  path = /opt/data                                                                            
-  browseable = yes                                                                            
-  writable = yes                                                                              
-  valid users = user1, user2, user3                                                           
-  read only = no                                                                              
-  write list = user1, user2                                                                   
- 
+path = /opt/data                                                                            
+browseable = yes                                                                            
+writable = yes                                                                              
+valid users = user1, user2, user3                                                           
+read only = no                                                                              
+write list = user1, user2                                                                   
 ```
 
 > valid users(список разрешенных пользователей); write list(пользователи с правом записи)
@@ -95,14 +88,13 @@ smbpasswd -a username
 
 ```CODE
 browseable = yes
-  guest ok = yes                                                                              
-  valid users = user1, @group1                                                                
-  invalid users = user2                                                                       
-  read only = no                                                                              
-  writable = yes                                                                              
-  write list = user1, @group1                                                                 
-  read list = user2                                                                           
- 
+guest ok = yes                                                                              
+valid users = user1, @group1                                                                
+invalid users = user2                                                                       
+read only = no                                                                              
+writable = yes                                                                              
+write list = user1, @group1                                                                 
+read list = user2                                                                           
 ```
 
 > browseable(видимость в сети); guest ok(гостевой доступ); valid users(разрешенные пользователи/группы); invalid users(запрещенные); write list(право записи); read list(только чтение)
@@ -111,11 +103,10 @@ browseable = yes
 
 ```CODE
 create mask = 0660
-  directory mask = 0770                                                                       
-  force user = nobody                                                                         
-  force group = nogroup                                                                       
-  inherit permissions = yes                                                                   
- 
+directory mask = 0770                                                                       
+force user = nobody                                                                         
+force group = nogroup                                                                       
+inherit permissions = yes                                                                   
 ```
 
 > create mask(права на файлы); directory mask(права на каталоги); force user/group(принудительный владелец); inherit permissions(наследование прав)
@@ -124,9 +115,8 @@ create mask = 0660
 
 ```CODE
 hosts allow = 192.168.1.0/24
-  hosts deny = 192.168.2.0/24                                                                 
-  max connections = 10                                                                        
- 
+hosts deny = 192.168.2.0/24                                                                 
+max connections = 10                                                                        
 ```
 
 > hosts allow(разрешенные сети); hosts deny(запрещенные сети); max connections(лимит подключений)
@@ -137,7 +127,6 @@ hosts allow = 192.168.1.0/24
 
 ```CODE
 testparm     
- 
 ```
 
 > проверяет синтаксис smb.conf
@@ -146,7 +135,6 @@ testparm
 
 ```CODE
 smbstatus                                                                                
- 
 ```
 
 > показывает подключенных пользователей и открытые файлы
@@ -155,7 +143,6 @@ smbstatus
 
 ```CODE
 \\192.168.1.1\samba                                                                      
- 
 ```
 
 > в проводнике Windows
@@ -164,7 +151,6 @@ smbstatus
 
 ```CODE
 smb://192.168.1.1/samba                                                                  
- 
 ```
 
 > в файловом менеджере или через smbclient

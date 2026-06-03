@@ -5,8 +5,7 @@
 
 <syntaxhighlight lang="bash">
 apt-get install zabbix-agent                                                             
-   
- 
+
 </syntaxhighlight>
 
 === Настройка ===
@@ -15,9 +14,8 @@ apt-get install zabbix-agent
 
 <syntaxhighlight lang="bash">
 Server=IP_ZABBIX_SERVER
-  ServerActive=IP_ZABBIX_SERVER
-  Hostname=HOST_CLIENT
- 
+ServerActive=IP_ZABBIX_SERVER
+Hostname=HOST_CLIENT
 </syntaxhighlight>
 
 <blockquote>
@@ -28,9 +26,8 @@ Server(IP или hostname сервера); ServerActive(IP для активны
 
 <syntaxhighlight lang="bash">
 systemctl restart zabbix-agentd
-  systemctl enable zabbix-agentd                                                              
-                                                                                              
- 
+systemctl enable zabbix-agentd                                                              
+
 </syntaxhighlight>
 
 === Добавление хоста в веб-интерфейсе ===

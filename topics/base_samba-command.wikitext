@@ -5,40 +5,35 @@
 
 <syntaxhighlight lang="bash">
 samba-tool group add <имя_группы>                                                                     
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Создание пользователя ====
 
 <syntaxhighlight lang="bash">
 samba-tool user create <имя_пользователя>                                                             
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Добавление пользователя в группу ====
 
 <syntaxhighlight lang="bash">
 samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Список пользователей ====
 
 <syntaxhighlight lang="bash">
 samba-tool user list                                                                                  
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Список участников группы ====
 
 <syntaxhighlight lang="bash">
 samba-tool group listmembers <имя_группы>                                                             
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 === Политика паролей ===
@@ -47,11 +42,10 @@ samba-tool group listmembers <имя_группы>
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --complexity=off                                               
-  samba-tool domain passwordsettings set --min-pwd-length=1                                                
-  samba-tool domain passwordsettings set --max-pwd-age=0                                                   
-  samba-tool domain passwordsettings set --min-pwd-age=0                                                   
-  samba-tool domain passwordsettings set --pwd-history-length=0                                            
- 
+samba-tool domain passwordsettings set --min-pwd-length=1                                                
+samba-tool domain passwordsettings set --max-pwd-age=0                                                   
+samba-tool domain passwordsettings set --min-pwd-age=0                                                   
+samba-tool domain passwordsettings set --pwd-history-length=0                                            
 </syntaxhighlight>
 
 <blockquote>
@@ -64,9 +58,8 @@ samba-tool domain passwordsettings set --complexity=off
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --lockout-threshold=0                                          
-  samba-tool domain passwordsettings set --lockout-duration=30                                             
-  samba-tool domain passwordsettings set --reset-count=30                                                  
- 
+samba-tool domain passwordsettings set --lockout-duration=30                                             
+samba-tool domain passwordsettings set --reset-count=30                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -79,8 +72,7 @@ samba-tool domain passwordsettings set --lockout-threshold=0
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
-  samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
- 
+samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
 </syntaxhighlight>
 
 <blockquote>
@@ -93,8 +85,7 @@ samba-tool domain passwordsettings set --krb-ticket-lifetime=24
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
-  samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
- 
+samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
 </syntaxhighlight>
 
 <blockquote>
@@ -107,8 +98,7 @@ samba-tool domain passwordsettings set --store-plaintext-password=yes
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
-  samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
- 
+samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -121,8 +111,7 @@ samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 === Аудит и логирование ===
@@ -131,16 +120,14 @@ samba-tool domain passwordsettings set --krb-policy-flags=0x00000000
 
 <syntaxhighlight lang="bash">
 samba-tool domain level show                                                                          
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Увеличение детализации логов ====
 
 <syntaxhighlight lang="bash">
 smbcontrol all debug 3                                                                                
-  smbcontrol all debug 10                                                                                  
- 
+smbcontrol all debug 10                                                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -153,16 +140,14 @@ debug 3(средний уровень); debug 10(максимальная дет
 
 <syntaxhighlight lang="bash">
 samba-tool domain level show                                                                          
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Повышение уровня домена и леса ====
 
 <syntaxhighlight lang="bash">
 samba-tool domain level raise --domain-level=2008_R2                                                  
-  samba-tool domain level raise --forest-level=2008_R2                                                     
- 
+samba-tool domain level raise --forest-level=2008_R2                                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -175,8 +160,7 @@ samba-tool domain level raise --domain-level=2008_R2
 
 <syntaxhighlight lang="bash">
 samba-tool domain passwordsettings show                                                               
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 === Управление DNS ===
@@ -185,7 +169,6 @@ samba-tool domain passwordsettings show
 
 <syntaxhighlight lang="bash">
 samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -198,8 +181,7 @@ samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_а
 
 <syntaxhighlight lang="bash">
 samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 === Массовое создание пользователей ===
@@ -208,23 +190,20 @@ samba-tool ou create "OU=CLI,DC=ad-team,DC=info"
 
 <syntaxhighlight lang="bash">
 for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Создание группы ====
 
 <syntaxhighlight lang="bash">
 samba-tool group add hq                                                                               
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 ==== Массовое добавление пользователей в группу ====
 
 <syntaxhighlight lang="bash">
 for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
- 
 </syntaxhighlight>
 
 <blockquote>

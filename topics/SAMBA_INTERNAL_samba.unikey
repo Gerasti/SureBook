@@ -1,89 +1,89 @@
 hd Установка Samba DC                                                                       
-                                                                                              
-  ne Установка пакетов                                                                        
-  ce apt-get update && apt-get install -y task-samba-dc                                       
-  ct task-samba-dc(Samba DC на базе Heimdal Kerberos)                                         
-                                                                                              
-  ne Остановка конфликтующих служб                                                            
-  ce for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
-  ct Samba DC использует собственные LDAP и Kerberos                                          
-                                                                                              
-  hd Настройка имени узла и домена                                                            
-                                                                                              
-  ne В /etc/sysconfig/network                                                                 
-  ce HOSTNAME=dc.domain.sample
-  ct dc.domain.sample(FQDN сервера); domain.sample(имя домена)                                    
-                                                                                              
-  ne Установка имени узла                                                                     
-  ce hostnamectl set-hostname dc.domain.sample                                                  
-  exec bash                                                                                   
-  domainname domain.sample                                                                      
-  ct exec bash(перезагрузка оболочки для применения)                                          
-                                                                                              
-  ne В /etc/resolvconf.conf                                                                   
-  ce nameserver 127.0.0.1                                                                     
-  ct для корректного распознавания локальных DNS-запросов                                     
-                                                                                              
-  hd Подготовка к созданию домена                                                             
-                                                                                              
-  ne Очистка баз и конфигурации Samba                                                         
-  ce rm -f /etc/samba/smb.conf
-  rm -rf /var/lib/samba                                                                       
-  rm -rf /var/cache/samba                                                                     
-  mkdir -p /var/lib/samba/sysvol                                                              
-  ct удаляет предыдущую конфигурацию домена                                                   
-                                                                                              
-  hd Создание домена                                                                          
-                                                                                              
-  ne Интерактивное создание домена                                                            
-  ce samba-tool domain provision
-  ct указать: доменное имя, рабочую группу, роль dc, бэкенд SAMBA_INTERNAL, DNS forwarder     
-  77.88.8.8, пароль администратора                                                            
-                                                                                              
-  ne Пакетное создание домена                                                                 
-  ce samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
-  --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
-  --use-rfc2307   
-  ct --realm(имя области Kerberos и DNS домена); --domain(имя рабочей группы);                
-  --dns-backend(бэкенд DNS); --use-rfc2307(поддержка UID/GID и ACL)                           
-  
-  ne Запуск службы Samba                                                                      
-  ce systemctl enable --now samba
-                                                                                              
-  ne Копирование конфигурации Kerberos                                                        
-  ce cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
-  ct Samba создает шаблон krb5.conf при создании домена                                       
-                                                                                              
-  hd Проверка                                                                                 
-                                                                                              
-  ne Проверка статуса службы                                                                  
-  ce systemctl status samba
-  ct служба должна быть active (running)                                                      
-                                                                                              
-  ne Просмотр информации о домене                                                             
-  ce samba-tool domain info 127.0.0.1                                                         
-  ct показывает общую информацию о домене                                                     
-                                                                                              
-  ne Просмотр общих ресурсов                                                                  
-  ce smbclient -L localhost -U administrator                                                  
-  ct должны быть netlogon и sysvol                                                            
-                                                                                              
-  ne Проверка DNS в /etc/resolv.conf                                                          
-  ce cat /etc/resolv.conf                                                                     
-  ct должен быть nameserver 127.0.0.1                                                         
-                                                                                              
-  ne Проверка SRV-записи Kerberos                                                             
-  ce host -t SRV _kerberos._udp.domain.sample.                                                  
-  ct утилита host из пакета bind-utils                                                        
-                                                                                              
-  ne Проверка SRV-записи LDAP                                                                 
-  ce host -t SRV _ldap._tcp.domain.sample.                                                      
-  ct проверяет доступность LDAP                                                               
-                                                                                              
-  ne Проверка A-записи хоста                                                                  
-  ce host -t A dc.domain.sample.                                                                
-  ct должен вернуть IP-адрес контроллера домена                                               
-                                                                                              
-  ne Проверка Kerberos                                                                        
-  ce kinit administrator@DOMAIN.SAMPLE                                                          
-  ct имя домена в верхнем регистре; запрашивает пароль администратора 
+
+ne Установка пакетов                                                                        
+ce apt-get update && apt-get install -y task-samba-dc                                       
+ct task-samba-dc(Samba DC на базе Heimdal Kerberos)                                         
+
+ne Остановка конфликтующих служб                                                            
+ce for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
+ct Samba DC использует собственные LDAP и Kerberos                                          
+
+hd Настройка имени узла и домена                                                            
+
+ne В /etc/sysconfig/network                                                                 
+ce HOSTNAME=dc.domain.sample
+ct dc.domain.sample(FQDN сервера); domain.sample(имя домена)                                    
+
+ne Установка имени узла                                                                     
+ce hostnamectl set-hostname dc.domain.sample                                                  
+exec bash                                                                                   
+domainname domain.sample                                                                      
+ct exec bash(перезагрузка оболочки для применения)                                          
+
+ne В /etc/resolvconf.conf                                                                   
+ce nameserver 127.0.0.1                                                                     
+ct для корректного распознавания локальных DNS-запросов                                     
+
+hd Подготовка к созданию домена                                                             
+
+ne Очистка баз и конфигурации Samba                                                         
+ce rm -f /etc/samba/smb.conf
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
+ct удаляет предыдущую конфигурацию домена                                                   
+
+hd Создание домена                                                                          
+
+ne Интерактивное создание домена                                                            
+ce samba-tool domain provision
+ct указать: доменное имя, рабочую группу, роль dc, бэкенд SAMBA_INTERNAL, DNS forwarder     
+77.88.8.8, пароль администратора                                                            
+
+ne Пакетное создание домена                                                                 
+ce samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
+--dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
+--use-rfc2307   
+ct --realm(имя области Kerberos и DNS домена); --domain(имя рабочей группы);                
+--dns-backend(бэкенд DNS); --use-rfc2307(поддержка UID/GID и ACL)                           
+
+ne Запуск службы Samba                                                                      
+ce systemctl enable --now samba
+
+ne Копирование конфигурации Kerberos                                                        
+ce cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+ct Samba создает шаблон krb5.conf при создании домена                                       
+
+hd Проверка                                                                                 
+
+ne Проверка статуса службы                                                                  
+ce systemctl status samba
+ct служба должна быть active (running)                                                      
+
+ne Просмотр информации о домене                                                             
+ce samba-tool domain info 127.0.0.1                                                         
+ct показывает общую информацию о домене                                                     
+
+ne Просмотр общих ресурсов                                                                  
+ce smbclient -L localhost -U administrator                                                  
+ct должны быть netlogon и sysvol                                                            
+
+ne Проверка DNS в /etc/resolv.conf                                                          
+ce cat /etc/resolv.conf                                                                     
+ct должен быть nameserver 127.0.0.1                                                         
+
+ne Проверка SRV-записи Kerberos                                                             
+ce host -t SRV _kerberos._udp.domain.sample.                                                  
+ct утилита host из пакета bind-utils                                                        
+
+ne Проверка SRV-записи LDAP                                                                 
+ce host -t SRV _ldap._tcp.domain.sample.                                                      
+ct проверяет доступность LDAP                                                               
+
+ne Проверка A-записи хоста                                                                  
+ce host -t A dc.domain.sample.                                                                
+ct должен вернуть IP-адрес контроллера домена                                               
+
+ne Проверка Kerberos                                                                        
+ce kinit administrator@DOMAIN.SAMPLE                                                          
+ct имя домена в верхнем регистре; запрашивает пароль администратора 

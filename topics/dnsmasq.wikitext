@@ -6,7 +6,6 @@
 <syntaxhighlight lang="bash">
 apt-get install dnsmasq
 
- 
 </syntaxhighlight>
 
 ==== Включение автозапуска ====
@@ -14,7 +13,6 @@ apt-get install dnsmasq
 <syntaxhighlight lang="bash">
 systemctl enable --now dnsmasq
 
- 
 </syntaxhighlight>
 
 === Настройка DNS в dnsmasq ===
@@ -44,8 +42,7 @@ address=/hq-cli.domain.example/192.168.5.3
 ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.example
 
 address=/br-srv.domain.example/192.168.5.2 
- 
- 
+
 </syntaxhighlight>
 
 <blockquote>
@@ -58,7 +55,6 @@ listen-address(IP-адреса для приёма DNS-запросов); domain
 
 <syntaxhighlight lang="bash">
 address=/host.example.com/192.168.0.10
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -69,7 +65,6 @@ address=/host.example.com/192.168.0.10
 
 <syntaxhighlight lang="bash">
 address=/host.example.com/2001:db8::1
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -80,7 +75,6 @@ address=/host.example.com/2001:db8::1
 
 <syntaxhighlight lang="bash">
 cname=alias.example.com,host.example.com
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -91,7 +85,6 @@ cname=alias.example.com,host.example.com
 
 <syntaxhighlight lang="bash">
 mx-host=example.com,mail.example.com,10
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -102,7 +95,6 @@ mx-host=example.com,mail.example.com,10
 
 <syntaxhighlight lang="bash">
 txt-record=example.com,"v=spf1 mx a -all"
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -113,7 +105,6 @@ txt-record=example.com,"v=spf1 mx a -all"
 
 <syntaxhighlight lang="bash">
 srv-host=_service._tcp.example.com,target.example.com,443,10,10
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -124,7 +115,6 @@ srv-host=_service._tcp.example.com,target.example.com,443,10,10
 
 <syntaxhighlight lang="bash">
 ptr-record=10.0.168.192.in-addr.arpa,host.example.com
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -137,14 +127,17 @@ ptr-record=10.0.168.192.in-addr.arpa,host.example.com
 
 <syntaxhighlight lang="bash">
 interface=ens3
-  bind-interfaces
-  no-resolv
-  dhcp-range=192.168.0.50,192.168.0.150,12h
+bind-interfaces
+no-resolv
+dhcp-range=192.168.0.50,192.168.0.150,12h
 
-  dhcp-option=3,192.168.0.1
-  dhcp-option=6,192.168.0.1
-  dhcp-option=15,no.do
- 
+dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
+dhcp-host=myhost,ignore 
+dhcp-host=192.168.1.50,ignore
+
+dhcp-option=3,192.168.0.1
+dhcp-option=6,192.168.0.1
+dhcp-option=15,no.do
 </syntaxhighlight>
 
 <blockquote>
@@ -155,12 +148,11 @@ interface(интерфейс для работы DHCP); bind-interfaces(рабо
 
 <syntaxhighlight lang="bash">
 user=nobody
-  group=nogroup
- 
+group=nogroup
 </syntaxhighlight>
 
 <blockquote>
-user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf)
+user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf); dhcp-host(исключить адрес из выдачи)
 </blockquote>
 
 ==== Применение конфигурации ====
@@ -168,7 +160,6 @@ user(пользователь процесса); group(группа процес
 <syntaxhighlight lang="bash">
 systemctl restart dnsmasq
 
- 
 </syntaxhighlight>
 
 === Проверка dnsmasq ===

@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 sudo apt-get install openssh-server
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,8 +15,7 @@ openssh-server(SSH-сервер, включает openssh-common автомат�
 
 <syntaxhighlight lang="bash">
 sudo systemctl enable --now sshd                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -26,23 +24,20 @@ sudo systemctl enable --now sshd
 
 <syntaxhighlight lang="bash">
 systemctl status sshd
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка прослушиваемого порта ====
 
 <syntaxhighlight lang="bash">
 ss -tulpn | grep ssh                                                                     
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка конфигурации ====
 
 <syntaxhighlight lang="bash">
 sshd -t                                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -53,7 +48,6 @@ sshd -t
 
 <syntaxhighlight lang="bash">
 who                                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -64,7 +58,6 @@ who
 
 <syntaxhighlight lang="bash">
 journalctl -u sshd                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -77,23 +70,21 @@ journalctl -u sshd
 
 <syntaxhighlight lang="bash">
 /etc/openssh/sshd_config
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Настройка /etc/openssh/sshd_config ====
 
 <syntaxhighlight lang="bash">
 Port 22                                                                                  
-  PasswordAuthentication yes                                                                  
-  PermitRootLogin no                                                                          
-  AllowUsers sshuser adminuser                                                                
-  MaxAuthTries 3                                                                              
-  PubkeyAuthentication yes                                                                    
- 
- AuthorizedKeysFile .ssh/authorized_keys                                                     
-  Banner /etc/ssh/banner.txt                                                                  
- 
+PasswordAuthentication yes                                                                  
+PermitRootLogin no                                                                          
+AllowUsers sshuser adminuser                                                                
+MaxAuthTries 3                                                                              
+PubkeyAuthentication yes                                                                    
+
+AuthorizedKeysFile .ssh/authorized_keys                                                     
+Banner /etc/ssh/banner.txt                                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -104,10 +95,9 @@ Port(обычно 22, изменение необязательно); PasswordAu
 
 <syntaxhighlight lang="bash">
 ************************************
-  - Authorized Access Only          *                                                         
-  - All activity is monitored        *                                                        
-  ---
- 
+- Authorized Access Only          *                                                         
+- All activity is monitored        *                                                        
+---
 </syntaxhighlight>
 
 <blockquote>
@@ -118,8 +108,7 @@ Port(обычно 22, изменение необязательно); PasswordAu
 
 <syntaxhighlight lang="bash">
 sudo systemctl restart sshd                                                              
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка аутентификации по ключам ===
@@ -128,7 +117,6 @@ sudo systemctl restart sshd
 
 <syntaxhighlight lang="bash">
 ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -139,7 +127,6 @@ ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
 
 <syntaxhighlight lang="bash">
 ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -152,11 +139,10 @@ ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
 
 <syntaxhighlight lang="bash">
 Host srv-hq  
-      HostName 192.168.11.67                                                                  
-      User sshuser                                                                            
-      IdentityFile ~/.ssh/srv_ssh_key
-      Port 22                                                                                 
- 
+HostName 192.168.11.67                                                                  
+User sshuser                                                                            
+IdentityFile ~/.ssh/srv_ssh_key
+Port 22                                                                                 
 </syntaxhighlight>
 
 <blockquote>
@@ -167,15 +153,13 @@ Host srv-hq
 
 <syntaxhighlight lang="bash">
 chmod 600 ~/.ssh/config                                                                  
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Подключение к серверу по псевдониму ====
 
 <syntaxhighlight lang="bash">
 ssh srv-hq                                                                               
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -186,7 +170,6 @@ ssh srv-hq
 
 <syntaxhighlight lang="bash">
 ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -197,7 +180,6 @@ ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67
 
 <syntaxhighlight lang="bash">
 ssh sshuser@192.168.11.67                                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -210,7 +192,6 @@ ssh sshuser@192.168.11.67
 
 <syntaxhighlight lang="bash">
 useradd -u 2026 -m -g users -G wheel sshuser
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -221,15 +202,13 @@ useradd -u 2026 -m -g users -G wheel sshuser
 
 <syntaxhighlight lang="bash">
 passwd sshuser
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Настройка sudo без пароля ====
 
 <syntaxhighlight lang="bash">
 visudo                                                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -240,7 +219,6 @@ visudo
 
 <syntaxhighlight lang="bash">
 sudo whoami                                                                              
- 
 </syntaxhighlight>
 
 <blockquote>

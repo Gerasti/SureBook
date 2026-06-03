@@ -1,43 +1,43 @@
 hd Шифрование раздела с LUKS
-  ne Создание ключа шифрования
-  ce dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
-  ct Генерация случайного ключа размером 4 КБ                                                 
-                                                                                              
-  ne Шифрование раздела с указанным ключом                                                    
-  ce cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
-  ct Инициализация LUKS-шифрования на разделе                                                 
-                                                                                              
-  ne Открытие зашифрованного раздела                                                          
-  ce cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
-  ct Открывает зашифрованный раздел как /dev/mapper/data_crypt                                
-                                                                                              
-  ne Форматирование раздела                                                                   
-  ce mkfs.ext4 /dev/mapper/data_crypt                                                         
-                                                                                              
-  hd Автоматическая разблокировка при загрузке                                                
-  ne Настройка автоматической разблокировки в /etc/crypttab                                   
-  ce data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
-  ct Формат: имя устройство ключ тип                                                          
-                                                                                              
-  ne Проверка синтаксиса                                                                      
-  ce systemctl daemon-reexec                                                                  
-  systemctl restart systemd-cryptsetup@data_crypt                                             
-                                                                                              
-  hd Монтирование раздела                                                                     
-  ne Настройка автомонтирования в /etc/fstab                                                  
-  ce /dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
-  ct Формат: устройство точка_монтирования файловая_система опции dump fsck                   
-                                                                                              
-  hd Защита ключа шифрования                                                                  
-  ne Установка прав доступа на ключ                                                           
-  ce chmod 600 /root/ext4.key                                                                 
-  chown root:root /root/ext4.key                                                              
-  ct Только root может читать и записывать ключ                                               
-                                                                                              
-  hd Применение настроек                                                                      
-  ne Перезагрузка системы                                                                     
-  ce reboot                                                                                   
-                                                                                              
-  ne Проверка монтирования                                                                    
-  ce df -h                                                                                    
-  ct Проверка, что зашифрованный раздел смонтирован
+ne Создание ключа шифрования
+ce dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
+ct Генерация случайного ключа размером 4 КБ                                                 
+
+ne Шифрование раздела с указанным ключом                                                    
+ce cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
+ct Инициализация LUKS-шифрования на разделе                                                 
+
+ne Открытие зашифрованного раздела                                                          
+ce cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
+ct Открывает зашифрованный раздел как /dev/mapper/data_crypt                                
+
+ne Форматирование раздела                                                                   
+ce mkfs.ext4 /dev/mapper/data_crypt                                                         
+
+hd Автоматическая разблокировка при загрузке                                                
+ne Настройка автоматической разблокировки в /etc/crypttab                                   
+ce data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
+ct Формат: имя устройство ключ тип                                                          
+
+ne Проверка синтаксиса                                                                      
+ce systemctl daemon-reexec                                                                  
+systemctl restart systemd-cryptsetup@data_crypt                                             
+
+hd Монтирование раздела                                                                     
+ne Настройка автомонтирования в /etc/fstab                                                  
+ce /dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
+ct Формат: устройство точка_монтирования файловая_система опции dump fsck                   
+
+hd Защита ключа шифрования                                                                  
+ne Установка прав доступа на ключ                                                           
+ce chmod 600 /root/ext4.key                                                                 
+chown root:root /root/ext4.key                                                              
+ct Только root может читать и записывать ключ                                               
+
+hd Применение настроек                                                                      
+ne Перезагрузка системы                                                                     
+ce reboot                                                                                   
+
+ne Проверка монтирования                                                                    
+ce df -h                                                                                    
+ct Проверка, что зашифрованный раздел смонтирован

@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install rsyslog logrotate                                                        
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -22,17 +21,16 @@ rsyslog(сбор и пересылка логов); logrotate(ротация и 
 
 <syntaxhighlight lang="bash">
 module(load="imuxsock")                                                                  
-  module(load="imklog")                                                                       
-  module(load="imudp")                                                                        
-  input(type="imudp" port="514")                                                              
-  module(load="imtcp")                                                                        
-  input(type="imtcp" port="514")                                                              
-                                                                                              
-  $template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
-                  
-  if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
-  & stop          
- 
+module(load="imklog")                                                                       
+module(load="imudp")                                                                        
+input(type="imudp" port="514")                                                              
+module(load="imtcp")                                                                        
+input(type="imtcp" port="514")                                                              
+
+$template RemoteLogs, "/opt/%HOSTNAME%/%PROGRAMNAME%.log"                                   
+
+if ($fromhost-ip != "127.0.0.1" and $syslogseverity <= 4) then ?RemoteLogs                  
+& stop          
 </syntaxhighlight>
 
 <blockquote>
@@ -43,9 +41,8 @@ imuxsock(локальные сообщения); imklog(логи ядра); imud
 
 <syntaxhighlight lang="bash">
 mkdir -p /opt/client1
-  mkdir -p /opt/client2                                                                       
-  mkdir -p /opt/client3                                                                       
- 
+mkdir -p /opt/client2                                                                       
+mkdir -p /opt/client3                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -56,8 +53,7 @@ mkdir -p /opt/client1
 
 <syntaxhighlight lang="bash">
 chown -R root:root /opt                                                                  
-  chmod -R 755 /opt                                                                           
- 
+chmod -R 755 /opt                                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -68,8 +64,7 @@ chown -R root:root /opt
 
 <syntaxhighlight lang="bash">
 systemctl restart rsyslog                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка клиента ===
@@ -78,13 +73,12 @@ systemctl restart rsyslog
 
 <syntaxhighlight lang="bash">
 *.warning action(type="omfwd"                                                            
-      target="<HQ-SRV_IP>"                                                                    
-      port="514"                                                                              
-      protocol="tcp"                                                                          
-      action.resumeRetryCount="-1"                                                            
-      queue.type="linkedList"                                                                 
-      queue.size="10000")                                                                     
- 
+target="<HQ-SRV_IP>"                                                                    
+port="514"                                                                              
+protocol="tcp"                                                                          
+action.resumeRetryCount="-1"                                                            
+queue.type="linkedList"                                                                 
+queue.size="10000")                                                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -95,8 +89,7 @@ systemctl restart rsyslog
 
 <syntaxhighlight lang="bash">
 systemctl restart rsyslog
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -105,7 +98,6 @@ systemctl restart rsyslog
 
 <syntaxhighlight lang="bash">
 ss -tulpn | grep 514                                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -116,7 +108,6 @@ ss -tulpn | grep 514
 
 <syntaxhighlight lang="bash">
 ls -la /opt/                                                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -127,7 +118,6 @@ ls -la /opt/
 
 <syntaxhighlight lang="bash">
 ls -la /opt/client1/                                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -138,7 +128,6 @@ ls -la /opt/client1/
 
 <syntaxhighlight lang="bash">
 logger -p user.warning "Test message from client"                                        
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -149,7 +138,6 @@ logger -p user.warning "Test message from client"
 
 <syntaxhighlight lang="bash">
 tail -f /opt/client1/*.log                                                               
- 
 </syntaxhighlight>
 
 <blockquote>

@@ -5,7 +5,6 @@
 
 ```CODE
 mkfs.ext4 /dev/sda                                                                                    
- 
 ```
 
 > создает файловую систему ext4 на устройстве /dev/sda
@@ -16,7 +15,6 @@ mkfs.ext4 /dev/sda
 
 ```CODE
 mkdir -p /opt/data                                                                                    
- 
 ```
 
 > -p(создание родительских директорий)
@@ -27,7 +25,6 @@ mkdir -p /opt/data
 
 ```CODE
 mount /dev/sda /opt/data                                                                              
- 
 ```
 
 > временное монтирование до перезагрузки
@@ -38,7 +35,6 @@ mount /dev/sda /opt/data
 
 ```CODE
 /dev/sda /opt/data ext4 defaults 0 2                                                                  
- 
 ```
 
 > /dev/sda(устройство); /opt/data(точка монтирования); ext4(тип ФС); defaults(опции монтирования); 0(резервное копирование dump); 2(порядок проверки fsck)
@@ -70,7 +66,6 @@ mount -a
 
 ```CODE
 df -h                                                                                                 
- 
 ```
 
 > -h(человекочитаемый формат)

@@ -1,186 +1,194 @@
 
-### Установка <!-- HEAD -->
+### Основные уровни RAID <!-- HEAD -->
+
+#### Сравнение уровней RAID <!-- NAME -->
+
+> RAID 0(striping, высокая скорость, нет отказоустойчивости, минимум 2 диска, объём = сумма дисков); RAID 1(mirroring, отказ 1 диска, минимум 2 диска, объём = размер 1 диска); RAID 5(striping+parity, отказ 1 диска, минимум 3 диска, объём = (N-1)×диск); RAID 6(double parity, отказ 2 диска, минимум 4 диска, объём = (N-2)×диск); RAID 10(mirror+stripe, высокая отказоустойчивость, минимум 4 диска, объём = 50%)
+
+> Программный RAID(реализован на уровне ОС, использует CPU) vs Аппаратный RAID(реализован контроллером, имеет собственный процессор)
+
+### Установка mdadm <!-- HEAD -->
 
 #### Установка утилиты mdadm <!-- NAME -->
 
 ```CODE
 apt-get install -y mdadm                                                                 
- 
 ```
 
-> mdadm(утилита для управления программными RAID)
+> mdadm(Multiple Device Administration, утилита для управления программными RAID-массивами в Linux); -y(автоматическое подтверждение установки)
 
-> Программный RAID(реализован на уровне ОС) vs Аппаратный RAID(реализован контроллером)
-
-> Программный RAID использует CPU, аппаратный имеет собственный процессор
+### Создание RAID массивов <!-- HEAD -->
 
 #### Создание RAID 0 массива <!-- NAME -->
 
 ```CODE
-mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc
- 
+mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc           
 ```
 
-> RAID 0(striping, чередование) - данные распределяются по дискам
-
-> Преимущества: высокая скорость чтения/записи, полное использование объёма
-
-> Недостатки: нет отказоустойчивости, при отказе одного диска теряются все данные
-
-> Минимум дисков: 2; Полезный объём: сумма всех дисков
+> --create(создать новый массив); --verbose(подробный вывод); /dev/md0(имя создаваемого RAID-устройства); --level(уровень RAID: {0, 1, 4, 5, 6, 10}); --raid-devices(количество активных дисков в массиве); /dev/sdb /dev/sdc(список физических дисков)
 
 #### Создание RAID 1 массива <!-- NAME -->
 
 ```CODE
-mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc           
- 
+mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+
 ```
-
-> RAID 1(mirroring, зеркалирование) - данные дублируются на все диски
-
-> Преимущества: высокая отказоустойчивость, быстрое чтение
-
-> Недостатки: половина объёма теряется, медленная запись
-
-> Минимум дисков: 2; Полезный объём: размер одного диска
-
-> Выдерживает отказ N-1 дисков
 
 #### Создание RAID 4 массива <!-- NAME -->
 
 ```CODE
-mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd  
- 
+mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
 ```
 
-> RAID 4(striping with dedicated parity) - выделенный диск для чётности
-
-> Преимущества: простая реализация
-
-> Недостатки: диск чётности - узкое место, устарел
-
-> Минимум дисков: 3; Полезный объём: (N-1) × размер диска
-
-> Редко используется, заменён на RAID 5
-
-> RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели, не поддерживаются mdadm
+> RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели и не поддерживаются mdadm
 
 #### Создание RAID 5 массива <!-- NAME -->
 
 ```CODE
 mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
- 
+
 ```
-
-> RAID 5(striping with parity) - данные и контрольные суммы распределены по дискам
-
-> Преимущества: баланс скорости и отказоустойчивости, экономия места
-
-> Недостатки: медленная запись из-за вычисления чётности, долгое восстановление
-
-> Минимум дисков: 3; Полезный объём: (N-1) × размер диска
-
-> Выдерживает отказ 1 диска
 
 #### Создание RAID 6 массива <!-- NAME -->
 
 ```CODE
-mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd  
-  /dev/sde                                                                                    
- 
+mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
 ```
-
-> RAID 6(striping with double parity) - двойная контрольная сумма
-
-> Преимущества: выдерживает отказ 2 дисков одновременно
-
-> Недостатки: ещё медленнее запись, больше потерь объёма
-
-> Минимум дисков: 4; Полезный объём: (N-2) × размер диска
-
-> Выдерживает отказ 2 дисков
 
 #### Создание RAID 10 массива <!-- NAME -->
 
 ```CODE
-mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd 
-  /dev/sde                                                                                    
- 
+mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
 ```
 
-> RAID 10(1+0, зеркалирование + чередование) - комбинация RAID 1 и RAID 0
+#### Создание массива с spare диском <!-- NAME -->
 
-> Преимущества: высокая скорость и отказоустойчивость
+```CODE
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb
+/dev/sdc /dev/sdd /dev/sde                                                                  
+```
 
-> Недостатки: половина объёма теряется, дорого
+> --spare-devices(количество резервных дисков); spare(горячий резерв) - диск автоматически заменит отказавший и начнёт процесс rebuild
 
-> Минимум дисков: 4; Полезный объём: 50% от суммы дисков
-
-> Выдерживает отказ нескольких дисков (не из одной зеркальной пары)
+### Настройка массива <!-- HEAD -->
 
 #### Создание файловой системы на массиве <!-- NAME -->
 
 ```CODE
 mkfs.ext4 /dev/md0                                                                       
- 
 ```
 
-> Форматирование массива {ext4, xfs, btrfs}
+> mkfs(make filesystem, создание файловой системы); форматы: {ext4, xfs, btrfs}
 
 #### Создание точки монтирования <!-- NAME -->
 
 ```CODE
 mkdir /mnt/raid                                                                          
-                                                                                              
- 
+
 ```
 
 #### Монтирование массива <!-- NAME -->
 
 ```CODE
 mount /dev/md0 /mnt/raid                                                                 
-                                                                                              
- 
+
 ```
 
-### Настройка <!-- HEAD -->
-
-#### В /etc/fstab добавить строку для автомонтирования <!-- NAME -->
+#### Добавление в /etc/fstab для автомонтирования <!-- NAME -->
 
 ```CODE
 /dev/md0   /mnt/raid   ext4   defaults   0 0                                             
- 
 ```
 
-> Автоматическое монтирование при загрузке
+> /dev/md0(устройство); /mnt/raid(точка монтирования); ext4(тип ФС); defaults(опции по умолчанию: rw,suid,dev,exec,auto,nouser,async); первый 0(dump, не создавать резервные копии); второй 0(fsck, не проверять ФС при загрузке)
 
-#### Сохранение конфигурации mdadm <!-- NAME -->
+### Настройка mdadm.conf <!-- HEAD -->
+
+#### Сохранение конфигурации массива <!-- NAME -->
 
 ```CODE
 mdadm --detail --scan >> /etc/mdadm.conf                                                 
- 
 ```
 
-> Сохраняет информацию о массиве для автосборки при загрузке
+> --detail(детальная информация о массиве); --scan(сканировать все массивы); >>(добавить в конец файла); создаёт строку ARRAY с UUID, уровнем и метаданными массива
 
-#### Добавление spare диска в массив <!-- NAME -->
+#### Пример строки ARRAY в mdadm.conf <!-- NAME -->
+
+```CODE
+ARRAY /dev/md0 metadata=1.2 name=hostname:0 UUID=12345678:abcdefgh:12345678:abcdefgh     
+```
+
+> ARRAY(определение массива); /dev/md0(имя устройства); metadata(версия метаданных: {0.90, 1.0, 1.1, 1.2}); name(имя массива hostname:номер); UUID(уникальный идентификатор массива)
+
+#### Добавление параметров устройств в mdadm.conf <!-- NAME -->
+
+```CODE
+DEVICE /dev/sdb /dev/sdc /dev/sdd /dev/sde
+```
+
+> DEVICE(список физических дисков для поиска массивов); можно использовать wildcards: /dev/sd*
+
+#### Настройка email-уведомлений в mdadm.conf <!-- NAME -->
+
+```CODE
+MAILADDR admin@example.com
+MAILFROM mdadm@server.local                                                                 
+```
+
+> MAILADDR(адрес для отправки уведомлений о проблемах с массивом); MAILFROM(адрес отправителя)
+
+#### Настройка программы мониторинга в mdadm.conf <!-- NAME -->
+
+```CODE
+PROGRAM /usr/local/bin/raid-notify.sh
+```
+
+> PROGRAM(скрипт, который будет выполнен при событии с массивом); получает параметры: событие и устройство
+
+#### Ручное редактирование mdadm.conf <!-- NAME -->
+
+```CODE
+nano /etc/mdadm.conf
+```
+
+> Файл можно редактировать вручную для тонкой настройки параметров
+
+#### Применение изменений из mdadm.conf <!-- NAME -->
+
+```CODE
+mdadm --assemble --scan                                                                  
+```
+
+> --assemble(собрать массивы); --scan(использовать конфигурацию из /etc/mdadm.conf)
+
+#### Обновление конфигурации после изменения массива <!-- NAME -->
+
+```CODE
+mdadm --detail --scan > /etc/mdadm.conf.new                                              
+mv /etc/mdadm.conf.new /etc/mdadm.conf                                                      
+```
+
+> Перезапись файла с актуальной конфигурацией всех массивов
+
+#### Резервное копирование mdadm.conf <!-- NAME -->
+
+```CODE
+cp /etc/mdadm.conf /etc/mdadm.conf.backup                                                
+```
+
+> Сохранение копии перед внесением изменений
+
+#### Добавление spare диска в существующий массив <!-- NAME -->
 
 ```CODE
 mdadm --add /dev/md0 /dev/sde                                                            
- 
 ```
 
-> spare(горячий резерв) - диск автоматически заменит отказавший
-
-#### Создание массива с spare диском <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb  
-  /dev/sdc /dev/sdd /dev/sde                                                                  
- 
-```
-
-> --spare-devices=1(количество резервных дисков)
+> --add(добавить диск в массив как горячий резерв)
 
 ### Управление массивом <!-- HEAD -->
 
@@ -188,80 +196,80 @@ mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /
 
 ```CODE
 mdadm --stop /dev/md0                                                                    
- 
 ```
 
-> Размонтировать перед остановкой
+> --stop(остановить массив); необходимо размонтировать перед остановкой
 
 #### Запуск массива <!-- NAME -->
 
 ```CODE
 mdadm --assemble /dev/md0 /dev/sdb /dev/sdc /dev/sdd                                     
-                                                                                              
- 
 ```
 
-#### Удаление диска из массива <!-- NAME -->
+> --assemble(собрать массив из указанных дисков)
+
+#### Автоматическая сборка всех массивов из mdadm.conf <!-- NAME -->
 
 ```CODE
-mdadm --remove /dev/md0 /dev/sdc                                                         
- 
+mdadm --assemble --scan
 ```
 
-> Диск должен быть помечен как failed
+> Собирает все массивы, описанные в /etc/mdadm.conf
 
 #### Пометка диска как отказавшего <!-- NAME -->
 
 ```CODE
 mdadm --fail /dev/md0 /dev/sdc                                                           
- 
 ```
 
-> Имитация отказа диска для тестирования
+> --fail(пометить диск как failed); для имитации отказа при тестировании
+
+#### Удаление диска из массива <!-- NAME -->
+
+```CODE
+mdadm --remove /dev/md0 /dev/sdc                                                         
+```
+
+> --remove(удалить диск из массива); диск должен быть помечен как failed
 
 #### Добавление нового диска взамен отказавшего <!-- NAME -->
 
 ```CODE
-mdadm --add /dev/md0 /dev/sde
- 
+mdadm --add /dev/md0 /dev/sde                                                            
 ```
 
-> Автоматически начнётся rebuild (восстановление)
+> Автоматически начнётся процесс rebuild (восстановление данных на новом диске)
 
 #### Увеличение количества дисков в массиве <!-- NAME -->
 
 ```CODE
 mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sde                                    
- 
 ```
 
-> Расширение массива с пересчётом данных
+> --grow(изменить параметры массива); расширение с пересчётом данных
 
 #### Изменение уровня RAID <!-- NAME -->
 
 ```CODE
 mdadm --grow /dev/md0 --level=6                                                          
- 
 ```
 
-> Преобразование RAID 5 в RAID 6 (требует время)
+> Преобразование массива (например RAID 5 в RAID 6), требует времени на пересчёт
 
-### Проверка <!-- HEAD -->
+### Проверка состояния <!-- HEAD -->
 
 #### Проверка состояния всех RAID массивов <!-- NAME -->
 
 ```CODE
 cat /proc/mdstat                                                                         
- 
 ```
 
-> Краткая информация: состояние, прогресс rebuild/resync
+> Краткая информация: состояние, прогресс rebuild/resync, активные/отказавшие диски
 
 #### Детальная информация о массиве <!-- NAME -->
 
 ```CODE
 mdadm --detail /dev/md0                                                                  
- 
 ```
 
 > Показывает уровень RAID, состояние дисков, размер, UUID
@@ -270,108 +278,96 @@ mdadm --detail /dev/md0
 
 ```CODE
 mdadm --examine /dev/sdb                                                                 
- 
 ```
 
-> Показывает метаданные RAID на конкретном диске
+> --examine(прочитать метаданные RAID на диске); показывает UUID массива, уровень RAID, роль диска
 
 #### Мониторинг состояния массива <!-- NAME -->
 
 ```CODE
-mdadm --monitor --scan --daemonise                                                       
- 
+mdadm --monitor --scan --daemonise
 ```
 
-> Запуск демона мониторинга для уведомлений об ошибках
+> --monitor(режим мониторинга); --daemonise(запустить как демон); отправляет уведомления об ошибках
 
 #### Проверка скорости rebuild <!-- NAME -->
 
 ```CODE
-cat /proc/sys/dev/raid/speed_limit_min                                                   
-  cat /proc/sys/dev/raid/speed_limit_max                                                      
- 
+cat /proc/sys/dev/raid/speed_limit_min
+cat /proc/sys/dev/raid/speed_limit_max                                                      
 ```
 
-> Показывает минимальную и максимальную скорость восстановления
+> Показывает минимальную и максимальную скорость восстановления в KB/s
 
 #### Изменение скорости rebuild <!-- NAME -->
 
 ```CODE
 echo 50000 > /proc/sys/dev/raid/speed_limit_min                                          
-  echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
- 
+echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
 ```
 
-> Значения в KB/s, влияет на производительность системы
+> Значения в KB/s; низкая скорость снижает нагрузку, высокая ускоряет восстановление
 
 #### Проверка целостности массива <!-- NAME -->
 
 ```CODE
 echo check > /sys/block/md0/md/sync_action                                               
- 
 ```
 
-> Запуск проверки без исправления ошибок
+> Запуск проверки целостности без исправления ошибок
 
 #### Восстановление с исправлением ошибок <!-- NAME -->
 
 ```CODE
 echo repair > /sys/block/md0/md/sync_action                                              
- 
 ```
 
-> Проверка и исправление несоответствий
+> Проверка и автоматическое исправление несоответствий в данных
 
 #### Просмотр прогресса проверки <!-- NAME -->
 
 ```CODE
 cat /proc/mdstat                                                                         
- 
 ```
 
-> Показывает прогресс операции check/repair
+> Показывает прогресс операций check/repair/rebuild в процентах
 
-### Удаление <!-- HEAD -->
+### Удаление массива <!-- HEAD -->
 
 #### Размонтирование массива <!-- NAME -->
 
 ```CODE
 umount /mnt/raid                                                                         
-                                                                                              
- 
+
 ```
 
 #### Остановка массива <!-- NAME -->
 
 ```CODE
 mdadm --stop /dev/md0                                                                    
-                                                                                              
- 
+
 ```
 
 #### Удаление метаданных RAID с дисков <!-- NAME -->
 
 ```CODE
 mdadm --zero-superblock /dev/sdb /dev/sdc /dev/sdd                                       
- 
 ```
 
-> Полное удаление информации о RAID с дисков
+> --zero-superblock(обнулить суперблок RAID); полное удаление информации о RAID с дисков
 
 #### Удаление записи из /etc/fstab <!-- NAME -->
 
 ```CODE
 sed -i '/\/dev\/md0/d' /etc/fstab                                                        
- 
 ```
 
-> Удаление строки автомонтирования
+> sed -i(редактировать файл на месте); /d(удалить строку)
 
 #### Удаление записи из /etc/mdadm.conf <!-- NAME -->
 
 ```CODE
 sed -i '/\/dev\/md0/d' /etc/mdadm.conf                                                   
- 
 ```
 
-> Удаление конфигурации массива
+> Удаление конфигурации массива из файла

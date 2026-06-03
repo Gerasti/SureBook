@@ -5,43 +5,38 @@
 
 ```CODE
 apt-get update && apt-get install -y postgresql15-server otrs otrs-apache2               
-                                                                                              
- 
+
 ```
 
 #### Запуск Apache <!-- NAME -->
 
 ```CODE
 systemctl enable --now httpd2                                                            
-                                                                                              
- 
+
 ```
 
 #### Создание системных баз данных PostgreSQL <!-- NAME -->
 
 ```CODE
 /etc/init.d/postgresql initdb                                                            
-                                                                                              
- 
+
 ```
 
 #### Запуск PostgreSQL <!-- NAME -->
 
 ```CODE
 systemctl enable --now postgresql                                                        
-                                                                                              
- 
+
 ```
 
 #### Создание пользователя и базы данных для OTRS <!-- NAME -->
 
 ```CODE
 psql -U postgres                                                                         
-  create database otrs;                                                                       
-  create user otrs with encrypted password 'P@ssw0rd';                                        
-  grant all privileges on database otrs to otrs;                                              
-  alter database otrs owner to otrs;                                                          
- 
+create database otrs;                                                                       
+create user otrs with encrypted password 'P@ssw0rd';                                        
+grant all privileges on database otrs to otrs;                                              
+alter database otrs owner to otrs;                                                          
 ```
 
 > P@ssw0rd(пароль для пользователя otrs)
@@ -52,18 +47,16 @@ psql -U postgres
 
 ```CODE
 apt-get install -y apache2-httpd-prefork                                                 
-  a2enextra httpd-addon.d                                                                     
-  echo "httpd-addon.d=yes" >> /etc/httpd2/conf/extra-start.d/999-otrs.conf                    
-                                                                                              
- 
+a2enextra httpd-addon.d                                                                     
+echo "httpd-addon.d=yes" >> /etc/httpd2/conf/extra-start.d/999-otrs.conf                    
+
 ```
 
 #### Перезагрузка Apache <!-- NAME -->
 
 ```CODE
 systemctl restart httpd2                                                                 
-                                                                                              
- 
+
 ```
 
 #### Веб-установщик <!-- NAME -->
@@ -85,16 +78,14 @@ systemctl restart httpd2
 
 ```CODE
 apt-get install -y postgresql15-perl perl-DBD-Pg                                         
-                                                                                              
- 
+
 ```
 
 #### Запуск OTRS <!-- NAME -->
 
 ```CODE
 rm /var/www/webapps/otrs/var/cron/otrs_daemin dist                                       
-  /var/www/webapps/otrs/bin/Cron.sh start otrs                                                
- 
+/var/www/webapps/otrs/bin/Cron.sh start otrs                                                
 ```
 
 > Устранение ошибок

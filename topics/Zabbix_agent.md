@@ -5,8 +5,7 @@
 
 ```CODE
 apt-get install zabbix-agent                                                             
-   
- 
+
 ```
 
 ### Настройка <!-- HEAD -->
@@ -15,9 +14,8 @@ apt-get install zabbix-agent
 
 ```CODE
 Server=IP_ZABBIX_SERVER
-  ServerActive=IP_ZABBIX_SERVER
-  Hostname=HOST_CLIENT
- 
+ServerActive=IP_ZABBIX_SERVER
+Hostname=HOST_CLIENT
 ```
 
 > Server(IP или hostname сервера); ServerActive(IP для активных проверок); Hostname(имя хоста как в веб-интерфейсе)
@@ -26,9 +24,8 @@ Server=IP_ZABBIX_SERVER
 
 ```CODE
 systemctl restart zabbix-agentd
-  systemctl enable zabbix-agentd                                                              
-                                                                                              
- 
+systemctl enable zabbix-agentd                                                              
+
 ```
 
 ### Добавление хоста в веб-интерфейсе <!-- HEAD -->

@@ -5,7 +5,6 @@
 
 ```CODE
 dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
- 
 ```
 
 > Генерация случайного ключа размером 4 КБ
@@ -14,7 +13,6 @@ dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4
 
 ```CODE
 cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
- 
 ```
 
 > Инициализация LUKS-шифрования на разделе
@@ -23,7 +21,6 @@ cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key
 
 ```CODE
 cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
- 
 ```
 
 > Открывает зашифрованный раздел как /dev/mapper/data_crypt
@@ -32,8 +29,7 @@ cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.k
 
 ```CODE
 mkfs.ext4 /dev/mapper/data_crypt                                                         
-                                                                                              
- 
+
 ```
 
 ### Автоматическая разблокировка при загрузке <!-- HEAD -->
@@ -42,7 +38,6 @@ mkfs.ext4 /dev/mapper/data_crypt
 
 ```CODE
 data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
- 
 ```
 
 > Формат: имя устройство ключ тип
@@ -51,9 +46,8 @@ data_crypt /dev/data_striped/lv_data /root/ext4.key luks
 
 ```CODE
 systemctl daemon-reexec                                                                  
-  systemctl restart systemd-cryptsetup@data_crypt                                             
-                                                                                              
- 
+systemctl restart systemd-cryptsetup@data_crypt                                             
+
 ```
 
 ### Монтирование раздела <!-- HEAD -->
@@ -62,7 +56,6 @@ systemctl daemon-reexec
 
 ```CODE
 /dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
- 
 ```
 
 > Формат: устройство точка_монтирования файловая_система опции dump fsck
@@ -73,8 +66,7 @@ systemctl daemon-reexec
 
 ```CODE
 chmod 600 /root/ext4.key                                                                 
-  chown root:root /root/ext4.key                                                              
- 
+chown root:root /root/ext4.key                                                              
 ```
 
 > Только root может читать и записывать ключ
@@ -85,15 +77,13 @@ chmod 600 /root/ext4.key
 
 ```CODE
 reboot                                                                                   
-                                                                                              
- 
+
 ```
 
 #### Проверка монтирования <!-- NAME -->
 
 ```CODE
 df -h                                                                                    
- 
 ```
 
 > Проверка, что зашифрованный раздел смонтирован

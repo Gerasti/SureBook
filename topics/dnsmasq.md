@@ -6,7 +6,6 @@
 ```CODE
 apt-get install dnsmasq
 
- 
 ```
 
 #### Включение автозапуска <!-- NAME -->
@@ -14,7 +13,6 @@ apt-get install dnsmasq
 ```CODE
 systemctl enable --now dnsmasq
 
- 
 ```
 
 ### Настройка DNS в dnsmasq <!-- HEAD -->
@@ -44,8 +42,7 @@ address=/hq-cli.domain.example/192.168.5.3
 ptr-record=3.5.168.192.in-addr.arpa,hq-cli.domain.example
 
 address=/br-srv.domain.example/192.168.5.2 
- 
- 
+
 ```
 
 > listen-address(IP-адреса для приёма DNS-запросов); domain(локальный домен сети); local(запрет пересылки локальной зоны во внешний DNS); cache-size(размер DNS-кэша); server(внешний DNS-сервер для пересылки); expand-hosts(использовать /etc/hosts); log-queries(логирование DNS-запросов); log-facility(файл логов)
@@ -56,7 +53,6 @@ address=/br-srv.domain.example/192.168.5.2
 
 ```CODE
 address=/host.example.com/192.168.0.10
- 
 ```
 
 > Соответствие доменного имени IPv4-адресу
@@ -65,7 +61,6 @@ address=/host.example.com/192.168.0.10
 
 ```CODE
 address=/host.example.com/2001:db8::1
- 
 ```
 
 > Соответствие доменного имени IPv6-адресу
@@ -74,7 +69,6 @@ address=/host.example.com/2001:db8::1
 
 ```CODE
 cname=alias.example.com,host.example.com
- 
 ```
 
 > Псевдоним для существующего доменного имени
@@ -83,7 +77,6 @@ cname=alias.example.com,host.example.com
 
 ```CODE
 mx-host=example.com,mail.example.com,10
- 
 ```
 
 > Почтовый сервер для домена, цифра указывает приоритет
@@ -92,7 +85,6 @@ mx-host=example.com,mail.example.com,10
 
 ```CODE
 txt-record=example.com,"v=spf1 mx a -all"
- 
 ```
 
 > Текстовые записи для SPF, DMARC, верификации
@@ -101,7 +93,6 @@ txt-record=example.com,"v=spf1 mx a -all"
 
 ```CODE
 srv-host=_service._tcp.example.com,target.example.com,443,10,10
- 
 ```
 
 > Указание сервиса, порта и приоритета
@@ -110,7 +101,6 @@ srv-host=_service._tcp.example.com,target.example.com,443,10,10
 
 ```CODE
 ptr-record=10.0.168.192.in-addr.arpa,host.example.com
- 
 ```
 
 > Обратное преобразование IP-адреса в доменное имя
@@ -121,16 +111,17 @@ ptr-record=10.0.168.192.in-addr.arpa,host.example.com
 
 ```CODE
 interface=ens3
-  bind-interfaces
-  no-resolv
-  dhcp-range=192.168.0.50,192.168.0.150,12h
-  dhcp-host=ignored,192.168.1.50,ignore
-  dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
+bind-interfaces
+no-resolv
+dhcp-range=192.168.0.50,192.168.0.150,12h
 
-  dhcp-option=3,192.168.0.1
-  dhcp-option=6,192.168.0.1
-  dhcp-option=15,no.do
- 
+dhcp-host=aa:bb:cc:dd:ee:ff,192.168.1.51
+dhcp-host=myhost,ignore 
+dhcp-host=192.168.1.50,ignore
+
+dhcp-option=3,192.168.0.1
+dhcp-option=6,192.168.0.1
+dhcp-option=15,no.do
 ```
 
 > interface(интерфейс для работы DHCP); bind-interfaces(работать только на указанном интерфейсе); dhcp-range(диапазон IP-адресов и время аренды); dhcp-option=3(шлюз по умолчанию); dhcp-option=6(DNS-сервер); dhcp-option=15(доменное имя сети)
@@ -139,8 +130,7 @@ interface=ens3
 
 ```CODE
 user=nobody
-  group=nogroup
- 
+group=nogroup
 ```
 
 > user(пользователь процесса); group(группа процесса); except-interface(исключить интерфейс из работы dnsmasq); no-resolv(запрещает использовать /etc/resolv.conf); dhcp-host(исключить адрес из выдачи)
@@ -150,7 +140,6 @@ user=nobody
 ```CODE
 systemctl restart dnsmasq
 
- 
 ```
 
 ### Проверка dnsmasq <!-- HEAD -->

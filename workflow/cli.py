@@ -8,7 +8,7 @@ from repositories import ConfigRepository, TopicRepository, InputRepository, Lis
 from commands import (
     ShowCommand, AddCommand, DeleteCommand, SearchCommand, RenameCommand,
     SaveCommand, SettingsCommand, LinkCommand, EditorCommand, TableCommand,
-    UnsaveCommand, CleanupCommand, PostCommand
+    UnsaveCommand, CleanupCommand, PostCommand, UniformatCommand
 )
 from fileutils import paths_to_list, diff_lists
 
@@ -69,6 +69,8 @@ Commands:
 
   cleanup               Remove duplicate topics from TOML
   cleanup force         Remove orphaned files not in current topics
+  uniformat [topic]     Remove leading spaces from .unikey files
+  unifmt [topic]        Alias for uniformat
   sort                  Sort alphabetically
   count                 Show statistics
   compare               Compare input vs lists
@@ -222,6 +224,7 @@ def main():
     table_cmd = TableCommand(topic_repo, config_repo)
     unsave_cmd = UnsaveCommand(topic_repo)
     cleanup_cmd = CleanupCommand(toml_path)
+    uniformat_cmd = UniformatCommand(toml_path)
 
     # Handle input/list path overrides first
     if command == "input":
@@ -499,6 +502,9 @@ Examples:
 
         elif command == "cleanup":
             return cleanup_cmd.execute(args, flags)
+
+        elif command in ["uniformat", "unifmt"]:
+            return uniformat_cmd.execute(args, flags)
 
         else:
             print(f"Unknown command: {command}")

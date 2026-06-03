@@ -5,15 +5,13 @@
 
 ```CODE
 apt-get update && apt-get install -y freeradius freeradius-utils                         
- 
 ```
 
 #### Запуск службы <!-- NAME -->
 
 ```CODE
 systemctl enable --now radiusd                                                           
-                                                                                              
- 
+
 ```
 
 ### Настройка RADIUS сервера <!-- HEAD -->
@@ -22,11 +20,10 @@ systemctl enable --now radiusd
 
 ```CODE
 client ALL {                                                                             
-    ipaddr = 0.0.0.0
-    netmask = 0                                                                               
-    secret = P@ssw0rd                                                                         
-  }                                                                                           
- 
+ipaddr = 0.0.0.0
+netmask = 0                                                                               
+secret = P@ssw0rd                                                                         
+}                                                                                           
 ```
 
 > ipaddr(IP клиента); netmask(маска сети); secret(общий секрет)
@@ -35,9 +32,8 @@ client ALL {
 
 ```CODE
 netuser Cleartext-Password := "P@ssw0rd"                                                 
-          Service-Type = Administrative-User,                                                 
-          Cisco-AVPair = "shell:roles=admin"                                                  
- 
+Service-Type = Administrative-User,                                                 
+Cisco-AVPair = "shell:roles=admin"                                                  
 ```
 
 > Cleartext-Password(пароль пользователя); Service-Type(тип доступа); Cisco-AVPair(роль для Cisco)
@@ -46,8 +42,7 @@ netuser Cleartext-Password := "P@ssw0rd"
 
 ```CODE
 systemctl restart radiusd
-                                                                                              
- 
+
 ```
 
 ### Проверка RADIUS сервера <!-- HEAD -->
@@ -56,7 +51,6 @@ systemctl restart radiusd
 
 ```CODE
 systemctl status radiusd                                                                 
- 
 ```
 
 > служба должна быть active (running)
@@ -65,7 +59,6 @@ systemctl status radiusd
 
 ```CODE
 radtest netuser P@ssw0rd localhost 0 P@ssw0rd                                            
- 
 ```
 
 > должен вернуть Access-Accept
@@ -76,14 +69,12 @@ radtest netuser P@ssw0rd localhost 0 P@ssw0rd
 
 ```CODE
 apt-get update && apt-get install -y pam_radius                                          
- 
 ```
 
 #### В /etc/pam_radius_auth.conf <!-- NAME -->
 
 ```CODE
 <ip сервера> P@ssw0rd 3                                                                  
- 
 ```
 
 > формат: IP секрет таймаут
@@ -92,7 +83,6 @@ apt-get update && apt-get install -y pam_radius
 
 ```CODE
 auth  sufficient  pam_radius_auth.so                                                     
- 
 ```
 
 > sufficient(достаточно для авторизации); pam_radius_auth.so(модуль RADIUS)
@@ -101,7 +91,6 @@ auth  sufficient  pam_radius_auth.so
 
 ```CODE
 useradd netuser                                                                          
- 
 ```
 
 > пользователь должен совпадать с настроенным на сервере
@@ -112,7 +101,6 @@ useradd netuser
 
 ```CODE
 ssh netuser@<ip клиента>                                                                 
- 
 ```
 
 > вход должен пройти с паролем P@ssw0rd через RADIUS-сервер

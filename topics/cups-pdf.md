@@ -5,8 +5,7 @@
 
 ```CODE
 apt-get install cups cups-pdf                                                            
-   
- 
+
 ```
 
 ### Настройка CUPS-сервера <!-- HEAD -->
@@ -15,17 +14,16 @@ apt-get install cups cups-pdf
 
 ```CODE
 Listen *:631                                                                             
-                                                                                              
-  <Location />                                                                                
-  Order allow,deny                                                                            
-  Allow all                                                                                   
-  </Location>                                                                                 
-   
-  <Location /admin>                                                                           
-  Order allow,deny
-  Allow all                                                                                   
-  </Location>     
- 
+
+<Location />                                                                                
+Order allow,deny                                                                            
+Allow all                                                                                   
+</Location>                                                                                 
+
+<Location /admin>                                                                           
+Order allow,deny
+Allow all                                                                                   
+</Location>     
 ```
 
 > Listen *:631(слушать порт 631 на всех интерфейсах); <Location />(доступ к основной странице); <Location /admin>(доступ к панели администратора); Allow all(разрешить всем клиентам)
@@ -36,16 +34,14 @@ Listen *:631
 
 ```CODE
 systemctl enable cups                                                                    
-  systemctl restart cups                                                                      
-                                                                                              
- 
+systemctl restart cups                                                                      
+
 ```
 
 #### Проверка доступных принтеров <!-- NAME -->
 
 ```CODE
 lpstat -p                                                                                
- 
 ```
 
 > Показывает список принтеров и их статус
@@ -56,15 +52,13 @@ lpstat -p
 
 ```CODE
 apt-get install cups                                                                     
-                  
- 
+
 ```
 
 #### Подключение сетевого принтера <!-- NAME -->
 
 ```CODE
 lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
- 
 ```
 
 > -p(имя принтера); -E(включить принтер); -v(URI принтера); -m everywhere(автоматический драйвер)
@@ -75,15 +69,13 @@ lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
 
 ```CODE
 lpoptions -d PDF                                                                         
-                                                                                              
- 
+
 ```
 
 #### Проверка подключения <!-- NAME -->
 
 ```CODE
 lpstat -t                                                                                
- 
 ```
 
 > Показывает список принтеров, очередь печати, принтер по умолчанию, состояние службы
@@ -94,7 +86,6 @@ lpstat -t
 
 ```CODE
 echo "Тест печати" | lp -t "Example"                                                     
- 
 ```
 
 > lp(команда печати); -t(название задания)
@@ -103,7 +94,6 @@ echo "Тест печати" | lp -t "Example"
 
 ```CODE
 ls -l /home/USERNAME/                                                                    
- 
 ```
 
 > При использовании cups-pdf документы сохраняются в домашнем каталоге пользователя клиента
@@ -112,7 +102,6 @@ ls -l /home/USERNAME/
 
 ```CODE
 http://IP_СЕРВЕРА:631                                                                    
- 
 ```
 
 > Управление принтерами, очередью и заданиями
@@ -123,16 +112,14 @@ http://IP_СЕРВЕРА:631
 
 ```CODE
 lpq                                                                                      
-                                                                                              
- 
+
 ```
 
 #### Отмена задания <!-- NAME -->
 
 ```CODE
 cancel ID_ЗАДАНИЯ                                                                        
-                                                                                              
- 
+
 ```
 
 #### Список устройств <!-- NAME -->

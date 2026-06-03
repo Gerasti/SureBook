@@ -3,7 +3,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -14,7 +13,6 @@ zabbix-phpfrontend-apache2(веб-интерфейс для Apache2); zabbix-php
 
 <syntaxhighlight lang="bash">
 ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -25,15 +23,13 @@ ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
 
 <syntaxhighlight lang="bash">
 systemctl restart httpd2                                                                 
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Изменение владельца для веб-установщика ====
 
 <syntaxhighlight lang="bash">
 chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -46,7 +42,6 @@ chown apache2:apache2 /var/www/webapps/zabbix/ui/conf
 
 <syntaxhighlight lang="bash">
 http://<ip сервера>/zabbix
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -73,7 +68,6 @@ port 0(автоматически использует порт по умолч�
 <syntaxhighlight lang="bash">
 http://<ip сервера>/zabbix
 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -84,8 +78,7 @@ http://<ip сервера>/zabbix
 
 <syntaxhighlight lang="bash">
 username: Admin                                                                          
-  password: zabbix                                                                            
- 
+password: zabbix                                                                            
 </syntaxhighlight>
 
 <blockquote>
@@ -96,7 +89,6 @@ Admin с заглавной буквы; рекомендуется сменит�
 
 <syntaxhighlight lang="bash">
 systemctl status httpd2                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>

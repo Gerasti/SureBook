@@ -1,85 +1,85 @@
 hd Установка и настройка Chrony NTP-сервера                                                 
-   
-  ne Установка пакета                                                                         
-  ce apt-get install -y chrony
 
-  ne Запуск службы
-  ce systemctl enable --now chronyd
+ne Установка пакета                                                                         
+ce apt-get install -y chrony
 
-  hd Настройка NTP-сервера
-  ct Сервер получает время от внешнего NTP и раздаёт время клиентам
-                                                                                              
-  ne Отключение стандартных pool в /etc/chrony.conf                                           
-  ce sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
-                                                                                              
-  ne Добавление внешнего NTP-сервера в /etc/chrony.conf                                       
-  ce server ntp2.vniiftri.ru iburst prefer minstratum 4                                       
-  local stratum 5                                                                             
-  allow 192.168.11.0/26                                                                       
-  allow 192.168.11.64/28                                                                      
-  allow 192.168.11.80/29                                                                      
-  makestep 1.0 3                                                                              
-  ct server(внешний NTP-сервер); iburst(быстрая синхронизация); prefer(предпочтительный       
-  сервер); minstratum 4(минимальный уровень источника); local stratum 5(локальный уровень     
-  сервера); allow(разрешить клиентам подключаться); makestep 1.0 3(корректировать время       
-  скачком, если расхождение больше 1 секунды, в первые 3 обновления)                          
-                  
-  ne Перезапуск службы                                                                        
-  ce systemctl restart chronyd
-                                                                                              
-  hd Разрешение NTP в firewall                                                                
-                                                                                              
-  ne Разрешение UDP 123 в iptables                                                            
-  ce iptables -A INPUT -p udp --dport 123 -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 123 -j ACCEPT                                             
-  ct UDP порт 123 используется для NTP                                                        
-                                                                                              
-  ne Разрешение UDP 123 в nftables                                                            
-  ce nft add rule inet filter input udp dport 123 accept                                      
-  nft add rule inet filter output udp sport 123 accept                                        
-                                                                                              
-  hd Проверка NTP-сервера                                                                     
-                                                                                              
-  ne Проверка синхронизации                                                                   
-  ce chronyc tracking
-  ct Показывает текущий источник времени, stratum, смещение, стабильность                     
-                                                                                              
-  ne Проверка источников                                                                      
-  ce chronyc sources                                                                          
-  ct Показывает список NTP-серверов и их статус                                               
-                                                                                              
-  ne Проверка статуса службы                                                                  
-  ce systemctl status chronyd                                                                 
-                                                                                              
-  ne Проверка открытого UDP-порта 123                                                         
-  ce ss -ulnp | grep 123
-                                                                                              
-  hd Настройка NTP-клиента                                                                    
-  ct Клиент синхронизирует время с локальным NTP-сервером                                     
-                                                                                              
-  ne Установка пакета                                                                         
-  ce apt-get install -y chrony                                                                
-                                                                                              
-  ne Отключение стандартных pool                                                              
-  ce sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
-                                                                                              
-  ne Добавление локального NTP-сервера в /etc/chrony.conf                                     
-  ce echo "server 192.168.11.67 iburst" >> /etc/chrony.conf                                   
-                                                                                              
-  ne Перезапуск службы                                                                        
-  ce systemctl restart chronyd                                                                
-                                                                                              
-  hd Проверка NTP-клиента                                                                     
-                                                                                              
-  ne Проверка источников синхронизации                                                        
-  ce chronyc sources
-  ct ^* означает текущий активный сервер                                                      
-                                                                                              
-  ne Проверка текущего времени                                                                
-  ce timedatectl                                                                              
-                                                                                              
-  ne Принудительная синхронизация                                                             
-  ce chronyc makestep                                                                         
-                                                                                              
-  ne Подробная статистика                                                                     
-  ce chronyc sourcestats
+ne Запуск службы
+ce systemctl enable --now chronyd
+
+hd Настройка NTP-сервера
+ct Сервер получает время от внешнего NTP и раздаёт время клиентам
+
+ne Отключение стандартных pool в /etc/chrony.conf                                           
+ce sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
+
+ne Добавление внешнего NTP-сервера в /etc/chrony.conf                                       
+ce server ntp2.vniiftri.ru iburst prefer minstratum 4                                       
+local stratum 5                                                                             
+allow 192.168.11.0/26                                                                       
+allow 192.168.11.64/28                                                                      
+allow 192.168.11.80/29                                                                      
+makestep 1.0 3                                                                              
+ct server(внешний NTP-сервер); iburst(быстрая синхронизация); prefer(предпочтительный       
+сервер); minstratum 4(минимальный уровень источника); local stratum 5(локальный уровень     
+сервера); allow(разрешить клиентам подключаться); makestep 1.0 3(корректировать время       
+скачком, если расхождение больше 1 секунды, в первые 3 обновления)                          
+
+ne Перезапуск службы                                                                        
+ce systemctl restart chronyd
+
+hd Разрешение NTP в firewall                                                                
+
+ne Разрешение UDP 123 в iptables                                                            
+ce iptables -A INPUT -p udp --dport 123 -j ACCEPT
+iptables -A OUTPUT -p udp --sport 123 -j ACCEPT                                             
+ct UDP порт 123 используется для NTP                                                        
+
+ne Разрешение UDP 123 в nftables                                                            
+ce nft add rule inet filter input udp dport 123 accept                                      
+nft add rule inet filter output udp sport 123 accept                                        
+
+hd Проверка NTP-сервера                                                                     
+
+ne Проверка синхронизации                                                                   
+ce chronyc tracking
+ct Показывает текущий источник времени, stratum, смещение, стабильность                     
+
+ne Проверка источников                                                                      
+ce chronyc sources                                                                          
+ct Показывает список NTP-серверов и их статус                                               
+
+ne Проверка статуса службы                                                                  
+ce systemctl status chronyd                                                                 
+
+ne Проверка открытого UDP-порта 123                                                         
+ce ss -ulnp | grep 123
+
+hd Настройка NTP-клиента                                                                    
+ct Клиент синхронизирует время с локальным NTP-сервером                                     
+
+ne Установка пакета                                                                         
+ce apt-get install -y chrony                                                                
+
+ne Отключение стандартных pool                                                              
+ce sed -i 's/^pool/#pool/' /etc/chrony.conf                                                 
+
+ne Добавление локального NTP-сервера в /etc/chrony.conf                                     
+ce echo "server 192.168.11.67 iburst" >> /etc/chrony.conf                                   
+
+ne Перезапуск службы                                                                        
+ce systemctl restart chronyd                                                                
+
+hd Проверка NTP-клиента                                                                     
+
+ne Проверка источников синхронизации                                                        
+ce chronyc sources
+ct ^* означает текущий активный сервер                                                      
+
+ne Проверка текущего времени                                                                
+ce timedatectl                                                                              
+
+ne Принудительная синхронизация                                                             
+ce chronyc makestep                                                                         
+
+ne Подробная статистика                                                                     
+ce chronyc sourcestats

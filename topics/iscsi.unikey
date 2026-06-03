@@ -1,57 +1,57 @@
- hd Установка                                                           
-  ne Установка пакета scsitarget-utils                                   
-  ce apt-get update && apt-get install -y scsitarget-utils               
-  ne Включение службы tgt                                                
-  ce systemctl enable --now tgt                                          
-  ne Просмотр списка блочных устройств                                   
-  ce lsblk                                                               
-  ct Определить диск для использования (в примере sda)                   
-                                                                         
-  hd Настройка    
-  ne В /etc/tgt/targets.conf добавить в конец файла                      
-  ce <target iqn.2026-05.ru.example:storage.disk1>                       
-      backing-store /dev/sda                                             
-      initiator-address 192.168.20.0/24                                  
-  </target>                                                              
-  ct iqn.2026-05.ru.example:storage.disk1 - уникальный идентификатор     
-  target; backing-store - путь к диску; initiator-address - разрешенная  
-  подсеть клиентов
-  ne Перезапуск службы tgt                                               
-  ce systemctl restart tgt                                               
-                                                                         
-  hd Проверка                                                            
-  ne Проверка target-ов                                                  
-  ce tgtadm --lld iscsi --op show --mode target                          
-  ct Показывает список доступных target-ов и их параметры                
-                                                                         
-  hd Настройка LVM                                                       
-  ne В /etc/lvm/lvm.conf в блоке devices                                 
-  ce filter = [ "r|/dev/sd.*|" ]                                         
-  ct Исключает iSCSI-диски из сканирования LVM                           
-                                                                         
-  hd Установка на клиенте                                                
-  ne Установка пакета open-iscsi                                         
-  ce apt-get update && apt-get install -y open-iscsi                     
-  ne Включение службы iscsid                                             
-  ce systemctl enable --now iscsid                                       
-                                                                         
-  hd Настройка на клиенте                                                
-  ne Поиск доступных target-ов                                           
-  ce iscsiadm -m discovery -t sendtargets -p 192.168.20.2                
-  ct 192.168.20.2 - IP-адрес сервера iSCSI                               
-  ne Подключение target-ов                                               
-  ce iscsiadm -m node --login                                            
-  ne В /etc/iscsi/iscsid.conf                                            
-  ce node.startup = automatic                                            
-  ct Закомментировать node.startup = manual, раскомментировать           
-  node.startup = automatic                                               
-  ne В /var/lib/iscsi/send_targets/<TargetServer>,<Port>/st_config       
-  ce discovery.sendtargets.use_discoveryd = Yes                          
-  ct Изменить с No на Yes                                                
-  ne Перезагрузка системы                                                
-  ce reboot                                                              
-                                                                         
-  hd Проверка на клиенте                                                 
-  ne Проверка подключенного диска                                        
-  ce lsblk                                                               
-  ct Должен появиться новый блочный диск (в примере 5 ГБ)
+hd Установка                                                           
+ne Установка пакета scsitarget-utils                                   
+ce apt-get update && apt-get install -y scsitarget-utils               
+ne Включение службы tgt                                                
+ce systemctl enable --now tgt                                          
+ne Просмотр списка блочных устройств                                   
+ce lsblk                                                               
+ct Определить диск для использования (в примере sda)                   
+
+hd Настройка    
+ne В /etc/tgt/targets.conf добавить в конец файла                      
+ce <target iqn.2026-05.ru.example:storage.disk1>                       
+backing-store /dev/sda                                             
+initiator-address 192.168.20.0/24                                  
+</target>                                                              
+ct iqn.2026-05.ru.example:storage.disk1 - уникальный идентификатор     
+target; backing-store - путь к диску; initiator-address - разрешенная  
+подсеть клиентов
+ne Перезапуск службы tgt                                               
+ce systemctl restart tgt                                               
+
+hd Проверка                                                            
+ne Проверка target-ов                                                  
+ce tgtadm --lld iscsi --op show --mode target                          
+ct Показывает список доступных target-ов и их параметры                
+
+hd Настройка LVM                                                       
+ne В /etc/lvm/lvm.conf в блоке devices                                 
+ce filter = [ "r|/dev/sd.*|" ]                                         
+ct Исключает iSCSI-диски из сканирования LVM                           
+
+hd Установка на клиенте                                                
+ne Установка пакета open-iscsi                                         
+ce apt-get update && apt-get install -y open-iscsi                     
+ne Включение службы iscsid                                             
+ce systemctl enable --now iscsid                                       
+
+hd Настройка на клиенте                                                
+ne Поиск доступных target-ов                                           
+ce iscsiadm -m discovery -t sendtargets -p 192.168.20.2                
+ct 192.168.20.2 - IP-адрес сервера iSCSI                               
+ne Подключение target-ов                                               
+ce iscsiadm -m node --login                                            
+ne В /etc/iscsi/iscsid.conf                                            
+ce node.startup = automatic                                            
+ct Закомментировать node.startup = manual, раскомментировать           
+node.startup = automatic                                               
+ne В /var/lib/iscsi/send_targets/<TargetServer>,<Port>/st_config       
+ce discovery.sendtargets.use_discoveryd = Yes                          
+ct Изменить с No на Yes                                                
+ne Перезагрузка системы                                                
+ce reboot                                                              
+
+hd Проверка на клиенте                                                 
+ne Проверка подключенного диска                                        
+ce lsblk                                                               
+ct Должен появиться новый блочный диск (в примере 5 ГБ)

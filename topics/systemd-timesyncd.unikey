@@ -1,93 +1,93 @@
 hd Установка и настройка systemd-timesyncd
 
-  ne Проверка установки
-  ce systemctl status systemd-timesyncd
-  ct systemd-timesyncd(встроенный NTP-клиент/сервер systemd, обычно уже
-  установлен)
+ne Проверка установки
+ce systemctl status systemd-timesyncd
+ct systemd-timesyncd(встроенный NTP-клиент/сервер systemd, обычно уже
+установлен)
 
-  ne Остановка и отключение chrony
-  ce systemctl stop chronyd
-  systemctl disable chronyd
-  ct systemd-timesyncd и chrony несовместимы на одной машине, работает только один
-   NTP-сервис
+ne Остановка и отключение chrony
+ce systemctl stop chronyd
+systemctl disable chronyd
+ct systemd-timesyncd и chrony несовместимы на одной машине, работает только один
+NTP-сервис
 
-  hd Настройка NTP-сервера
+hd Настройка NTP-сервера
 
-  ne Основной конфигурационный файл
-  ce /etc/systemd/timesyncd.conf
+ne Основной конфигурационный файл
+ce /etc/systemd/timesyncd.conf
 
-  ne Настройка /etc/systemd/timesyncd.conf для сервера
-  ce [Time]
-  NTP=ntp2.vniiftri.ru
-  FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
-  ct NTP(основные NTP-серверы через пробел); FallbackNTP(резервные серверы)
+ne Настройка /etc/systemd/timesyncd.conf для сервера
+ce [Time]
+NTP=ntp2.vniiftri.ru
+FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
+ct NTP(основные NTP-серверы через пробел); FallbackNTP(резервные серверы)
 
-  ne Перезапуск службы
-  ce systemctl restart systemd-timesyncd
+ne Перезапуск службы
+ce systemctl restart systemd-timesyncd
 
-  ne Включение службы
-  ce systemctl enable systemd-timesyncd
+ne Включение службы
+ce systemctl enable systemd-timesyncd
 
-  hd Разрешение NTP в firewall
+hd Разрешение NTP в firewall
 
-  ne Разрешение UDP 123 в iptables
-  ce iptables -A INPUT -p udp --dport 123 -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
-  ct UDP порт 123 используется для NTP
+ne Разрешение UDP 123 в iptables
+ce iptables -A INPUT -p udp --dport 123 -j ACCEPT
+iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
+ct UDP порт 123 используется для NTP
 
-  ne Разрешение UDP 123 в nftables
-  ce nft add rule inet filter input udp dport 123 accept
-  nft add rule inet filter output udp sport 123 accept
+ne Разрешение UDP 123 в nftables
+ce nft add rule inet filter input udp dport 123 accept
+nft add rule inet filter output udp sport 123 accept
 
-  hd Проверка NTP-сервера
+hd Проверка NTP-сервера
 
-  ne Проверка статуса синхронизации
-  ce timedatectl status
-  ct Показывает System clock synchronized, NTP service
+ne Проверка статуса синхронизации
+ce timedatectl status
+ct Показывает System clock synchronized, NTP service
 
-  ne Проверка статуса службы
-  ce systemctl status systemd-timesyncd
+ne Проверка статуса службы
+ce systemctl status systemd-timesyncd
 
-  ne Подробная информация о синхронизации
-  ce timedatectl timesync-status
-  ct Показывает сервер, stratum, задержку, смещение
+ne Подробная информация о синхронизации
+ce timedatectl timesync-status
+ct Показывает сервер, stratum, задержку, смещение
 
-  ne Проверка открытого UDP-порта 123
-  ce ss -ulnp | grep 123
+ne Проверка открытого UDP-порта 123
+ce ss -ulnp | grep 123
 
-  ne Просмотр логов
-  ce journalctl -u systemd-timesyncd
+ne Просмотр логов
+ce journalctl -u systemd-timesyncd
 
-  hd Настройка NTP-клиента
+hd Настройка NTP-клиента
 
-  ne Остановка и отключение chrony
-  ce systemctl stop chronyd
-  systemctl disable chronyd
+ne Остановка и отключение chrony
+ce systemctl stop chronyd
+systemctl disable chronyd
 
-  ne Настройка /etc/systemd/timesyncd.conf для клиента
-  ce [Time]
-  NTP=192.168.11.67
-  FallbackNTP=ntp2.vniiftri.ru
-  ct NTP(локальный NTP-сервер); FallbackNTP(резервный внешний сервер)
+ne Настройка /etc/systemd/timesyncd.conf для клиента
+ce [Time]
+NTP=192.168.11.67
+FallbackNTP=ntp2.vniiftri.ru
+ct NTP(локальный NTP-сервер); FallbackNTP(резервный внешний сервер)
 
-  ne Перезапуск службы
-  ce systemctl restart systemd-timesyncd
+ne Перезапуск службы
+ce systemctl restart systemd-timesyncd
 
-  ne Включение службы
-  ce systemctl enable systemd-timesyncd
+ne Включение службы
+ce systemctl enable systemd-timesyncd
 
-  hd Проверка клиента
+hd Проверка клиента
 
-  ne Проверка синхронизации
-  ce timedatectl status
+ne Проверка синхронизации
+ce timedatectl status
 
-  ne Подробная информация
-  ce timedatectl timesync-status
+ne Подробная информация
+ce timedatectl timesync-status
 
-  ne Включение NTP-синхронизации
-  ce timedatectl set-ntp true
-  ct Включает автоматическую синхронизацию времени
+ne Включение NTP-синхронизации
+ce timedatectl set-ntp true
+ct Включает автоматическую синхронизацию времени
 
-  ne Проверка синхронизации с сервером
-  ce ntpdate -q 192.168.11.67
-  ct -q(запрос без изменения времени), показывает смещение времени
+ne Проверка синхронизации с сервером
+ce ntpdate -q 192.168.11.67
+ct -q(запрос без изменения времени), показывает смещение времени

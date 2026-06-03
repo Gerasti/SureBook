@@ -1,83 +1,125 @@
 
-=== Установка на сервере ===
+=== Установка NFS на сервере ===
 
 ==== Установка NFS-сервера ====
 
 <syntaxhighlight lang="bash">
 apt-get install nfs-server                                                               
- 
-</syntaxhighlight>
-
-==== Создание каталога для экспорта chown 777 /nfs ====
-
-==== Содержимое файла /etc/exports ====
-
-<syntaxhighlight lang="bash">
-/nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
- 
 </syntaxhighlight>
 
 <blockquote>
-/nfs (экспортируемый каталог); 192.168.20.0/26 (разрешенная подсеть); rw (чтение-запись); sync (синхронная запись); no_subtree_check (отключить проверку подкаталогов)
+Устанавливает сервер NFS для экспорта каталогов по сети
+</blockquote>
+
+==== Создание каталога для экспорта ====
+
+<syntaxhighlight lang="bash">
+mkdir /nfs
+chmod 777 /nfs
+</syntaxhighlight>
+
+<blockquote>
+mkdir(создать каталог); chmod 777(права rwxrwxrwx для всех пользователей)
+</blockquote>
+
+==== Настройка экспортов в /etc/exports ====
+
+<syntaxhighlight lang="bash">
+/nfs 192.168.20.0/26(rw,sync,no_subtree_check)                                           
+</syntaxhighlight>
+
+<blockquote>
+/nfs(экспортируемый каталог); 192.168.20.0/26(разрешенная подсеть); rw(read-write, чтение и запись); sync(синхронная запись на диск перед ответом клиенту); no_subtree_check(отключить проверку подкаталогов, повышает производительность)
+</blockquote>
+
+<blockquote>
+Опции маппинга пользователей: root_squash(по умолчанию, root клиента мапится на nobody:nogroup, UID 65534); no_root_squash(root клиента = root сервера, небезопасно); all_squash(все пользователи клиента мапятся на анонимного); anonuid=1000(указать конкретный UID для анонимных пользователей); anongid=1000(указать конкретный GID для анонимных пользователей)
+</blockquote>
+
+<blockquote>
+Другие опции экспорта: ro(только чтение); async(асинхронная запись, быстрее но риск потери данных); subtree_check(проверка подкаталогов, безопаснее но медленнее)
 </blockquote>
 
 ==== Применение изменений ====
 
 <syntaxhighlight lang="bash">
-exportfs -ra                                                                             
- 
+exportfs -ra 
 </syntaxhighlight>
 
 <blockquote>
-Перечитывает /etc/exports и применяет изменения
+exportfs(управление таблицей экспортируемых NFS-каталогов); -r(re-export, перечитать /etc/exports); -a(all, применить ко всем каталогам)
 </blockquote>
 
-=== Установка на клиенте ===
+=== Установка NFS на клиенте ===
 
 ==== Установка NFS-клиента ====
 
 <syntaxhighlight lang="bash">
 apt-get install nfs-clients                                                              
- 
-</syntaxhighlight>
-
-==== В /etc/fstab добавить строку ====
-
-<syntaxhighlight lang="bash">
-192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
- 
 </syntaxhighlight>
 
 <blockquote>
-192.168.30.3:/nfs (удаленный каталог); /mnt/nfs (точка монтирования); nfs (тип ФС)
+Устанавливает утилиты для монтирования NFS-каталогов
 </blockquote>
 
-==== Монтирование ====
+==== Добавление записи в /etc/fstab ====
 
 <syntaxhighlight lang="bash">
-mount -a                                                                                 
-                                                                                              
- 
+192.168.30.3:/nfs /mnt/nfs nfs defaults 0 0                                              
 </syntaxhighlight>
 
-=== Проверка ===
+<blockquote>
+192.168.30.3:/nfs(удаленный каталог в формате IP:путь); /mnt/nfs(точка монтирования); nfs(тип файловой системы); defaults(опции по умолчанию: rw,suid,dev,exec,auto,nouser,async); первый 0(dump, не создавать резервные копии); второй 0(fsck, не проверять ФС при загрузке)
+</blockquote>
+
+==== Монтирование всех файловых систем из fstab ====
+
+<syntaxhighlight lang="bash">
+mount -a
+</syntaxhighlight>
+
+<blockquote>
+-a(all, смонтировать все файловые системы из /etc/fstab)
+</blockquote>
+
+=== Проверка подключения ===
+
+==== Просмотр NFS-монтов ====
+
+<syntaxhighlight lang="bash">
+mount | grep nfs                                                                         
+</syntaxhighlight>
+
+<blockquote>
+mount(показать все смонтированные файловые системы); grep nfs(фильтр по типу nfs)
+</blockquote>
+
+==== Проверка доступных экспортов на сервере ====
+
+<syntaxhighlight lang="bash">
+showmount -e 192.168.30.3                                                                
+</syntaxhighlight>
+
+<blockquote>
+showmount(показать информацию о NFS-экспортах); -e(exports, список экспортируемых каталогов с указанием разрешенных клиентов)
+</blockquote>
+
+=== Проверка работы NFS ===
 
 ==== Создание тестового файла на клиенте ====
 
 <syntaxhighlight lang="bash">
 cd /mnt/nfs                                                                              
-  touch txt                                                                                   
-  ls                                                                                          
- 
+touch txt                                                                                   
+ls                                                                                          
 </syntaxhighlight>
+
+<blockquote>
+touch(создать пустой файл); ls(список файлов в каталоге)
+</blockquote>
 
 ==== Проверка на сервере ====
 
 <syntaxhighlight lang="bash">
 ls -l /nfs                                                                               
- 
 </syntaxhighlight>
-
-<blockquote>
-Файл txt должен быть виден с владельцем nobody:nobody [](#Установка на сервере)
-</blockquote>

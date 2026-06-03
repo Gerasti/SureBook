@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/sda                                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -18,7 +17,6 @@ mkfs.ext4 /dev/sda
 
 <syntaxhighlight lang="bash">
 mkdir -p /opt/data                                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -31,7 +29,6 @@ mkdir -p /opt/data
 
 <syntaxhighlight lang="bash">
 mount /dev/sda /opt/data                                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -44,7 +41,6 @@ mount /dev/sda /opt/data
 
 <syntaxhighlight lang="bash">
 /dev/sda /opt/data ext4 defaults 0 2                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -80,7 +76,6 @@ mount -a
 
 <syntaxhighlight lang="bash">
 df -h                                                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>

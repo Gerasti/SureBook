@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install sudo
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -18,7 +17,6 @@ sudo(выполнение команд от имени другого польз
 
 <syntaxhighlight lang="bash">
 useradd -m -g users -G wheel -s /bin/bash username
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -29,7 +27,6 @@ useradd -m -g users -G wheel -s /bin/bash username
 
 <syntaxhighlight lang="bash">
 useradd -u 2026 -m -g users -G wheel username
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -40,15 +37,13 @@ useradd -u 2026 -m -g users -G wheel username
 
 <syntaxhighlight lang="bash">
 passwd username                                                                          
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание пользователя интерактивно ====
 
 <syntaxhighlight lang="bash">
 adduser username                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -61,15 +56,13 @@ adduser username
 
 <syntaxhighlight lang="bash">
 /etc/sudoers 
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Редактирование конфигурации sudo ====
 
 <syntaxhighlight lang="bash">
 visudo                                                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -80,7 +73,6 @@ visudo
 
 <syntaxhighlight lang="bash">
 %wheel ALL=(ALL:ALL) ALL                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -91,7 +83,6 @@ visudo
 
 <syntaxhighlight lang="bash">
 %wheel ALL=(ALL:ALL) NOPASSWD: ALL                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -102,7 +93,6 @@ visudo
 
 <syntaxhighlight lang="bash">
 username ALL=(ALL:ALL) ALL                                                               
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -113,7 +103,6 @@ username ALL=(ALL:ALL) ALL
 
 <syntaxhighlight lang="bash">
 username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -124,7 +113,6 @@ username ALL=(ALL) /usr/bin/systemctl, /usr/bin/apt-get
 
 <syntaxhighlight lang="bash">
 usermod -aG wheel username                                                               
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -137,7 +125,6 @@ usermod -aG wheel username
 
 <syntaxhighlight lang="bash">
 usermod -s /bin/bash username
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -148,7 +135,6 @@ usermod -s /bin/bash username
 
 <syntaxhighlight lang="bash">
 usermod -d /home/newdir username                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -159,7 +145,6 @@ usermod -d /home/newdir username
 
 <syntaxhighlight lang="bash">
 usermod -L username                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -170,7 +155,6 @@ usermod -L username
 
 <syntaxhighlight lang="bash">
 usermod -U username                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -181,7 +165,6 @@ usermod -U username
 
 <syntaxhighlight lang="bash">
 userdel username                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -192,7 +175,6 @@ userdel username
 
 <syntaxhighlight lang="bash">
 userdel -r username                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -203,7 +185,6 @@ userdel -r username
 
 <syntaxhighlight lang="bash">
 groups username                                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -214,7 +195,6 @@ groups username
 
 <syntaxhighlight lang="bash">
 id username                                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -227,7 +207,6 @@ id username
 
 <syntaxhighlight lang="bash">
 sudo whoami  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -238,7 +217,6 @@ sudo whoami
 
 <syntaxhighlight lang="bash">
 sudo -u username whoami                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -249,7 +227,6 @@ sudo -u username whoami
 
 <syntaxhighlight lang="bash">
 sudo -l                                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -260,7 +237,6 @@ sudo -l
 
 <syntaxhighlight lang="bash">
 journalctl -u sudo                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -271,7 +247,6 @@ journalctl -u sudo
 
 <syntaxhighlight lang="bash">
 cat /etc/passwd                                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -282,7 +257,6 @@ cat /etc/passwd
 
 <syntaxhighlight lang="bash">
 cat /etc/group                                                                           
- 
 </syntaxhighlight>
 
 <blockquote>

@@ -1,52 +1,52 @@
 hd Настройка сетевых интерфейсов в ALT Linux
-  ct Конфигурация интерфейсов хранится в /etc/net/ifaces/
-  ct Рекомендуется добавлять интерфейсы по одному, чтобы избежать изменения имён              
-                                                                                              
-  hd Создание конфигурации интерфейса                                                         
-  ne Создание каталога интерфейса                                                             
-  ce mkdir -p /etc/net/ifaces/ens32                                                           
-                                                                                              
-  ne Копирование конфигурации существующего интерфейса                                        
-  ce cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/                                  
-  ct Опционально, если уже есть настроенный интерфейс                                         
-                                                                                              
-  hd Настройка параметров интерфейса                                                          
-  ne Базовая конфигурация в /etc/net/ifaces/ens32/options                                     
-  ce TYPE=eth                                                                                 
-  BOOTPROTO=static                                                                            
-  CONFIG_IPV4=yes                                                                             
-  ct TYPE=eth(тип интерфейса Ethernet); BOOTPROTO(протокол получения IP) {static, dhcp};      
-  CONFIG_IPV4=yes(включение IPv4)                                                             
-                                                                                              
-  ne Настройка IP-адреса в /etc/net/ifaces/ens32/ipv4address                                  
-  ce 192.168.11.67/28
-  192.168.33.67/32                                                                            
-  ct IP-адрес обязательно указывается с маской сети, можно указать несколько адресов          
-                                                                                              
-  ne Настройка шлюза в /etc/net/ifaces/ens32/ipv4route                                        
-  ce default via 192.168.11.1                                                                 
-  ct default(маршрут по умолчанию); via(IP-адрес маршрутизатора)                              
-                                                                                              
-  ne Применение изменений                                                                     
-  ce systemctl restart network                                                                
-                                                                                              
-  hd Ручное управление интерфейсами                                                           
-  ne Запуск интерфейса                                                                        
-  ce ifup ens32                                                                               
-                                                                                              
-  ne Остановка интерфейса                                                                     
-  ce ifdown ens32                                                                             
-                                                                                              
-  hd Ручное управление маршрутами                                                             
-  ne Добавление шлюза                                                                         
-  ce ip route add default via 192.168.11.1                                                    
-                                                                                              
-  ne Удаление шлюза                                                                           
-  ce ip route del default via 192.168.11.1                                                    
-                                                                                              
-  ne Проверка маршрутов                                                                       
-  ce ip route                                                                                 
-                                                                                              
-  hd Проверка интерфейсов                                                                     
-  ne Просмотр интерфейсов                                                                     
-  ce ip a 
+ct Конфигурация интерфейсов хранится в /etc/net/ifaces/
+ct Рекомендуется добавлять интерфейсы по одному, чтобы избежать изменения имён              
+
+hd Создание конфигурации интерфейса                                                         
+ne Создание каталога интерфейса                                                             
+ce mkdir -p /etc/net/ifaces/ens32                                                           
+
+ne Копирование конфигурации существующего интерфейса                                        
+ce cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/                                  
+ct Опционально, если уже есть настроенный интерфейс                                         
+
+hd Настройка параметров интерфейса                                                          
+ne Базовая конфигурация в /etc/net/ifaces/ens32/options                                     
+ce TYPE=eth                                                                                 
+BOOTPROTO=static                                                                            
+CONFIG_IPV4=yes                                                                             
+ct TYPE=eth(тип интерфейса Ethernet); BOOTPROTO(протокол получения IP) {static, dhcp};      
+CONFIG_IPV4=yes(включение IPv4)                                                             
+
+ne Настройка IP-адреса в /etc/net/ifaces/ens32/ipv4address                                  
+ce 192.168.11.67/28
+192.168.33.67/32                                                                            
+ct IP-адрес обязательно указывается с маской сети, можно указать несколько адресов          
+
+ne Настройка шлюза в /etc/net/ifaces/ens32/ipv4route                                        
+ce default via 192.168.11.1                                                                 
+ct default(маршрут по умолчанию); via(IP-адрес маршрутизатора)                              
+
+ne Применение изменений                                                                     
+ce systemctl restart network                                                                
+
+hd Ручное управление интерфейсами                                                           
+ne Запуск интерфейса                                                                        
+ce ifup ens32                                                                               
+
+ne Остановка интерфейса                                                                     
+ce ifdown ens32                                                                             
+
+hd Ручное управление маршрутами                                                             
+ne Добавление шлюза                                                                         
+ce ip route add default via 192.168.11.1                                                    
+
+ne Удаление шлюза                                                                           
+ce ip route del default via 192.168.11.1                                                    
+
+ne Проверка маршрутов                                                                       
+ce ip route                                                                                 
+
+hd Проверка интерфейсов                                                                     
+ne Просмотр интерфейсов                                                                     
+ce ip a 

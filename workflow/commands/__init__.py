@@ -14,6 +14,7 @@ from .table import TableCommand
 from .unsave import UnsaveCommand
 from .cleanup import CleanupCommand
 from .post import PostCommand
+from .uniformat import UniformatCommand
 
 __all__ = [
     'Command',
@@ -30,4 +31,5 @@ __all__ = [
     'UnsaveCommand',
     'CleanupCommand',
     'PostCommand',
+    'UniformatCommand',
 ]

@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get install open-vm-tools open-vm-tools-desktop xrandr
- 
 ```
 
 > open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция мыши, графика); xrandr(утилита для управления разрешением экрана)
@@ -14,16 +13,14 @@ apt-get install open-vm-tools open-vm-tools-desktop xrandr
 
 ```CODE
 systemctl enable vmtoolsd
-                                                                                  
- 
+
 ```
 
 #### Запуск службы <!-- NAME -->
 
 ```CODE
 systemctl start vmtoolsd                                                     
-                                                                                  
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -32,32 +29,28 @@ systemctl start vmtoolsd
 
 ```CODE
 systemctl status vmtoolsd
-                                                                                  
- 
+
 ```
 
 #### Проверка версии VMware Tools <!-- NAME -->
 
 ```CODE
 vmware-toolbox-cmd -v                                                        
-                                                                                  
- 
+
 ```
 
 #### Проверка работы буфера обмена <!-- NAME -->
 
 ```CODE
 vmware-toolbox-cmd stat clipboard                                            
-                                                                                  
- 
+
 ```
 
 #### Проверка синхронизации времени <!-- NAME -->
 
 ```CODE
 vmware-toolbox-cmd timesync status                                           
-                                                                                  
- 
+
 ```
 
 ### Настройка <!-- HEAD -->
@@ -66,23 +59,20 @@ vmware-toolbox-cmd timesync status
 
 ```CODE
 vmware-toolbox-cmd timesync enable
-                                                                                  
- 
+
 ```
 
 #### Отключение синхронизации времени с хостом <!-- NAME -->
 
 ```CODE
 vmware-toolbox-cmd timesync disable                                          
-                                                                                  
- 
+
 ```
 
 #### Ручная настройка разрешения экрана <!-- NAME -->
 
 ```CODE
 xrandr --output Virtual1 --mode 1920x1080                                    
- 
 ```
 
 > Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение экрана)

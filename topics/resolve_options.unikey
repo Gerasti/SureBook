@@ -1,40 +1,40 @@
 hd Настройка                                                         
-                                                                                              
-  ne Просмотр текущей конфигурации                                                            
-  ce cat /etc/resolv.conf                                                                     
-  ct показывает текущие DNS-серверы                                                           
-                                                                                              
-  ne Добавление одного DNS-сервера                                                            
-  ce echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
-  ct перезаписывает файл; 77.88.8.8(Яндекс DNS)                                             
-                                                                                              
-  ne Добавление нескольких DNS-серверов                                                       
-  ce echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
-  echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
-  ct добавляет в конец файла; 8.8.8.8(Google DNS)                                          
-                                                                                              
-  ne Настройка с доменом поиска                                                               
-  ce nameserver 192.168.1.1                                                                   
-  search example.local                                                                        
-  domain example.local                                                                        
-  ct search(список доменов для поиска); domain(локальный домен)                               
-                                                                                              
-  ne Настройка с опциями                                                                      
-  ce nameserver 77.88.8.8                                                                     
-  options timeout:2 attempts:3 rotate                                                         
-  ct timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование    
-  серверов)                                                                                   
-                                                                                              
-  hd Проверка DNS                                                                             
-                  
-  ne Проверка разрешения имен                                                                 
-  ce nslookup ya.ru
-  ct должен вернуть IP-адрес                                                                  
-                                                                                              
-  ne Проверка через dig(bind-utils)                                                                       
-  ce dig ya.ru                                                                                
-  ct показывает подробную информацию о DNS-запросе                                            
-                                                                                              
-  ne Проверка через host                                                                      
-  ce host ya.ru                                                                               
-  ct простая проверка разрешения имени
+
+ne Просмотр текущей конфигурации                                                            
+ce cat /etc/resolv.conf                                                                     
+ct показывает текущие DNS-серверы                                                           
+
+ne Добавление одного DNS-сервера                                                            
+ce echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+ct перезаписывает файл; 77.88.8.8(Яндекс DNS)                                             
+
+ne Добавление нескольких DNS-серверов                                                       
+ce echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
+ct добавляет в конец файла; 8.8.8.8(Google DNS)                                          
+
+ne Настройка с доменом поиска                                                               
+ce nameserver 192.168.1.1                                                                   
+search example.local                                                                        
+domain example.local                                                                        
+ct search(список доменов для поиска); domain(локальный домен)                               
+
+ne Настройка с опциями                                                                      
+ce nameserver 77.88.8.8                                                                     
+options timeout:2 attempts:3 rotate                                                         
+ct timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование    
+серверов)                                                                                   
+
+hd Проверка DNS                                                                             
+
+ne Проверка разрешения имен                                                                 
+ce nslookup ya.ru
+ct должен вернуть IP-адрес                                                                  
+
+ne Проверка через dig(bind-utils)                                                                       
+ce dig ya.ru                                                                                
+ct показывает подробную информацию о DNS-запросе                                            
+
+ne Проверка через host                                                                      
+ce host ya.ru                                                                               
+ct простая проверка разрешения имени

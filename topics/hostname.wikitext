@@ -5,16 +5,14 @@
 
 <syntaxhighlight lang="bash">
 hostname                                                                                 
-  hostnamectl
-                                                                                              
- 
+hostnamectl
+
 </syntaxhighlight>
 
 ==== Временное изменение hostname до перезагрузки ====
 
 <syntaxhighlight lang="bash">
 hostname new-hostname
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -25,7 +23,6 @@ hostname new-hostname
 
 <syntaxhighlight lang="bash">
 hostnamectl set-hostname new-hostname
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -36,7 +33,6 @@ hostnamectl set-hostname new-hostname
 
 <syntaxhighlight lang="bash">
 hostnamectl set-hostname new-hostname; exec bash
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -47,7 +43,6 @@ exec bash перезапускает оболочку без login shell
 
 <syntaxhighlight lang="bash">
 hostnamectl set-hostname new-hostname; exec bash -l                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -58,7 +53,6 @@ exec bash -l перезапускает оболочку как login shell, з�
 
 <syntaxhighlight lang="bash">
 echo "new-hostname" > /etc/hostname                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -69,7 +63,6 @@ echo "new-hostname" > /etc/hostname
 
 <syntaxhighlight lang="bash">
 nano /etc/hosts                                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -78,9 +71,8 @@ nano /etc/hosts
 
 <syntaxhighlight lang="bash">
 127.0.0.1   localhost                                                                    
-  127.0.1.1   new-hostname                                                                    
-  192.168.1.10   new-hostname.some.domain new-hostname                                        
- 
+127.0.1.1   new-hostname                                                                    
+192.168.1.10   new-hostname.some.domain new-hostname                                        
 </syntaxhighlight>
 
 <blockquote>
@@ -91,8 +83,7 @@ nano /etc/hosts
 
 <syntaxhighlight lang="bash">
 systemctl restart systemd-hostnamed                                                      
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка hostname ===
@@ -101,7 +92,6 @@ systemctl restart systemd-hostnamed
 
 <syntaxhighlight lang="bash">
 hostname -f                                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -112,7 +102,6 @@ hostname -f
 
 <syntaxhighlight lang="bash">
 hostname -s                                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -123,7 +112,6 @@ hostname -s
 
 <syntaxhighlight lang="bash">
 hostnamectl status                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>

@@ -5,21 +5,18 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y scsitarget-utils               
- 
 </syntaxhighlight>
 
 ==== Включение службы tgt ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now tgt                                          
- 
 </syntaxhighlight>
 
 ==== Просмотр списка блочных устройств ====
 
 <syntaxhighlight lang="bash">
 lsblk                                                               
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -32,10 +29,9 @@ lsblk
 
 <syntaxhighlight lang="bash">
 <target iqn.2026-05.ru.example:storage.disk1>                       
-      backing-store /dev/sda                                             
-      initiator-address 192.168.20.0/24                                  
-  </target>                                                              
- 
+backing-store /dev/sda                                             
+initiator-address 192.168.20.0/24                                  
+</target>                                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -46,8 +42,7 @@ iqn.2026-05.ru.example:storage.disk1 - уникальный идентифика
 
 <syntaxhighlight lang="bash">
 systemctl restart tgt                                               
-                                                                         
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -56,7 +51,6 @@ systemctl restart tgt
 
 <syntaxhighlight lang="bash">
 tgtadm --lld iscsi --op show --mode target                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -69,7 +63,6 @@ tgtadm --lld iscsi --op show --mode target
 
 <syntaxhighlight lang="bash">
 filter = [ "r|/dev/sd.*|" ]                                         
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -82,15 +75,13 @@ filter = [ "r|/dev/sd.*|" ]
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y open-iscsi                     
- 
 </syntaxhighlight>
 
 ==== Включение службы iscsid ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now iscsid                                       
-                                                                         
- 
+
 </syntaxhighlight>
 
 === Настройка на клиенте ===
@@ -99,7 +90,6 @@ systemctl enable --now iscsid
 
 <syntaxhighlight lang="bash">
 iscsiadm -m discovery -t sendtargets -p 192.168.20.2                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -110,14 +100,12 @@ iscsiadm -m discovery -t sendtargets -p 192.168.20.2
 
 <syntaxhighlight lang="bash">
 iscsiadm -m node --login                                            
- 
 </syntaxhighlight>
 
 ==== В /etc/iscsi/iscsid.conf ====
 
 <syntaxhighlight lang="bash">
 node.startup = automatic                                            
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -128,7 +116,6 @@ node.startup = automatic
 
 <syntaxhighlight lang="bash">
 discovery.sendtargets.use_discoveryd = Yes                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -139,8 +126,7 @@ discovery.sendtargets.use_discoveryd = Yes
 
 <syntaxhighlight lang="bash">
 reboot                                                              
-                                                                         
- 
+
 </syntaxhighlight>
 
 === Проверка на клиенте ===
@@ -149,7 +135,6 @@ reboot
 
 <syntaxhighlight lang="bash">
 lsblk                                                               
- 
 </syntaxhighlight>
 
 <blockquote>

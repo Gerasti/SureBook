@@ -35,6 +35,7 @@ docker phpMyAdmin
 docker single-mode Open WebUI
 docker WordPress
 docker Zabbix
+docker_testapp_from_tar
 ecorouter bgp
 ecorouter DHCP-retranslation
 ecorouter DHCP-server
@@ -76,6 +77,7 @@ iptables NAT
 iptables port forwarding
 iscsi
 iscsi attach
+LAMP_Linux_Apache_MariaDB_PHP
 logrotate
 LVM
 mdadm options
@@ -103,6 +105,7 @@ replication postgresql-server
 resolve options
 rsyslog
 samba share folder
+Samba_attach_client
 SAMBA_INTERNAL samba
 SQL install MariaDB
 SQL install MySQL

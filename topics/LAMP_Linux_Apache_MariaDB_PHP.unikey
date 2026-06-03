@@ -1,0 +1,124 @@
+hd Установка LAMP-сервера
+ne Что такое LAMP
+ce LAMP = Linux + Apache + MariaDB + PHP
+ct Linux(операционная система); Apache(веб-сервер); MariaDB(система управления базами
+данных); PHP(язык серверной веб-разработки)
+
+ne Установка готового набора пакетов
+ce apt-get install lamp-server
+ct Устанавливает все компоненты LAMP одной командой
+
+hd Подготовка файлов сайта
+ne Копирование файлов в директорию Apache
+ce cp /mnt/web/index.php /var/www/html/
+cp /mnt/web/logo.png /var/www/html/
+ct /var/www/html/(стандартная директория для файлов веб-сервера Apache)
+
+hd Настройка PHP-приложения
+ne Редактирование файла index.php
+ce nano /var/www/html/index.php
+
+ne Параметры подключения к базе данных
+ce $servername = "localhost";
+$username = "webc";
+$password = "P@ssw0rd";
+$dbname = "webdb";
+ct $servername(адрес сервера базы данных); $username(пользователь MariaDB); $password(пароль
+пользователя); $dbname(имя базы данных)
+
+hd Настройка MariaDB
+ne Запуск и добавление в автозагрузку
+ce systemctl enable --now mariadb
+ct enable(добавить в автозагрузку); --now(запустить немедленно)
+
+ne Подключение к MariaDB
+ce mariadb -u root
+ct -u(user, указание пользователя для подключения); root(административный пользователь по
+умолчанию)
+
+ne Создание базы данных
+ce create database webdb;
+ct create database(создание новой базы данных); webdb(имя базы данных)
+
+ne Создание пользователя
+ce create user 'webc'@'localhost' identified by 'P@ssw0rd';
+ct create user(создание нового пользователя); 'webc'@'localhost'(имя пользователя и хост, с
+которого разрешено подключение); identified by(установка пароля)
+
+ne Выдача прав пользователю
+ce grant all privileges on webdb.* to 'webc'@'localhost' with grant option;
+ct grant all privileges(выдать все права); webdb.*(база данных и все её таблицы); with grant
+option(право передавать свои привилегии другим пользователям)
+
+ne Выход из MariaDB
+ce exit;
+ct Завершает сеанс работы с MariaDB
+
+hd Импорт базы данных
+ne Загрузка дамп-файла в базу данных
+ce mariadb -u webc -p -D webdb < /mnt/web/dump.sql
+ct -u(указание пользователя); -p(запрос пароля); -D(указание базы данных для импорта);
+<(перенаправление содержимого файла в команду)
+
+hd Запуск Apache
+ne Включение автозапуска и запуск веб-сервера
+ce systemctl enable --now httpd2.service
+ct httpd2.service(имя службы веб-сервера Apache в ALT Linux)
+
+hd Проверка работы
+ne Проверка статуса MariaDB
+ce systemctl status mariadb
+ct Показывает состояние службы и последние записи логов
+
+ne Проверка статуса Apache
+ce systemctl status httpd2
+ct Показывает состояние веб-сервера
+
+ne Проверка открытых портов
+ce ss -tulpn | grep -E '80|443'
+ct ss(socket statistics, утилита для просмотра сетевых соединений); -t(показать TCP-сокеты);
+-u(показать UDP-сокеты); -l(показать слушающие сокеты); -p(показать процессы); -n(не
+разрешать имена портов и адресов); grep -E '80|443'(фильтр по портам HTTP и HTTPS)
+
+ne Проверка сайта в браузере
+ce http://<IP_СЕРВЕРА>
+ct Открыть в браузере для проверки работы веб-приложения
+
+hd Управление службами
+ne Перезапуск Apache
+ce systemctl restart httpd2
+ct Применяет изменения конфигурации без перезагрузки системы
+
+ne Перезапуск MariaDB
+ce systemctl restart mariadb
+ct Перезапускает службу базы данных
+
+ne Просмотр логов Apache
+ce journalctl -u httpd2
+ct -u(фильтр по юниту службы); показывает все записи журнала для Apache
+
+ne Просмотр логов MariaDB
+ce journalctl -u mariadb
+ct Показывает журнал работы службы базы данных
+
+ne Просмотр логов Apache в реальном времени
+ce journalctl -u httpd2 -f
+ct -f(follow, следить за новыми записями)
+
+hd Устранение типичных проблем
+ne Проблема: Apache не запускается
+ce apachectl configtest
+ct Проверяет синтаксис конфигурационных файлов Apache на ошибки
+
+ne Проблема: ошибка подключения к БД
+ce mariadb -u webc -p
+ct Проверка подключения к базе данных вручную для диагностики проблем с логином, паролем или
+правами пользователя
+
+ne Проверка существования базы данных
+ce mariadb -u root -e "show databases;"
+ct -e(execute, выполнить SQL-команду); show databases(показать список всех баз данных)
+
+ne Проверка прав пользователя
+ce mariadb -u root -e "show grants for 'webc'@'localhost';"
+ct show grants(показать привилегии пользователя)

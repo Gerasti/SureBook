@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
- 
 ```
 
 > SRV-BR(резервный сервер); SRV-HQ(основной сервер)
@@ -16,11 +15,10 @@ apt-get install -y postgresql16 postgresql16-server postgresql16-contrib
 
 ```CODE
 wal_level = replica                                                                      
-  max_wal_senders = 2                                                                         
-  max_replication_slots = 2                                                                   
-  hot_standby = on                                                                            
-  hot_standby_feedback = on                                                                   
- 
+max_wal_senders = 2                                                                         
+max_replication_slots = 2                                                                   
+hot_standby = on                                                                            
+hot_standby_feedback = on                                                                   
 ```
 
 > wal_level(уровень журналирования); max_wal_senders(количество процессов репликации); hot_standby(чтение на реплике)
@@ -29,8 +27,7 @@ wal_level = replica
 
 ```CODE
 systemctl restart postgresql
-                                                                                              
- 
+
 ```
 
 ### Настройка репликации на резервном сервере <!-- HEAD -->
@@ -39,15 +36,13 @@ systemctl restart postgresql
 
 ```CODE
 systemctl stop postgresql                                                                
-                                                                                              
- 
+
 ```
 
 #### Очистка директории данных <!-- NAME -->
 
 ```CODE
 rm -rf /var/lib/pgsql/data/*                                                             
- 
 ```
 
 > удаляет существующие данные для создания реплики
@@ -56,8 +51,7 @@ rm -rf /var/lib/pgsql/data/*
 
 ```CODE
 pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
-  --write-recovery-conf                                                                       
- 
+--write-recovery-conf                                                                       
 ```
 
 > -h(IP основного сервера); -U(пользователь); -D(директория данных); --wal-method(метод передачи WAL); --write-recovery-conf(создание конфига репликации)
@@ -66,16 +60,14 @@ pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=s
 
 ```CODE
 chown -R postgres:postgres /var/lib/pgsql/data/
-                                                                                              
- 
+
 ```
 
 #### Запуск службы на SRV-BR <!-- NAME -->
 
 ```CODE
 systemctl start postgresql                                                               
-                                                                                              
- 
+
 ```
 
 ### Проверка репликации <!-- HEAD -->
@@ -84,7 +76,6 @@ systemctl start postgresql
 
 ```CODE
 psql -U postgres                                                                         
- 
 ```
 
 > подключение к PostgreSQL
@@ -93,7 +84,6 @@ psql -U postgres
 
 ```CODE
 SELECT * FROM pg_stat_replication;                                                       
- 
 ```
 
 > показывает подключенные реплики
@@ -102,8 +92,7 @@ SELECT * FROM pg_stat_replication;
 
 ```CODE
 \c one                                                                                   
-  \dt+                                                                                        
- 
+\dt+                                                                                        
 ```
 
 > \c(подключение к БД); \dt+(список таблиц с размерами)

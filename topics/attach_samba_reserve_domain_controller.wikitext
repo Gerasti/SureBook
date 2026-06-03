@@ -5,8 +5,7 @@
 
 <syntaxhighlight lang="bash">
 apt-get install -y task-samba-dc                                                                      
-                                                                                                           
- 
+
 </syntaxhighlight>
 
 === Настройка DNS ===
@@ -15,10 +14,9 @@ apt-get install -y task-samba-dc
 
 <syntaxhighlight lang="bash">
 search ad.team                                                                                        
-  nameserver 192.168.11.67                                                                                 
-  nameserver 192.168.33.67                                                                                 
-  nameserver 8.8.8.8                                                                                       
- 
+nameserver 192.168.11.67                                                                                 
+nameserver 192.168.33.67                                                                                 
+nameserver 8.8.8.8                                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -31,20 +29,19 @@ search(домен поиска); nameserver(DNS серверы)
 
 <syntaxhighlight lang="bash">
 [libdefaults]                                                                                         
-  default_realm = AD.TEAM                                                                                  
-  dns_lookup_kdc = true                                                                                    
-  dns_lookup_realm = false                                                                                 
-                                                                                                           
-  [realms]                                                                                                 
-  AD.TEAM = {                                                                                              
-  kdc = srv-hq.ad.team                                                                                     
-  default_domain = ad.team                                                                                 
-  }                                                                                                        
-                                                                                                           
-  [domain_realm]                                                                                           
-  .ad.team = AD.TEAM
-  ad.team = AD.TEAM                                                                                        
- 
+default_realm = AD.TEAM                                                                                  
+dns_lookup_kdc = true                                                                                    
+dns_lookup_realm = false                                                                                 
+
+[realms]                                                                                                 
+AD.TEAM = {                                                                                              
+kdc = srv-hq.ad.team                                                                                     
+default_domain = ad.team                                                                                 
+}                                                                                                        
+
+[domain_realm]                                                                                           
+.ad.team = AD.TEAM
+ad.team = AD.TEAM                                                                                        
 </syntaxhighlight>
 
 <blockquote>
@@ -57,7 +54,6 @@ default_realm(область по умолчанию); dns_lookup_kdc(поиск
 
 <syntaxhighlight lang="bash">
 samba-tool dns add srv-hq ad.team srv-dt A 192.168.33.67 -Uadministrator                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -70,7 +66,6 @@ samba-tool dns add(добавление DNS записи); A(тип записи
 
 <syntaxhighlight lang="bash">
 host srv-hq                                                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -81,7 +76,6 @@ host srv-hq
 
 <syntaxhighlight lang="bash">
 kinit administrator                                                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -92,7 +86,6 @@ kinit administrator
 
 <syntaxhighlight lang="bash">
 klist                                                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -105,7 +98,6 @@ klist
 
 <syntaxhighlight lang="bash">
 samba-tool domain join ad.team DC -Uadministrator --realm=ad.team --workgroup=ad                      
- 
 </syntaxhighlight>
 
 <blockquote>

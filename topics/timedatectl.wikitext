@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 timedatectl  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,7 +15,6 @@ timedatectl
 
 <syntaxhighlight lang="bash">
 timedatectl status                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -29,7 +27,6 @@ timedatectl status
 
 <syntaxhighlight lang="bash">
 timedatectl set-time "2026-05-31 10:30:00"
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -40,16 +37,14 @@ timedatectl set-time "2026-05-31 10:30:00"
 
 <syntaxhighlight lang="bash">
 timedatectl set-time "2026-05-31"                                            
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Установка только времени ====
 
 <syntaxhighlight lang="bash">
 timedatectl set-time "10:30:00"                                              
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Настройка часового пояса ===
@@ -58,7 +53,6 @@ timedatectl set-time "10:30:00"
 
 <syntaxhighlight lang="bash">
 timedatectl show-timezones
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -69,15 +63,13 @@ timedatectl show-timezones
 
 <syntaxhighlight lang="bash">
 timedatectl list-timezones | grep Moscow                                     
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Установка часового пояса ====
 
 <syntaxhighlight lang="bash">
 timedatectl set-timezone Europe/Moscow                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -88,8 +80,7 @@ timedatectl set-timezone Europe/Moscow
 
 <syntaxhighlight lang="bash">
 timedatectl set-timezone UTC                                                 
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Настройка NTP-синхронизации ===
@@ -98,7 +89,6 @@ timedatectl set-timezone UTC
 
 <syntaxhighlight lang="bash">
 timedatectl set-ntp true
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -109,7 +99,6 @@ timedatectl set-ntp true
 
 <syntaxhighlight lang="bash">
 timedatectl set-ntp false                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -120,7 +109,6 @@ timedatectl set-ntp false
 
 <syntaxhighlight lang="bash">
 timedatectl timesync-status                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -133,7 +121,6 @@ timedatectl timesync-status
 
 <syntaxhighlight lang="bash">
 hwclock --systohc
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -144,7 +131,6 @@ hwclock --systohc
 
 <syntaxhighlight lang="bash">
 hwclock --hctosys                                                            
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -155,7 +141,6 @@ hwclock --hctosys
 
 <syntaxhighlight lang="bash">
 hwclock --show                                                               
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -166,7 +151,6 @@ hwclock --show
 
 <syntaxhighlight lang="bash">
 timedatectl set-local-rtc 0                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -177,7 +161,6 @@ timedatectl set-local-rtc 0
 
 <syntaxhighlight lang="bash">
 timedatectl set-local-rtc 1                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -190,7 +173,6 @@ timedatectl set-local-rtc 1
 
 <syntaxhighlight lang="bash">
 timedatectl show
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -201,7 +183,6 @@ timedatectl show
 
 <syntaxhighlight lang="bash">
 timedatectl show -p Timezone                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -212,8 +193,7 @@ timedatectl show -p Timezone
 
 <syntaxhighlight lang="bash">
 journalctl -u systemd-timesyncd                                              
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Примеры часовых поясов ====

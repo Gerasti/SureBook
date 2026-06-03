@@ -5,8 +5,7 @@
 
 ```CODE
 apt-get install strongswan
-                                                                                              
- 
+
 ```
 
 ### Настройка первого маршрутизатора <!-- HEAD -->
@@ -15,29 +14,27 @@ apt-get install strongswan
 
 ```CODE
 /etc/strongswan/ipsec.conf
-                                                                                              
- 
+
 ```
 
 #### Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.1 <!-- NAME -->
 
 ```CODE
 config setup                                                                             
-                                                                                              
-  conn nameConnect                                                                            
-      authby=psk                                                                              
-      keyexchange=ikev2                                                                       
-                                                                                              
-  leftid=10.10.10.1                                                                           
-  left=10.10.10.1                                                                             
-  leftsubnet=10.10.10.0/30                                                                    
-                                                                                              
-  rightid=10.10.10.2                                                                          
-  right=10.10.10.2                                                                            
-  rightsubnet=10.10.10.0/30                                                                   
-                                                                                              
-  auto=start                                                                                  
- 
+
+conn nameConnect                                                                            
+authby=psk                                                                              
+keyexchange=ikev2                                                                       
+
+leftid=10.10.10.1                                                                           
+left=10.10.10.1                                                                             
+leftsubnet=10.10.10.0/30                                                                    
+
+rightid=10.10.10.2                                                                          
+right=10.10.10.2                                                                            
+rightsubnet=10.10.10.0/30                                                                   
+
+auto=start                                                                                  
 ```
 
 > authby=psk(аутентификация по общему ключу); keyexchange=ikev2(протокол обмена ключами); leftid(публичный идентификатор локального узла); left(локальный IP-адрес); leftsubnet(локальная подсеть); rightid(публичный идентификатор удалённого узла); right(удалённый IP-адрес); rightsubnet(удалённая подсеть); auto=start(автоматический запуск туннеля)
@@ -46,15 +43,13 @@ config setup
 
 ```CODE
 /etc/strongswan/ipsec.secrets                                                            
-                                                                                              
- 
+
 ```
 
 #### Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.1 <!-- NAME -->
 
 ```CODE
 10.10.10.1 10.10.10.2 : PSK "P@ssw0rd"                                                   
- 
 ```
 
 > Формат: локальный_IP удалённый_IP : PSK "пароль"
@@ -65,21 +60,20 @@ config setup
 
 ```CODE
 config setup 
-                                                                                              
-  conn nameConnect                                                                            
-      authby=psk
-      keyexchange=ikev2                                                                       
-                                                                                              
-  leftid=10.10.10.2                                                                           
-  left=10.10.10.2                                                                             
-  leftsubnet=10.10.10.0/30                                                                    
-                                                                                              
-  rightid=10.10.10.1                                                                          
-  right=10.10.10.1                                                                            
-  rightsubnet=10.10.10.0/30                                                                   
-                                                                                              
-  auto=start                                                                                  
- 
+
+conn nameConnect                                                                            
+authby=psk
+keyexchange=ikev2                                                                       
+
+leftid=10.10.10.2                                                                           
+left=10.10.10.2                                                                             
+leftsubnet=10.10.10.0/30                                                                    
+
+rightid=10.10.10.1                                                                          
+right=10.10.10.1                                                                            
+rightsubnet=10.10.10.0/30                                                                   
+
+auto=start                                                                                  
 ```
 
 > Зеркальная конфигурация: left и right меняются местами
@@ -88,7 +82,6 @@ config setup
 
 ```CODE
 10.10.10.2 10.10.10.1 : PSK "P@ssw0rd"                                                   
- 
 ```
 
 > Тот же пароль, адреса в обратном порядке
@@ -99,8 +92,7 @@ config setup
 
 ```CODE
 systemctl enable --now strongswan-starter ipsec
-                                                                                              
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -109,7 +101,6 @@ systemctl enable --now strongswan-starter ipsec
 
 ```CODE
 ipsec status
- 
 ```
 
 > Показывает состояние IPsec соединений
@@ -118,7 +109,6 @@ ipsec status
 
 ```CODE
 ping 10.10.10.2                                                                          
- 
 ```
 
 > С первого маршрутизатора, с второго ping 10.10.10.1

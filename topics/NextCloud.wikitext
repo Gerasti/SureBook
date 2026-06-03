@@ -5,25 +5,22 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y mariadb-server                                      
- 
 </syntaxhighlight>
 
 ==== Включение службы MariaDB ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now mariadb                                                           
- 
 </syntaxhighlight>
 
 ==== Создание базы данных и пользователя ====
 
 <syntaxhighlight lang="bash">
 mariadb                                                                                  
-  CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'P@ssw0rd';                               
-  CREATE DATABASE nextcloud DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;               
-  GRANT ALL PRIVILEGES ON nextcloud.* to nextcloud@localhost;                                 
-  EXIT;                                                                                       
- 
+CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'P@ssw0rd';                               
+CREATE DATABASE nextcloud DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;               
+GRANT ALL PRIVILEGES ON nextcloud.* to nextcloud@localhost;                                 
+EXIT;                                                                                       
 </syntaxhighlight>
 
 <blockquote>
@@ -34,61 +31,53 @@ mariadb
 
 <syntaxhighlight lang="bash">
 apt-get install -y apache2 apache2-mod_{ssl,php8.2} tzdata                               
- 
 </syntaxhighlight>
 
 ==== Установка PHP8.2 и модулей ====
 
 <syntaxhighlight lang="bash">
 apt-get install -y php8.2 php8.2-{pdo_mysql,curl,dom,exif,fileinfo,gd2,gmp,imagick,intl,l
-  ibs,mbstring,memcached,opcache,openssl,pcntl,pdo,xmlreader,zip}                             
- 
+ibs,mbstring,memcached,opcache,openssl,pcntl,pdo,xmlreader,zip}                             
 </syntaxhighlight>
 
 ==== Включение модулей Apache2 ====
 
 <syntaxhighlight lang="bash">
 for i in dir env headers mime rewrite;do a2enmod $i;done                                 
- 
 </syntaxhighlight>
 
 ==== Запуск веб-сервера ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now httpd2                                                            
- 
 </syntaxhighlight>
 
 ==== Установка wget ====
 
 <syntaxhighlight lang="bash">
 apt-get install -y wget                                                                  
- 
 </syntaxhighlight>
 
 ==== Загрузка Nextcloud ====
 
 <syntaxhighlight lang="bash">
 wget https://download.nextcloud.com/server/releases/latest.zip                           
- 
 </syntaxhighlight>
 
 ==== Распаковка и перемещение ====
 
 <syntaxhighlight lang="bash">
 unzip latest.zip; rm -f latest.zip                                                       
-  cp -r nextcloud /var/www/html; rm -rf nextcloud                                             
- 
+cp -r nextcloud /var/www/html; rm -rf nextcloud                                             
 </syntaxhighlight>
 
 ==== Настройка прав доступа ====
 
 <syntaxhighlight lang="bash">
 chown -R root /var/www/html/nextcloud                                                    
-  mkdir /var/www/html/nextcloud/data                                                          
-  chown -R apache2 /var/www/html/nextcloud/{apps,config,data}/                                
-                                                                                              
- 
+mkdir /var/www/html/nextcloud/data                                                          
+chown -R apache2 /var/www/html/nextcloud/{apps,config,data}/                                
+
 </syntaxhighlight>
 
 === Настройка ===
@@ -97,20 +86,19 @@ chown -R root /var/www/html/nextcloud
 
 <syntaxhighlight lang="bash">
 <VirtualHost *:80>                                                                       
-    DocumentRoot /var/www/html/nextcloud/                                                     
-    ServerName  nextcloud.champ.first                                                         
-                                                                                              
-    <Directory /var/www/html/nextcloud/>                                                      
-      Require all granted                                                                     
-      AllowOverride All                                                                       
-      Options FollowSymLinks MultiViews                                                       
-                                                                                              
-      <IfModule mod_dav.c>                                                                    
-        Dav off                                                                               
-      </IfModule>                                                                             
-    </Directory>                                                                              
-  </VirtualHost>                                                                              
- 
+DocumentRoot /var/www/html/nextcloud/                                                     
+ServerName  nextcloud.champ.first                                                         
+
+<Directory /var/www/html/nextcloud/>                                                      
+Require all granted                                                                     
+AllowOverride All                                                                       
+Options FollowSymLinks MultiViews                                                       
+
+<IfModule mod_dav.c>                                                                    
+Dav off                                                                               
+</IfModule>                                                                             
+</Directory>                                                                              
+</VirtualHost>                                                                              
 </syntaxhighlight>
 
 <blockquote>
@@ -121,9 +109,8 @@ ServerName (доменное имя); DocumentRoot (путь к Nextcloud)
 
 <syntaxhighlight lang="bash">
 ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-enabled/    
-  systemctl restart httpd2                                                                    
-                                                                                              
- 
+systemctl restart httpd2                                                                    
+
 </syntaxhighlight>
 
 === Веб-установщик ===

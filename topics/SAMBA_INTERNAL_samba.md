@@ -5,7 +5,6 @@
 
 ```CODE
 apt-get update && apt-get install -y task-samba-dc                                       
- 
 ```
 
 > task-samba-dc(Samba DC на базе Heimdal Kerberos)
@@ -14,7 +13,6 @@ apt-get update && apt-get install -y task-samba-dc
 
 ```CODE
 for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done                 
- 
 ```
 
 > Samba DC использует собственные LDAP и Kerberos
@@ -25,7 +23,6 @@ for i in smb nmb krb5kdc slapd bind; do systemctl disable $i --now; done
 
 ```CODE
 HOSTNAME=dc.domain.sample
- 
 ```
 
 > dc.domain.sample(FQDN сервера); domain.sample(имя домена)
@@ -34,9 +31,8 @@ HOSTNAME=dc.domain.sample
 
 ```CODE
 hostnamectl set-hostname dc.domain.sample                                                  
-  exec bash                                                                                   
-  domainname domain.sample                                                                      
- 
+exec bash                                                                                   
+domainname domain.sample                                                                      
 ```
 
 > exec bash(перезагрузка оболочки для применения)
@@ -45,7 +41,6 @@ hostnamectl set-hostname dc.domain.sample
 
 ```CODE
 nameserver 127.0.0.1                                                                     
- 
 ```
 
 > для корректного распознавания локальных DNS-запросов
@@ -56,10 +51,9 @@ nameserver 127.0.0.1
 
 ```CODE
 rm -f /etc/samba/smb.conf
-  rm -rf /var/lib/samba                                                                       
-  rm -rf /var/cache/samba                                                                     
-  mkdir -p /var/lib/samba/sysvol                                                              
- 
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
 ```
 
 > удаляет предыдущую конфигурацию домена
@@ -70,7 +64,6 @@ rm -f /etc/samba/smb.conf
 
 ```CODE
 samba-tool domain provision
- 
 ```
 
 > указать: доменное имя, рабочую группу, роль dc, бэкенд SAMBA_INTERNAL, DNS forwarder 77.88.8.8, пароль администратора
@@ -79,9 +72,8 @@ samba-tool domain provision
 
 ```CODE
 samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P@ssw0rd'
-  --dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
-  --use-rfc2307   
- 
+--dns-backend=SAMBA_INTERNAL --option="dns forwarder=77.88.8.8" --server-role=dc            
+--use-rfc2307   
 ```
 
 > --realm(имя области Kerberos и DNS домена); --domain(имя рабочей группы); --dns-backend(бэкенд DNS); --use-rfc2307(поддержка UID/GID и ACL)
@@ -90,15 +82,13 @@ samba-tool domain provision --realm=domain.sample --domain=domain --adminpass='P
 
 ```CODE
 systemctl enable --now samba
-                                                                                              
- 
+
 ```
 
 #### Копирование конфигурации Kerberos <!-- NAME -->
 
 ```CODE
 cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
- 
 ```
 
 > Samba создает шаблон krb5.conf при создании домена
@@ -109,7 +99,6 @@ cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
 
 ```CODE
 systemctl status samba
- 
 ```
 
 > служба должна быть active (running)
@@ -118,7 +107,6 @@ systemctl status samba
 
 ```CODE
 samba-tool domain info 127.0.0.1                                                         
- 
 ```
 
 > показывает общую информацию о домене
@@ -127,7 +115,6 @@ samba-tool domain info 127.0.0.1
 
 ```CODE
 smbclient -L localhost -U administrator                                                  
- 
 ```
 
 > должны быть netlogon и sysvol
@@ -136,7 +123,6 @@ smbclient -L localhost -U administrator
 
 ```CODE
 cat /etc/resolv.conf                                                                     
- 
 ```
 
 > должен быть nameserver 127.0.0.1
@@ -145,7 +131,6 @@ cat /etc/resolv.conf
 
 ```CODE
 host -t SRV _kerberos._udp.domain.sample.                                                  
- 
 ```
 
 > утилита host из пакета bind-utils
@@ -154,7 +139,6 @@ host -t SRV _kerberos._udp.domain.sample.
 
 ```CODE
 host -t SRV _ldap._tcp.domain.sample.                                                      
- 
 ```
 
 > проверяет доступность LDAP
@@ -163,7 +147,6 @@ host -t SRV _ldap._tcp.domain.sample.
 
 ```CODE
 host -t A dc.domain.sample.                                                                
- 
 ```
 
 > должен вернуть IP-адрес контроллера домена
@@ -172,7 +155,6 @@ host -t A dc.domain.sample.
 
 ```CODE
 kinit administrator@DOMAIN.SAMPLE                                                          
- 
 ```
 
 > имя домена в верхнем регистре; запрашивает пароль администратора

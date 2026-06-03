@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 net.ipv4.ip_forward=1                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,29 +15,26 @@ net.ipv4.ip_forward=1
 
 <syntaxhighlight lang="bash">
 sysctl -p                                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание каталога для туннельного интерфейса ====
 
 <syntaxhighlight lang="bash">
 mkdir -p /etc/net/ifaces/tun                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Настройка параметров туннеля в /etc/net/ifaces/tun/options ====
 
 <syntaxhighlight lang="bash">
 TYPE=iptun                                                                               
-  TUNTYPE=gre                                                                                 
-  TUNLOCAL=172.16.4.1
-  TUNREMOTE=172.16.5.1                                                                        
-  TUNOPTIONS='ttl 64'                                                                         
-  TUNTTL=64                                                                                   
-  TUNMTU=1476                                                                                 
- 
+TUNTYPE=gre                                                                                 
+TUNLOCAL=172.16.4.1
+TUNREMOTE=172.16.5.1                                                                        
+TUNOPTIONS='ttl 64'                                                                         
+TUNTTL=64                                                                                   
+TUNMTU=1476                                                                                 
 </syntaxhighlight>
 
 <blockquote>
@@ -49,7 +45,6 @@ TYPE=iptun(тип интерфейса - IP-туннель); TUNTYPE=gre(про�
 
 <syntaxhighlight lang="bash">
 10.10.10.2/30
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -60,8 +55,7 @@ TYPE=iptun(тип интерфейса - IP-туннель); TUNTYPE=gre(про�
 
 <syntaxhighlight lang="bash">
 systemctl restart network                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 <blockquote>

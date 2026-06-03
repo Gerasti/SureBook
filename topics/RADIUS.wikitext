@@ -5,15 +5,13 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y freeradius freeradius-utils                         
- 
 </syntaxhighlight>
 
 ==== Запуск службы ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now radiusd                                                           
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Настройка RADIUS сервера ===
@@ -22,11 +20,10 @@ systemctl enable --now radiusd
 
 <syntaxhighlight lang="bash">
 client ALL {                                                                             
-    ipaddr = 0.0.0.0
-    netmask = 0                                                                               
-    secret = P@ssw0rd                                                                         
-  }                                                                                           
- 
+ipaddr = 0.0.0.0
+netmask = 0                                                                               
+secret = P@ssw0rd                                                                         
+}                                                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -37,9 +34,8 @@ ipaddr(IP клиента); netmask(маска сети); secret(общий се�
 
 <syntaxhighlight lang="bash">
 netuser Cleartext-Password := "P@ssw0rd"                                                 
-          Service-Type = Administrative-User,                                                 
-          Cisco-AVPair = "shell:roles=admin"                                                  
- 
+Service-Type = Administrative-User,                                                 
+Cisco-AVPair = "shell:roles=admin"                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -50,8 +46,7 @@ Cleartext-Password(пароль пользователя); Service-Type(тип �
 
 <syntaxhighlight lang="bash">
 systemctl restart radiusd
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка RADIUS сервера ===
@@ -60,7 +55,6 @@ systemctl restart radiusd
 
 <syntaxhighlight lang="bash">
 systemctl status radiusd                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -71,7 +65,6 @@ systemctl status radiusd
 
 <syntaxhighlight lang="bash">
 radtest netuser P@ssw0rd localhost 0 P@ssw0rd                                            
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -84,14 +77,12 @@ radtest netuser P@ssw0rd localhost 0 P@ssw0rd
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y pam_radius                                          
- 
 </syntaxhighlight>
 
 ==== В /etc/pam_radius_auth.conf ====
 
 <syntaxhighlight lang="bash">
 <ip сервера> P@ssw0rd 3                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -102,7 +93,6 @@ apt-get update && apt-get install -y pam_radius
 
 <syntaxhighlight lang="bash">
 auth  sufficient  pam_radius_auth.so                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -113,7 +103,6 @@ sufficient(достаточно для авторизации); pam_radius_auth.
 
 <syntaxhighlight lang="bash">
 useradd netuser                                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -126,7 +115,6 @@ useradd netuser
 
 <syntaxhighlight lang="bash">
 ssh netuser@<ip клиента>                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>

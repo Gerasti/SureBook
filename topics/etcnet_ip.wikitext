@@ -15,15 +15,13 @@
 
 <syntaxhighlight lang="bash">
 mkdir -p /etc/net/ifaces/ens32                                                           
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Копирование конфигурации существующего интерфейса ====
 
 <syntaxhighlight lang="bash">
 cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -36,9 +34,8 @@ cp /etc/net/ifaces/ens33/options /etc/net/ifaces/ens32/
 
 <syntaxhighlight lang="bash">
 TYPE=eth                                                                                 
-  BOOTPROTO=static                                                                            
-  CONFIG_IPV4=yes                                                                             
- 
+BOOTPROTO=static                                                                            
+CONFIG_IPV4=yes                                                                             
 </syntaxhighlight>
 
 <blockquote>
@@ -49,8 +46,7 @@ TYPE=eth(тип интерфейса Ethernet); BOOTPROTO(протокол по�
 
 <syntaxhighlight lang="bash">
 192.168.11.67/28
-  192.168.33.67/32                                                                            
- 
+192.168.33.67/32                                                                            
 </syntaxhighlight>
 
 <blockquote>
@@ -61,7 +57,6 @@ IP-адрес обязательно указывается с маской се
 
 <syntaxhighlight lang="bash">
 default via 192.168.11.1                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -72,8 +67,7 @@ default(маршрут по умолчанию); via(IP-адрес маршру�
 
 <syntaxhighlight lang="bash">
 systemctl restart network                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Ручное управление интерфейсами ===
@@ -82,16 +76,14 @@ systemctl restart network
 
 <syntaxhighlight lang="bash">
 ifup ens32                                                                               
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Остановка интерфейса ====
 
 <syntaxhighlight lang="bash">
 ifdown ens32                                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Ручное управление маршрутами ===
@@ -100,24 +92,21 @@ ifdown ens32
 
 <syntaxhighlight lang="bash">
 ip route add default via 192.168.11.1                                                    
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Удаление шлюза ====
 
 <syntaxhighlight lang="bash">
 ip route del default via 192.168.11.1                                                    
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка маршрутов ====
 
 <syntaxhighlight lang="bash">
 ip route                                                                                 
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка интерфейсов ===

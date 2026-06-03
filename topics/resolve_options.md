@@ -5,7 +5,6 @@
 
 ```CODE
 cat /etc/resolv.conf                                                                     
- 
 ```
 
 > показывает текущие DNS-серверы
@@ -14,7 +13,6 @@ cat /etc/resolv.conf
 
 ```CODE
 echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
- 
 ```
 
 > перезаписывает файл; 77.88.8.8(Яндекс DNS)
@@ -23,8 +21,7 @@ echo "nameserver 77.88.8.8" > /etc/resolv.conf
 
 ```CODE
 echo "nameserver 77.88.8.8" > /etc/resolv.conf                                           
-  echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
- 
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf                                               
 ```
 
 > добавляет в конец файла; 8.8.8.8(Google DNS)
@@ -33,9 +30,8 @@ echo "nameserver 77.88.8.8" > /etc/resolv.conf
 
 ```CODE
 nameserver 192.168.1.1                                                                   
-  search example.local                                                                        
-  domain example.local                                                                        
- 
+search example.local                                                                        
+domain example.local                                                                        
 ```
 
 > search(список доменов для поиска); domain(локальный домен)
@@ -44,8 +40,7 @@ nameserver 192.168.1.1
 
 ```CODE
 nameserver 77.88.8.8                                                                     
-  options timeout:2 attempts:3 rotate                                                         
- 
+options timeout:2 attempts:3 rotate                                                         
 ```
 
 > timeout(таймаут запроса в секундах); attempts(количество попыток); rotate(чередование серверов)
@@ -56,7 +51,6 @@ nameserver 77.88.8.8
 
 ```CODE
 nslookup ya.ru
- 
 ```
 
 > должен вернуть IP-адрес
@@ -65,7 +59,6 @@ nslookup ya.ru
 
 ```CODE
 dig ya.ru                                                                                
- 
 ```
 
 > показывает подробную информацию о DNS-запросе
@@ -74,7 +67,6 @@ dig ya.ru
 
 ```CODE
 host ya.ru                                                                               
- 
 ```
 
 > простая проверка разрешения имени

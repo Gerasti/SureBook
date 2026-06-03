@@ -31,7 +31,6 @@
 
 ```CODE
 apt-get install -y lvm2                                                                  
- 
 ```
 
 > lvm2(пакет для работы с LVM)
@@ -40,10 +39,9 @@ apt-get install -y lvm2
 
 ```CODE
 parted /dev/sda                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%
-  set 1 lvm on                                                                                
- 
+mklabel gpt                                                                                 
+mkpart primary 0% 100%
+set 1 lvm on                                                                                
 ```
 
 > set 1 lvm on(установка флага LVM на раздел)
@@ -52,18 +50,16 @@ parted /dev/sda
 
 ```CODE
 parted /dev/sdb                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%                                                                      
-  set 1 lvm on                                                                                
-                                                                                              
- 
+mklabel gpt                                                                                 
+mkpart primary 0% 100%                                                                      
+set 1 lvm on                                                                                
+
 ```
 
 #### Создание Physical Volume <!-- NAME -->
 
 ```CODE
 pvcreate /dev/sda1 /dev/sdb1                                                             
- 
 ```
 
 > pvcreate(инициализация физических томов для LVM)
@@ -72,7 +68,6 @@ pvcreate /dev/sda1 /dev/sdb1
 
 ```CODE
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
- 
 ```
 
 > vgcreate(создание группы томов) vg01(имя группы)
@@ -83,7 +78,6 @@ vgcreate vg01 /dev/sda1 /dev/sdb1
 
 ```CODE
 lvcreate -L 10G -n lv_data vg01                                                          
- 
 ```
 
 > lvcreate(создание логического тома) -L(размер) -n(имя тома)
@@ -94,7 +88,6 @@ lvcreate -L 10G -n lv_data vg01
 
 ```CODE
 lvcreate -l 100%FREE -n lv_data vg01                                                     
- 
 ```
 
 > -l 100%FREE(использовать 100% свободного места в VG)
@@ -103,7 +96,6 @@ lvcreate -l 100%FREE -n lv_data vg01
 
 ```CODE
 mkfs.ext4 /dev/vg01/lv_data                                                              
- 
 ```
 
 > Форматирование логического тома {ext4, xfs, btrfs}
@@ -112,16 +104,14 @@ mkfs.ext4 /dev/vg01/lv_data
 
 ```CODE
 mkdir /mnt/data                                                                          
-                                                                                              
- 
+
 ```
 
 #### Монтирование LV <!-- NAME -->
 
 ```CODE
 mount /dev/vg01/lv_data /mnt/data                                                        
-                                                                                              
- 
+
 ```
 
 ### Настройка striped (RAID 0) <!-- HEAD -->
@@ -134,23 +124,20 @@ mount /dev/vg01/lv_data /mnt/data
 
 ```CODE
 pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
- 
+
 ```
 
 #### Создание VG для striped <!-- NAME -->
 
 ```CODE
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
- 
+
 ```
 
 #### Создание striped LV <!-- NAME -->
 
 ```CODE
 lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
- 
 ```
 
 > -i2(количество дисков для striping, страйпинг по 2 дискам)
@@ -161,17 +148,15 @@ lvcreate -l 100%FREE -n lv_data -i2 vg01
 
 ```CODE
 mkfs.ext4 /dev/vg01/lv_data                                                              
-                                                                                              
- 
+
 ```
 
 #### Монтирование <!-- NAME -->
 
 ```CODE
 mkdir /mnt/data                                                                          
-  mount /dev/vg01/lv_data /mnt/data                                                           
-                                                                                              
- 
+mount /dev/vg01/lv_data /mnt/data                                                           
+
 ```
 
 ### Настройка mirroring (RAID 1) <!-- HEAD -->
@@ -184,23 +169,20 @@ mkdir /mnt/data
 
 ```CODE
 pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
- 
+
 ```
 
 #### Создание VG для mirroring <!-- NAME -->
 
 ```CODE
 vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
- 
+
 ```
 
 #### Создание mirrored LV <!-- NAME -->
 
 ```CODE
 lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
- 
 ```
 
 > -m1(количество копий минус одна, одно зеркало = 2 копии)
@@ -211,17 +193,15 @@ lvcreate -l 100%FREE -n lvmirror -m1 vg01
 
 ```CODE
 mkfs.ext4 /dev/vg01/lvmirror                                                             
-                                                                                              
- 
+
 ```
 
 #### Монтирование <!-- NAME -->
 
 ```CODE
 mkdir /mnt/mirror                                                                        
-  mount /dev/vg01/lvmirror /mnt/mirror                                                        
-                                                                                              
- 
+mount /dev/vg01/lvmirror /mnt/mirror                                                        
+
 ```
 
 ### Управление LVM <!-- HEAD -->
@@ -230,7 +210,6 @@ mkdir /mnt/mirror
 
 ```CODE
 lvextend -L +5G /dev/vg01/lv_data                                                        
- 
 ```
 
 > -L +5G(добавить 5GB к текущему размеру)
@@ -241,7 +220,6 @@ lvextend -L +5G /dev/vg01/lv_data
 
 ```CODE
 resize2fs /dev/vg01/lv_data                                                              
- 
 ```
 
 > resize2fs(для ext4); xfs_growfs(для xfs)
@@ -252,11 +230,10 @@ resize2fs /dev/vg01/lv_data
 
 ```CODE
 umount /mnt/data                                                                         
-  e2fsck -f /dev/vg01/lv_data                                                                 
-  resize2fs /dev/vg01/lv_data 5G                                                              
-  lvreduce -L 5G /dev/vg01/lv_data                                                            
-  mount /dev/vg01/lv_data /mnt/data                                                           
- 
+e2fsck -f /dev/vg01/lv_data                                                                 
+resize2fs /dev/vg01/lv_data 5G                                                              
+lvreduce -L 5G /dev/vg01/lv_data                                                            
+mount /dev/vg01/lv_data /mnt/data                                                           
 ```
 
 > Сначала уменьшить ФС, потом LV; требует размонтирования
@@ -265,8 +242,7 @@ umount /mnt/data
 
 ```CODE
 pvcreate /dev/sdc1                                                                       
-  vgextend vg01 /dev/sdc1                                                                     
- 
+vgextend vg01 /dev/sdc1                                                                     
 ```
 
 > vgextend(расширение группы томов новым диском)
@@ -275,8 +251,7 @@ pvcreate /dev/sdc1
 
 ```CODE
 pvmove /dev/sda1                                                                         
-  vgreduce vg01 /dev/sda1                                                                     
- 
+vgreduce vg01 /dev/sda1                                                                     
 ```
 
 > pvmove(перемещение данных с диска); vgreduce(удаление диска из VG)
@@ -285,7 +260,6 @@ pvmove /dev/sda1
 
 ```CODE
 lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
- 
 ```
 
 > -s(создание снапшота); -L 1G(размер для хранения изменений)
@@ -296,7 +270,6 @@ lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data
 
 ```CODE
 lvconvert --merge /dev/vg01/lv_data_snap                                                 
- 
 ```
 
 > Откат LV к состоянию снапшота; требует перезагрузки или размонтирования
@@ -305,33 +278,29 @@ lvconvert --merge /dev/vg01/lv_data_snap
 
 ```CODE
 lvremove /dev/vg01/lv_data_snap                                                          
-                                                                                              
- 
+
 ```
 
 #### Удаление LV <!-- NAME -->
 
 ```CODE
 umount /mnt/data                                                                         
-  lvremove /dev/vg01/lv_data                                                                  
-                                                                                              
- 
+lvremove /dev/vg01/lv_data                                                                  
+
 ```
 
 #### Удаление VG <!-- NAME -->
 
 ```CODE
 vgremove vg01                                                                            
-                                                                                              
- 
+
 ```
 
 #### Удаление PV <!-- NAME -->
 
 ```CODE
 pvremove /dev/sda1                                                                       
-                                                                                              
- 
+
 ```
 
 ### Автомонтирование <!-- HEAD -->
@@ -340,7 +309,6 @@ pvremove /dev/sda1
 
 ```CODE
 /dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
- 
 ```
 
 > Автоматическое монтирование при загрузке
@@ -349,7 +317,6 @@ pvremove /dev/sda1
 
 ```CODE
 mount -a                                                                                 
- 
 ```
 
 > mount -a(монтирует все из /etc/fstab, что ещё не смонтировано)
@@ -360,8 +327,7 @@ mount -a
 
 ```CODE
 pvdisplay                                                                                
-  pvs
- 
+pvs
 ```
 
 > pvdisplay(детальная информация); pvs(краткая таблица)
@@ -370,8 +336,7 @@ pvdisplay
 
 ```CODE
 vgdisplay                                                                                
-  vgs                                                                                         
- 
+vgs                                                                                         
 ```
 
 > Показывает размер VG, свободное место, количество PV
@@ -380,8 +345,7 @@ vgdisplay
 
 ```CODE
 lvdisplay                                                                                
-  lvs                                                                                         
- 
+lvs                                                                                         
 ```
 
 > Показывает размер LV, VG, состояние
@@ -390,7 +354,6 @@ lvdisplay
 
 ```CODE
 lsblk                                                                                    
- 
 ```
 
 > Показывает иерархию дисков, разделов и LVM томов
@@ -399,7 +362,6 @@ lsblk
 
 ```CODE
 df -h                                                                                    
- 
 ```
 
 > Показывает смонтированные файловые системы и использование
@@ -408,8 +370,7 @@ df -h
 
 ```CODE
 reboot                                                                                   
-  df -h                                                                                       
- 
+df -h                                                                                       
 ```
 
 > Опционально, только для проверки автомонтирования после перезагрузки
@@ -420,7 +381,6 @@ reboot
 
 ```CODE
 lvs -a -o +devices                                                                       
- 
 ```
 
 > Показывает устройства и состояние зеркал
@@ -429,7 +389,6 @@ lvs -a -o +devices
 
 ```CODE
 lvs -a -o +snap_percent                                                                  
- 
 ```
 
 > Показывает процент использования снапшота

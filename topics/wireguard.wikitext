@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get update && apt-get install -y wireguard-tools wireguard-tools-wg-quick
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -18,17 +17,15 @@ wireguard-tools(утилиты для управления WireGuard); wireguard
 
 <syntaxhighlight lang="bash">
 mkdir -p /etc/wireguard/keys
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Генерация ключей сервера и клиента ====
 
 <syntaxhighlight lang="bash">
 cd /etc/wireguard/keys                                                       
-  wg genkey | tee srv-sec.key | wg pubkey > srv-pub.key                           
-  wg genkey | tee cli-sec.key | wg pubkey > cli-pub.key                           
- 
+wg genkey | tee srv-sec.key | wg pubkey > srv-pub.key                           
+wg genkey | tee cli-sec.key | wg pubkey > cli-pub.key                           
 </syntaxhighlight>
 
 <blockquote>
@@ -39,14 +36,13 @@ wg genkey(генерация приватного ключа); wg pubkey(ген�
 
 <syntaxhighlight lang="bash">
 [Interface]
-  Address = 10.20.30.1/30                                                         
-  ListenPort = 51820                                                              
-  PrivateKey = <содержимое srv-sec.key>                                           
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое cli-pub.key>                                            
-  AllowedIPs = 10.20.30.2/32, 172.16.100.0/24                                     
- 
+Address = 10.20.30.1/30                                                         
+ListenPort = 51820                                                              
+PrivateKey = <содержимое srv-sec.key>                                           
+
+[Peer]                                                                          
+PublicKey = <содержимое cli-pub.key>                                            
+AllowedIPs = 10.20.30.2/32, 172.16.100.0/24                                     
 </syntaxhighlight>
 
 <blockquote>
@@ -57,8 +53,7 @@ wg genkey(генерация приватного ключа); wg pubkey(ген�
 
 <syntaxhighlight lang="bash">
 systemctl enable --now wg-quick@wg0
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Настройка клиента FW-R ===
@@ -67,17 +62,15 @@ systemctl enable --now wg-quick@wg0
 
 <syntaxhighlight lang="bash">
 mkdir -p /etc/wireguard/keys
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Копирование ключей с сервера ====
 
 <syntaxhighlight lang="bash">
 cd /etc/wireguard/keys
-  scp root@4.4.4.2:/etc/wireguard/keys/cli-sec.key ./                             
-  scp root@4.4.4.2:/etc/wireguard/keys/srv-pub.key ./                             
- 
+scp root@4.4.4.2:/etc/wireguard/keys/cli-sec.key ./                             
+scp root@4.4.4.2:/etc/wireguard/keys/srv-pub.key ./                             
 </syntaxhighlight>
 
 <blockquote>
@@ -88,15 +81,14 @@ cd /etc/wireguard/keys
 
 <syntaxhighlight lang="bash">
 [Interface]                                                                  
-  Address = 10.20.30.2/30                                                         
-  PrivateKey = <содержимое cli-sec.key>                                           
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое srv-pub.key>                                            
-  Endpoint = 4.4.4.2:51820                                                        
-  AllowedIPs = 10.20.30.1/32, 192.168.100.0/24                                    
-  PersistentKeepalive = 25                                                        
- 
+Address = 10.20.30.2/30                                                         
+PrivateKey = <содержимое cli-sec.key>                                           
+
+[Peer]                                                                          
+PublicKey = <содержимое srv-pub.key>                                            
+Endpoint = 4.4.4.2:51820                                                        
+AllowedIPs = 10.20.30.1/32, 192.168.100.0/24                                    
+PersistentKeepalive = 25                                                        
 </syntaxhighlight>
 
 <blockquote>
@@ -107,8 +99,7 @@ Endpoint(адрес и порт сервера); AllowedIPs(разрешённы
 
 <syntaxhighlight lang="bash">
 systemctl enable --now wg-quick@wg0
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Разрешение WireGuard в firewall ===
@@ -117,7 +108,6 @@ systemctl enable --now wg-quick@wg0
 
 <syntaxhighlight lang="bash">
 iptables -A INPUT -p udp --dport 51820 -j ACCEPT
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -128,8 +118,7 @@ UDP порт 51820 используется для WireGuard
 
 <syntaxhighlight lang="bash">
 nft add rule inet filter input udp dport 51820 accept                        
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -138,7 +127,6 @@ nft add rule inet filter input udp dport 51820 accept
 
 <syntaxhighlight lang="bash">
 wg show wg0  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -149,23 +137,20 @@ wg show wg0
 
 <syntaxhighlight lang="bash">
 ip -c a | grep wg0                                                           
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка статуса службы ====
 
 <syntaxhighlight lang="bash">
 systemctl status wg-quick@wg0                                                
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка связности через туннель ====
 
 <syntaxhighlight lang="bash">
 ping 10.20.30.2                                                              
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -176,7 +161,6 @@ ping 10.20.30.2
 
 <syntaxhighlight lang="bash">
 ping 172.16.100.10                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -189,40 +173,35 @@ ping 172.16.100.10
 
 <syntaxhighlight lang="bash">
 systemctl stop wg-quick@wg0
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Запуск туннеля ====
 
 <syntaxhighlight lang="bash">
 systemctl start wg-quick@wg0                                                 
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Перезапуск туннеля ====
 
 <syntaxhighlight lang="bash">
 systemctl restart wg-quick@wg0                                               
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Ручное поднятие интерфейса ====
 
 <syntaxhighlight lang="bash">
 wg-quick up wg0                                                              
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Ручное отключение интерфейса ====
 
 <syntaxhighlight lang="bash">
 wg-quick down wg0                                                            
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Настройка динамической маршрутизации OSPF ===
@@ -231,7 +210,6 @@ wg-quick down wg0
 
 <syntaxhighlight lang="bash">
 apt-get install -y frr
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -242,15 +220,14 @@ FRR(Free Range Routing, пакет для динамической маршру�
 
 <syntaxhighlight lang="bash">
 [Interface]                                                                  
-  Address = 10.20.30.1/30                                                         
-  ListenPort = 51820                                                              
-  PrivateKey = <содержимое srv-sec.key>                                           
-  Table = off                                                                     
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое cli-pub.key>
-  AllowedIPs = 10.20.30.2/32                                                      
- 
+Address = 10.20.30.1/30                                                         
+ListenPort = 51820                                                              
+PrivateKey = <содержимое srv-sec.key>                                           
+Table = off                                                                     
+
+[Peer]                                                                          
+PublicKey = <содержимое cli-pub.key>
+AllowedIPs = 10.20.30.2/32                                                      
 </syntaxhighlight>
 
 <blockquote>
@@ -261,59 +238,54 @@ Table = off(отключить автоматическое управление
 
 <syntaxhighlight lang="bash">
 [Interface]  
-  Address = 10.20.30.2/30                                                         
-  PrivateKey = <содержимое cli-sec.key>                                           
-  Table = off                                                                     
-                                                                                  
-  [Peer]                                                                          
-  PublicKey = <содержимое srv-pub.key>                                            
-  Endpoint = 4.4.4.2:51820                                                        
-  AllowedIPs = 10.20.30.1/32                                                      
-  PersistentKeepalive = 25                                                        
-                                                                                  
- 
+Address = 10.20.30.2/30                                                         
+PrivateKey = <содержимое cli-sec.key>                                           
+Table = off                                                                     
+
+[Peer]                                                                          
+PublicKey = <содержимое srv-pub.key>                                            
+Endpoint = 4.4.4.2:51820                                                        
+AllowedIPs = 10.20.30.1/32                                                      
+PersistentKeepalive = 25                                                        
+
 </syntaxhighlight>
 
 ==== Перезапуск туннеля на обоих серверах ====
 
 <syntaxhighlight lang="bash">
 systemctl restart wg-quick@wg0                                               
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Включение демона OSPF на обоих серверах ====
 
 <syntaxhighlight lang="bash">
 sed -i 's/ospfd=no/ospfd=yes/g' /etc/frr/daemons                             
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Запуск и автозагрузка FRR на обоих серверах ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now frr                                                   
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Настройка OSPF на сервере FW-L ====
 
 <syntaxhighlight lang="bash">
 vtysh                                                                        
-  configure terminal                                                              
-  router ospf     
-  passive-interface default                                                       
-  network 10.20.30.0/30 area 0
-  network 192.168.100.0/24 area 0                                                 
-  exit                                                                            
-  interface wg0                                                                   
-  no ip ospf passive                                                              
-  exit                                                                            
-  end                                                                             
-  wr mem                                                                          
- 
+configure terminal                                                              
+router ospf     
+passive-interface default                                                       
+network 10.20.30.0/30 area 0
+network 192.168.100.0/24 area 0                                                 
+exit                                                                            
+interface wg0                                                                   
+no ip ospf passive                                                              
+exit                                                                            
+end                                                                             
+wr mem                                                                          
 </syntaxhighlight>
 
 <blockquote>
@@ -324,26 +296,24 @@ vtysh(интерактивная оболочка FRR); router ospf(включи
 
 <syntaxhighlight lang="bash">
 vtysh
-  configure terminal                                                              
-  router ospf                                                                     
-  passive-interface default
-  network 10.20.30.0/30 area 0                                                    
-  network 172.16.100.0/24 area 0                                                  
-  exit                                                                            
-  interface wg0                                                                   
-  no ip ospf passive                                                              
-  exit            
-  end                                                                             
-  wr mem          
-                                                                                  
- 
+configure terminal                                                              
+router ospf                                                                     
+passive-interface default
+network 10.20.30.0/30 area 0                                                    
+network 172.16.100.0/24 area 0                                                  
+exit                                                                            
+interface wg0                                                                   
+no ip ospf passive                                                              
+exit            
+end                                                                             
+wr mem          
+
 </syntaxhighlight>
 
 ==== Проверка OSPF соседей ====
 
 <syntaxhighlight lang="bash">
 vtysh -c "show ip ospf neighbor"                                             
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -354,7 +324,6 @@ vtysh -c "show ip ospf neighbor"
 
 <syntaxhighlight lang="bash">
 ip -c r | grep ospf                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -365,16 +334,14 @@ ip -c r | grep ospf
 
 <syntaxhighlight lang="bash">
 vtysh -c "show ip route ospf"                                                
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка статуса OSPF ====
 
 <syntaxhighlight lang="bash">
 vtysh -c "show ip ospf"                                                      
-                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка интерфейсов OSPF ====

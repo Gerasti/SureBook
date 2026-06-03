@@ -1,0 +1,162 @@
+hd Импорт Docker-образов                                                                    
+ne Загрузка образа сайта                                                                    
+ce docker load < /mnt/docker/site_latest.tar                                                
+ct docker load(загрузка образа из tar-архива); <(перенаправление содержимого файла)         
+
+ne Загрузка образа MariaDB                                                                  
+ce docker load < /mnt/docker/mariadb_latest.tar                                             
+ct Загружает заранее подготовленный образ базы данных                                       
+
+ne Просмотр списка загруженных образов                                                      
+ce docker image ls                                                                          
+ct Показывает все локально доступные Docker-образы с их тегами и ID                         
+
+hd Создание Docker Compose файла                                                            
+ne Создание файла конфигурации                                                              
+ce vim docker-compose.yml                                                                   
+ct docker-compose.yml(стандартное имя файла конфигурации для Docker Compose)                
+
+ne Конфигурация Docker Compose                                                              
+ce  services:
+  database:
+    container_name: db
+    image: mariadb:10.11
+    restart: always
+
+    ports:
+      - "3306:3306"
+
+    environment:
+      MARIADB_DATABASE: "testdb"
+      MARIADB_USER: "testc"
+      MARIADB_PASSWORD: "P@ssw0rd"
+      MARIADB_ROOT_PASSWORD: "toor"
+
+  app:
+    container_name: testapp
+    image: site:latest
+    restart: always
+
+    ports:
+      - "8080:8000"
+
+    environment:
+      DB_TYPE: "maria"
+      DB_HOST: "192.168.122.97"
+      DB_PORT: "3306"
+      DB_NAME: "testdb"
+      DB_USER: "testc"
+      DB_PASS: "P@ssw0rd"
+
+    depends_on:
+      - database                                                                          
+ct services(определение сервисов для запуска); container_name(имя контейнера);              
+image(используемый Docker-образ); restart(политика перезапуска: {always, unless-stopped,    
+on-failure, no}); ports(проброс портов в формате "внешний:внутренний");                     
+environment(переменные окружения для контейнера); depends_on(зависимости между контейнерами,
+определяет порядок запуска)
+ct MARIADB_DATABASE(создаёт базу данных при первом запуске); MARIADB_USER(создаёт
+пользователя БД); MARIADB_PASSWORD(пароль пользователя); MARIADB_ROOT_PASSWORD(пароль       
+root-пользователя MariaDB)
+ct DB_TYPE(тип СУБД для подключения); DB_HOST(IP-адрес сервера базы данных); DB_PORT(порт   
+для подключения к БД); DB_NAME(имя базы данных); DB_USER(пользователь для подключения);     
+DB_PASS(пароль пользователя)
+
+hd Управление контейнерами                                                                  
+ne Запуск контейнеров
+ce docker compose up -d                                                                     
+ct up(создать и запустить контейнеры); -d(detached mode, запуск в фоновом режиме)           
+
+ne Просмотр запущенных контейнеров                                                          
+ce docker ps                                                                                
+ct Показывает список активных контейнеров с их статусом, портами и именами                  
+
+ne Просмотр всех контейнеров включая остановленные                                          
+ce docker ps -a                                                                             
+ct -a(all, показать все контейнеры включая остановленные)                                   
+
+ne Остановка и удаление контейнеров                                                         
+ce docker compose down                                                                      
+ct down(остановить и удалить контейнеры, сети, созданные через compose)                     
+
+hd Просмотр логов контейнеров                                                               
+ne Логи контейнера приложения                                                               
+ce docker logs testapp                                                                      
+ct Показывает все логи контейнера с момента его запуска                                     
+
+ne Логи контейнера базы данных                                                              
+ce docker logs db                                                                           
+ct Показывает логи MariaDB для диагностики проблем с БД                                     
+
+ne Просмотр логов в реальном времени                                                        
+ce docker logs -f testapp                                                                   
+ct -f(follow, следить за новыми записями в реальном времени)                                
+
+ne Просмотр последних строк логов                                                           
+ce docker logs --tail 50 testapp                                                            
+ct --tail(показать последние N строк логов)                                                 
+
+hd Проверка работы                                                                          
+ne Проверка открытых портов                                                                 
+ce ss -tulpn | grep -E '3306|8080'                                                          
+ct ss(socket statistics); -t(TCP-сокеты); -u(UDP-сокеты); -l(слушающие сокеты); -p(показать 
+процессы); -n(не разрешать имена); grep(фильтр по портам 3306 и 8080)                       
+
+ne Проверка сети Docker                                                                     
+ce docker network ls
+ct Показывает список Docker-сетей                                                           
+
+ne Проверка доступности приложения                                                          
+ce curl http://192.168.122.97:8080                                                          
+ct Проверяет HTTP-ответ от приложения                                                       
+
+hd Дополнительные команды Docker                                                            
+ne Подключение к контейнеру                                                                 
+ce docker exec -it testapp bash                                                             
+ct exec(выполнить команду в контейнере); -it(интерактивный режим с TTY); bash(запустить     
+оболочку)                                                                                   
+
+ne Остановка контейнера                                                                     
+ce docker stop testapp
+ct Корректно останавливает контейнер с отправкой SIGTERM                                    
+
+ne Запуск остановленного контейнера                                                         
+ce docker start testapp                                                                     
+ct Запускает ранее остановленный контейнер                                                  
+
+ne Перезапуск контейнера                                                                    
+ce docker restart testapp                                                                   
+ct Перезапускает контейнер (остановка + запуск)                                             
+
+ne Удаление контейнера                                                                      
+ce docker rm testapp                                                                        
+ct Удаляет остановленный контейнер                                                          
+
+ne Удаление образа                                                                          
+ce docker rmi site:latest                                                                   
+ct rmi(remove image, удалить образ); требуется отсутствие контейнеров на основе этого образа
+
+ne Просмотр использования ресурсов                                                          
+ce docker stats                                                                             
+ct Показывает использование CPU, памяти, сети и диска контейнерами в реальном времени       
+
+hd Устранение типичных проблем                                                              
+ne Проблема: контейнер не запускается                                                       
+ce docker logs testapp                                                                      
+docker inspect testapp                                                                      
+ct logs(просмотр логов для выявления ошибок); inspect(детальная информация о конфигурации и 
+состоянии контейнера)                                                                       
+
+ne Проблема: порт уже занят                                                                 
+ce ss -tulpn | grep 8080
+docker ps -a                                                                                
+ct Проверка, какой процесс занимает порт и наличие конфликтующих контейнеров                
+
+ne Проблема: приложение не подключается к БД                                                
+ce docker logs db                                                                           
+docker exec -it testapp ping db                                                             
+ct Проверка логов базы данных и сетевой связности между контейнерами                        
+
+ne Очистка неиспользуемых ресурсов                                                          
+ce docker system prune -a                                                                   
+ct prune(удалить неиспользуемые данные); -a(all, включая неиспользуемые образы)

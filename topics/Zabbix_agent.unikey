@@ -1,28 +1,28 @@
 hd Установка                                                                                
-  ne Установка пакета на клиенте                                                              
-  ce apt-get install zabbix-agent                                                             
-   
-  hd Настройка                                                                                
-  ne Настройка в /etc/zabbix/zabbix_agentd.conf
-  ce Server=IP_ZABBIX_SERVER
-  ServerActive=IP_ZABBIX_SERVER
-  Hostname=HOST_CLIENT
-  ct Server(IP или hostname сервера); ServerActive(IP для активных проверок); Hostname(имя
-  хоста как в веб-интерфейсе)                                                                 
-   
-  ne Перезапуск и включение службы                                                            
-  ce systemctl restart zabbix-agentd
-  systemctl enable zabbix-agentd                                                              
-                                                                                              
-  hd Добавление хоста в веб-интерфейсе                                                        
-  lt Действия                                                                                 
-  - Monitoring -> Hosts                                                                       
-  - Create host                                                                               
-  - Host name: указать как в zabbix_agentd.conf                                               
-  - Templates: в поиске найти Linux by Zabbix agent                                           
-  - Host groups: выбрать Discovered hosts                                                     
-  - Add interface: Agent                                                                      
-  -- IP address: IP-адрес агента                                                              
-  -- Port: 10050                                                                              
-  - Сохранить                                                                                 
-  ct После добавления хост можно добавить в Dashboards для мониторинга
+ne Установка пакета на клиенте                                                              
+ce apt-get install zabbix-agent                                                             
+
+hd Настройка                                                                                
+ne Настройка в /etc/zabbix/zabbix_agentd.conf
+ce Server=IP_ZABBIX_SERVER
+ServerActive=IP_ZABBIX_SERVER
+Hostname=HOST_CLIENT
+ct Server(IP или hostname сервера); ServerActive(IP для активных проверок); Hostname(имя
+хоста как в веб-интерфейсе)                                                                 
+
+ne Перезапуск и включение службы                                                            
+ce systemctl restart zabbix-agentd
+systemctl enable zabbix-agentd                                                              
+
+hd Добавление хоста в веб-интерфейсе                                                        
+lt Действия                                                                                 
+- Monitoring -> Hosts                                                                       
+- Create host                                                                               
+- Host name: указать как в zabbix_agentd.conf                                               
+- Templates: в поиске найти Linux by Zabbix agent                                           
+- Host groups: выбрать Discovered hosts                                                     
+- Add interface: Agent                                                                      
+-- IP address: IP-адрес агента                                                              
+-- Port: 10050                                                                              
+- Сохранить                                                                                 
+ct После добавления хост можно добавить в Dashboards для мониторинга

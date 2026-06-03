@@ -1,64 +1,64 @@
 hd Установка sudo-samba-schema                                 
-  ne Добавление временного репозитория                           
-  ce echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
-  /etc/apt/sources.list                                          
-  ne Установка пакета                                            
-  ce apt-get install sudo-samba-schema                           
-  ne Удаление временного репозитория                             
-  ce sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
-  ne Настройка DNS в /etc/resolv.conf                            
-  ce nameserver <ip_локального_сервера>                                    ct Оставляем только локальный DNS                              
-  ne Перезапуск Samba                                            
-  ce systemctl restart samba                                     
-  hd Настройка схемы sudo в AD                                   
-  ne Применение схемы sudo                                       
-  ce sudo-schema-apply                                           
-  ct Ответить Yes, ввести Administrator и пароль, подтвердить Ok 
-  ne Создание роли sudo                                          
-  ce create-sudo-role                                            
-  ct Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE                       
-  ct Имя роли: pravila_hq                                        
-  ct sudoHost: ALL                                               
-  ct sudoCommand: /bin/cat                                       
-  ct sudoUser: %hq                                               
-  hd Настройка через ADMC                                        
-  ne Установка ADMC на клиенте                                   
-  ce apt-get install admc                                        
-  ne Аутентификация                                              
-  ce kinit administrator                                         
-  ne Запуск ADMC                                                 
-  ce sudo admc                                                   
-  ne Включение дополнительных возможностей                       
-  lt Настройка правила pravila_hq                                
-  - Настройки → Включить Дополнительные возможности              
-  - domain.sample → sudoers → pravila_hq → Правой кнопкой мыши →  
-  Свойства                                                       
-  - Атрибуты → sudoOption → Изменить → Добавить параметр         
-  !authenticate → Apply                                          
-  - Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и
-  /usr/bin/id → Apply                                            
-  hd Настройка клиента
-  ne Установка пакетов                                           
-  ce apt-get install sudo libsss_sudo                            
-  ne Настройка прав sudo                                         
-  ce control sudo public                                         
-  ne Настройка SSSD в /etc/sssd/sssd.conf                        
-  ce [sssd]                                                      
-  services = nss, pam, sudo                                      
-                                                                 
-  [pam]                                                          
-                                                                 
-  [domain/DOMAIN.SAMPLE]                                          
-  sudo_provider = ad
-  ne Настройка NSS в /etc/nsswitch.conf                          
-  ce sudoers: files sss                                          
-  ne Очистка кэша и перезапуск                                   
-  ce rm -rf /var/lib/sss/db/*                                    
-  sss_cache -E                                                   
-  systemctl restart sssd                                         
-  ct Можно выполнить reboot вместо очистки кэша                  
-  hd Проверка                                                    
-  ne Вход за пользователя hquser1                                
-  ce sudo cat /etc/passwd | sudo grep root && sudo id root       
-  ct Должны выполниться команды без запроса пароля благодаря     
-  !authenticate 
+ne Добавление временного репозитория                           
+ce echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
+/etc/apt/sources.list                                          
+ne Установка пакета                                            
+ce apt-get install sudo-samba-schema                           
+ne Удаление временного репозитория                             
+ce sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
+ne Настройка DNS в /etc/resolv.conf                            
+ce nameserver <ip_локального_сервера>                                    ct Оставляем только локальный DNS                              
+ne Перезапуск Samba                                            
+ce systemctl restart samba                                     
+hd Настройка схемы sudo в AD                                   
+ne Применение схемы sudo                                       
+ce sudo-schema-apply                                           
+ct Ответить Yes, ввести Administrator и пароль, подтвердить Ok 
+ne Создание роли sudo                                          
+ce create-sudo-role                                            
+ct Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE                       
+ct Имя роли: pravila_hq                                        
+ct sudoHost: ALL                                               
+ct sudoCommand: /bin/cat                                       
+ct sudoUser: %hq                                               
+hd Настройка через ADMC                                        
+ne Установка ADMC на клиенте                                   
+ce apt-get install admc                                        
+ne Аутентификация                                              
+ce kinit administrator                                         
+ne Запуск ADMC                                                 
+ce sudo admc                                                   
+ne Включение дополнительных возможностей                       
+lt Настройка правила pravila_hq                                
+- Настройки → Включить Дополнительные возможности              
+- domain.sample → sudoers → pravila_hq → Правой кнопкой мыши →  
+Свойства                                                       
+- Атрибуты → sudoOption → Изменить → Добавить параметр         
+!authenticate → Apply                                          
+- Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и
+/usr/bin/id → Apply                                            
+hd Настройка клиента
+ne Установка пакетов                                           
+ce apt-get install sudo libsss_sudo                            
+ne Настройка прав sudo                                         
+ce control sudo public                                         
+ne Настройка SSSD в /etc/sssd/sssd.conf                        
+ce [sssd]                                                      
+services = nss, pam, sudo                                      
+
+[pam]                                                          
+
+[domain/DOMAIN.SAMPLE]                                          
+sudo_provider = ad
+ne Настройка NSS в /etc/nsswitch.conf                          
+ce sudoers: files sss                                          
+ne Очистка кэша и перезапуск                                   
+ce rm -rf /var/lib/sss/db/*                                    
+sss_cache -E                                                   
+systemctl restart sssd                                         
+ct Можно выполнить reboot вместо очистки кэша                  
+hd Проверка                                                    
+ne Вход за пользователя hquser1                                
+ce sudo cat /etc/passwd | sudo grep root && sudo id root       
+ct Должны выполниться команды без запроса пароля благодаря     
+!authenticate 

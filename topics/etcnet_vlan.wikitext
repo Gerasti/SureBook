@@ -7,7 +7,6 @@
 
 <syntaxhighlight lang="bash">
 mkdir -p /etc/net/ifaces/ens32.100                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -18,11 +17,10 @@ mkdir -p /etc/net/ifaces/ens32.100
 
 <syntaxhighlight lang="bash">
 TYPE=vlan                                                                                
-  CONFIG_IPV4=yes                                                                             
-  BOOTPROTO=static                                                                            
-  VID=100                                                                                     
-  HOST=ens32                                                                                  
- 
+CONFIG_IPV4=yes                                                                             
+BOOTPROTO=static                                                                            
+VID=100                                                                                     
+HOST=ens32                                                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -33,16 +31,14 @@ TYPE=vlan(тип интерфейса VLAN); VID(идентификатор VLAN
 
 <syntaxhighlight lang="bash">
 192.168.11.67/24
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Применение изменений ====
 
 <syntaxhighlight lang="bash">
 systemctl restart network                                                                
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Ручное управление VLAN ===
@@ -51,16 +47,14 @@ systemctl restart network
 
 <syntaxhighlight lang="bash">
 ifup ens32.100                                                                           
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Остановка VLAN-интерфейса ====
 
 <syntaxhighlight lang="bash">
 ifdown ens32.100                                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 === Проверка VLAN ===

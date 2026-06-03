@@ -3,9 +3,8 @@
 
 ```CODE
 parted /dev/sda                                                                          
-  mklabel gpt                                                                                 
-  mkpart boot 0% 100%                                                                         
- 
+mklabel gpt                                                                                 
+mkpart boot 0% 100%                                                                         
 ```
 
 > mklabel(создание таблицы разделов) {gpt, msdos}
@@ -18,9 +17,8 @@ parted /dev/sda
 
 ```CODE
 parted /dev/sdc                                                                          
-  mklabel gpt                                                                                 
-  mkpart root ext4 0% 100%                                                                    
- 
+mklabel gpt                                                                                 
+mkpart root ext4 0% 100%                                                                    
 ```
 
 > ext4(тип файловой системы) {ext4, xfs, btrfs, swap}
@@ -31,10 +29,9 @@ parted /dev/sdc
 
 ```CODE
 parted /dev/sdd                                                                          
-  mklabel gpt                                                                                 
-  mkpart system 0% 50%                                                                        
-  mkpart data 50% 100%                                                                        
- 
+mklabel gpt                                                                                 
+mkpart system 0% 50%                                                                        
+mkpart data 50% 100%                                                                        
 ```
 
 > Создание двух разделов по 50% диска с названиями system и data
@@ -43,9 +40,8 @@ parted /dev/sdd
 
 ```CODE
 parted /dev/sde                                                                          
-  mklabel gpt                                                                                 
-  mkpart root 1MiB 10GiB
- 
+mklabel gpt                                                                                 
+mkpart root 1MiB 10GiB
 ```
 
 > 1MiB(начало раздела, выравнивание) 10GiB(конец раздела)
@@ -56,10 +52,9 @@ parted /dev/sde
 
 ```CODE
 parted /dev/sdf                                                                          
-  mklabel gpt                                                                                 
-  mkpart swap linux-swap 0% 4GiB
-  mkpart root ext4 4GiB 100%                                                                  
- 
+mklabel gpt                                                                                 
+mkpart swap linux-swap 0% 4GiB
+mkpart root ext4 4GiB 100%                                                                  
 ```
 
 > Первый раздел для swap, второй для системы
@@ -68,11 +63,10 @@ parted /dev/sdf
 
 ```CODE
 parted /dev/sdg                                                                          
-  mklabel gpt                                                                                 
-  mkpart EFI fat32 1MiB 512MiB                                                                
-  set 1 esp on                                                                                
-  mkpart root ext4 512MiB 100%                                                                
- 
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart root ext4 512MiB 100%                                                                
 ```
 
 > EFI(название раздела) для загрузчика UEFI
@@ -87,10 +81,9 @@ parted /dev/sdg
 
 ```CODE
 parted /dev/sdh                                                                          
-  mklabel msdos                                                                               
-  mkpart primary ext4 1MiB 100%                                                               
-  set 1 boot on                                                                               
- 
+mklabel msdos                                                                               
+mkpart primary ext4 1MiB 100%                                                               
+set 1 boot on                                                                               
 ```
 
 > msdos(таблица разделов MBR) для BIOS Legacy систем
@@ -103,11 +96,10 @@ parted /dev/sdh
 
 ```CODE
 parted /dev/sdi                                                                          
-  mklabel msdos                                                                               
-  mkpart primary linux-swap 1MiB 4GiB                                                         
-  mkpart primary ext4 4GiB 100%                                                               
-  set 2 boot on                                                                               
- 
+mklabel msdos                                                                               
+mkpart primary linux-swap 1MiB 4GiB                                                         
+mkpart primary ext4 4GiB 100%                                                               
+set 2 boot on                                                                               
 ```
 
 > msdos для совместимости со старыми BIOS
@@ -118,13 +110,12 @@ parted /dev/sdi
 
 ```CODE
 parted /dev/sdj                                                                          
-  mklabel gpt                                                                                 
-  mkpart boot ext4 1MiB 512MiB                                                                
-  set 1 boot on                                                                               
-  mkpart swap linux-swap 512MiB 4GiB                                                          
-  set 2 swap on                                                                               
-  mkpart root ext4 4GiB 100%                                                                  
- 
+mklabel gpt                                                                                 
+mkpart boot ext4 1MiB 512MiB                                                                
+set 1 boot on                                                                               
+mkpart swap linux-swap 512MiB 4GiB                                                          
+set 2 swap on                                                                               
+mkpart root ext4 4GiB 100%                                                                  
 ```
 
 > boot(название и флаг загрузочного раздела) для /boot
@@ -137,15 +128,14 @@ parted /dev/sdj
 
 ```CODE
 parted /dev/sdk                                                                          
-  mklabel gpt                                                                                 
-  mkpart EFI fat32 1MiB 512MiB                                                                
-  set 1 esp on                                                                                
-  mkpart boot ext4 512MiB 1GiB                                                                
-  set 2 boot on                                                                               
-  mkpart swap linux-swap 1GiB 5GiB                                                            
-  set 3 swap on                                                                               
-  mkpart root ext4 5GiB 100%                                                                  
- 
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart boot ext4 512MiB 1GiB                                                                
+set 2 boot on                                                                               
+mkpart swap linux-swap 1GiB 5GiB                                                            
+set 3 swap on                                                                               
+mkpart root ext4 5GiB 100%                                                                  
 ```
 
 > esp(EFI раздел) + boot(/boot) + swap(подкачка) + root(корень)
@@ -156,12 +146,11 @@ parted /dev/sdk
 
 ```CODE
 parted /dev/sdl                                                                          
-  mklabel gpt                                                                                 
-  mkpart EFI fat32 1MiB 512MiB                                                                
-  set 1 esp on                                                                                
-  mkpart lvm 512MiB 100%                                                                      
-  set 2 lvm on                                                                                
- 
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart lvm 512MiB 100%                                                                      
+set 2 lvm on                                                                                
 ```
 
 > lvm(флаг для LVM) для физического тома LVM
@@ -172,11 +161,10 @@ parted /dev/sdl
 
 ```CODE
 pvcreate /dev/sdl2
-  vgcreate vg0 /dev/sdl2                                                                      
-  lvcreate -L 4G -n swap vg0                                                                  
-  lvcreate -L 20G -n root vg0                                                                 
-  lvcreate -l 100%FREE -n home vg0                                                            
- 
+vgcreate vg0 /dev/sdl2                                                                      
+lvcreate -L 4G -n swap vg0                                                                  
+lvcreate -L 20G -n root vg0                                                                 
+lvcreate -l 100%FREE -n home vg0                                                            
 ```
 
 > pvcreate(создание физического тома)
@@ -191,10 +179,9 @@ pvcreate /dev/sdl2
 
 ```CODE
 parted /dev/sdm                                                                          
-  mklabel gpt                                                                                 
-  mkpart raid1 1MiB 100%
-  set 1 raid on                                                                               
- 
+mklabel gpt                                                                                 
+mkpart raid1 1MiB 100%
+set 1 raid on                                                                               
 ```
 
 > raid(флаг для RAID) для программного RAID массива
@@ -205,8 +192,7 @@ parted /dev/sdm
 
 ```CODE
 parted -s /dev/sdg mklabel gpt                                                           
-  parted -s /dev/sdg mkpart root 0% 100%                                                      
- 
+parted -s /dev/sdg mkpart root 0% 100%                                                      
 ```
 
 > -s(неинтерактивный режим, без подтверждений)
@@ -215,8 +201,7 @@ parted -s /dev/sdg mklabel gpt
 
 ```CODE
 parted /dev/sdh                                                                          
-  rm 1                                                                                        
- 
+rm 1                                                                                        
 ```
 
 > rm(удаление раздела) 1(номер раздела)
@@ -225,8 +210,7 @@ parted /dev/sdh
 
 ```CODE
 parted /dev/sdi                                                                          
-  resizepart 1 50GiB                                                                          
- 
+resizepart 1 50GiB                                                                          
 ```
 
 > resizepart(изменение размера) 1(номер раздела) 50GiB(новый размер)
@@ -235,9 +219,8 @@ parted /dev/sdi
 
 ```CODE
 parted /dev/sdj                                                                          
-  set 1 boot on                                                                               
-  set 1 boot off                                                                              
- 
+set 1 boot on                                                                               
+set 1 boot off                                                                              
 ```
 
 > set(установка флага) 1(номер раздела) boot(тип флага) on/off(включить/выключить)
@@ -248,8 +231,7 @@ parted /dev/sdj
 
 ```CODE
 parted /dev/sda                                                                          
-  help set                                                                                    
- 
+help set                                                                                    
 ```
 
 > Показывает все доступные флаги для установки
@@ -260,7 +242,6 @@ parted /dev/sda
 
 ```CODE
 lsblk                                                                                    
- 
 ```
 
 > Показывает все блочные устройства и разделы
@@ -269,7 +250,6 @@ lsblk
 
 ```CODE
 parted /dev/sda print                                                                    
- 
 ```
 
 > Показывает таблицу разделов конкретного диска с флагами
@@ -278,7 +258,6 @@ parted /dev/sda print
 
 ```CODE
 parted -l                                                                                
- 
 ```
 
 > Показывает информацию о всех дисках в системе
@@ -287,7 +266,6 @@ parted -l
 
 ```CODE
 parted /dev/sda align-check optimal 1                                                    
- 
 ```
 
 > align-check(проверка выравнивания) optimal(тип) 1(номер раздела)
@@ -296,7 +274,6 @@ parted /dev/sda align-check optimal 1
 
 ```CODE
 swapon --show                                                                            
- 
 ```
 
 > Показывает активные swap разделы
@@ -305,7 +282,6 @@ swapon --show
 
 ```CODE
 mount | grep efi                                                                         
- 
 ```
 
 > Показывает смонтированные EFI разделы
@@ -314,9 +290,8 @@ mount | grep efi
 
 ```CODE
 pvdisplay                                                                                
-  vgdisplay                                                                                   
-  lvdisplay                                                                                   
- 
+vgdisplay                                                                                   
+lvdisplay                                                                                   
 ```
 
 > Показывает физические тома, группы томов и логические тома LVM Исправления: - primary заменено на осмысленные названия разделов (boot, root, swap, data) - Для BIOS Legacy использую msdos, не gpt - Добавлено объяснение LVM: технология для гибкого управления разделами (изменение размера, снапшоты, объединение дисков) - Добавлен пример создания LVM томов после разметки

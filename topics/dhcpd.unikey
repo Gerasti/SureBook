@@ -1,48 +1,305 @@
-hd Установка DHCP-сервера
-  ne Установка пакета
-  ce apt-get install dhcp-server                                                              
-                                                                                              
-  ne Определение сетевого интерфейса                                                          
-  ce ip a -c                                                                                  
-                                                                                              
-  ne Настройка интерфейса в /etc/sysconfig/dhcpd                                              
-  ce DHCPDARGS=ens34                                                                          
-  ct Указывает интерфейс, который будет раздавать IP-адреса                                   
-                                                                                              
-  hd Настройка DHCP-сервера                                                                   
-  ne Основная конфигурация в /etc/dhcp/dhcpd.conf                                             
-  ce ddns-update-style none;                                                                  
-                                                                                              
-  subnet 192.168.11.0 netmask 255.255.255.192 {                                               
-          option routers                  192.168.11.1;                                       
-          option domain-name              "bind.domain";                                      
-          option domain-name-servers      77.88.8.8,192.168.11.1;                             
-                                                                                              
-          range dynamic-bootp 192.168.11.2 192.168.11.63;                                     
-          default-lease-time 21600;                                                           
-          max-lease-time 43200;                                                               
-                                                                                              
-  host R-HQ {                                                                                 
-          hardware ethernet 00:0c:29:41:f2:9f;                                                
-          fixed-address 192.168.11.1;                                                         
-  }                                                                                           
-  }                                                                                           
-  ct subnet(определение подсети); range(диапазон выдаваемых адресов); option routers(шлюз по  
-  умолчанию); option domain-name-servers(DNS-серверы); default-lease-time(время аренды по     
-  умолчанию в секундах); max-lease-time(максимальное время аренды); host(резервирование IP по
-  MAC-адресу)                                                                                 
-                  
-  ne Проверка конфигурации                                                                    
-  ce dhcpd -t -cf /etc/dhcp/dhcpd.conf
-                                                                                              
-  ne Запуск и включение службы                                                                
-  ce systemctl enable --now dhcpd                                                             
-                                                                                              
-  hd Проверка DHCP-сервера                                                                    
-  ne Проверка статуса службы                                                                  
-  ce systemctl status dhcpd                                                                   
-                                                                                              
-  hd Настройка DHCP-клиента                                                                   
-  ne Получение IP-адреса от DHCP-сервера                                                      
-  ce dhcpcd                                                                                   
-  ct Клиент получит IP-адрес, шлюз и DNS-серверы из конфигурации сервера
+hd Установка DHCP-сервера                                                                   
+ne Установка пакета                                                                         
+ce apt-get install dhcp-server                                                              
+ct Устанавливает ISC DHCP Server — стандартную реализацию DHCP для Linux                    
+ne Определение сетевого интерфейса                                                          
+ce ip a -c                                                                                  
+ct Показывает список сетевых интерфейсов с подсветкой                                       
+hd Настройка основного конфигурационного файла                                              
+ne Редактирование /etc/dhcp/dhcpd.conf                                                      
+ce default-lease-time 3600;                                                                 
+max-lease-time 86400;                                                                       
+authoritative;                                                                              
+ddns-update-style none;                                                                     
+
+subnet 10.21.211.0 netmask 255.255.255.0 {                                                  
+range 10.21.211.10 10.21.211.230;                                                       
+
+option routers 10.21.211.1;                                                             
+option subnet-mask 255.255.255.0;                                                       
+option broadcast-address 10.21.211.255;                                                 
+option domain-name "example.local";                                                     
+option domain-name-servers 192.168.1.1, 8.8.8.8;                                        
+}                                                                                           
+ct default-lease-time(время аренды по умолчанию в секундах, 3600 = 1 час);                  
+max-lease-time(максимальное время аренды, 86400 = 24 часа); authoritative(сервер является   
+авторитетным для данной сети); ddns-update-style(метод динамического обновления DNS: {none, 
+interim, standard})                                                                         
+ct subnet(определение подсети и маски, может быть несколько); range(диапазон IP-адресов для динамической выдачи);
+option routers(шлюз по умолчанию); option subnet-mask(маска подсети); option                
+broadcast-address(широковещательный адрес); option domain-name(доменное имя); option
+domain-name-servers(DNS-серверы через запятую)                                              
+
+hd Динамическое обновление DNS (DDNS)                                                       
+ne Отключение DDNS
+ce ddns-update-style none;                                                                  
+ct none(динамическое обновление DNS отключено, DHCP не будет обновлять записи на            
+DNS-сервере)                                                                                
+
+ne Настройка DDNS с использованием interim                                                  
+ce ddns-update-style interim;
+ignore client-updates;                                                                      
+
+zone example.local. {                                                                       
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}               
+
+zone 211.21.10.in-addr.arpa. {
+primary 192.168.1.1;
+key DHCP_UPDATER;                                                                       
+}                                                                                           
+ct interim(устаревший метод DDNS, используется для совместимости со старыми версиями BIND); 
+ignore client-updates(игнорировать запросы клиентов на обновление DNS); zone(определение    
+зоны DNS для обновления); primary(IP-адрес первичного DNS-сервера); key(имя ключа TSIG для
+аутентификации)                                                                             
+
+ne Настройка DDNS с использованием standard                                                 
+ce ddns-update-style standard;
+ddns-domainname "example.local";                                                            
+ddns-rev-domainname "in-addr.arpa";                                                         
+
+update-static-leases on;                                                                    
+update-conflict-detection off;                                                              
+
+zone example.local. {
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}                                                                                           
+
+zone 211.21.10.in-addr.arpa. {                                                              
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}                                                                                           
+ct standard(современный метод DDNS согласно RFC 4702); ddns-domainname(доменное имя для     
+прямых записей); ddns-rev-domainname(доменное имя для обратных записей);                    
+update-static-leases(обновлять DNS для статических резервирований);
+update-conflict-detection(проверка конфликтов имён перед обновлением)                       
+
+ne Создание ключа TSIG для безопасного обновления DNS                                       
+ce dnssec-keygen -a HMAC-MD5 -b 128 -n HOST DHCP_UPDATER
+ct Генерирует ключ TSIG для аутентификации обновлений между DHCP и DNS                      
+
+ne Добавление ключа TSIG в конфигурацию DHCP                                                
+ce key DHCP_UPDATER {                                                                       
+algorithm hmac-md5;                                                                     
+secret "base64-encoded-key-here";                                                       
+}                                                                                           
+ct key(определение ключа TSIG); algorithm(алгоритм шифрования: {hmac-md5, hmac-sha1,        
+hmac-sha256}); secret(секретный ключ в формате base64)                                      
+
+ne Настройка обновления только прямых или только обратных зон                               
+ce ddns-update-style standard;
+ddns-updates on;                                                                            
+update-optimization off;                                                                    
+
+subnet 10.21.211.0 netmask 255.255.255.0 {                                                  
+range 10.21.211.10 10.21.211.230;                                                       
+
+ddns-updates on;                                                                        
+}                                                                                           
+ct ddns-updates(включить или отключить DDNS для конкретной подсети);                        
+update-optimization(оптимизация обновлений, отключение заставляет обновлять DNS при каждом  
+продлении аренды)                                                                           
+
+hd Резервирование IP-адреса по MAC-адресу                                                   
+ne Добавление статического хоста
+ce host Server-01 {                                                                         
+hardware ethernet 00:0c:29:41:f2:9f;                                                    
+fixed-address 10.21.211.5;                                                              
+}                                                                                           
+ct host(имя резервирования); hardware ethernet(MAC-адрес устройства);                       
+fixed-address(фиксированный IP-адрес для этого устройства)                                  
+
+ne Резервирование с дополнительными параметрами                                             
+ce host Printer-Office {
+hardware ethernet 00:1a:2b:3c:4d:5e;                                                    
+fixed-address 10.21.211.50;                                                             
+option host-name "printer.example.local";                                               
+}                                                                                           
+ct option host-name(устанавливает имя хоста для устройства)                                 
+
+ne Резервирование с обновлением DNS                                                         
+ce host Server-01 {                                                                         
+hardware ethernet 00:0c:29:41:f2:9f;                                                    
+fixed-address 10.21.211.5;                                                              
+ddns-hostname "server01";                                                               
+ddns-domainname "example.local";                                                        
+}                                                                                           
+ct ddns-hostname(имя хоста для записи в DNS); ddns-domainname(доменное имя для этого хоста) 
+
+hd Проверка и запуск DHCP-сервера                                                           
+ne Проверка синтаксиса конфигурации                                                         
+ce dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
+ct -t(тестовый режим без запуска сервера); -cf(указание пути к конфигурационному файлу)     
+
+ne Проверка конфигурации с указанием интерфейса                                             
+ce dhcpd -t -cf /etc/dhcp/dhcpd.conf ens34                                                  
+ct Проверяет конфигурацию и привязку к конкретному интерфейсу                               
+
+hd Настройка интерфейса для DHCP-сервера                                                    
+ne Редактирование /etc/default/isc-dhcp-server                                              
+ce DHCP_CONF=/etc/dhcp/dhcpd.conf                                                           
+DHCP_PID=/var/run/dhcpd.pid                                                                 
+DHCP_OPTS="-4"                                                                              
+
+INTERFACEv4="ens34"                                                                         
+INTERFACEv6=""                                                                              
+ct DHCP_CONF(путь к основному конфигурационному файлу); DHCP_PID(путь к PID-файлу процесса);
+DHCP_OPTS(опции запуска, -4 = только IPv4); INTERFACEv4(интерфейс для раздачи IPv4);       
+INTERFACEv6(интерфейс для IPv6, пустое значение = отключено)                                
+
+ne Альтернативный способ указания интерфейса в /etc/sysconfig/dhcpd                         
+ce DHCPDARGS=ens34
+ct Используется в дистрибутивах на базе Red Hat/CentOS/ALT Linux                            
+
+hd Управление службой DHCP                                                                  
+ne Запуск и добавление в автозагрузку                                                       
+ce systemctl enable --now dhcpd                                                             
+ct enable(добавить в автозагрузку); --now(запустить немедленно)                             
+
+ne Проверка статуса службы                                                                  
+ce systemctl status dhcpd                                                                   
+ct Показывает состояние процесса и последние логи                                           
+
+ne Перезапуск службы после изменения конфигурации                                           
+ce systemctl restart dhcpd                                                                  
+ct Требуется после любых изменений в /etc/dhcp/dhcpd.conf                                   
+
+ne Просмотр логов DHCP-сервера                                                              
+ce journalctl -u dhcpd -f                                                                   
+ct -u(фильтр по юниту); -f(следить за новыми записями в реальном времени)                   
+
+hd Дополнительные опции DHCP                                                                
+ne Настройка времени обновления адреса                                                      
+ce subnet 10.21.211.0 netmask 255.255.255.0 {                                               
+range 10.21.211.10 10.21.211.230;                                                       
+
+default-lease-time 3600;                                                                
+max-lease-time 86400;                                                                   
+min-lease-time 1800;                                                                    
+}                                                                                           
+ct min-lease-time(минимальное время аренды, 1800 = 30 минут)                                
+
+ne Настройка NTP-серверов для клиентов                                                      
+ce option ntp-servers 10.21.211.1, 192.168.1.2;                                             
+ct option ntp-servers(список серверов синхронизации времени)                                
+
+ne Настройка доменного суффикса поиска                                                      
+ce option domain-search "example.local", "backup.local";                                    
+ct option domain-search(список доменов для автодополнения при поиске хостов)                
+
+ne Настройка MTU для клиентов                                                               
+ce option interface-mtu 1500;                                                               
+ct option interface-mtu(максимальный размер пакета для интерфейса в байтах)                 
+
+ne Настройка WINS-серверов для Windows-клиентов                                             
+ce option netbios-name-servers 10.21.211.1;                                                 
+option netbios-node-type 8;                                                                 
+ct option netbios-name-servers(WINS-серверы для разрешения NetBIOS-имён); option            
+netbios-node-type(тип узла: {1=B-node, 2=P-node, 4=M-node, 8=H-node})                       
+
+hd Расширенная конфигурация                                                                 
+ne Настройка пула адресов с ограничениями                                                   
+ce subnet 10.21.211.0 netmask 255.255.255.0 {                                               
+pool {                                                                                  
+range 10.21.211.10 10.21.211.50;                                                    
+allow members of "trusted-devices";                                                 
+}                                                                                       
+
+pool {                                                                                  
+range 10.21.211.100 10.21.211.200;
+deny members of "trusted-devices";                                                  
+}                                                                                       
+}                                                                                           
+
+group trusted-devices {
+host device1 {                                                                          
+hardware ethernet 00:11:22:33:44:55;                                                
+}                                                                                       
+}                                                                                           
+ct pool(отдельный пул адресов с правилами доступа); allow/deny members of(разрешить или     
+запретить группе устройств)                                                                 
+
+ne Настройка DHCP Relay для удалённых подсетей                                              
+ce shared-network office-network {
+subnet 10.21.211.0 netmask 255.255.255.0 {                                              
+option routers 10.21.211.1;                                                         
+}                                                                                       
+
+subnet 10.21.212.0 netmask 255.255.255.0 {                                              
+range 10.21.212.10 10.21.212.100;
+option routers 10.21.212.1;                                                         
+}                                                                                       
+}                                                                                           
+ct shared-network(объединение подсетей, подключенных к одному физическому сегменту)         
+
+hd Настройка DHCP-клиента                                                                   
+ne Получение IP-адреса через DHCP                                                           
+ce dhcpcd                                                                                   
+ct Запускает DHCP-клиент для автоматического получения IP-адреса, шлюза и DNS
+
+ne Получение адреса на конкретном интерфейсе                                                
+ce dhcpcd ens34                                                                             
+ct Запускает DHCP-клиент только на указанном интерфейсе                                     
+
+ne Принудительное обновление аренды                                                         
+ce dhcpcd -n ens34                                                                          
+ct -n(запросить новый адрес вместо попытки продлить текущий)                                
+
+ne Освобождение IP-адреса                                                                   
+ce dhcpcd -k ens34                                                                          
+ct -k(отправить DHCPRELEASE и освободить текущий адрес)                                     
+
+hd Диагностика и мониторинг DHCP                                                            
+ne Просмотр активных аренд                                                                  
+ce cat /var/lib/dhcp/dhcpd.leases                                                           
+ct Файл содержит базу данных всех выданных и истёкших аренд                                 
+
+ne Просмотр последних выданных адресов                                                      
+ce tail -f /var/lib/dhcp/dhcpd.leases                                                       
+ct -f(следить за файлом в реальном времени)                                                 
+
+ne Анализ DHCP-трафика                                                                      
+ce tcpdump -i ens34 -n port 67 or port 68                                                   
+ct Перехватывает DHCP-пакеты (порты 67=сервер, 68=клиент)                                   
+
+ne Проверка доступности DHCP-сервера из сети                                                
+ce nmap --script broadcast-dhcp-discover                                                    
+ct Отправляет broadcast DHCP DISCOVER для обнаружения серверов в сети                       
+
+ne Мониторинг количества свободных адресов                                                  
+ce grep "lease" /var/lib/dhcp/dhcpd.leases | grep -c "binding state active"                 
+ct Подсчитывает количество активных аренд                                                   
+
+ne Проверка обновлений DNS от DHCP                                                          
+ce grep "DHCID" /var/log/syslog                                                             
+ct Показывает записи об обновлениях DNS (DHCID = DHCP Client Identifier)                    
+
+hd Устранение типичных проблем                                                              
+ne Проблема: DHCP не запускается                                                            
+ce systemctl status dhcpd
+journalctl -xeu dhcpd                                                                       
+ct Проверка ошибок в логах и статусе службы                                                 
+
+ne Проблема: конфликт IP-адресов                                                            
+ce option ping-check true;                                                                  
+ping-timeout 2;                                                                             
+ct ping-check(проверять адрес через ping перед выдачей); ping-timeout(время ожидания ответа 
+в секундах)                                                                                 
+
+ne Проблема: клиенты не получают адреса                                                     
+ce ip a show ens34
+systemctl status firewalld                                                                  
+ct Проверка состояния интерфейса и правил firewall (должны быть открыты порты 67/udp и      
+68/udp)                                                                                     
+
+ne Открытие портов в firewall                                                               
+ce firewall-cmd --permanent --add-service=dhcp
+firewall-cmd --reload                                                                       
+ct Добавляет правило для DHCP-сервиса и применяет изменения                                 
+
+ne Проблема: DDNS не обновляется                                                            
+ce named-checkconf /etc/named.conf                                                          
+journalctl -u named -f                                                                      
+ct Проверка конфигурации DNS-сервера и логов для диагностики проблем с обновлением          

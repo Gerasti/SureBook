@@ -1,312 +1,312 @@
- hd Подключение к PostgreSQL                                                                 
-  ne Подключение к БД от имени пользователя postgres                                          
-  ce psql -U postgres                                                                         
-  ct -U(имя пользователя)                                                                     
-                                                                                              
-  ne Подключение к конкретной базе данных                                                     
-  ce psql -U user01 -d db01                                                                   
-  ct -d(имя базы данных)                                                                      
-                                                                                              
-  ne Удалённое подключение к БД                                                               
-  ce psql -U user01 -h 192.168.1.10 -d db01                                                   
-  ct -h(IP-адрес или hostname сервера)                                                        
-                                                                                              
-  ne Подключение с указанием порта                                                            
-  ce psql -U user01 -h 192.168.1.10 -p 5432 -d db01                                           
-  ct -p(порт) по умолчанию 5432                                                               
-                                                                                              
-  ne Выход из psql                                                                            
-  ce \q                                                                                       
-                                                                                              
-  hd Управление базами данных                                                                 
-  ne Создание базы данных                                                                     
-  ce CREATE DATABASE mydb;                                                                    
-  ct mydb(имя создаваемой БД)                                                                 
-                                                                                              
-  ne Создание БД с указанием владельца и кодировки                                            
-  ce CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';                                       
-  ct OWNER(владелец БД); ENCODING(кодировка) {UTF8, LATIN1}                                   
-                                                                                              
-  ne Удаление базы данных                                                                     
-  ce DROP DATABASE mydb;                                                                      
-  ct Удаляет БД безвозвратно                                                                  
-                                                                                              
-  ne Переименование базы данных                                                               
-  ce ALTER DATABASE mydb RENAME TO newdb;                                                     
-                                                                                              
-  ne Просмотр списка баз данных                                                               
-  ce \l                                                                                       
-  ct Показывает все БД с владельцами и кодировками                                            
-                                                                                              
-  ne Просмотр списка БД через SQL                                                             
-  ce SELECT datname FROM pg_database;                                                         
-                                                                                              
-  ne Подключение к другой БД внутри psql                                                      
-  ce \c dbname                                                                                
-  ct Переключение между базами данных                                                         
-                                                                                              
-  ne Просмотр размера базы данных                                                             
-  ce SELECT pg_size_pretty(pg_database_size('mydb'));                                         
-                                                                                              
-  hd Управление пользователями                                                                
-  ne Создание пользователя                                                                    
-  ce CREATE USER username WITH PASSWORD 'P@ssw0rd';                                           
-  ct username(имя пользователя)                                                               
-                                                                                              
-  ne Создание пользователя с правами суперпользователя                                        
-  ce CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';                                    
-  ct SUPERUSER(полные права на сервер)                                                        
-                                                                                              
-  ne Создание пользователя с правами создания БД                                              
-  ce CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';                                 
-  ct CREATEDB(право создавать базы данных)                                                    
-                                                                                              
-  ne Изменение пароля пользователя                                                            
-  ce ALTER USER username WITH PASSWORD 'NewP@ssw0rd';                                         
-                                                                                              
-  ne Удаление пользователя                                                                    
-  ce DROP USER username;                                                                      
-                                                                                              
-  ne Просмотр списка пользователей                                                            
-  ce \du                                                                                      
-  ct Показывает пользователей с их ролями                                                     
-                                                                                              
-  ne Просмотр списка пользователей через SQL                                                  
-  ce SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                           
-                                                                                              
-  ne Переименование пользователя                                                              
-  ce ALTER USER oldname RENAME TO newname;                                                    
-                                                                                              
-  hd Управление правами доступа                                                               
-  ne Предоставление всех прав на БД пользователю                                              
-  ce GRANT ALL PRIVILEGES ON DATABASE mydb TO username;                                       
-  ct ALL PRIVILEGES(все права на БД)                                                          
-                                                                                              
-  ne Предоставление прав на подключение к БД                                                  
-  ce GRANT CONNECT ON DATABASE mydb TO username;                                              
-  ct CONNECT(право подключаться к БД)                                                         
-                                                                                              
-  ne Предоставление прав на схему                                                             
-  ce GRANT ALL ON SCHEMA public TO username;                                                  
-  ct public(схема по умолчанию)                                                               
-                                                                                              
-  ne Предоставление прав на все таблицы в схеме                                               
-  ce GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username;                         
-                                                                                              
-  ne Предоставление прав на конкретную таблицу                                                
-  ce GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;                           
-  ct SELECT, INSERT, UPDATE, DELETE(типы операций)                                            
-                                                                                              
-  ne Отзыв прав у пользователя                                                                
-  ce REVOKE ALL PRIVILEGES ON DATABASE mydb FROM username;                                    
-                                                                                              
-  ne Изменение владельца базы данных                                                          
-  ce ALTER DATABASE mydb OWNER TO newowner;                                                   
-                                                                                              
-  ne Изменение владельца таблицы                                                              
-  ce ALTER TABLE tablename OWNER TO newowner;                                                 
-                                                                                              
-  hd Управление таблицами                                                                     
-  ne Просмотр списка таблиц                                                                   
-  ce \dt                                                                                      
-  ct Показывает таблицы в текущей БД                                                          
-                                                                                              
-  ne Просмотр списка таблиц с размерами                                                       
-  ce \dt+                                                                                     
-  ct Показывает таблицы с размерами и описанием                                               
-                                                                                              
-  ne Просмотр структуры таблицы                                                               
-  ce \d tablename                                                                             
-  ct Показывает столбцы, типы данных, индексы                                                 
-                                                                                              
-  ne Создание таблицы                                                                         
-  ce CREATE TABLE users (                                                                     
-      id SERIAL PRIMARY KEY,                                                                  
-      username VARCHAR(50) NOT NULL,                                                          
-      email VARCHAR(100) UNIQUE,                                                              
-      created_at TIMESTAMP DEFAULT NOW()                                                      
-  );                                                                                          
-  ct SERIAL(автоинкремент); PRIMARY KEY(первичный ключ); NOT NULL(обязательное поле);         
-  UNIQUE(уникальное значение)                                                                 
-                  
-  ne Удаление таблицы                                                                         
-  ce DROP TABLE tablename;
-                                                                                              
-  ne Переименование таблицы                                                                   
-  ce ALTER TABLE oldname RENAME TO newname;                                                   
-                                                                                              
-  ne Добавление столбца в таблицу                                                             
-  ce ALTER TABLE tablename ADD COLUMN columnname VARCHAR(50);                                 
-                                                                                              
-  ne Удаление столбца из таблицы                                                              
-  ce ALTER TABLE tablename DROP COLUMN columnname;                                            
-                                                                                              
-  ne Изменение типа данных столбца                                                            
-  ce ALTER TABLE tablename ALTER COLUMN columnname TYPE INTEGER;                              
-                                                                                              
-  ne Очистка таблицы                                                                          
-  ce TRUNCATE TABLE tablename;                                                                
-  ct Удаляет все строки, но сохраняет структуру                                               
-                                                                                              
-  hd Работа с данными                                                                         
-  ne Вставка данных в таблицу                                                                 
-  ce INSERT INTO users (username, email) VALUES ('john', 'john@example.com');                 
-                                                                                              
-  ne Вставка нескольких строк                                                                 
-  ce INSERT INTO users (username, email) VALUES                                               
-  ('alice', 'alice@example.com'),                                                             
-  ('bob', 'bob@example.com');                                                                 
-                                                                                              
-  ne Выборка всех данных из таблицы                                                           
-  ce SELECT * FROM users;                                                                     
-                                                                                              
-  ne Выборка конкретных столбцов                                                              
-  ce SELECT username, email FROM users;                                                       
-                                                                                              
-  ne Выборка с условием                                                                       
-  ce SELECT * FROM users WHERE id = 1;                                                        
-  ct WHERE(условие фильтрации)                                                                
-                                                                                              
-  ne Выборка с сортировкой                                                                    
-  ce SELECT * FROM users ORDER BY created_at DESC;                                            
-  ct ORDER BY(сортировка); DESC(по убыванию) {ASC, DESC}                                      
-                                                                                              
-  ne Выборка с ограничением количества строк                                                  
-  ce SELECT * FROM users LIMIT 10;                                                            
-  ct LIMIT(ограничение количества строк)                                                      
-                                                                                              
-  ne Обновление данных                                                                        
-  ce UPDATE users SET email = 'newemail@example.com' WHERE id = 1;                            
-                                                                                              
-  ne Удаление данных                                                                          
-  ce DELETE FROM users WHERE id = 1;                                                          
-                                                                                              
-  ne Подсчёт количества строк                                                                 
-  ce SELECT COUNT(*) FROM users;                                                              
-                                                                                              
-  hd Резервное копирование и восстановление                                                   
-  ne Создание резервной копии БД                                                              
-  ce pg_dump -U postgres -d mydb -f backup.sql                                                
-  ct -f(файл для сохранения резервной копии)                                                  
-                                                                                              
-  ne Создание резервной копии в сжатом формате                                                
-  ce pg_dump -U postgres -d mydb -F c -f backup.dump                                          
-  ct -F c(custom format, сжатый формат)                                                       
-                                                                                              
-  ne Создание резервной копии всех БД                                                         
-  ce pg_dumpall -U postgres -f all_databases.sql                                              
-  ct pg_dumpall(резервное копирование всех БД и пользователей)                                
-                                                                                              
-  ne Восстановление БД из SQL файла                                                           
-  ce psql -U postgres -d mydb -f backup.sql                                                   
-  ct Восстановление из текстового SQL файла                                                   
-                                                                                              
-  ne Восстановление БД из сжатого формата                                                     
-  ce pg_restore -U postgres -d mydb backup.dump                                               
-  ct pg_restore(восстановление из custom format)                                              
-                                                                                              
-  ne Восстановление с созданием новой БД                                                      
-  ce pg_restore -U postgres -C -d postgres backup.dump                                        
-  ct -C(создать БД перед восстановлением)                                                     
-                                                                                              
-  hd Информационные команды psql                                                              
-  ne Список всех команд psql                                                                  
-  ce \?                                                                                       
-  ct Показывает все доступные команды psql                                                    
-                                                                                              
-  ne Список SQL команд                                                                        
-  ce \h                                                                                       
-  ct Показывает справку по SQL командам                                                       
-                                                                                              
-  ne Справка по конкретной SQL команде                                                        
-  ce \h CREATE TABLE                                                                          
-  ct Показывает синтаксис команды CREATE TABLE                                                
-                                                                                              
-  ne Просмотр текущей БД и пользователя                                                       
-  ce \conninfo                                                                                
-  ct Показывает информацию о текущем подключении                                              
-                                                                                              
-  ne Просмотр всех схем                                                                       
-  ce \dn                                                                                      
-  ct Показывает список схем в текущей БД                                                      
-                                                                                              
-  ne Просмотр всех представлений                                                              
-  ce \dv                                                                                      
-  ct Показывает список представлений (views)                                                  
-                                                                                              
-  ne Просмотр всех индексов                                                                   
-  ce \di                                                                                      
-  ct Показывает список индексов                                                               
-                                                                                              
-  ne Просмотр всех последовательностей                                                        
-  ce \ds                                                                                      
-  ct Показывает список sequences                                                              
-                                                                                              
-  ne Включение расширенного вывода                                                            
-  ce \x                                                                                       
-  ct Переключает между обычным и расширенным форматом вывода                                  
-                                                                                              
-  ne Выполнение команд из файла                                                               
-  ce \i /path/to/file.sql                                                                     
-  ct Выполняет SQL команды из файла                                                           
-                                                                                              
-  ne Вывод результата запроса в файл                                                          
-  ce \o /path/to/output.txt                                                                   
-  SELECT * FROM users;                                                                        
-  \o                                                                                          
-  ct \o(перенаправление вывода в файл); \o без параметра(отключение перенаправления)          
-                                                                                              
-  ne Измерение времени выполнения запросов                                                    
-  ce \timing                                                                                  
-  ct Включает/выключает отображение времени выполнения                                        
-                                                                                              
-  hd Управление индексами                                                                     
-  ne Создание индекса                                                                         
-  ce CREATE INDEX idx_username ON users(username);                                            
-  ct idx_username(имя индекса); users(таблица); username(столбец)                             
-                                                                                              
-  ne Создание уникального индекса                                                             
-  ce CREATE UNIQUE INDEX idx_email ON users(email);                                           
-  ct UNIQUE(индекс с уникальными значениями)                                                  
-                                                                                              
-  ne Удаление индекса                                                                         
-  ce DROP INDEX idx_username;                                                                 
-                                                                                              
-  ne Просмотр индексов таблицы                                                                
-  ce \d tablename                                                                             
-  ct Показывает индексы в описании таблицы                                                    
-                                                                                              
-  hd Управление транзакциями                                                                  
-  ne Начало транзакции                                                                        
-  ce BEGIN;                                                                                   
-                                                                                              
-  ne Фиксация транзакции                                                                      
-  ce COMMIT;                                                                                  
-                                                                                              
-  ne Откат транзакции                                                                         
-  ce ROLLBACK;
-                                                                                              
-  ne Пример использования транзакции                                                          
-  ce BEGIN;                                                                                   
-  UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
-  UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
-  COMMIT;                                                                                     
-  ct Транзакция для атомарного выполнения нескольких операций                                 
-                                                                                              
-  hd Проверка                                                                                 
-  ne Проверка версии PostgreSQL                                                               
-  ce SELECT version();                                                                        
-                                                                                              
-  ne Проверка текущего времени на сервере                                                     
-  ce SELECT NOW();                                                                            
-                                                                                              
-  ne Проверка активных подключений                                                            
-  ce SELECT * FROM pg_stat_activity;                                                          
-  ct Показывает все активные подключения к серверу                                            
-                                                                                              
-  ne Проверка размера всех БД                                                                 
-  ce SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;              
-                                                                                              
-  ne Проверка размера всех таблиц в БД                                                        
-  ce SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))     
-  FROM pg_tables WHERE schemaname = 'public'; 
+hd Подключение к PostgreSQL                                                                 
+ne Подключение к БД от имени пользователя postgres                                          
+ce psql -U postgres                                                                         
+ct -U(имя пользователя)                                                                     
+
+ne Подключение к конкретной базе данных                                                     
+ce psql -U user01 -d db01                                                                   
+ct -d(имя базы данных)                                                                      
+
+ne Удалённое подключение к БД                                                               
+ce psql -U user01 -h 192.168.1.10 -d db01                                                   
+ct -h(IP-адрес или hostname сервера)                                                        
+
+ne Подключение с указанием порта                                                            
+ce psql -U user01 -h 192.168.1.10 -p 5432 -d db01                                           
+ct -p(порт) по умолчанию 5432                                                               
+
+ne Выход из psql                                                                            
+ce \q                                                                                       
+
+hd Управление базами данных                                                                 
+ne Создание базы данных                                                                     
+ce CREATE DATABASE mydb;                                                                    
+ct mydb(имя создаваемой БД)                                                                 
+
+ne Создание БД с указанием владельца и кодировки                                            
+ce CREATE DATABASE mydb OWNER myuser ENCODING 'UTF8';                                       
+ct OWNER(владелец БД); ENCODING(кодировка) {UTF8, LATIN1}                                   
+
+ne Удаление базы данных                                                                     
+ce DROP DATABASE mydb;                                                                      
+ct Удаляет БД безвозвратно                                                                  
+
+ne Переименование базы данных                                                               
+ce ALTER DATABASE mydb RENAME TO newdb;                                                     
+
+ne Просмотр списка баз данных                                                               
+ce \l                                                                                       
+ct Показывает все БД с владельцами и кодировками                                            
+
+ne Просмотр списка БД через SQL                                                             
+ce SELECT datname FROM pg_database;                                                         
+
+ne Подключение к другой БД внутри psql                                                      
+ce \c dbname                                                                                
+ct Переключение между базами данных                                                         
+
+ne Просмотр размера базы данных                                                             
+ce SELECT pg_size_pretty(pg_database_size('mydb'));                                         
+
+hd Управление пользователями                                                                
+ne Создание пользователя                                                                    
+ce CREATE USER username WITH PASSWORD 'P@ssw0rd';                                           
+ct username(имя пользователя)                                                               
+
+ne Создание пользователя с правами суперпользователя                                        
+ce CREATE USER admin WITH SUPERUSER PASSWORD 'P@ssw0rd';                                    
+ct SUPERUSER(полные права на сервер)                                                        
+
+ne Создание пользователя с правами создания БД                                              
+ce CREATE USER dbcreator WITH CREATEDB PASSWORD 'P@ssw0rd';                                 
+ct CREATEDB(право создавать базы данных)                                                    
+
+ne Изменение пароля пользователя                                                            
+ce ALTER USER username WITH PASSWORD 'NewP@ssw0rd';                                         
+
+ne Удаление пользователя                                                                    
+ce DROP USER username;                                                                      
+
+ne Просмотр списка пользователей                                                            
+ce \du                                                                                      
+ct Показывает пользователей с их ролями                                                     
+
+ne Просмотр списка пользователей через SQL                                                  
+ce SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                           
+
+ne Переименование пользователя                                                              
+ce ALTER USER oldname RENAME TO newname;                                                    
+
+hd Управление правами доступа                                                               
+ne Предоставление всех прав на БД пользователю                                              
+ce GRANT ALL PRIVILEGES ON DATABASE mydb TO username;                                       
+ct ALL PRIVILEGES(все права на БД)                                                          
+
+ne Предоставление прав на подключение к БД                                                  
+ce GRANT CONNECT ON DATABASE mydb TO username;                                              
+ct CONNECT(право подключаться к БД)                                                         
+
+ne Предоставление прав на схему                                                             
+ce GRANT ALL ON SCHEMA public TO username;                                                  
+ct public(схема по умолчанию)                                                               
+
+ne Предоставление прав на все таблицы в схеме                                               
+ce GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username;                         
+
+ne Предоставление прав на конкретную таблицу                                                
+ce GRANT SELECT, INSERT, UPDATE, DELETE ON tablename TO username;                           
+ct SELECT, INSERT, UPDATE, DELETE(типы операций)                                            
+
+ne Отзыв прав у пользователя                                                                
+ce REVOKE ALL PRIVILEGES ON DATABASE mydb FROM username;                                    
+
+ne Изменение владельца базы данных                                                          
+ce ALTER DATABASE mydb OWNER TO newowner;                                                   
+
+ne Изменение владельца таблицы                                                              
+ce ALTER TABLE tablename OWNER TO newowner;                                                 
+
+hd Управление таблицами                                                                     
+ne Просмотр списка таблиц                                                                   
+ce \dt                                                                                      
+ct Показывает таблицы в текущей БД                                                          
+
+ne Просмотр списка таблиц с размерами                                                       
+ce \dt+                                                                                     
+ct Показывает таблицы с размерами и описанием                                               
+
+ne Просмотр структуры таблицы                                                               
+ce \d tablename                                                                             
+ct Показывает столбцы, типы данных, индексы                                                 
+
+ne Создание таблицы                                                                         
+ce CREATE TABLE users (                                                                     
+id SERIAL PRIMARY KEY,                                                                  
+username VARCHAR(50) NOT NULL,                                                          
+email VARCHAR(100) UNIQUE,                                                              
+created_at TIMESTAMP DEFAULT NOW()                                                      
+);                                                                                          
+ct SERIAL(автоинкремент); PRIMARY KEY(первичный ключ); NOT NULL(обязательное поле);         
+UNIQUE(уникальное значение)                                                                 
+
+ne Удаление таблицы                                                                         
+ce DROP TABLE tablename;
+
+ne Переименование таблицы                                                                   
+ce ALTER TABLE oldname RENAME TO newname;                                                   
+
+ne Добавление столбца в таблицу                                                             
+ce ALTER TABLE tablename ADD COLUMN columnname VARCHAR(50);                                 
+
+ne Удаление столбца из таблицы                                                              
+ce ALTER TABLE tablename DROP COLUMN columnname;                                            
+
+ne Изменение типа данных столбца                                                            
+ce ALTER TABLE tablename ALTER COLUMN columnname TYPE INTEGER;                              
+
+ne Очистка таблицы                                                                          
+ce TRUNCATE TABLE tablename;                                                                
+ct Удаляет все строки, но сохраняет структуру                                               
+
+hd Работа с данными                                                                         
+ne Вставка данных в таблицу                                                                 
+ce INSERT INTO users (username, email) VALUES ('john', 'john@example.com');                 
+
+ne Вставка нескольких строк                                                                 
+ce INSERT INTO users (username, email) VALUES                                               
+('alice', 'alice@example.com'),                                                             
+('bob', 'bob@example.com');                                                                 
+
+ne Выборка всех данных из таблицы                                                           
+ce SELECT * FROM users;                                                                     
+
+ne Выборка конкретных столбцов                                                              
+ce SELECT username, email FROM users;                                                       
+
+ne Выборка с условием                                                                       
+ce SELECT * FROM users WHERE id = 1;                                                        
+ct WHERE(условие фильтрации)                                                                
+
+ne Выборка с сортировкой                                                                    
+ce SELECT * FROM users ORDER BY created_at DESC;                                            
+ct ORDER BY(сортировка); DESC(по убыванию) {ASC, DESC}                                      
+
+ne Выборка с ограничением количества строк                                                  
+ce SELECT * FROM users LIMIT 10;                                                            
+ct LIMIT(ограничение количества строк)                                                      
+
+ne Обновление данных                                                                        
+ce UPDATE users SET email = 'newemail@example.com' WHERE id = 1;                            
+
+ne Удаление данных                                                                          
+ce DELETE FROM users WHERE id = 1;                                                          
+
+ne Подсчёт количества строк                                                                 
+ce SELECT COUNT(*) FROM users;                                                              
+
+hd Резервное копирование и восстановление                                                   
+ne Создание резервной копии БД                                                              
+ce pg_dump -U postgres -d mydb -f backup.sql                                                
+ct -f(файл для сохранения резервной копии)                                                  
+
+ne Создание резервной копии в сжатом формате                                                
+ce pg_dump -U postgres -d mydb -F c -f backup.dump                                          
+ct -F c(custom format, сжатый формат)                                                       
+
+ne Создание резервной копии всех БД                                                         
+ce pg_dumpall -U postgres -f all_databases.sql                                              
+ct pg_dumpall(резервное копирование всех БД и пользователей)                                
+
+ne Восстановление БД из SQL файла                                                           
+ce psql -U postgres -d mydb -f backup.sql                                                   
+ct Восстановление из текстового SQL файла                                                   
+
+ne Восстановление БД из сжатого формата                                                     
+ce pg_restore -U postgres -d mydb backup.dump                                               
+ct pg_restore(восстановление из custom format)                                              
+
+ne Восстановление с созданием новой БД                                                      
+ce pg_restore -U postgres -C -d postgres backup.dump                                        
+ct -C(создать БД перед восстановлением)                                                     
+
+hd Информационные команды psql                                                              
+ne Список всех команд psql                                                                  
+ce \?                                                                                       
+ct Показывает все доступные команды psql                                                    
+
+ne Список SQL команд                                                                        
+ce \h                                                                                       
+ct Показывает справку по SQL командам                                                       
+
+ne Справка по конкретной SQL команде                                                        
+ce \h CREATE TABLE                                                                          
+ct Показывает синтаксис команды CREATE TABLE                                                
+
+ne Просмотр текущей БД и пользователя                                                       
+ce \conninfo                                                                                
+ct Показывает информацию о текущем подключении                                              
+
+ne Просмотр всех схем                                                                       
+ce \dn                                                                                      
+ct Показывает список схем в текущей БД                                                      
+
+ne Просмотр всех представлений                                                              
+ce \dv                                                                                      
+ct Показывает список представлений (views)                                                  
+
+ne Просмотр всех индексов                                                                   
+ce \di                                                                                      
+ct Показывает список индексов                                                               
+
+ne Просмотр всех последовательностей                                                        
+ce \ds                                                                                      
+ct Показывает список sequences                                                              
+
+ne Включение расширенного вывода                                                            
+ce \x                                                                                       
+ct Переключает между обычным и расширенным форматом вывода                                  
+
+ne Выполнение команд из файла                                                               
+ce \i /path/to/file.sql                                                                     
+ct Выполняет SQL команды из файла                                                           
+
+ne Вывод результата запроса в файл                                                          
+ce \o /path/to/output.txt                                                                   
+SELECT * FROM users;                                                                        
+\o                                                                                          
+ct \o(перенаправление вывода в файл); \o без параметра(отключение перенаправления)          
+
+ne Измерение времени выполнения запросов                                                    
+ce \timing                                                                                  
+ct Включает/выключает отображение времени выполнения                                        
+
+hd Управление индексами                                                                     
+ne Создание индекса                                                                         
+ce CREATE INDEX idx_username ON users(username);                                            
+ct idx_username(имя индекса); users(таблица); username(столбец)                             
+
+ne Создание уникального индекса                                                             
+ce CREATE UNIQUE INDEX idx_email ON users(email);                                           
+ct UNIQUE(индекс с уникальными значениями)                                                  
+
+ne Удаление индекса                                                                         
+ce DROP INDEX idx_username;                                                                 
+
+ne Просмотр индексов таблицы                                                                
+ce \d tablename                                                                             
+ct Показывает индексы в описании таблицы                                                    
+
+hd Управление транзакциями                                                                  
+ne Начало транзакции                                                                        
+ce BEGIN;                                                                                   
+
+ne Фиксация транзакции                                                                      
+ce COMMIT;                                                                                  
+
+ne Откат транзакции                                                                         
+ce ROLLBACK;
+
+ne Пример использования транзакции                                                          
+ce BEGIN;                                                                                   
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;                                   
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;                                   
+COMMIT;                                                                                     
+ct Транзакция для атомарного выполнения нескольких операций                                 
+
+hd Проверка                                                                                 
+ne Проверка версии PostgreSQL                                                               
+ce SELECT version();                                                                        
+
+ne Проверка текущего времени на сервере                                                     
+ce SELECT NOW();                                                                            
+
+ne Проверка активных подключений                                                            
+ce SELECT * FROM pg_stat_activity;                                                          
+ct Показывает все активные подключения к серверу                                            
+
+ne Проверка размера всех БД                                                                 
+ce SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database;              
+
+ne Проверка размера всех таблиц в БД                                                        
+ce SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))     
+FROM pg_tables WHERE schemaname = 'public'; 

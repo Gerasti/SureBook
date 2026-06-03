@@ -1,0 +1,279 @@
+
+=== Установка LAMP-сервера ===
+
+==== Что такое LAMP ====
+
+<syntaxhighlight lang="bash">
+LAMP = Linux + Apache + MariaDB + PHP
+</syntaxhighlight>
+
+<blockquote>
+Linux(операционная система); Apache(веб-сервер); MariaDB(система управления базами данных); PHP(язык серверной веб-разработки)
+</blockquote>
+
+==== Установка готового набора пакетов ====
+
+<syntaxhighlight lang="bash">
+apt-get install lamp-server
+</syntaxhighlight>
+
+<blockquote>
+Устанавливает все компоненты LAMP одной командой
+</blockquote>
+
+=== Подготовка файлов сайта ===
+
+==== Копирование файлов в директорию Apache ====
+
+<syntaxhighlight lang="bash">
+cp /mnt/web/index.php /var/www/html/
+cp /mnt/web/logo.png /var/www/html/
+</syntaxhighlight>
+
+<blockquote>
+/var/www/html/(стандартная директория для файлов веб-сервера Apache)
+</blockquote>
+
+=== Настройка PHP-приложения ===
+
+==== Редактирование файла index.php ====
+
+<syntaxhighlight lang="bash">
+nano /var/www/html/index.php
+
+</syntaxhighlight>
+
+==== Параметры подключения к базе данных ====
+
+<syntaxhighlight lang="bash">
+$servername = "localhost";
+$username = "webc";
+$password = "P@ssw0rd";
+$dbname = "webdb";
+</syntaxhighlight>
+
+<blockquote>
+$servername(адрес сервера базы данных); $username(пользователь MariaDB); $password(пароль пользователя); $dbname(имя базы данных)
+</blockquote>
+
+=== Настройка MariaDB ===
+
+==== Запуск и добавление в автозагрузку ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now mariadb
+</syntaxhighlight>
+
+<blockquote>
+enable(добавить в автозагрузку); --now(запустить немедленно)
+</blockquote>
+
+==== Подключение к MariaDB ====
+
+<syntaxhighlight lang="bash">
+mariadb -u root
+</syntaxhighlight>
+
+<blockquote>
+-u(user, указание пользователя для подключения); root(административный пользователь по умолчанию)
+</blockquote>
+
+==== Создание базы данных ====
+
+<syntaxhighlight lang="bash">
+create database webdb;
+</syntaxhighlight>
+
+<blockquote>
+create database(создание новой базы данных); webdb(имя базы данных)
+</blockquote>
+
+==== Создание пользователя ====
+
+<syntaxhighlight lang="bash">
+create user 'webc'@'localhost' identified by 'P@ssw0rd';
+</syntaxhighlight>
+
+<blockquote>
+create user(создание нового пользователя); 'webc'@'localhost'(имя пользователя и хост, с которого разрешено подключение); identified by(установка пароля)
+</blockquote>
+
+==== Выдача прав пользователю ====
+
+<syntaxhighlight lang="bash">
+grant all privileges on webdb.* to 'webc'@'localhost' with grant option;
+</syntaxhighlight>
+
+<blockquote>
+grant all privileges(выдать все права); webdb.*(база данных и все её таблицы); with grant option(право передавать свои привилегии другим пользователям)
+</blockquote>
+
+==== Выход из MariaDB ====
+
+<syntaxhighlight lang="bash">
+exit;
+</syntaxhighlight>
+
+<blockquote>
+Завершает сеанс работы с MariaDB
+</blockquote>
+
+=== Импорт базы данных ===
+
+==== Загрузка дамп-файла в базу данных ====
+
+<syntaxhighlight lang="bash">
+mariadb -u webc -p -D webdb < /mnt/web/dump.sql
+</syntaxhighlight>
+
+<blockquote>
+-u(указание пользователя); -p(запрос пароля); -D(указание базы данных для импорта); <(перенаправление содержимого файла в команду)
+</blockquote>
+
+=== Запуск Apache ===
+
+==== Включение автозапуска и запуск веб-сервера ====
+
+<syntaxhighlight lang="bash">
+systemctl enable --now httpd2.service
+</syntaxhighlight>
+
+<blockquote>
+httpd2.service(имя службы веб-сервера Apache в ALT Linux)
+</blockquote>
+
+=== Проверка работы ===
+
+==== Проверка статуса MariaDB ====
+
+<syntaxhighlight lang="bash">
+systemctl status mariadb
+</syntaxhighlight>
+
+<blockquote>
+Показывает состояние службы и последние записи логов
+</blockquote>
+
+==== Проверка статуса Apache ====
+
+<syntaxhighlight lang="bash">
+systemctl status httpd2
+</syntaxhighlight>
+
+<blockquote>
+Показывает состояние веб-сервера
+</blockquote>
+
+==== Проверка открытых портов ====
+
+<syntaxhighlight lang="bash">
+ss -tulpn | grep -E '80|443'
+</syntaxhighlight>
+
+<blockquote>
+ss(socket statistics, утилита для просмотра сетевых соединений); -t(показать TCP-сокеты); -u(показать UDP-сокеты); -l(показать слушающие сокеты); -p(показать процессы); -n(не разрешать имена портов и адресов); grep -E '80|443'(фильтр по портам HTTP и HTTPS)
+</blockquote>
+
+==== Проверка сайта в браузере ====
+
+<syntaxhighlight lang="bash">
+http://<IP_СЕРВЕРА>
+</syntaxhighlight>
+
+<blockquote>
+Открыть в браузере для проверки работы веб-приложения
+</blockquote>
+
+=== Управление службами ===
+
+==== Перезапуск Apache ====
+
+<syntaxhighlight lang="bash">
+systemctl restart httpd2
+</syntaxhighlight>
+
+<blockquote>
+Применяет изменения конфигурации без перезагрузки системы
+</blockquote>
+
+==== Перезапуск MariaDB ====
+
+<syntaxhighlight lang="bash">
+systemctl restart mariadb
+</syntaxhighlight>
+
+<blockquote>
+Перезапускает службу базы данных
+</blockquote>
+
+==== Просмотр логов Apache ====
+
+<syntaxhighlight lang="bash">
+journalctl -u httpd2
+</syntaxhighlight>
+
+<blockquote>
+-u(фильтр по юниту службы); показывает все записи журнала для Apache
+</blockquote>
+
+==== Просмотр логов MariaDB ====
+
+<syntaxhighlight lang="bash">
+journalctl -u mariadb
+</syntaxhighlight>
+
+<blockquote>
+Показывает журнал работы службы базы данных
+</blockquote>
+
+==== Просмотр логов Apache в реальном времени ====
+
+<syntaxhighlight lang="bash">
+journalctl -u httpd2 -f
+</syntaxhighlight>
+
+<blockquote>
+-f(follow, следить за новыми записями)
+</blockquote>
+
+=== Устранение типичных проблем ===
+
+==== Проблема: Apache не запускается ====
+
+<syntaxhighlight lang="bash">
+apachectl configtest
+</syntaxhighlight>
+
+<blockquote>
+Проверяет синтаксис конфигурационных файлов Apache на ошибки
+</blockquote>
+
+==== Проблема: ошибка подключения к БД ====
+
+<syntaxhighlight lang="bash">
+mariadb -u webc -p
+</syntaxhighlight>
+
+<blockquote>
+Проверка подключения к базе данных вручную для диагностики проблем с логином, паролем или правами пользователя
+</blockquote>
+
+==== Проверка существования базы данных ====
+
+<syntaxhighlight lang="bash">
+mariadb -u root -e "show databases;"
+</syntaxhighlight>
+
+<blockquote>
+-e(execute, выполнить SQL-команду); show databases(показать список всех баз данных)
+</blockquote>
+
+==== Проверка прав пользователя ====
+
+<syntaxhighlight lang="bash">
+mariadb -u root -e "show grants for 'webc'@'localhost';"
+</syntaxhighlight>
+
+<blockquote>
+show grants(показать привилегии пользователя)
+</blockquote>

@@ -1,261 +1,229 @@
 
-=== Установка ===
+=== Основные уровни RAID ===
+
+==== Сравнение уровней RAID ====
+
+<blockquote>
+RAID 0(striping, высокая скорость, нет отказоустойчивости, минимум 2 диска, объём = сумма дисков); RAID 1(mirroring, отказ 1 диска, минимум 2 диска, объём = размер 1 диска); RAID 5(striping+parity, отказ 1 диска, минимум 3 диска, объём = (N-1)×диск); RAID 6(double parity, отказ 2 диска, минимум 4 диска, объём = (N-2)×диск); RAID 10(mirror+stripe, высокая отказоустойчивость, минимум 4 диска, объём = 50%)
+</blockquote>
+
+<blockquote>
+Программный RAID(реализован на уровне ОС, использует CPU) vs Аппаратный RAID(реализован контроллером, имеет собственный процессор)
+</blockquote>
+
+=== Установка mdadm ===
 
 ==== Установка утилиты mdadm ====
 
 <syntaxhighlight lang="bash">
 apt-get install -y mdadm                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
-mdadm(утилита для управления программными RAID)
+mdadm(Multiple Device Administration, утилита для управления программными RAID-массивами в Linux); -y(автоматическое подтверждение установки)
 </blockquote>
 
-<blockquote>
-Программный RAID(реализован на уровне ОС) vs Аппаратный RAID(реализован контроллером)
-</blockquote>
-
-<blockquote>
-Программный RAID использует CPU, аппаратный имеет собственный процессор
-</blockquote>
+=== Создание RAID массивов ===
 
 ==== Создание RAID 0 массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc
- 
+mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc           
 </syntaxhighlight>
 
 <blockquote>
-RAID 0(striping, чередование) - данные распределяются по дискам
-</blockquote>
-
-<blockquote>
-Преимущества: высокая скорость чтения/записи, полное использование объёма
-</blockquote>
-
-<blockquote>
-Недостатки: нет отказоустойчивости, при отказе одного диска теряются все данные
-</blockquote>
-
-<blockquote>
-Минимум дисков: 2; Полезный объём: сумма всех дисков
+--create(создать новый массив); --verbose(подробный вывод); /dev/md0(имя создаваемого RAID-устройства); --level(уровень RAID: {0, 1, 4, 5, 6, 10}); --raid-devices(количество активных дисков в массиве); /dev/sdb /dev/sdc(список физических дисков)
 </blockquote>
 
 ==== Создание RAID 1 массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc           
- 
+mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+
 </syntaxhighlight>
-
-<blockquote>
-RAID 1(mirroring, зеркалирование) - данные дублируются на все диски
-</blockquote>
-
-<blockquote>
-Преимущества: высокая отказоустойчивость, быстрое чтение
-</blockquote>
-
-<blockquote>
-Недостатки: половина объёма теряется, медленная запись
-</blockquote>
-
-<blockquote>
-Минимум дисков: 2; Полезный объём: размер одного диска
-</blockquote>
-
-<blockquote>
-Выдерживает отказ N-1 дисков
-</blockquote>
 
 ==== Создание RAID 4 массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd  
- 
+mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
 </syntaxhighlight>
 
 <blockquote>
-RAID 4(striping with dedicated parity) - выделенный диск для чётности
-</blockquote>
-
-<blockquote>
-Преимущества: простая реализация
-</blockquote>
-
-<blockquote>
-Недостатки: диск чётности - узкое место, устарел
-</blockquote>
-
-<blockquote>
-Минимум дисков: 3; Полезный объём: (N-1) × размер диска
-</blockquote>
-
-<blockquote>
-Редко используется, заменён на RAID 5
-</blockquote>
-
-<blockquote>
-RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели, не поддерживаются mdadm
+RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели и не поддерживаются mdadm
 </blockquote>
 
 ==== Создание RAID 5 массива ====
 
 <syntaxhighlight lang="bash">
 mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
- 
+
 </syntaxhighlight>
-
-<blockquote>
-RAID 5(striping with parity) - данные и контрольные суммы распределены по дискам
-</blockquote>
-
-<blockquote>
-Преимущества: баланс скорости и отказоустойчивости, экономия места
-</blockquote>
-
-<blockquote>
-Недостатки: медленная запись из-за вычисления чётности, долгое восстановление
-</blockquote>
-
-<blockquote>
-Минимум дисков: 3; Полезный объём: (N-1) × размер диска
-</blockquote>
-
-<blockquote>
-Выдерживает отказ 1 диска
-</blockquote>
 
 ==== Создание RAID 6 массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd  
-  /dev/sde                                                                                    
- 
+mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
 </syntaxhighlight>
-
-<blockquote>
-RAID 6(striping with double parity) - двойная контрольная сумма
-</blockquote>
-
-<blockquote>
-Преимущества: выдерживает отказ 2 дисков одновременно
-</blockquote>
-
-<blockquote>
-Недостатки: ещё медленнее запись, больше потерь объёма
-</blockquote>
-
-<blockquote>
-Минимум дисков: 4; Полезный объём: (N-2) × размер диска
-</blockquote>
-
-<blockquote>
-Выдерживает отказ 2 дисков
-</blockquote>
 
 ==== Создание RAID 10 массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd 
-  /dev/sde                                                                                    
- 
+mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
+</syntaxhighlight>
+
+==== Создание массива с spare диском ====
+
+<syntaxhighlight lang="bash">
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb
+/dev/sdc /dev/sdd /dev/sde                                                                  
 </syntaxhighlight>
 
 <blockquote>
-RAID 10(1+0, зеркалирование + чередование) - комбинация RAID 1 и RAID 0
+--spare-devices(количество резервных дисков); spare(горячий резерв) - диск автоматически заменит отказавший и начнёт процесс rebuild
 </blockquote>
 
-<blockquote>
-Преимущества: высокая скорость и отказоустойчивость
-</blockquote>
-
-<blockquote>
-Недостатки: половина объёма теряется, дорого
-</blockquote>
-
-<blockquote>
-Минимум дисков: 4; Полезный объём: 50% от суммы дисков
-</blockquote>
-
-<blockquote>
-Выдерживает отказ нескольких дисков (не из одной зеркальной пары)
-</blockquote>
+=== Настройка массива ===
 
 ==== Создание файловой системы на массиве ====
 
 <syntaxhighlight lang="bash">
 mkfs.ext4 /dev/md0                                                                       
- 
 </syntaxhighlight>
 
 <blockquote>
-Форматирование массива {ext4, xfs, btrfs}
+mkfs(make filesystem, создание файловой системы); форматы: {ext4, xfs, btrfs}
 </blockquote>
 
 ==== Создание точки монтирования ====
 
 <syntaxhighlight lang="bash">
 mkdir /mnt/raid                                                                          
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Монтирование массива ====
 
 <syntaxhighlight lang="bash">
 mount /dev/md0 /mnt/raid                                                                 
-                                                                                              
- 
+
 </syntaxhighlight>
 
-=== Настройка ===
-
-==== В /etc/fstab добавить строку для автомонтирования ====
+==== Добавление в /etc/fstab для автомонтирования ====
 
 <syntaxhighlight lang="bash">
 /dev/md0   /mnt/raid   ext4   defaults   0 0                                             
- 
 </syntaxhighlight>
 
 <blockquote>
-Автоматическое монтирование при загрузке
+/dev/md0(устройство); /mnt/raid(точка монтирования); ext4(тип ФС); defaults(опции по умолчанию: rw,suid,dev,exec,auto,nouser,async); первый 0(dump, не создавать резервные копии); второй 0(fsck, не проверять ФС при загрузке)
 </blockquote>
 
-==== Сохранение конфигурации mdadm ====
+=== Настройка mdadm.conf ===
+
+==== Сохранение конфигурации массива ====
 
 <syntaxhighlight lang="bash">
 mdadm --detail --scan >> /etc/mdadm.conf                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
-Сохраняет информацию о массиве для автосборки при загрузке
+--detail(детальная информация о массиве); --scan(сканировать все массивы); >>(добавить в конец файла); создаёт строку ARRAY с UUID, уровнем и метаданными массива
 </blockquote>
 
-==== Добавление spare диска в массив ====
+==== Пример строки ARRAY в mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+ARRAY /dev/md0 metadata=1.2 name=hostname:0 UUID=12345678:abcdefgh:12345678:abcdefgh     
+</syntaxhighlight>
+
+<blockquote>
+ARRAY(определение массива); /dev/md0(имя устройства); metadata(версия метаданных: {0.90, 1.0, 1.1, 1.2}); name(имя массива hostname:номер); UUID(уникальный идентификатор массива)
+</blockquote>
+
+==== Добавление параметров устройств в mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+DEVICE /dev/sdb /dev/sdc /dev/sdd /dev/sde
+</syntaxhighlight>
+
+<blockquote>
+DEVICE(список физических дисков для поиска массивов); можно использовать wildcards: /dev/sd*
+</blockquote>
+
+==== Настройка email-уведомлений в mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+MAILADDR admin@example.com
+MAILFROM mdadm@server.local                                                                 
+</syntaxhighlight>
+
+<blockquote>
+MAILADDR(адрес для отправки уведомлений о проблемах с массивом); MAILFROM(адрес отправителя)
+</blockquote>
+
+==== Настройка программы мониторинга в mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+PROGRAM /usr/local/bin/raid-notify.sh
+</syntaxhighlight>
+
+<blockquote>
+PROGRAM(скрипт, который будет выполнен при событии с массивом); получает параметры: событие и устройство
+</blockquote>
+
+==== Ручное редактирование mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+nano /etc/mdadm.conf
+</syntaxhighlight>
+
+<blockquote>
+Файл можно редактировать вручную для тонкой настройки параметров
+</blockquote>
+
+==== Применение изменений из mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+mdadm --assemble --scan                                                                  
+</syntaxhighlight>
+
+<blockquote>
+--assemble(собрать массивы); --scan(использовать конфигурацию из /etc/mdadm.conf)
+</blockquote>
+
+==== Обновление конфигурации после изменения массива ====
+
+<syntaxhighlight lang="bash">
+mdadm --detail --scan > /etc/mdadm.conf.new                                              
+mv /etc/mdadm.conf.new /etc/mdadm.conf                                                      
+</syntaxhighlight>
+
+<blockquote>
+Перезапись файла с актуальной конфигурацией всех массивов
+</blockquote>
+
+==== Резервное копирование mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+cp /etc/mdadm.conf /etc/mdadm.conf.backup                                                
+</syntaxhighlight>
+
+<blockquote>
+Сохранение копии перед внесением изменений
+</blockquote>
+
+==== Добавление spare диска в существующий массив ====
 
 <syntaxhighlight lang="bash">
 mdadm --add /dev/md0 /dev/sde                                                            
- 
 </syntaxhighlight>
 
 <blockquote>
-spare(горячий резерв) - диск автоматически заменит отказавший
-</blockquote>
-
-==== Создание массива с spare диском ====
-
-<syntaxhighlight lang="bash">
-mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb  
-  /dev/sdc /dev/sdd /dev/sde                                                                  
- 
-</syntaxhighlight>
-
-<blockquote>
---spare-devices=1(количество резервных дисков)
+--add(добавить диск в массив как горячий резерв)
 </blockquote>
 
 === Управление массивом ===
@@ -264,94 +232,98 @@ mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /
 
 <syntaxhighlight lang="bash">
 mdadm --stop /dev/md0                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
-Размонтировать перед остановкой
+--stop(остановить массив); необходимо размонтировать перед остановкой
 </blockquote>
 
 ==== Запуск массива ====
 
 <syntaxhighlight lang="bash">
 mdadm --assemble /dev/md0 /dev/sdb /dev/sdc /dev/sdd                                     
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Удаление диска из массива ====
-
-<syntaxhighlight lang="bash">
-mdadm --remove /dev/md0 /dev/sdc                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
-Диск должен быть помечен как failed
+--assemble(собрать массив из указанных дисков)
+</blockquote>
+
+==== Автоматическая сборка всех массивов из mdadm.conf ====
+
+<syntaxhighlight lang="bash">
+mdadm --assemble --scan
+</syntaxhighlight>
+
+<blockquote>
+Собирает все массивы, описанные в /etc/mdadm.conf
 </blockquote>
 
 ==== Пометка диска как отказавшего ====
 
 <syntaxhighlight lang="bash">
 mdadm --fail /dev/md0 /dev/sdc                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
-Имитация отказа диска для тестирования
+--fail(пометить диск как failed); для имитации отказа при тестировании
+</blockquote>
+
+==== Удаление диска из массива ====
+
+<syntaxhighlight lang="bash">
+mdadm --remove /dev/md0 /dev/sdc                                                         
+</syntaxhighlight>
+
+<blockquote>
+--remove(удалить диск из массива); диск должен быть помечен как failed
 </blockquote>
 
 ==== Добавление нового диска взамен отказавшего ====
 
 <syntaxhighlight lang="bash">
-mdadm --add /dev/md0 /dev/sde
- 
+mdadm --add /dev/md0 /dev/sde                                                            
 </syntaxhighlight>
 
 <blockquote>
-Автоматически начнётся rebuild (восстановление)
+Автоматически начнётся процесс rebuild (восстановление данных на новом диске)
 </blockquote>
 
 ==== Увеличение количества дисков в массиве ====
 
 <syntaxhighlight lang="bash">
 mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sde                                    
- 
 </syntaxhighlight>
 
 <blockquote>
-Расширение массива с пересчётом данных
+--grow(изменить параметры массива); расширение с пересчётом данных
 </blockquote>
 
 ==== Изменение уровня RAID ====
 
 <syntaxhighlight lang="bash">
 mdadm --grow /dev/md0 --level=6                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
-Преобразование RAID 5 в RAID 6 (требует время)
+Преобразование массива (например RAID 5 в RAID 6), требует времени на пересчёт
 </blockquote>
 
-=== Проверка ===
+=== Проверка состояния ===
 
 ==== Проверка состояния всех RAID массивов ====
 
 <syntaxhighlight lang="bash">
 cat /proc/mdstat                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
-Краткая информация: состояние, прогресс rebuild/resync
+Краткая информация: состояние, прогресс rebuild/resync, активные/отказавшие диски
 </blockquote>
 
 ==== Детальная информация о массиве ====
 
 <syntaxhighlight lang="bash">
 mdadm --detail /dev/md0                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -362,128 +334,116 @@ mdadm --detail /dev/md0
 
 <syntaxhighlight lang="bash">
 mdadm --examine /dev/sdb                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
-Показывает метаданные RAID на конкретном диске
+--examine(прочитать метаданные RAID на диске); показывает UUID массива, уровень RAID, роль диска
 </blockquote>
 
 ==== Мониторинг состояния массива ====
 
 <syntaxhighlight lang="bash">
-mdadm --monitor --scan --daemonise                                                       
- 
+mdadm --monitor --scan --daemonise
 </syntaxhighlight>
 
 <blockquote>
-Запуск демона мониторинга для уведомлений об ошибках
+--monitor(режим мониторинга); --daemonise(запустить как демон); отправляет уведомления об ошибках
 </blockquote>
 
 ==== Проверка скорости rebuild ====
 
 <syntaxhighlight lang="bash">
-cat /proc/sys/dev/raid/speed_limit_min                                                   
-  cat /proc/sys/dev/raid/speed_limit_max                                                      
- 
+cat /proc/sys/dev/raid/speed_limit_min
+cat /proc/sys/dev/raid/speed_limit_max                                                      
 </syntaxhighlight>
 
 <blockquote>
-Показывает минимальную и максимальную скорость восстановления
+Показывает минимальную и максимальную скорость восстановления в KB/s
 </blockquote>
 
 ==== Изменение скорости rebuild ====
 
 <syntaxhighlight lang="bash">
 echo 50000 > /proc/sys/dev/raid/speed_limit_min                                          
-  echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
- 
+echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
 </syntaxhighlight>
 
 <blockquote>
-Значения в KB/s, влияет на производительность системы
+Значения в KB/s; низкая скорость снижает нагрузку, высокая ускоряет восстановление
 </blockquote>
 
 ==== Проверка целостности массива ====
 
 <syntaxhighlight lang="bash">
 echo check > /sys/block/md0/md/sync_action                                               
- 
 </syntaxhighlight>
 
 <blockquote>
-Запуск проверки без исправления ошибок
+Запуск проверки целостности без исправления ошибок
 </blockquote>
 
 ==== Восстановление с исправлением ошибок ====
 
 <syntaxhighlight lang="bash">
 echo repair > /sys/block/md0/md/sync_action                                              
- 
 </syntaxhighlight>
 
 <blockquote>
-Проверка и исправление несоответствий
+Проверка и автоматическое исправление несоответствий в данных
 </blockquote>
 
 ==== Просмотр прогресса проверки ====
 
 <syntaxhighlight lang="bash">
 cat /proc/mdstat                                                                         
- 
 </syntaxhighlight>
 
 <blockquote>
-Показывает прогресс операции check/repair
+Показывает прогресс операций check/repair/rebuild в процентах
 </blockquote>
 
-=== Удаление ===
+=== Удаление массива ===
 
 ==== Размонтирование массива ====
 
 <syntaxhighlight lang="bash">
 umount /mnt/raid                                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Остановка массива ====
 
 <syntaxhighlight lang="bash">
 mdadm --stop /dev/md0                                                                    
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Удаление метаданных RAID с дисков ====
 
 <syntaxhighlight lang="bash">
 mdadm --zero-superblock /dev/sdb /dev/sdc /dev/sdd                                       
- 
 </syntaxhighlight>
 
 <blockquote>
-Полное удаление информации о RAID с дисков
+--zero-superblock(обнулить суперблок RAID); полное удаление информации о RAID с дисков
 </blockquote>
 
 ==== Удаление записи из /etc/fstab ====
 
 <syntaxhighlight lang="bash">
 sed -i '/\/dev\/md0/d' /etc/fstab                                                        
- 
 </syntaxhighlight>
 
 <blockquote>
-Удаление строки автомонтирования
+sed -i(редактировать файл на месте); /d(удалить строку)
 </blockquote>
 
 ==== Удаление записи из /etc/mdadm.conf ====
 
 <syntaxhighlight lang="bash">
 sed -i '/\/dev\/md0/d' /etc/mdadm.conf                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
-Удаление конфигурации массива
+Удаление конфигурации массива из файла
 </blockquote>

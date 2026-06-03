@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,26 +15,23 @@ postgresql16-contrib(дополнительные модули и утилиты
 
 <syntaxhighlight lang="bash">
 /etc/init.d/postgresql initdb
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Запуск службы ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now postgresql                                                        
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Установка пароля для пользователя postgres ====
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
-  ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
-  \q                                                                                          
-                                                                                              
- 
+ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
+\q                                                                                          
+
 </syntaxhighlight>
 
 === Настройка ===
@@ -44,7 +40,6 @@ psql -U postgres
 
 <syntaxhighlight lang="bash">
 listen_addresses = '*'                                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -59,16 +54,14 @@ listen_addresses(адреса для прослушивания) {'*', 'localhos
 
 <syntaxhighlight lang="bash">
 systemctl restart postgresql                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf ====
 
 <syntaxhighlight lang="bash">
 host    all             all             0.0.0.0/0               md5                      
-  host    replication     all             0.0.0.0/0               md5                         
- 
+host    replication     all             0.0.0.0/0               md5                         
 </syntaxhighlight>
 
 <blockquote>
@@ -103,19 +96,17 @@ md5(метод аутентификации) {md5, trust, reject, scram-sha-256}
 
 <syntaxhighlight lang="bash">
 systemctl restart postgresql                                                             
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Создание базы данных и пользователя ====
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
-  CREATE DATABASE db01;                                                                       
-  CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
-  GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
-  \q                                                                                          
- 
+CREATE DATABASE db01;                                                                       
+CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
+GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
+\q                                                                                          
 </syntaxhighlight>
 
 <blockquote>
@@ -126,23 +117,21 @@ db01(имя создаваемой БД); user01(имя пользователя
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
-  CREATE DATABASE one;                                                                        
-  CREATE DATABASE two;                                                                        
-  CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
-  CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
-  GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
-  GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
-  \q                                                                                          
-                                                                                              
- 
+CREATE DATABASE one;                                                                        
+CREATE DATABASE two;                                                                        
+CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
+CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
+GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
+GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
+\q                                                                                          
+
 </syntaxhighlight>
 
 ==== Заполнение базы данных тестовыми данными ====
 
 <syntaxhighlight lang="bash">
 pgbench -U postgres -i one                                                               
-  pgbench -U postgres -i two                                                                  
- 
+pgbench -U postgres -i two                                                                  
 </syntaxhighlight>
 
 <blockquote>
@@ -155,7 +144,6 @@ pgbench -U postgres -i one
 
 <syntaxhighlight lang="bash">
 ss -tlpn | grep postgres                                                                 
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -166,10 +154,9 @@ ss -tlpn | grep postgres
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
-  SELECT datname FROM pg_database;                                                            
-  SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
-  \q                                                                                          
- 
+SELECT datname FROM pg_database;                                                            
+SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
+\q                                                                                          
 </syntaxhighlight>
 
 <blockquote>
@@ -180,12 +167,11 @@ psql -U postgres
 
 <syntaxhighlight lang="bash">
 psql -U postgres                                                                         
-  \c one                                                                                      
-  \dt+                                                                                        
-  \c two                                                                                      
-  \dt+                                                                                        
-  \q              
- 
+\c one                                                                                      
+\dt+                                                                                        
+\c two                                                                                      
+\dt+                                                                                        
+\q              
 </syntaxhighlight>
 
 <blockquote>
@@ -196,7 +182,6 @@ psql -U postgres
 
 <syntaxhighlight lang="bash">
 psql -U user01 db01                                                                      
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -207,7 +192,6 @@ psql -U user01 db01
 
 <syntaxhighlight lang="bash">
 psql -U user01 -h IP_сервера -d db01                                                     
- 
 </syntaxhighlight>
 
 <blockquote>

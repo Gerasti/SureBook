@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 apt-get install open-vm-tools open-vm-tools-desktop xrandr
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,16 +15,14 @@ open-vm-tools(базовые функции: общая папка, синхро
 
 <syntaxhighlight lang="bash">
 systemctl enable vmtoolsd
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Запуск службы ====
 
 <syntaxhighlight lang="bash">
 systemctl start vmtoolsd                                                     
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Проверка ===
@@ -34,32 +31,28 @@ systemctl start vmtoolsd
 
 <syntaxhighlight lang="bash">
 systemctl status vmtoolsd
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка версии VMware Tools ====
 
 <syntaxhighlight lang="bash">
 vmware-toolbox-cmd -v                                                        
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка работы буфера обмена ====
 
 <syntaxhighlight lang="bash">
 vmware-toolbox-cmd stat clipboard                                            
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Проверка синхронизации времени ====
 
 <syntaxhighlight lang="bash">
 vmware-toolbox-cmd timesync status                                           
-                                                                                  
- 
+
 </syntaxhighlight>
 
 === Настройка ===
@@ -68,23 +61,20 @@ vmware-toolbox-cmd timesync status
 
 <syntaxhighlight lang="bash">
 vmware-toolbox-cmd timesync enable
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Отключение синхронизации времени с хостом ====
 
 <syntaxhighlight lang="bash">
 vmware-toolbox-cmd timesync disable                                          
-                                                                                  
- 
+
 </syntaxhighlight>
 
 ==== Ручная настройка разрешения экрана ====
 
 <syntaxhighlight lang="bash">
 xrandr --output Virtual1 --mode 1920x1080                                    
- 
 </syntaxhighlight>
 
 <blockquote>

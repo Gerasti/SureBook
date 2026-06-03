@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 systemctl status systemd-timesyncd
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,8 +15,7 @@ systemd-timesyncd(встроенный NTP-клиент/сервер systemd, о
 
 <syntaxhighlight lang="bash">
 systemctl stop chronyd
-  systemctl disable chronyd
- 
+systemctl disable chronyd
 </syntaxhighlight>
 
 <blockquote>
@@ -31,16 +29,14 @@ systemd-timesyncd и chrony несовместимы на одной машин�
 <syntaxhighlight lang="bash">
 /etc/systemd/timesyncd.conf
 
- 
 </syntaxhighlight>
 
 ==== Настройка /etc/systemd/timesyncd.conf для сервера ====
 
 <syntaxhighlight lang="bash">
 [Time]
-  NTP=ntp2.vniiftri.ru
-  FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
- 
+NTP=ntp2.vniiftri.ru
+FallbackNTP=0.pool.ntp.org 1.pool.ntp.org
 </syntaxhighlight>
 
 <blockquote>
@@ -52,7 +48,6 @@ NTP(основные NTP-серверы через пробел); FallbackNTP(р
 <syntaxhighlight lang="bash">
 systemctl restart systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 ==== Включение службы ====
@@ -60,7 +55,6 @@ systemctl restart systemd-timesyncd
 <syntaxhighlight lang="bash">
 systemctl enable systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 === Разрешение NTP в firewall ===
@@ -69,8 +63,7 @@ systemctl enable systemd-timesyncd
 
 <syntaxhighlight lang="bash">
 iptables -A INPUT -p udp --dport 123 -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
- 
+iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
 </syntaxhighlight>
 
 <blockquote>
@@ -81,9 +74,8 @@ UDP порт 123 используется для NTP
 
 <syntaxhighlight lang="bash">
 nft add rule inet filter input udp dport 123 accept
-  nft add rule inet filter output udp sport 123 accept
+nft add rule inet filter output udp sport 123 accept
 
- 
 </syntaxhighlight>
 
 === Проверка NTP-сервера ===
@@ -92,7 +84,6 @@ nft add rule inet filter input udp dport 123 accept
 
 <syntaxhighlight lang="bash">
 timedatectl status
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -104,14 +95,12 @@ timedatectl status
 <syntaxhighlight lang="bash">
 systemctl status systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 ==== Подробная информация о синхронизации ====
 
 <syntaxhighlight lang="bash">
 timedatectl timesync-status
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -123,7 +112,6 @@ timedatectl timesync-status
 <syntaxhighlight lang="bash">
 ss -ulnp | grep 123
 
- 
 </syntaxhighlight>
 
 ==== Просмотр логов ====
@@ -131,7 +119,6 @@ ss -ulnp | grep 123
 <syntaxhighlight lang="bash">
 journalctl -u systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 === Настройка NTP-клиента ===
@@ -140,18 +127,16 @@ journalctl -u systemd-timesyncd
 
 <syntaxhighlight lang="bash">
 systemctl stop chronyd
-  systemctl disable chronyd
+systemctl disable chronyd
 
- 
 </syntaxhighlight>
 
 ==== Настройка /etc/systemd/timesyncd.conf для клиента ====
 
 <syntaxhighlight lang="bash">
 [Time]
-  NTP=192.168.11.67
-  FallbackNTP=ntp2.vniiftri.ru
- 
+NTP=192.168.11.67
+FallbackNTP=ntp2.vniiftri.ru
 </syntaxhighlight>
 
 <blockquote>
@@ -163,7 +148,6 @@ NTP(локальный NTP-сервер); FallbackNTP(резервный вне�
 <syntaxhighlight lang="bash">
 systemctl restart systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 ==== Включение службы ====
@@ -171,7 +155,6 @@ systemctl restart systemd-timesyncd
 <syntaxhighlight lang="bash">
 systemctl enable systemd-timesyncd
 
- 
 </syntaxhighlight>
 
 === Проверка клиента ===
@@ -181,7 +164,6 @@ systemctl enable systemd-timesyncd
 <syntaxhighlight lang="bash">
 timedatectl status
 
- 
 </syntaxhighlight>
 
 ==== Подробная информация ====
@@ -189,14 +171,12 @@ timedatectl status
 <syntaxhighlight lang="bash">
 timedatectl timesync-status
 
- 
 </syntaxhighlight>
 
 ==== Включение NTP-синхронизации ====
 
 <syntaxhighlight lang="bash">
 timedatectl set-ntp true
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -207,7 +187,6 @@ timedatectl set-ntp true
 
 <syntaxhighlight lang="bash">
 ntpdate -q 192.168.11.67
- 
 </syntaxhighlight>
 
 <blockquote>

@@ -5,8 +5,7 @@
 
 ```CODE
 apt-get install -y task-samba-dc                                                                      
-                                                                                                           
- 
+
 ```
 
 ### Настройка DNS <!-- HEAD -->
@@ -15,10 +14,9 @@ apt-get install -y task-samba-dc
 
 ```CODE
 search ad.team                                                                                        
-  nameserver 192.168.11.67                                                                                 
-  nameserver 192.168.33.67                                                                                 
-  nameserver 8.8.8.8                                                                                       
- 
+nameserver 192.168.11.67                                                                                 
+nameserver 192.168.33.67                                                                                 
+nameserver 8.8.8.8                                                                                       
 ```
 
 > search(домен поиска); nameserver(DNS серверы)
@@ -29,20 +27,19 @@ search ad.team
 
 ```CODE
 [libdefaults]                                                                                         
-  default_realm = AD.TEAM                                                                                  
-  dns_lookup_kdc = true                                                                                    
-  dns_lookup_realm = false                                                                                 
-                                                                                                           
-  [realms]                                                                                                 
-  AD.TEAM = {                                                                                              
-  kdc = srv-hq.ad.team                                                                                     
-  default_domain = ad.team                                                                                 
-  }                                                                                                        
-                                                                                                           
-  [domain_realm]                                                                                           
-  .ad.team = AD.TEAM
-  ad.team = AD.TEAM                                                                                        
- 
+default_realm = AD.TEAM                                                                                  
+dns_lookup_kdc = true                                                                                    
+dns_lookup_realm = false                                                                                 
+
+[realms]                                                                                                 
+AD.TEAM = {                                                                                              
+kdc = srv-hq.ad.team                                                                                     
+default_domain = ad.team                                                                                 
+}                                                                                                        
+
+[domain_realm]                                                                                           
+.ad.team = AD.TEAM
+ad.team = AD.TEAM                                                                                        
 ```
 
 > default_realm(область по умолчанию); dns_lookup_kdc(поиск KDC через DNS); kdc(контроллер домена); domain_realm(сопоставление доменов)
@@ -53,7 +50,6 @@ search ad.team
 
 ```CODE
 samba-tool dns add srv-hq ad.team srv-dt A 192.168.33.67 -Uadministrator                              
- 
 ```
 
 > samba-tool dns add(добавление DNS записи); A(тип записи); -U(пользователь)
@@ -64,7 +60,6 @@ samba-tool dns add srv-hq ad.team srv-dt A 192.168.33.67 -Uadministrator
 
 ```CODE
 host srv-hq                                                                                           
- 
 ```
 
 > должен вернуть srv-hq.ad.team has address 192.168.11.67
@@ -73,7 +68,6 @@ host srv-hq
 
 ```CODE
 kinit administrator                                                                                   
- 
 ```
 
 > вводится пароль administrator@AD.TEAM
@@ -82,7 +76,6 @@ kinit administrator
 
 ```CODE
 klist                                                                                                 
- 
 ```
 
 > показывает кэш билетов и срок действия
@@ -93,7 +86,6 @@ klist
 
 ```CODE
 samba-tool domain join ad.team DC -Uadministrator --realm=ad.team --workgroup=ad                      
- 
 ```
 
 > domain join(присоединение к домену); DC(режим контроллера домена); --realm(область Kerberos); --workgroup(рабочая группа)

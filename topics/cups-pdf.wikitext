@@ -5,8 +5,7 @@
 
 <syntaxhighlight lang="bash">
 apt-get install cups cups-pdf                                                            
-   
- 
+
 </syntaxhighlight>
 
 === Настройка CUPS-сервера ===
@@ -15,17 +14,16 @@ apt-get install cups cups-pdf
 
 <syntaxhighlight lang="bash">
 Listen *:631                                                                             
-                                                                                              
-  <Location />                                                                                
-  Order allow,deny                                                                            
-  Allow all                                                                                   
-  </Location>                                                                                 
-   
-  <Location /admin>                                                                           
-  Order allow,deny
-  Allow all                                                                                   
-  </Location>     
- 
+
+<Location />                                                                                
+Order allow,deny                                                                            
+Allow all                                                                                   
+</Location>                                                                                 
+
+<Location /admin>                                                                           
+Order allow,deny
+Allow all                                                                                   
+</Location>     
 </syntaxhighlight>
 
 <blockquote>
@@ -40,16 +38,14 @@ Listen *:631(слушать порт 631 на всех интерфейсах); 
 
 <syntaxhighlight lang="bash">
 systemctl enable cups                                                                    
-  systemctl restart cups                                                                      
-                                                                                              
- 
+systemctl restart cups                                                                      
+
 </syntaxhighlight>
 
 ==== Проверка доступных принтеров ====
 
 <syntaxhighlight lang="bash">
 lpstat -p                                                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -62,15 +58,13 @@ lpstat -p
 
 <syntaxhighlight lang="bash">
 apt-get install cups                                                                     
-                  
- 
+
 </syntaxhighlight>
 
 ==== Подключение сетевого принтера ====
 
 <syntaxhighlight lang="bash">
 lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -85,15 +79,13 @@ lpadmin -p PDF -E -v ipp://192.168.1.10:631/printers/PDF -m everywhere
 
 <syntaxhighlight lang="bash">
 lpoptions -d PDF                                                                         
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Проверка подключения ====
 
 <syntaxhighlight lang="bash">
 lpstat -t                                                                                
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -106,7 +98,6 @@ lpstat -t
 
 <syntaxhighlight lang="bash">
 echo "Тест печати" | lp -t "Example"                                                     
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -117,7 +108,6 @@ lp(команда печати); -t(название задания)
 
 <syntaxhighlight lang="bash">
 ls -l /home/USERNAME/                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -128,7 +118,6 @@ ls -l /home/USERNAME/
 
 <syntaxhighlight lang="bash">
 http://IP_СЕРВЕРА:631                                                                    
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -141,16 +130,14 @@ http://IP_СЕРВЕРА:631
 
 <syntaxhighlight lang="bash">
 lpq                                                                                      
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Отмена задания ====
 
 <syntaxhighlight lang="bash">
 cancel ID_ЗАДАНИЯ                                                                        
-                                                                                              
- 
+
 </syntaxhighlight>
 
 ==== Список устройств ====

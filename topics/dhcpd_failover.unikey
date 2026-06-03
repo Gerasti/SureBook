@@ -1,71 +1,71 @@
 hd Настройка DHCP failover 
-  ct Failover обеспечивает отказоустойчивость DHCP: если один сервер выходит из строя, второй 
-  продолжает выдавать IP-адреса                                                               
-  ct Общие настройки (subnets, options) выносятся в отдельные файлы и копируются на оба
-  сервера, специфичные настройки (primary/secondary) остаются в основном файле dhcpd.conf     
-                  
-  ne Создание директории для конфигураций на primary                                          
-  ce mkdir /etc/dhcp/dhcpd.conf.d
-  cat /etc/dhcp/dhcpd.conf > /etc/dhcp/dhcpd.conf.d/subnets.conf                              
-                                                                                              
-  ne Настройка include в /etc/dhcp/dhcpd.conf на primary                                      
-  ce echo include \"/etc/dhcp/dhcpd.conf.d/subnets.conf\"\; > /etc/dhcp/dhcpd.conf            
-                                                                                              
-  ne Настройка failover primary в /etc/dhcp/dhcpd.conf                                        
-  ce failover peer "dhcp-failover" {                                                          
-       primary;                                                                               
-       address 10.10.10.101;                                                                  
-       port 519;                                                                              
-       peer address 10.10.10.102;                                                             
-       peer port 520;                                                                         
-       max-response-delay 60;                                                                 
-       max-unacked-updates 10;                                                                
-       mclt 3600;                                                                             
-       split 128;                                                                             
-       load balance max seconds 3;                                                            
-  }                                                                                           
-                                                                                              
-  include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
-  ct primary(основной сервер); address(адрес текущего сервера); port(порт текущего сервера);
-  peer address(адрес secondary); peer port(порт secondary); max-response-delay(секунд до      
-  признания второго сервера недоступным); max-unacked-updates(максимум пакетов bind-update);
-  mclt(максимальное время lease без уведомления второго сервера, только на primary); split    
-  128(распределение адресов 50/50%, только на primary); load balance max seconds(секунд
-  ожидания ответа второго сервера)
+ct Failover обеспечивает отказоустойчивость DHCP: если один сервер выходит из строя, второй 
+продолжает выдавать IP-адреса                                                               
+ct Общие настройки (subnets, options) выносятся в отдельные файлы и копируются на оба
+сервера, специфичные настройки (primary/secondary) остаются в основном файле dhcpd.conf     
 
-  ne Добавление failover peer в /etc/dhcp/dhcpd.conf.d/subnets.conf                           
-  ce subnet 10.10.20.0 netmask 255.255.255.0 {
-    option routers 10.10.20.1;                                                                
-    pool {                                                                                    
-      failover peer "dhcp-failover";                                                          
-      range 10.10.20.50 10.10.20.200;                                                         
-    }                                                                                         
-  }                                                                                           
-  ct pool(пул адресов с failover); failover peer(указание пира для отказоустойчивости)        
-                                                                                              
-  ne Проверка и перезапуск на primary                                                         
-  ce dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
-  systemctl restart dhcpd                                                                     
-                                                                                              
-  ne Копирование конфигурации на secondary                                                    
-  ce scp -r /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.d root@10.10.10.102:/etc/dhcp/          
-  ct При изменении конфигурации необходимо копировать файлы на второй сервер                  
-                                                                                              
-  ne Настройка failover secondary в /etc/dhcp/dhcpd.conf                                      
-  ce failover peer "dhcp-failover" {                                                          
-      secondary;                                                                              
-      address 10.10.10.102;                                                                   
-      port 520;                                                                               
-      peer address 10.10.10.101;                                                              
-      peer port 519;                                                                          
-      max-response-delay 60;                                                                  
-      max-unacked-updates 10;                                                                 
-      load balance max seconds 3;                                                             
-  }                                                                                           
-                                                                                              
-  include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
-  ct secondary(вторичный сервер); без параметров mclt и split так как они только на primary   
-                                                                                              
-  ne Проверка и перезапуск на secondary                                                       
-  ce dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
-  systemctl restart dhcpd 
+ne Создание директории для конфигураций на primary                                          
+ce mkdir /etc/dhcp/dhcpd.conf.d
+cat /etc/dhcp/dhcpd.conf > /etc/dhcp/dhcpd.conf.d/subnets.conf                              
+
+ne Настройка include в /etc/dhcp/dhcpd.conf на primary                                      
+ce echo include \"/etc/dhcp/dhcpd.conf.d/subnets.conf\"\; > /etc/dhcp/dhcpd.conf            
+
+ne Настройка failover primary в /etc/dhcp/dhcpd.conf                                        
+ce failover peer "dhcp-failover" {                                                          
+primary;                                                                               
+address 10.10.10.101;                                                                  
+port 519;                                                                              
+peer address 10.10.10.102;                                                             
+peer port 520;                                                                         
+max-response-delay 60;                                                                 
+max-unacked-updates 10;                                                                
+mclt 3600;                                                                             
+split 128;                                                                             
+load balance max seconds 3;                                                            
+}                                                                                           
+
+include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
+ct primary(основной сервер); address(адрес текущего сервера); port(порт текущего сервера);
+peer address(адрес secondary); peer port(порт secondary); max-response-delay(секунд до      
+признания второго сервера недоступным); max-unacked-updates(максимум пакетов bind-update);
+mclt(максимальное время lease без уведомления второго сервера, только на primary); split    
+128(распределение адресов 50/50%, только на primary); load balance max seconds(секунд
+ожидания ответа второго сервера)
+
+ne Добавление failover peer в /etc/dhcp/dhcpd.conf.d/subnets.conf                           
+ce subnet 10.10.20.0 netmask 255.255.255.0 {
+option routers 10.10.20.1;                                                                
+pool {                                                                                    
+failover peer "dhcp-failover";                                                          
+range 10.10.20.50 10.10.20.200;                                                         
+}                                                                                         
+}                                                                                           
+ct pool(пул адресов с failover); failover peer(указание пира для отказоустойчивости)        
+
+ne Проверка и перезапуск на primary                                                         
+ce dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
+systemctl restart dhcpd                                                                     
+
+ne Копирование конфигурации на secondary                                                    
+ce scp -r /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.d root@10.10.10.102:/etc/dhcp/          
+ct При изменении конфигурации необходимо копировать файлы на второй сервер                  
+
+ne Настройка failover secondary в /etc/dhcp/dhcpd.conf                                      
+ce failover peer "dhcp-failover" {                                                          
+secondary;                                                                              
+address 10.10.10.102;                                                                   
+port 520;                                                                               
+peer address 10.10.10.101;                                                              
+peer port 519;                                                                          
+max-response-delay 60;                                                                  
+max-unacked-updates 10;                                                                 
+load balance max seconds 3;                                                             
+}                                                                                           
+
+include "/etc/dhcp/dhcpd.conf.d/subnets.conf";                                              
+ct secondary(вторичный сервер); без параметров mclt и split так как они только на primary   
+
+ne Проверка и перезапуск на secondary                                                       
+ce dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
+systemctl restart dhcpd 

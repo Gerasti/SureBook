@@ -1,203 +1,203 @@
 hd Основы LVM                                                                               
-  ct LVM(Logical Volume Manager) - система управления логическими томами                      
-  ct Основа LVM: абстракция физических дисков для гибкого управления хранилищем               
-  ct Зачем LVM: изменение размера разделов без перезагрузки, создание снапшотов, объединение  
-  дисков, миграция данных
-  ct Преимущества: динамическое изменение размера, перемещение данных между дисками, создание
-  резервных копий на лету                                                                     
-  ct LVM vs mdadm: LVM для гибкого управления томами, mdadm для отказоустойчивости
-  ct LVM может striping и mirroring, но mdadm лучше для RAID (производительность, надёжность) 
-  ct Часто используют вместе: mdadm для RAID массива, затем LVM поверх для управления томами  
-                                                                                              
-  lt Компоненты LVM                                                                           
-  - Physical Volume (PV) - физический том, диск или раздел                                    
-  - Volume Group (VG) - группа томов, объединяет несколько PV                                 
-  - Logical Volume (LV) - логический том, используется как обычный раздел                     
-  - Physical Extent (PE) - минимальная единица данных для распределения                       
-                                                                                              
-  hd Установка                                                                                
-  ne Установка пакета LVM                                                                     
-  ce apt-get install -y lvm2                                                                  
-  ct lvm2(пакет для работы с LVM)                                                             
-                                                                                              
-  ne Создание разметки на дисках                                                              
-  ce parted /dev/sda                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%
-  set 1 lvm on                                                                                
-  ct set 1 lvm on(установка флага LVM на раздел)                                              
-                                                                                              
-  ne Создание разметки на втором диске                                                        
-  ce parted /dev/sdb                                                                          
-  mklabel gpt                                                                                 
-  mkpart primary 0% 100%                                                                      
-  set 1 lvm on                                                                                
-                                                                                              
-  ne Создание Physical Volume                                                                 
-  ce pvcreate /dev/sda1 /dev/sdb1                                                             
-  ct pvcreate(инициализация физических томов для LVM)                                         
-                                                                                              
-  ne Создание Volume Group                                                                    
-  ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-  ct vgcreate(создание группы томов) vg01(имя группы)                                         
-  ct Объединяет несколько физических томов в один пул                                         
-                                                                                              
-  ne Создание Logical Volume                                                                  
-  ce lvcreate -L 10G -n lv_data vg01                                                          
-  ct lvcreate(создание логического тома) -L(размер) -n(имя тома)                              
-  ct Альтернатива: -l 100%FREE(использовать всё свободное место)                              
-                                                                                              
-  ne Создание LV с использованием всего пространства                                          
-  ce lvcreate -l 100%FREE -n lv_data vg01                                                     
-  ct -l 100%FREE(использовать 100% свободного места в VG)                                     
-                                                                                              
-  ne Создание файловой системы на LV                                                          
-  ce mkfs.ext4 /dev/vg01/lv_data                                                              
-  ct Форматирование логического тома {ext4, xfs, btrfs}                                       
-                                                                                              
-  ne Создание точки монтирования                                                              
-  ce mkdir /mnt/data                                                                          
-                                                                                              
-  ne Монтирование LV                                                                          
-  ce mount /dev/vg01/lv_data /mnt/data                                                        
-                                                                                              
-  hd Настройка striped (RAID 0)                                                               
-  ct striped(чередование) - данные распределяются по дискам для увеличения скорости           
-  ct Требуется минимум 2 диска                                                                
-                                                                                              
-  ne Создание PV для striped                                                                  
-  ce pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
-  ne Создание VG для striped                                                                  
-  ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
-  ne Создание striped LV                                                                      
-  ce lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
-  ct -i2(количество дисков для striping, страйпинг по 2 дискам)                               
-  ct Увеличивает скорость чтения/записи, но нет отказоустойчивости                            
-                                                                                              
-  ne Создание файловой системы                                                                
-  ce mkfs.ext4 /dev/vg01/lv_data                                                              
-                                                                                              
-  ne Монтирование                                                                             
-  ce mkdir /mnt/data                                                                          
-  mount /dev/vg01/lv_data /mnt/data                                                           
-                                                                                              
-  hd Настройка mirroring (RAID 1)                                                             
-  ct mirroring(зеркалирование) - данные дублируются на несколько дисков для отказоустойчивости
-  ct Требуется минимум 2 диска                                                                
-                                                                                              
-  ne Создание PV для mirroring                                                                
-  ce pvcreate /dev/sda1 /dev/sdb1                                                             
-                                                                                              
-  ne Создание VG для mirroring                                                                
-  ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
-                                                                                              
-  ne Создание mirrored LV                                                                     
-  ce lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
-  ct -m1(количество копий минус одна, одно зеркало = 2 копии)                                 
-  ct Обеспечивает отказоустойчивость, выдерживает отказ одного диска                          
-                                                                                              
-  ne Создание файловой системы                                                                
-  ce mkfs.ext4 /dev/vg01/lvmirror                                                             
-                                                                                              
-  ne Монтирование                                                                             
-  ce mkdir /mnt/mirror                                                                        
-  mount /dev/vg01/lvmirror /mnt/mirror                                                        
-                                                                                              
-  hd Управление LVM                                                                           
-  ne Увеличение размера LV                                                                    
-  ce lvextend -L +5G /dev/vg01/lv_data                                                        
-  ct -L +5G(добавить 5GB к текущему размеру)                                                  
-  ct Изменение размера без перезагрузки и размонтирования                                     
-                                                                                              
-  ne Увеличение размера файловой системы                                                      
-  ce resize2fs /dev/vg01/lv_data                                                              
-  ct resize2fs(для ext4); xfs_growfs(для xfs)                                                 
-  ct Расширяет файловую систему на весь размер LV                                             
-                                                                                              
-  ne Уменьшение размера LV                                                                    
-  ce umount /mnt/data                                                                         
-  e2fsck -f /dev/vg01/lv_data                                                                 
-  resize2fs /dev/vg01/lv_data 5G                                                              
-  lvreduce -L 5G /dev/vg01/lv_data                                                            
-  mount /dev/vg01/lv_data /mnt/data                                                           
-  ct Сначала уменьшить ФС, потом LV; требует размонтирования                                  
-                                                                                              
-  ne Добавление диска в VG                                                                    
-  ce pvcreate /dev/sdc1                                                                       
-  vgextend vg01 /dev/sdc1                                                                     
-  ct vgextend(расширение группы томов новым диском)                                           
-                                                                                              
-  ne Удаление диска из VG                                                                     
-  ce pvmove /dev/sda1                                                                         
-  vgreduce vg01 /dev/sda1                                                                     
-  ct pvmove(перемещение данных с диска); vgreduce(удаление диска из VG)                       
-                                                                                              
-  ne Создание снапшота LV                                                                     
-  ce lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
-  ct -s(создание снапшота); -L 1G(размер для хранения изменений)                              
-  ct Снапшот для резервного копирования без остановки системы                                 
-                                                                                              
-  ne Восстановление из снапшота                                                               
-  ce lvconvert --merge /dev/vg01/lv_data_snap                                                 
-  ct Откат LV к состоянию снапшота; требует перезагрузки или размонтирования                  
-                                                                                              
-  ne Удаление снапшота                                                                        
-  ce lvremove /dev/vg01/lv_data_snap                                                          
-                                                                                              
-  ne Удаление LV                                                                              
-  ce umount /mnt/data                                                                         
-  lvremove /dev/vg01/lv_data                                                                  
-                                                                                              
-  ne Удаление VG                                                                              
-  ce vgremove vg01                                                                            
-                                                                                              
-  ne Удаление PV                                                                              
-  ce pvremove /dev/sda1                                                                       
-                                                                                              
-  hd Автомонтирование                                                                         
-  ne В /etc/fstab добавить строку                                                             
-  ce /dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
-  ct Автоматическое монтирование при загрузке                                                 
-                                                                                              
-  ne Применение изменений fstab без перезагрузки                                              
-  ce mount -a                                                                                 
-  ct mount -a(монтирует все из /etc/fstab, что ещё не смонтировано)                           
-  hd Проверка                                                                                 
-  ne Просмотр Physical Volumes                                                                
-  ce pvdisplay                                                                                
-  pvs
-  ct pvdisplay(детальная информация); pvs(краткая таблица)                                    
-                                                                                              
-  ne Просмотр Volume Groups                                                                   
-  ce vgdisplay                                                                                
-  vgs                                                                                         
-  ct Показывает размер VG, свободное место, количество PV
-                                                                                              
-  ne Просмотр Logical Volumes                                                                 
-  ce lvdisplay                                                                                
-  lvs                                                                                         
-  ct Показывает размер LV, VG, состояние
-                                                                                              
-  ne Просмотр всех компонентов LVM                                                            
-  ce lsblk                                                                                    
-  ct Показывает иерархию дисков, разделов и LVM томов                                         
-                                                                                              
-  ne Проверка монтирования                                                                    
-  ce df -h                                                                                    
-  ct Показывает смонтированные файловые системы и использование                               
-                                                                                              
-  ne Проверка автомонтирования после перезагрузки                                             
-  ce reboot                                                                                   
-  df -h                                                                                       
-  ct Опционально, только для проверки автомонтирования после перезагрузки
-  ct Вместо перезагрузки можно использовать mount -a                                          
-                                                                                              
-  ne Проверка состояния mirrored LV                                                           
-  ce lvs -a -o +devices                                                                       
-  ct Показывает устройства и состояние зеркал                                                 
-                                                                                              
-  ne Проверка снапшотов                                                                       
-  ce lvs -a -o +snap_percent                                                                  
-  ct Показывает процент использования снапшота
+ct LVM(Logical Volume Manager) - система управления логическими томами                      
+ct Основа LVM: абстракция физических дисков для гибкого управления хранилищем               
+ct Зачем LVM: изменение размера разделов без перезагрузки, создание снапшотов, объединение  
+дисков, миграция данных
+ct Преимущества: динамическое изменение размера, перемещение данных между дисками, создание
+резервных копий на лету                                                                     
+ct LVM vs mdadm: LVM для гибкого управления томами, mdadm для отказоустойчивости
+ct LVM может striping и mirroring, но mdadm лучше для RAID (производительность, надёжность) 
+ct Часто используют вместе: mdadm для RAID массива, затем LVM поверх для управления томами  
+
+lt Компоненты LVM                                                                           
+- Physical Volume (PV) - физический том, диск или раздел                                    
+- Volume Group (VG) - группа томов, объединяет несколько PV                                 
+- Logical Volume (LV) - логический том, используется как обычный раздел                     
+- Physical Extent (PE) - минимальная единица данных для распределения                       
+
+hd Установка                                                                                
+ne Установка пакета LVM                                                                     
+ce apt-get install -y lvm2                                                                  
+ct lvm2(пакет для работы с LVM)                                                             
+
+ne Создание разметки на дисках                                                              
+ce parted /dev/sda                                                                          
+mklabel gpt                                                                                 
+mkpart primary 0% 100%
+set 1 lvm on                                                                                
+ct set 1 lvm on(установка флага LVM на раздел)                                              
+
+ne Создание разметки на втором диске                                                        
+ce parted /dev/sdb                                                                          
+mklabel gpt                                                                                 
+mkpart primary 0% 100%                                                                      
+set 1 lvm on                                                                                
+
+ne Создание Physical Volume                                                                 
+ce pvcreate /dev/sda1 /dev/sdb1                                                             
+ct pvcreate(инициализация физических томов для LVM)                                         
+
+ne Создание Volume Group                                                                    
+ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+ct vgcreate(создание группы томов) vg01(имя группы)                                         
+ct Объединяет несколько физических томов в один пул                                         
+
+ne Создание Logical Volume                                                                  
+ce lvcreate -L 10G -n lv_data vg01                                                          
+ct lvcreate(создание логического тома) -L(размер) -n(имя тома)                              
+ct Альтернатива: -l 100%FREE(использовать всё свободное место)                              
+
+ne Создание LV с использованием всего пространства                                          
+ce lvcreate -l 100%FREE -n lv_data vg01                                                     
+ct -l 100%FREE(использовать 100% свободного места в VG)                                     
+
+ne Создание файловой системы на LV                                                          
+ce mkfs.ext4 /dev/vg01/lv_data                                                              
+ct Форматирование логического тома {ext4, xfs, btrfs}                                       
+
+ne Создание точки монтирования                                                              
+ce mkdir /mnt/data                                                                          
+
+ne Монтирование LV                                                                          
+ce mount /dev/vg01/lv_data /mnt/data                                                        
+
+hd Настройка striped (RAID 0)                                                               
+ct striped(чередование) - данные распределяются по дискам для увеличения скорости           
+ct Требуется минимум 2 диска                                                                
+
+ne Создание PV для striped                                                                  
+ce pvcreate /dev/sda1 /dev/sdb1                                                             
+
+ne Создание VG для striped                                                                  
+ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+
+ne Создание striped LV                                                                      
+ce lvcreate -l 100%FREE -n lv_data -i2 vg01                                                 
+ct -i2(количество дисков для striping, страйпинг по 2 дискам)                               
+ct Увеличивает скорость чтения/записи, но нет отказоустойчивости                            
+
+ne Создание файловой системы                                                                
+ce mkfs.ext4 /dev/vg01/lv_data                                                              
+
+ne Монтирование                                                                             
+ce mkdir /mnt/data                                                                          
+mount /dev/vg01/lv_data /mnt/data                                                           
+
+hd Настройка mirroring (RAID 1)                                                             
+ct mirroring(зеркалирование) - данные дублируются на несколько дисков для отказоустойчивости
+ct Требуется минимум 2 диска                                                                
+
+ne Создание PV для mirroring                                                                
+ce pvcreate /dev/sda1 /dev/sdb1                                                             
+
+ne Создание VG для mirroring                                                                
+ce vgcreate vg01 /dev/sda1 /dev/sdb1                                                        
+
+ne Создание mirrored LV                                                                     
+ce lvcreate -l 100%FREE -n lvmirror -m1 vg01                                                
+ct -m1(количество копий минус одна, одно зеркало = 2 копии)                                 
+ct Обеспечивает отказоустойчивость, выдерживает отказ одного диска                          
+
+ne Создание файловой системы                                                                
+ce mkfs.ext4 /dev/vg01/lvmirror                                                             
+
+ne Монтирование                                                                             
+ce mkdir /mnt/mirror                                                                        
+mount /dev/vg01/lvmirror /mnt/mirror                                                        
+
+hd Управление LVM                                                                           
+ne Увеличение размера LV                                                                    
+ce lvextend -L +5G /dev/vg01/lv_data                                                        
+ct -L +5G(добавить 5GB к текущему размеру)                                                  
+ct Изменение размера без перезагрузки и размонтирования                                     
+
+ne Увеличение размера файловой системы                                                      
+ce resize2fs /dev/vg01/lv_data                                                              
+ct resize2fs(для ext4); xfs_growfs(для xfs)                                                 
+ct Расширяет файловую систему на весь размер LV                                             
+
+ne Уменьшение размера LV                                                                    
+ce umount /mnt/data                                                                         
+e2fsck -f /dev/vg01/lv_data                                                                 
+resize2fs /dev/vg01/lv_data 5G                                                              
+lvreduce -L 5G /dev/vg01/lv_data                                                            
+mount /dev/vg01/lv_data /mnt/data                                                           
+ct Сначала уменьшить ФС, потом LV; требует размонтирования                                  
+
+ne Добавление диска в VG                                                                    
+ce pvcreate /dev/sdc1                                                                       
+vgextend vg01 /dev/sdc1                                                                     
+ct vgextend(расширение группы томов новым диском)                                           
+
+ne Удаление диска из VG                                                                     
+ce pvmove /dev/sda1                                                                         
+vgreduce vg01 /dev/sda1                                                                     
+ct pvmove(перемещение данных с диска); vgreduce(удаление диска из VG)                       
+
+ne Создание снапшота LV                                                                     
+ce lvcreate -L 1G -s -n lv_data_snap /dev/vg01/lv_data                                      
+ct -s(создание снапшота); -L 1G(размер для хранения изменений)                              
+ct Снапшот для резервного копирования без остановки системы                                 
+
+ne Восстановление из снапшота                                                               
+ce lvconvert --merge /dev/vg01/lv_data_snap                                                 
+ct Откат LV к состоянию снапшота; требует перезагрузки или размонтирования                  
+
+ne Удаление снапшота                                                                        
+ce lvremove /dev/vg01/lv_data_snap                                                          
+
+ne Удаление LV                                                                              
+ce umount /mnt/data                                                                         
+lvremove /dev/vg01/lv_data                                                                  
+
+ne Удаление VG                                                                              
+ce vgremove vg01                                                                            
+
+ne Удаление PV                                                                              
+ce pvremove /dev/sda1                                                                       
+
+hd Автомонтирование                                                                         
+ne В /etc/fstab добавить строку                                                             
+ce /dev/vg01/lv_data   /mnt/data   ext4   defaults   0 0                                    
+ct Автоматическое монтирование при загрузке                                                 
+
+ne Применение изменений fstab без перезагрузки                                              
+ce mount -a                                                                                 
+ct mount -a(монтирует все из /etc/fstab, что ещё не смонтировано)                           
+hd Проверка                                                                                 
+ne Просмотр Physical Volumes                                                                
+ce pvdisplay                                                                                
+pvs
+ct pvdisplay(детальная информация); pvs(краткая таблица)                                    
+
+ne Просмотр Volume Groups                                                                   
+ce vgdisplay                                                                                
+vgs                                                                                         
+ct Показывает размер VG, свободное место, количество PV
+
+ne Просмотр Logical Volumes                                                                 
+ce lvdisplay                                                                                
+lvs                                                                                         
+ct Показывает размер LV, VG, состояние
+
+ne Просмотр всех компонентов LVM                                                            
+ce lsblk                                                                                    
+ct Показывает иерархию дисков, разделов и LVM томов                                         
+
+ne Проверка монтирования                                                                    
+ce df -h                                                                                    
+ct Показывает смонтированные файловые системы и использование                               
+
+ne Проверка автомонтирования после перезагрузки                                             
+ce reboot                                                                                   
+df -h                                                                                       
+ct Опционально, только для проверки автомонтирования после перезагрузки
+ct Вместо перезагрузки можно использовать mount -a                                          
+
+ne Проверка состояния mirrored LV                                                           
+ce lvs -a -o +devices                                                                       
+ct Показывает устройства и состояние зеркал                                                 
+
+ne Проверка снапшотов                                                                       
+ce lvs -a -o +snap_percent                                                                  
+ct Показывает процент использования снапшота

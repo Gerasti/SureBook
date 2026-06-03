@@ -5,92 +5,548 @@
 
 <syntaxhighlight lang="bash">
 apt-get install dhcp-server                                                              
-                                                                                              
- 
 </syntaxhighlight>
+
+<blockquote>
+Устанавливает ISC DHCP Server — стандартную реализацию DHCP для Linux
+</blockquote>
 
 ==== Определение сетевого интерфейса ====
 
 <syntaxhighlight lang="bash">
 ip a -c                                                                                  
-                                                                                              
- 
-</syntaxhighlight>
-
-==== Настройка интерфейса в /etc/sysconfig/dhcpd ====
-
-<syntaxhighlight lang="bash">
-DHCPDARGS=ens34                                                                          
- 
 </syntaxhighlight>
 
 <blockquote>
-Указывает интерфейс, который будет раздавать IP-адреса
+Показывает список сетевых интерфейсов с подсветкой
 </blockquote>
 
-=== Настройка DHCP-сервера ===
+=== Настройка основного конфигурационного файла ===
 
-==== Основная конфигурация в /etc/dhcp/dhcpd.conf ====
+==== Редактирование /etc/dhcp/dhcpd.conf ====
+
+<syntaxhighlight lang="bash">
+default-lease-time 3600;                                                                 
+max-lease-time 86400;                                                                       
+authoritative;                                                                              
+ddns-update-style none;                                                                     
+
+subnet 10.21.211.0 netmask 255.255.255.0 {                                                  
+range 10.21.211.10 10.21.211.230;                                                       
+
+option routers 10.21.211.1;                                                             
+option subnet-mask 255.255.255.0;                                                       
+option broadcast-address 10.21.211.255;                                                 
+option domain-name "example.local";                                                     
+option domain-name-servers 192.168.1.1, 8.8.8.8;                                        
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+default-lease-time(время аренды по умолчанию в секундах, 3600 = 1 час); max-lease-time(максимальное время аренды, 86400 = 24 часа); authoritative(сервер является авторитетным для данной сети); ddns-update-style(метод динамического обновления DNS: {none, interim, standard})
+</blockquote>
+
+<blockquote>
+subnet(определение подсети и маски, может быть несколько); range(диапазон IP-адресов для динамической выдачи); option routers(шлюз по умолчанию); option subnet-mask(маска подсети); option broadcast-address(широковещательный адрес); option domain-name(доменное имя); option domain-name-servers(DNS-серверы через запятую)
+</blockquote>
+
+=== Динамическое обновление DNS (DDNS) ===
+
+==== Отключение DDNS ====
 
 <syntaxhighlight lang="bash">
 ddns-update-style none;                                                                  
-                                                                                              
-  subnet 192.168.11.0 netmask 255.255.255.192 {                                               
-          option routers                  192.168.11.1;                                       
-          option domain-name              "bind.domain";                                      
-          option domain-name-servers      77.88.8.8,192.168.11.1;                             
-                                                                                              
-          range dynamic-bootp 192.168.11.2 192.168.11.63;                                     
-          default-lease-time 21600;                                                           
-          max-lease-time 43200;                                                               
-                                                                                              
-  host R-HQ {                                                                                 
-          hardware ethernet 00:0c:29:41:f2:9f;                                                
-          fixed-address 192.168.11.1;                                                         
-  }                                                                                           
-  }                                                                                           
- 
 </syntaxhighlight>
 
 <blockquote>
-subnet(определение подсети); range(диапазон выдаваемых адресов); option routers(шлюз по умолчанию); option domain-name-servers(DNS-серверы); default-lease-time(время аренды по умолчанию в секундах); max-lease-time(максимальное время аренды); host(резервирование IP по MAC-адресу)
+none(динамическое обновление DNS отключено, DHCP не будет обновлять записи на DNS-сервере)
 </blockquote>
 
-==== Проверка конфигурации ====
+==== Настройка DDNS с использованием interim ====
 
 <syntaxhighlight lang="bash">
-dhcpd -t -cf /etc/dhcp/dhcpd.conf
-                                                                                              
- 
+ddns-update-style interim;
+ignore client-updates;                                                                      
+
+zone example.local. {                                                                       
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}               
+
+zone 211.21.10.in-addr.arpa. {
+primary 192.168.1.1;
+key DHCP_UPDATER;                                                                       
+}                                                                                           
 </syntaxhighlight>
 
-==== Запуск и включение службы ====
+<blockquote>
+interim(устаревший метод DDNS, используется для совместимости со старыми версиями BIND); ignore client-updates(игнорировать запросы клиентов на обновление DNS); zone(определение зоны DNS для обновления); primary(IP-адрес первичного DNS-сервера); key(имя ключа TSIG для аутентификации)
+</blockquote>
+
+==== Настройка DDNS с использованием standard ====
+
+<syntaxhighlight lang="bash">
+ddns-update-style standard;
+ddns-domainname "example.local";                                                            
+ddns-rev-domainname "in-addr.arpa";                                                         
+
+update-static-leases on;                                                                    
+update-conflict-detection off;                                                              
+
+zone example.local. {
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}                                                                                           
+
+zone 211.21.10.in-addr.arpa. {                                                              
+primary 192.168.1.1;                                                                    
+key DHCP_UPDATER;                                                                       
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+standard(современный метод DDNS согласно RFC 4702); ddns-domainname(доменное имя для прямых записей); ddns-rev-domainname(доменное имя для обратных записей); update-static-leases(обновлять DNS для статических резервирований); update-conflict-detection(проверка конфликтов имён перед обновлением)
+</blockquote>
+
+==== Создание ключа TSIG для безопасного обновления DNS ====
+
+<syntaxhighlight lang="bash">
+dnssec-keygen -a HMAC-MD5 -b 128 -n HOST DHCP_UPDATER
+</syntaxhighlight>
+
+<blockquote>
+Генерирует ключ TSIG для аутентификации обновлений между DHCP и DNS
+</blockquote>
+
+==== Добавление ключа TSIG в конфигурацию DHCP ====
+
+<syntaxhighlight lang="bash">
+key DHCP_UPDATER {                                                                       
+algorithm hmac-md5;                                                                     
+secret "base64-encoded-key-here";                                                       
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+key(определение ключа TSIG); algorithm(алгоритм шифрования: {hmac-md5, hmac-sha1, hmac-sha256}); secret(секретный ключ в формате base64)
+</blockquote>
+
+==== Настройка обновления только прямых или только обратных зон ====
+
+<syntaxhighlight lang="bash">
+ddns-update-style standard;
+ddns-updates on;                                                                            
+update-optimization off;                                                                    
+
+subnet 10.21.211.0 netmask 255.255.255.0 {                                                  
+range 10.21.211.10 10.21.211.230;                                                       
+
+ddns-updates on;                                                                        
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+ddns-updates(включить или отключить DDNS для конкретной подсети); update-optimization(оптимизация обновлений, отключение заставляет обновлять DNS при каждом продлении аренды)
+</blockquote>
+
+=== Резервирование IP-адреса по MAC-адресу ===
+
+==== Добавление статического хоста ====
+
+<syntaxhighlight lang="bash">
+host Server-01 {                                                                         
+hardware ethernet 00:0c:29:41:f2:9f;                                                    
+fixed-address 10.21.211.5;                                                              
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+host(имя резервирования); hardware ethernet(MAC-адрес устройства); fixed-address(фиксированный IP-адрес для этого устройства)
+</blockquote>
+
+==== Резервирование с дополнительными параметрами ====
+
+<syntaxhighlight lang="bash">
+host Printer-Office {
+hardware ethernet 00:1a:2b:3c:4d:5e;                                                    
+fixed-address 10.21.211.50;                                                             
+option host-name "printer.example.local";                                               
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+option host-name(устанавливает имя хоста для устройства)
+</blockquote>
+
+==== Резервирование с обновлением DNS ====
+
+<syntaxhighlight lang="bash">
+host Server-01 {                                                                         
+hardware ethernet 00:0c:29:41:f2:9f;                                                    
+fixed-address 10.21.211.5;                                                              
+ddns-hostname "server01";                                                               
+ddns-domainname "example.local";                                                        
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+ddns-hostname(имя хоста для записи в DNS); ddns-domainname(доменное имя для этого хоста)
+</blockquote>
+
+=== Проверка и запуск DHCP-сервера ===
+
+==== Проверка синтаксиса конфигурации ====
+
+<syntaxhighlight lang="bash">
+dhcpd -t -cf /etc/dhcp/dhcpd.conf                                                        
+</syntaxhighlight>
+
+<blockquote>
+-t(тестовый режим без запуска сервера); -cf(указание пути к конфигурационному файлу)
+</blockquote>
+
+==== Проверка конфигурации с указанием интерфейса ====
+
+<syntaxhighlight lang="bash">
+dhcpd -t -cf /etc/dhcp/dhcpd.conf ens34                                                  
+</syntaxhighlight>
+
+<blockquote>
+Проверяет конфигурацию и привязку к конкретному интерфейсу
+</blockquote>
+
+=== Настройка интерфейса для DHCP-сервера ===
+
+==== Редактирование /etc/default/isc-dhcp-server ====
+
+<syntaxhighlight lang="bash">
+DHCP_CONF=/etc/dhcp/dhcpd.conf                                                           
+DHCP_PID=/var/run/dhcpd.pid                                                                 
+DHCP_OPTS="-4"                                                                              
+
+INTERFACEv4="ens34"                                                                         
+INTERFACEv6=""                                                                              
+</syntaxhighlight>
+
+<blockquote>
+DHCP_CONF(путь к основному конфигурационному файлу); DHCP_PID(путь к PID-файлу процесса); DHCP_OPTS(опции запуска, -4 = только IPv4); INTERFACEv4(интерфейс для раздачи IPv4); INTERFACEv6(интерфейс для IPv6, пустое значение = отключено)
+</blockquote>
+
+==== Альтернативный способ указания интерфейса в /etc/sysconfig/dhcpd ====
+
+<syntaxhighlight lang="bash">
+DHCPDARGS=ens34
+</syntaxhighlight>
+
+<blockquote>
+Используется в дистрибутивах на базе Red Hat/CentOS/ALT Linux
+</blockquote>
+
+=== Управление службой DHCP ===
+
+==== Запуск и добавление в автозагрузку ====
 
 <syntaxhighlight lang="bash">
 systemctl enable --now dhcpd                                                             
-                                                                                              
- 
 </syntaxhighlight>
 
-=== Проверка DHCP-сервера ===
+<blockquote>
+enable(добавить в автозагрузку); --now(запустить немедленно)
+</blockquote>
 
 ==== Проверка статуса службы ====
 
 <syntaxhighlight lang="bash">
 systemctl status dhcpd                                                                   
-                                                                                              
- 
-</syntaxhighlight>
-
-=== Настройка DHCP-клиента ===
-
-==== Получение IP-адреса от DHCP-сервера ====
-
-<syntaxhighlight lang="bash">
-dhcpcd                                                                                   
- 
 </syntaxhighlight>
 
 <blockquote>
-Клиент получит IP-адрес, шлюз и DNS-серверы из конфигурации сервера
+Показывает состояние процесса и последние логи
+</blockquote>
+
+==== Перезапуск службы после изменения конфигурации ====
+
+<syntaxhighlight lang="bash">
+systemctl restart dhcpd                                                                  
+</syntaxhighlight>
+
+<blockquote>
+Требуется после любых изменений в /etc/dhcp/dhcpd.conf
+</blockquote>
+
+==== Просмотр логов DHCP-сервера ====
+
+<syntaxhighlight lang="bash">
+journalctl -u dhcpd -f                                                                   
+</syntaxhighlight>
+
+<blockquote>
+-u(фильтр по юниту); -f(следить за новыми записями в реальном времени)
+</blockquote>
+
+=== Дополнительные опции DHCP ===
+
+==== Настройка времени обновления адреса ====
+
+<syntaxhighlight lang="bash">
+subnet 10.21.211.0 netmask 255.255.255.0 {                                               
+range 10.21.211.10 10.21.211.230;                                                       
+
+default-lease-time 3600;                                                                
+max-lease-time 86400;                                                                   
+min-lease-time 1800;                                                                    
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+min-lease-time(минимальное время аренды, 1800 = 30 минут)
+</blockquote>
+
+==== Настройка NTP-серверов для клиентов ====
+
+<syntaxhighlight lang="bash">
+option ntp-servers 10.21.211.1, 192.168.1.2;                                             
+</syntaxhighlight>
+
+<blockquote>
+option ntp-servers(список серверов синхронизации времени)
+</blockquote>
+
+==== Настройка доменного суффикса поиска ====
+
+<syntaxhighlight lang="bash">
+option domain-search "example.local", "backup.local";                                    
+</syntaxhighlight>
+
+<blockquote>
+option domain-search(список доменов для автодополнения при поиске хостов)
+</blockquote>
+
+==== Настройка MTU для клиентов ====
+
+<syntaxhighlight lang="bash">
+option interface-mtu 1500;                                                               
+</syntaxhighlight>
+
+<blockquote>
+option interface-mtu(максимальный размер пакета для интерфейса в байтах)
+</blockquote>
+
+==== Настройка WINS-серверов для Windows-клиентов ====
+
+<syntaxhighlight lang="bash">
+option netbios-name-servers 10.21.211.1;                                                 
+option netbios-node-type 8;                                                                 
+</syntaxhighlight>
+
+<blockquote>
+option netbios-name-servers(WINS-серверы для разрешения NetBIOS-имён); option netbios-node-type(тип узла: {1=B-node, 2=P-node, 4=M-node, 8=H-node})
+</blockquote>
+
+=== Расширенная конфигурация ===
+
+==== Настройка пула адресов с ограничениями ====
+
+<syntaxhighlight lang="bash">
+subnet 10.21.211.0 netmask 255.255.255.0 {                                               
+pool {                                                                                  
+range 10.21.211.10 10.21.211.50;                                                    
+allow members of "trusted-devices";                                                 
+}                                                                                       
+
+pool {                                                                                  
+range 10.21.211.100 10.21.211.200;
+deny members of "trusted-devices";                                                  
+}                                                                                       
+}                                                                                           
+
+group trusted-devices {
+host device1 {                                                                          
+hardware ethernet 00:11:22:33:44:55;                                                
+}                                                                                       
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+pool(отдельный пул адресов с правилами доступа); allow/deny members of(разрешить или запретить группе устройств)
+</blockquote>
+
+==== Настройка DHCP Relay для удалённых подсетей ====
+
+<syntaxhighlight lang="bash">
+shared-network office-network {
+subnet 10.21.211.0 netmask 255.255.255.0 {                                              
+option routers 10.21.211.1;                                                         
+}                                                                                       
+
+subnet 10.21.212.0 netmask 255.255.255.0 {                                              
+range 10.21.212.10 10.21.212.100;
+option routers 10.21.212.1;                                                         
+}                                                                                       
+}                                                                                           
+</syntaxhighlight>
+
+<blockquote>
+shared-network(объединение подсетей, подключенных к одному физическому сегменту)
+</blockquote>
+
+=== Настройка DHCP-клиента ===
+
+==== Получение IP-адреса через DHCP ====
+
+<syntaxhighlight lang="bash">
+dhcpcd                                                                                   
+</syntaxhighlight>
+
+<blockquote>
+Запускает DHCP-клиент для автоматического получения IP-адреса, шлюза и DNS
+</blockquote>
+
+==== Получение адреса на конкретном интерфейсе ====
+
+<syntaxhighlight lang="bash">
+dhcpcd ens34                                                                             
+</syntaxhighlight>
+
+<blockquote>
+Запускает DHCP-клиент только на указанном интерфейсе
+</blockquote>
+
+==== Принудительное обновление аренды ====
+
+<syntaxhighlight lang="bash">
+dhcpcd -n ens34                                                                          
+</syntaxhighlight>
+
+<blockquote>
+-n(запросить новый адрес вместо попытки продлить текущий)
+</blockquote>
+
+==== Освобождение IP-адреса ====
+
+<syntaxhighlight lang="bash">
+dhcpcd -k ens34                                                                          
+</syntaxhighlight>
+
+<blockquote>
+-k(отправить DHCPRELEASE и освободить текущий адрес)
+</blockquote>
+
+=== Диагностика и мониторинг DHCP ===
+
+==== Просмотр активных аренд ====
+
+<syntaxhighlight lang="bash">
+cat /var/lib/dhcp/dhcpd.leases                                                           
+</syntaxhighlight>
+
+<blockquote>
+Файл содержит базу данных всех выданных и истёкших аренд
+</blockquote>
+
+==== Просмотр последних выданных адресов ====
+
+<syntaxhighlight lang="bash">
+tail -f /var/lib/dhcp/dhcpd.leases                                                       
+</syntaxhighlight>
+
+<blockquote>
+-f(следить за файлом в реальном времени)
+</blockquote>
+
+==== Анализ DHCP-трафика ====
+
+<syntaxhighlight lang="bash">
+tcpdump -i ens34 -n port 67 or port 68                                                   
+</syntaxhighlight>
+
+<blockquote>
+Перехватывает DHCP-пакеты (порты 67=сервер, 68=клиент)
+</blockquote>
+
+==== Проверка доступности DHCP-сервера из сети ====
+
+<syntaxhighlight lang="bash">
+nmap --script broadcast-dhcp-discover                                                    
+</syntaxhighlight>
+
+<blockquote>
+Отправляет broadcast DHCP DISCOVER для обнаружения серверов в сети
+</blockquote>
+
+==== Мониторинг количества свободных адресов ====
+
+<syntaxhighlight lang="bash">
+grep "lease" /var/lib/dhcp/dhcpd.leases | grep -c "binding state active"                 
+</syntaxhighlight>
+
+<blockquote>
+Подсчитывает количество активных аренд
+</blockquote>
+
+==== Проверка обновлений DNS от DHCP ====
+
+<syntaxhighlight lang="bash">
+grep "DHCID" /var/log/syslog                                                             
+</syntaxhighlight>
+
+<blockquote>
+Показывает записи об обновлениях DNS (DHCID = DHCP Client Identifier)
+</blockquote>
+
+=== Устранение типичных проблем ===
+
+==== Проблема: DHCP не запускается ====
+
+<syntaxhighlight lang="bash">
+systemctl status dhcpd
+journalctl -xeu dhcpd                                                                       
+</syntaxhighlight>
+
+<blockquote>
+Проверка ошибок в логах и статусе службы
+</blockquote>
+
+==== Проблема: конфликт IP-адресов ====
+
+<syntaxhighlight lang="bash">
+option ping-check true;                                                                  
+ping-timeout 2;                                                                             
+</syntaxhighlight>
+
+<blockquote>
+ping-check(проверять адрес через ping перед выдачей); ping-timeout(время ожидания ответа в секундах)
+</blockquote>
+
+==== Проблема: клиенты не получают адреса ====
+
+<syntaxhighlight lang="bash">
+ip a show ens34
+systemctl status firewalld                                                                  
+</syntaxhighlight>
+
+<blockquote>
+Проверка состояния интерфейса и правил firewall (должны быть открыты порты 67/udp и 68/udp)
+</blockquote>
+
+==== Открытие портов в firewall ====
+
+<syntaxhighlight lang="bash">
+firewall-cmd --permanent --add-service=dhcp
+firewall-cmd --reload                                                                       
+</syntaxhighlight>
+
+<blockquote>
+Добавляет правило для DHCP-сервиса и применяет изменения
+</blockquote>
+
+==== Проблема: DDNS не обновляется ====
+
+<syntaxhighlight lang="bash">
+named-checkconf /etc/named.conf                                                          
+journalctl -u named -f                                                                      
+</syntaxhighlight>
+
+<blockquote>
+Проверка конфигурации DNS-сервера и логов для диагностики проблем с обновлением
 </blockquote>

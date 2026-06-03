@@ -5,7 +5,6 @@
 
 ```CODE
 net.ipv4.ip_forward=1                                                                    
- 
 ```
 
 > Разрешает маршрутизацию пакетов между интерфейсами
@@ -14,29 +13,26 @@ net.ipv4.ip_forward=1
 
 ```CODE
 sysctl -p                                                                                
-                                                                                              
- 
+
 ```
 
 #### Создание каталога для туннельного интерфейса <!-- NAME -->
 
 ```CODE
 mkdir -p /etc/net/ifaces/tun                                                             
-                                                                                              
- 
+
 ```
 
 #### Настройка параметров туннеля в /etc/net/ifaces/tun/options <!-- NAME -->
 
 ```CODE
 TYPE=iptun                                                                               
-  TUNTYPE=gre                                                                                 
-  TUNLOCAL=172.16.4.1
-  TUNREMOTE=172.16.5.1                                                                        
-  TUNOPTIONS='ttl 64'                                                                         
-  TUNTTL=64                                                                                   
-  TUNMTU=1476                                                                                 
- 
+TUNTYPE=gre                                                                                 
+TUNLOCAL=172.16.4.1
+TUNREMOTE=172.16.5.1                                                                        
+TUNOPTIONS='ttl 64'                                                                         
+TUNTTL=64                                                                                   
+TUNMTU=1476                                                                                 
 ```
 
 > TYPE=iptun(тип интерфейса - IP-туннель); TUNTYPE=gre(протокол туннелирования GRE); TUNLOCAL(локальный IP внешнего интерфейса); TUNREMOTE(удалённый IP внешнего интерфейса); TUNTTL(время жизни пакета); TUNMTU(максимальный размер пакета)
@@ -45,7 +41,6 @@ TYPE=iptun
 
 ```CODE
 10.10.10.2/30
- 
 ```
 
 > Внутренний IP-адрес туннеля с маской /30
@@ -54,8 +49,7 @@ TYPE=iptun
 
 ```CODE
 systemctl restart network                                                                
-                                                                                              
- 
+
 ```
 
 > Аналогичную настройку необходимо выполнить на втором роутере с зеркальными параметрами TUNLOCAL и TUNREMOTE

@@ -1,0 +1,327 @@
+
+=== Импорт Docker-образов ===
+
+==== Загрузка образа сайта ====
+
+<syntaxhighlight lang="bash">
+docker load < /mnt/docker/site_latest.tar                                                
+</syntaxhighlight>
+
+<blockquote>
+docker load(загрузка образа из tar-архива); <(перенаправление содержимого файла)
+</blockquote>
+
+==== Загрузка образа MariaDB ====
+
+<syntaxhighlight lang="bash">
+docker load < /mnt/docker/mariadb_latest.tar                                             
+</syntaxhighlight>
+
+<blockquote>
+Загружает заранее подготовленный образ базы данных
+</blockquote>
+
+==== Просмотр списка загруженных образов ====
+
+<syntaxhighlight lang="bash">
+docker image ls                                                                          
+</syntaxhighlight>
+
+<blockquote>
+Показывает все локально доступные Docker-образы с их тегами и ID
+</blockquote>
+
+=== Создание Docker Compose файла ===
+
+==== Создание файла конфигурации ====
+
+<syntaxhighlight lang="bash">
+vim docker-compose.yml                                                                   
+</syntaxhighlight>
+
+<blockquote>
+docker-compose.yml(стандартное имя файла конфигурации для Docker Compose)
+</blockquote>
+
+==== Конфигурация Docker Compose ====
+
+<syntaxhighlight lang="bash">
+ services:
+  database:
+    container_name: db
+    image: mariadb:10.11
+    restart: always
+
+    ports:
+      - "3306:3306"
+
+    environment:
+      MARIADB_DATABASE: "testdb"
+      MARIADB_USER: "testc"
+      MARIADB_PASSWORD: "P@ssw0rd"
+      MARIADB_ROOT_PASSWORD: "toor"
+
+  app:
+    container_name: testapp
+    image: site:latest
+    restart: always
+
+    ports:
+      - "8080:8000"
+
+    environment:
+      DB_TYPE: "maria"
+      DB_HOST: "192.168.122.97"
+      DB_PORT: "3306"
+      DB_NAME: "testdb"
+      DB_USER: "testc"
+      DB_PASS: "P@ssw0rd"
+
+    depends_on:
+      - database                                                                          
+</syntaxhighlight>
+
+<blockquote>
+services(определение сервисов для запуска); container_name(имя контейнера); image(используемый Docker-образ); restart(политика перезапуска: {always, unless-stopped, on-failure, no}); ports(проброс портов в формате "внешний:внутренний"); environment(переменные окружения для контейнера); depends_on(зависимости между контейнерами, определяет порядок запуска)
+</blockquote>
+
+<blockquote>
+MARIADB_DATABASE(создаёт базу данных при первом запуске); MARIADB_USER(создаёт пользователя БД); MARIADB_PASSWORD(пароль пользователя); MARIADB_ROOT_PASSWORD(пароль root-пользователя MariaDB)
+</blockquote>
+
+<blockquote>
+DB_TYPE(тип СУБД для подключения); DB_HOST(IP-адрес сервера базы данных); DB_PORT(порт для подключения к БД); DB_NAME(имя базы данных); DB_USER(пользователь для подключения); DB_PASS(пароль пользователя)
+</blockquote>
+
+=== Управление контейнерами ===
+
+==== Запуск контейнеров ====
+
+<syntaxhighlight lang="bash">
+docker compose up -d                                                                     
+</syntaxhighlight>
+
+<blockquote>
+up(создать и запустить контейнеры); -d(detached mode, запуск в фоновом режиме)
+</blockquote>
+
+==== Просмотр запущенных контейнеров ====
+
+<syntaxhighlight lang="bash">
+docker ps                                                                                
+</syntaxhighlight>
+
+<blockquote>
+Показывает список активных контейнеров с их статусом, портами и именами
+</blockquote>
+
+==== Просмотр всех контейнеров включая остановленные ====
+
+<syntaxhighlight lang="bash">
+docker ps -a                                                                             
+</syntaxhighlight>
+
+<blockquote>
+-a(all, показать все контейнеры включая остановленные)
+</blockquote>
+
+==== Остановка и удаление контейнеров ====
+
+<syntaxhighlight lang="bash">
+docker compose down                                                                      
+</syntaxhighlight>
+
+<blockquote>
+down(остановить и удалить контейнеры, сети, созданные через compose)
+</blockquote>
+
+=== Просмотр логов контейнеров ===
+
+==== Логи контейнера приложения ====
+
+<syntaxhighlight lang="bash">
+docker logs testapp                                                                      
+</syntaxhighlight>
+
+<blockquote>
+Показывает все логи контейнера с момента его запуска
+</blockquote>
+
+==== Логи контейнера базы данных ====
+
+<syntaxhighlight lang="bash">
+docker logs db                                                                           
+</syntaxhighlight>
+
+<blockquote>
+Показывает логи MariaDB для диагностики проблем с БД
+</blockquote>
+
+==== Просмотр логов в реальном времени ====
+
+<syntaxhighlight lang="bash">
+docker logs -f testapp                                                                   
+</syntaxhighlight>
+
+<blockquote>
+-f(follow, следить за новыми записями в реальном времени)
+</blockquote>
+
+==== Просмотр последних строк логов ====
+
+<syntaxhighlight lang="bash">
+docker logs --tail 50 testapp                                                            
+</syntaxhighlight>
+
+<blockquote>
+--tail(показать последние N строк логов)
+</blockquote>
+
+=== Проверка работы ===
+
+==== Проверка открытых портов ====
+
+<syntaxhighlight lang="bash">
+ss -tulpn | grep -E '3306|8080'                                                          
+</syntaxhighlight>
+
+<blockquote>
+ss(socket statistics); -t(TCP-сокеты); -u(UDP-сокеты); -l(слушающие сокеты); -p(показать процессы); -n(не разрешать имена); grep(фильтр по портам 3306 и 8080)
+</blockquote>
+
+==== Проверка сети Docker ====
+
+<syntaxhighlight lang="bash">
+docker network ls
+</syntaxhighlight>
+
+<blockquote>
+Показывает список Docker-сетей
+</blockquote>
+
+==== Проверка доступности приложения ====
+
+<syntaxhighlight lang="bash">
+curl http://192.168.122.97:8080                                                          
+</syntaxhighlight>
+
+<blockquote>
+Проверяет HTTP-ответ от приложения
+</blockquote>
+
+=== Дополнительные команды Docker ===
+
+==== Подключение к контейнеру ====
+
+<syntaxhighlight lang="bash">
+docker exec -it testapp bash                                                             
+</syntaxhighlight>
+
+<blockquote>
+exec(выполнить команду в контейнере); -it(интерактивный режим с TTY); bash(запустить оболочку)
+</blockquote>
+
+==== Остановка контейнера ====
+
+<syntaxhighlight lang="bash">
+docker stop testapp
+</syntaxhighlight>
+
+<blockquote>
+Корректно останавливает контейнер с отправкой SIGTERM
+</blockquote>
+
+==== Запуск остановленного контейнера ====
+
+<syntaxhighlight lang="bash">
+docker start testapp                                                                     
+</syntaxhighlight>
+
+<blockquote>
+Запускает ранее остановленный контейнер
+</blockquote>
+
+==== Перезапуск контейнера ====
+
+<syntaxhighlight lang="bash">
+docker restart testapp                                                                   
+</syntaxhighlight>
+
+<blockquote>
+Перезапускает контейнер (остановка + запуск)
+</blockquote>
+
+==== Удаление контейнера ====
+
+<syntaxhighlight lang="bash">
+docker rm testapp                                                                        
+</syntaxhighlight>
+
+<blockquote>
+Удаляет остановленный контейнер
+</blockquote>
+
+==== Удаление образа ====
+
+<syntaxhighlight lang="bash">
+docker rmi site:latest                                                                   
+</syntaxhighlight>
+
+<blockquote>
+rmi(remove image, удалить образ); требуется отсутствие контейнеров на основе этого образа
+</blockquote>
+
+==== Просмотр использования ресурсов ====
+
+<syntaxhighlight lang="bash">
+docker stats                                                                             
+</syntaxhighlight>
+
+<blockquote>
+Показывает использование CPU, памяти, сети и диска контейнерами в реальном времени
+</blockquote>
+
+=== Устранение типичных проблем ===
+
+==== Проблема: контейнер не запускается ====
+
+<syntaxhighlight lang="bash">
+docker logs testapp                                                                      
+docker inspect testapp                                                                      
+</syntaxhighlight>
+
+<blockquote>
+logs(просмотр логов для выявления ошибок); inspect(детальная информация о конфигурации и состоянии контейнера)
+</blockquote>
+
+==== Проблема: порт уже занят ====
+
+<syntaxhighlight lang="bash">
+ss -tulpn | grep 8080
+docker ps -a                                                                                
+</syntaxhighlight>
+
+<blockquote>
+Проверка, какой процесс занимает порт и наличие конфликтующих контейнеров
+</blockquote>
+
+==== Проблема: приложение не подключается к БД ====
+
+<syntaxhighlight lang="bash">
+docker logs db                                                                           
+docker exec -it testapp ping db                                                             
+</syntaxhighlight>
+
+<blockquote>
+Проверка логов базы данных и сетевой связности между контейнерами
+</blockquote>
+
+==== Очистка неиспользуемых ресурсов ====
+
+<syntaxhighlight lang="bash">
+docker system prune -a                                                                   
+</syntaxhighlight>
+
+<blockquote>
+prune(удалить неиспользуемые данные); -a(all, включая неиспользуемые образы)
+</blockquote>

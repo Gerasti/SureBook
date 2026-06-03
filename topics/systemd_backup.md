@@ -5,22 +5,20 @@
 
 ```CODE
 mkdir -p /var/backup
-                                                                                              
- 
+
 ```
 
 #### Создание службы /etc/systemd/system/backup.service <!-- NAME -->
 
 ```CODE
 [Unit]                                                                                   
-  Description=Backup shared folder to /var/backup                                             
-  After=network.target                                                                        
-                                                                                              
-  [Service]                                                                                   
-  Type=oneshot                                                                                
-  ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
-  /path/to/shared/folder'                                                                     
- 
+Description=Backup shared folder to /var/backup                                             
+After=network.target                                                                        
+
+[Service]                                                                                   
+Type=oneshot                                                                                
+ExecStart=/bin/bash -c 'tar -czf /var/backup/shared-$(date +%%Y-%%m-%%d-%%H-%%M-%%S).tar.gz 
+/path/to/shared/folder'                                                                     
 ```
 
 > Type=oneshot(служба завершается после выполнения команды); ExecStart(команда создания архива с датой и временем); %%(двойной процент для экранирования в systemd)
@@ -29,15 +27,14 @@ mkdir -p /var/backup
 
 ```CODE
 [Unit]       
-  Description=Run backup.service daily at 20:00                                               
-                                                                                              
-  [Timer]                                                                                     
-  OnCalendar=20:00                                                                            
-  Persistent=true                                                                             
-                                                                                              
-  [Install]                                                                                   
-  WantedBy=timers.target                                                                      
- 
+Description=Run backup.service daily at 20:00                                               
+
+[Timer]                                                                                     
+OnCalendar=20:00                                                                            
+Persistent=true                                                                             
+
+[Install]                                                                                   
+WantedBy=timers.target                                                                      
 ```
 
 > OnCalendar=20:00(запуск каждый день в 20:00); Persistent=true(выполнить пропущенную задачу при загрузке, если система была выключена)
@@ -48,7 +45,6 @@ mkdir -p /var/backup
 
 ```CODE
 systemctl daemon-reload
- 
 ```
 
 > Применяет изменения после создания или редактирования unit-файлов
@@ -57,8 +53,7 @@ systemctl daemon-reload
 
 ```CODE
 systemctl enable --now backup.timer                                                      
-                                                                                              
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -67,7 +62,6 @@ systemctl enable --now backup.timer
 
 ```CODE
 systemctl list-timers
- 
 ```
 
 > Показывает все таймеры, время следующего запуска и последнего выполнения
@@ -76,23 +70,20 @@ systemctl list-timers
 
 ```CODE
 systemctl status backup.timer                                                            
-                                                                                              
- 
+
 ```
 
 #### Проверка статуса службы <!-- NAME -->
 
 ```CODE
 systemctl status backup.service                                                          
-                                                                                              
- 
+
 ```
 
 #### Ручной запуск службы резервного копирования <!-- NAME -->
 
 ```CODE
 systemctl start backup.service                                                           
- 
 ```
 
 > Для проверки работы службы без ожидания таймера
@@ -101,7 +92,6 @@ systemctl start backup.service
 
 ```CODE
 ls -lh /var/backup                                                                       
- 
 ```
 
 > -lh(список с размерами в читаемом формате)
@@ -110,7 +100,6 @@ ls -lh /var/backup
 
 ```CODE
 journalctl -u backup.service                                                             
- 
 ```
 
 > Показывает логи выполнения резервного копирования
@@ -119,8 +108,7 @@ journalctl -u backup.service
 
 ```CODE
 journalctl -u backup.timer                                                               
-                                                                                              
- 
+
 ```
 
 #### Дополнительные варианты OnCalendar <!-- LIST -->

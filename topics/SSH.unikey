@@ -1,113 +1,113 @@
 hd Установка                                                                                
-   
-  ne Установка пакетов OpenSSH                                                                
-  ce sudo apt-get install openssh-server
-  ct openssh-server(SSH-сервер, включает openssh-common автоматически)                        
-                                                                                              
-  ne Запуск и автозагрузка службы                                                             
-  ce sudo systemctl enable --now sshd                                                         
-                                                                                              
-  hd Проверка     
-                                                                                              
-  ne Проверка статуса службы                                                                  
-  ce systemctl status sshd
-                                                                                              
-  ne Проверка прослушиваемого порта                                                           
-  ce ss -tulpn | grep ssh                                                                     
-                                                                                              
-  ne Проверка конфигурации                                                                    
-  ce sshd -t                                                                                  
-  ct Необязательно, проверяет синтаксис /etc/openssh/sshd_config перед перезапуском           
-                                                                                              
-  ne Просмотр активных подключений                                                            
-  ce who                                                                                      
-  ct Необязательно, показывает текущие SSH-сессии                                             
-                                                                                              
-  ne Просмотр логов SSH                                                                       
-  ce journalctl -u sshd                                                                       
-  ct Необязательно, для диагностики проблем подключения                                       
-                                                                                              
-  hd Настройка сервера                                                                        
-                                                                                              
-  ne Основной конфигурационный файл                                                           
-  ce /etc/openssh/sshd_config
-                                                                                              
-  ne Настройка /etc/openssh/sshd_config                                                       
-  ce Port 22                                                                                  
-  PasswordAuthentication yes                                                                  
-  PermitRootLogin no                                                                          
-  AllowUsers sshuser adminuser                                                                
-  MaxAuthTries 3                                                                              
-  PubkeyAuthentication yes                                                                    
- 
- AuthorizedKeysFile .ssh/authorized_keys                                                     
-  Banner /etc/ssh/banner.txt                                                                  
-  ct Port(обычно 22, изменение необязательно); PasswordAuthentication(yes для начальной       
-  настройки, no после настройки ключей); PermitRootLogin no(рекомендуется);                   
-  AllowUsers(необязательно, белый список); MaxAuthTries(необязательно, обычно 3-6);           
-  PubkeyAuthentication yes(обычно включено по умолчанию); AuthorizedKeysFile(стандартное      
-  расположение); Banner(необязательно)
 
-  ne Создание файла баннера /etc/ssh/banner.txt                                               
-  ce ************************************
-  - Authorized Access Only          *                                                         
-  - All activity is monitored        *                                                        
-  ---
-  ct Необязательно, содержимое баннера произвольное                                        
-                                                                                              
-  ne Перезапуск службы после изменений                                                        
-  ce sudo systemctl restart sshd                                                              
-                                                                                              
-  hd Настройка аутентификации по ключам                                                       
-                                                                                              
-  ne Генерация SSH-ключа на клиенте                                                           
-  ce ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
-  ct -t ed25519(современный стандарт, быстрее и безопаснее RSA); -f(имя файла, по умолчанию   
-  id_ed25519)                                                                                 
-                                                                                              
-  ne Копирование публичного ключа на сервер                                                   
-  ce ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
-  ct Публичный ключ добавляется в ~/.ssh/authorized_keys на сервере                           
-                                                                                              
-  hd Настройка клиента                                                                        
-                                                                                              
-  ne Настройка ~/.ssh/config для упрощения подключения                                        
-  ce Host srv-hq  
-      HostName 192.168.11.67                                                                  
-      User sshuser                                                                            
-      IdentityFile ~/.ssh/srv_ssh_key
-      Port 22                                                                                 
-  ct Необязательно, упрощает подключение. Port(указывать только если не 22)                   
-                                                                                              
-  ne Установка прав на config                                                                 
-  ce chmod 600 ~/.ssh/config                                                                  
-                                                                                              
-  ne Подключение к серверу по псевдониму                                                      
-  ce ssh srv-hq                                                                               
-  ct Работает только при настроенном ~/.ssh/config                                            
-                                                                                              
-  ne Подключение к серверу напрямую                                                           
-  ce ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67                                          
-  ct Стандартный способ подключения с указанием ключа, для нестандартного порта использовать -p {8022]                                        
-                                                                                              
-  ne Подключение по паролю                                                                    
-  ce ssh sshuser@192.168.11.67                                                                
-  ct Работает если PasswordAuthentication yes на сервере                                      
-                                                                                              
-  hd Создание пользователя                                                                    
-                                                                                              
-  ne Создание пользователя                                                                    
-  ce useradd -u 2026 -m -g users -G wheel sshuser
-  ct -u(UID, необязательно); -m(создать домашний каталог); -g(основная группа, обычно users); 
-  -G wheel(для sudo)                                                                          
-                                                                                              
-  ne Установка пароля                                                                         
-  ce passwd sshuser
-                                                                                              
-  ne Настройка sudo без пароля                                                                
-  ce visudo                                                                                   
-  ct Добавить: %wheel ALL=(ALL:ALL) NOPASSWD: ALL. Необязательно, обычно sudo требует пароль  
-                                                                                              
-  ne Проверка sudo                                                                            
-  ce sudo whoami                                                                              
-  ct Результат: root
+ne Установка пакетов OpenSSH                                                                
+ce sudo apt-get install openssh-server
+ct openssh-server(SSH-сервер, включает openssh-common автоматически)                        
+
+ne Запуск и автозагрузка службы                                                             
+ce sudo systemctl enable --now sshd                                                         
+
+hd Проверка     
+
+ne Проверка статуса службы                                                                  
+ce systemctl status sshd
+
+ne Проверка прослушиваемого порта                                                           
+ce ss -tulpn | grep ssh                                                                     
+
+ne Проверка конфигурации                                                                    
+ce sshd -t                                                                                  
+ct Необязательно, проверяет синтаксис /etc/openssh/sshd_config перед перезапуском           
+
+ne Просмотр активных подключений                                                            
+ce who                                                                                      
+ct Необязательно, показывает текущие SSH-сессии                                             
+
+ne Просмотр логов SSH                                                                       
+ce journalctl -u sshd                                                                       
+ct Необязательно, для диагностики проблем подключения                                       
+
+hd Настройка сервера                                                                        
+
+ne Основной конфигурационный файл                                                           
+ce /etc/openssh/sshd_config
+
+ne Настройка /etc/openssh/sshd_config                                                       
+ce Port 22                                                                                  
+PasswordAuthentication yes                                                                  
+PermitRootLogin no                                                                          
+AllowUsers sshuser adminuser                                                                
+MaxAuthTries 3                                                                              
+PubkeyAuthentication yes                                                                    
+
+AuthorizedKeysFile .ssh/authorized_keys                                                     
+Banner /etc/ssh/banner.txt                                                                  
+ct Port(обычно 22, изменение необязательно); PasswordAuthentication(yes для начальной       
+настройки, no после настройки ключей); PermitRootLogin no(рекомендуется);                   
+AllowUsers(необязательно, белый список); MaxAuthTries(необязательно, обычно 3-6);           
+PubkeyAuthentication yes(обычно включено по умолчанию); AuthorizedKeysFile(стандартное      
+расположение); Banner(необязательно)
+
+ne Создание файла баннера /etc/ssh/banner.txt                                               
+ce ************************************
+- Authorized Access Only          *                                                         
+- All activity is monitored        *                                                        
+---
+ct Необязательно, содержимое баннера произвольное                                        
+
+ne Перезапуск службы после изменений                                                        
+ce sudo systemctl restart sshd                                                              
+
+hd Настройка аутентификации по ключам                                                       
+
+ne Генерация SSH-ключа на клиенте                                                           
+ce ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
+ct -t ed25519(современный стандарт, быстрее и безопаснее RSA); -f(имя файла, по умолчанию   
+id_ed25519)                                                                                 
+
+ne Копирование публичного ключа на сервер                                                   
+ce ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
+ct Публичный ключ добавляется в ~/.ssh/authorized_keys на сервере                           
+
+hd Настройка клиента                                                                        
+
+ne Настройка ~/.ssh/config для упрощения подключения                                        
+ce Host srv-hq  
+HostName 192.168.11.67                                                                  
+User sshuser                                                                            
+IdentityFile ~/.ssh/srv_ssh_key
+Port 22                                                                                 
+ct Необязательно, упрощает подключение. Port(указывать только если не 22)                   
+
+ne Установка прав на config                                                                 
+ce chmod 600 ~/.ssh/config                                                                  
+
+ne Подключение к серверу по псевдониму                                                      
+ce ssh srv-hq                                                                               
+ct Работает только при настроенном ~/.ssh/config                                            
+
+ne Подключение к серверу напрямую                                                           
+ce ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67                                          
+ct Стандартный способ подключения с указанием ключа, для нестандартного порта использовать -p {8022]                                        
+
+ne Подключение по паролю                                                                    
+ce ssh sshuser@192.168.11.67                                                                
+ct Работает если PasswordAuthentication yes на сервере                                      
+
+hd Создание пользователя                                                                    
+
+ne Создание пользователя                                                                    
+ce useradd -u 2026 -m -g users -G wheel sshuser
+ct -u(UID, необязательно); -m(создать домашний каталог); -g(основная группа, обычно users); 
+-G wheel(для sudo)                                                                          
+
+ne Установка пароля                                                                         
+ce passwd sshuser
+
+ne Настройка sudo без пароля                                                                
+ce visudo                                                                                   
+ct Добавить: %wheel ALL=(ALL:ALL) NOPASSWD: ALL. Необязательно, обычно sudo требует пароль  
+
+ne Проверка sudo                                                                            
+ce sudo whoami                                                                              
+ct Результат: root

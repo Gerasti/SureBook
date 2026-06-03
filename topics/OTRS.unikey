@@ -1,55 +1,55 @@
 
-  hd Установка                                                                                
-  ne Установка пакетов                                                                        
-  ce apt-get update && apt-get install -y postgresql15-server otrs otrs-apache2               
-                                                                                              
-  ne Запуск Apache                                                                            
-  ce systemctl enable --now httpd2                                                            
-                                                                                              
-  ne Создание системных баз данных PostgreSQL                                                 
-  ce /etc/init.d/postgresql initdb                                                            
-                                                                                              
-  ne Запуск PostgreSQL                                                                        
-  ce systemctl enable --now postgresql                                                        
-                                                                                              
-  ne Создание пользователя и базы данных для OTRS                                             
-  ce psql -U postgres                                                                         
-  create database otrs;                                                                       
-  create user otrs with encrypted password 'P@ssw0rd';                                        
-  grant all privileges on database otrs to otrs;                                              
-  alter database otrs owner to otrs;                                                          
-  ct P@ssw0rd(пароль для пользователя otrs)                                                   
-                                                                                              
-  hd Настройка                                                                                
-  ne Настройка otrs-apache2                                                                   
-  ce apt-get install -y apache2-httpd-prefork                                                 
-  a2enextra httpd-addon.d                                                                     
-  echo "httpd-addon.d=yes" >> /etc/httpd2/conf/extra-start.d/999-otrs.conf                    
-                                                                                              
-  ne Перезагрузка Apache                                                                      
-  ce systemctl restart httpd2                                                                 
-                                                                                              
-  ne Веб-установщик                                                                           
-  ct Открыть в браузере http://IP_адрес_сервера/otrs/installer.pl                             
-  lt Действия в веб-установщике                                                               
-  - Принять лицензию                                                                          
-  - Настроить базу данных                                                                     
-  -- type database: PostgreSQL                                                                
-  -- host: localhost                                                                          
-  -- database: otrs                                                                           
-  -- user: otrs                                                                               
-  -- password: P@ssw0rd                                                                       
-  - Запомнить пароль администратора                                                           
-  - Перейти по ссылке для входа в админскую учётную запись                                    
-                                                                                              
-  ne Установка модулей PostgreSQL                                                             
-  ce apt-get install -y postgresql15-perl perl-DBD-Pg                                         
-                                                                                              
-  ne Запуск OTRS                                                                              
-  ce rm /var/www/webapps/otrs/var/cron/otrs_daemin dist                                       
-  /var/www/webapps/otrs/bin/Cron.sh start otrs                                                
-  ct Устранение ошибок                                                                        
-                                                                                              
-  hd Проверка                                                                                 
-  ct Доступ администратора: http://IP_адрес_сервера/otrs/index.pl                             
-  ct Доступ пользователей: http://IP_адрес_сервера/otrs/customer.pl  
+hd Установка                                                                                
+ne Установка пакетов                                                                        
+ce apt-get update && apt-get install -y postgresql15-server otrs otrs-apache2               
+
+ne Запуск Apache                                                                            
+ce systemctl enable --now httpd2                                                            
+
+ne Создание системных баз данных PostgreSQL                                                 
+ce /etc/init.d/postgresql initdb                                                            
+
+ne Запуск PostgreSQL                                                                        
+ce systemctl enable --now postgresql                                                        
+
+ne Создание пользователя и базы данных для OTRS                                             
+ce psql -U postgres                                                                         
+create database otrs;                                                                       
+create user otrs with encrypted password 'P@ssw0rd';                                        
+grant all privileges on database otrs to otrs;                                              
+alter database otrs owner to otrs;                                                          
+ct P@ssw0rd(пароль для пользователя otrs)                                                   
+
+hd Настройка                                                                                
+ne Настройка otrs-apache2                                                                   
+ce apt-get install -y apache2-httpd-prefork                                                 
+a2enextra httpd-addon.d                                                                     
+echo "httpd-addon.d=yes" >> /etc/httpd2/conf/extra-start.d/999-otrs.conf                    
+
+ne Перезагрузка Apache                                                                      
+ce systemctl restart httpd2                                                                 
+
+ne Веб-установщик                                                                           
+ct Открыть в браузере http://IP_адрес_сервера/otrs/installer.pl                             
+lt Действия в веб-установщике                                                               
+- Принять лицензию                                                                          
+- Настроить базу данных                                                                     
+-- type database: PostgreSQL                                                                
+-- host: localhost                                                                          
+-- database: otrs                                                                           
+-- user: otrs                                                                               
+-- password: P@ssw0rd                                                                       
+- Запомнить пароль администратора                                                           
+- Перейти по ссылке для входа в админскую учётную запись                                    
+
+ne Установка модулей PostgreSQL                                                             
+ce apt-get install -y postgresql15-perl perl-DBD-Pg                                         
+
+ne Запуск OTRS                                                                              
+ce rm /var/www/webapps/otrs/var/cron/otrs_daemin dist                                       
+/var/www/webapps/otrs/bin/Cron.sh start otrs                                                
+ct Устранение ошибок                                                                        
+
+hd Проверка                                                                                 
+ct Доступ администратора: http://IP_адрес_сервера/otrs/index.pl                             
+ct Доступ пользователей: http://IP_адрес_сервера/otrs/customer.pl  

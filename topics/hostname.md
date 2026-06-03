@@ -5,16 +5,14 @@
 
 ```CODE
 hostname                                                                                 
-  hostnamectl
-                                                                                              
- 
+hostnamectl
+
 ```
 
 #### Временное изменение hostname до перезагрузки <!-- NAME -->
 
 ```CODE
 hostname new-hostname
- 
 ```
 
 > Изменения не сохраняются после перезагрузки
@@ -23,7 +21,6 @@ hostname new-hostname
 
 ```CODE
 hostnamectl set-hostname new-hostname
- 
 ```
 
 > Изменения сохраняются после перезагрузки
@@ -32,7 +29,6 @@ hostnamectl set-hostname new-hostname
 
 ```CODE
 hostnamectl set-hostname new-hostname; exec bash
- 
 ```
 
 > exec bash перезапускает оболочку без login shell
@@ -41,7 +37,6 @@ hostnamectl set-hostname new-hostname; exec bash
 
 ```CODE
 hostnamectl set-hostname new-hostname; exec bash -l                                      
- 
 ```
 
 > exec bash -l перезапускает оболочку как login shell, загружает профили пользователя
@@ -50,7 +45,6 @@ hostnamectl set-hostname new-hostname; exec bash -l
 
 ```CODE
 echo "new-hostname" > /etc/hostname                                                      
- 
 ```
 
 > Альтернативный способ, требует перезагрузки или применения изменений
@@ -59,16 +53,14 @@ echo "new-hostname" > /etc/hostname
 
 ```CODE
 nano /etc/hosts                                                                          
- 
 ```
 
 > Добавить или изменить строку
 
 ```CODE
 127.0.0.1   localhost                                                                    
-  127.0.1.1   new-hostname                                                                    
-  192.168.1.10   new-hostname.some.domain new-hostname                                        
- 
+127.0.1.1   new-hostname                                                                    
+192.168.1.10   new-hostname.some.domain new-hostname                                        
 ```
 
 > Рекомендуется синхронизировать с /etc/hostname для корректной работы DNS
@@ -77,8 +69,7 @@ nano /etc/hosts
 
 ```CODE
 systemctl restart systemd-hostnamed                                                      
-                                                                                              
- 
+
 ```
 
 ### Проверка hostname <!-- HEAD -->
@@ -87,7 +78,6 @@ systemctl restart systemd-hostnamed
 
 ```CODE
 hostname -f                                                                              
- 
 ```
 
 > Показывает FQDN (Fully Qualified Domain Name)
@@ -96,7 +86,6 @@ hostname -f
 
 ```CODE
 hostname -s                                                                              
- 
 ```
 
 > Показывает короткое имя без домена
@@ -105,7 +94,6 @@ hostname -s
 
 ```CODE
 hostnamectl status                                                                       
- 
 ```
 
 > Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System, Kernel, Architecture

@@ -5,7 +5,6 @@
 
 ```CODE
 sudo apt-get install openssh-server
- 
 ```
 
 > openssh-server(SSH-сервер, включает openssh-common автоматически)
@@ -14,8 +13,7 @@ sudo apt-get install openssh-server
 
 ```CODE
 sudo systemctl enable --now sshd                                                         
-                                                                                              
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -24,23 +22,20 @@ sudo systemctl enable --now sshd
 
 ```CODE
 systemctl status sshd
-                                                                                              
- 
+
 ```
 
 #### Проверка прослушиваемого порта <!-- NAME -->
 
 ```CODE
 ss -tulpn | grep ssh                                                                     
-                                                                                              
- 
+
 ```
 
 #### Проверка конфигурации <!-- NAME -->
 
 ```CODE
 sshd -t                                                                                  
- 
 ```
 
 > Необязательно, проверяет синтаксис /etc/openssh/sshd_config перед перезапуском
@@ -49,7 +44,6 @@ sshd -t
 
 ```CODE
 who                                                                                      
- 
 ```
 
 > Необязательно, показывает текущие SSH-сессии
@@ -58,7 +52,6 @@ who
 
 ```CODE
 journalctl -u sshd                                                                       
- 
 ```
 
 > Необязательно, для диагностики проблем подключения
@@ -69,23 +62,21 @@ journalctl -u sshd
 
 ```CODE
 /etc/openssh/sshd_config
-                                                                                              
- 
+
 ```
 
 #### Настройка /etc/openssh/sshd_config <!-- NAME -->
 
 ```CODE
 Port 22                                                                                  
-  PasswordAuthentication yes                                                                  
-  PermitRootLogin no                                                                          
-  AllowUsers sshuser adminuser                                                                
-  MaxAuthTries 3                                                                              
-  PubkeyAuthentication yes                                                                    
- 
- AuthorizedKeysFile .ssh/authorized_keys                                                     
-  Banner /etc/ssh/banner.txt                                                                  
- 
+PasswordAuthentication yes                                                                  
+PermitRootLogin no                                                                          
+AllowUsers sshuser adminuser                                                                
+MaxAuthTries 3                                                                              
+PubkeyAuthentication yes                                                                    
+
+AuthorizedKeysFile .ssh/authorized_keys                                                     
+Banner /etc/ssh/banner.txt                                                                  
 ```
 
 > Port(обычно 22, изменение необязательно); PasswordAuthentication(yes для начальной настройки, no после настройки ключей); PermitRootLogin no(рекомендуется); AllowUsers(необязательно, белый список); MaxAuthTries(необязательно, обычно 3-6); PubkeyAuthentication yes(обычно включено по умолчанию); AuthorizedKeysFile(стандартное расположение); Banner(необязательно)
@@ -94,10 +85,9 @@ Port 22
 
 ```CODE
 ************************************
-  - Authorized Access Only          *                                                         
-  - All activity is monitored        *                                                        
-  ---
- 
+- Authorized Access Only          *                                                         
+- All activity is monitored        *                                                        
+---
 ```
 
 > Необязательно, содержимое баннера произвольное
@@ -106,8 +96,7 @@ Port 22
 
 ```CODE
 sudo systemctl restart sshd                                                              
-                                                                                              
- 
+
 ```
 
 ### Настройка аутентификации по ключам <!-- HEAD -->
@@ -116,7 +105,6 @@ sudo systemctl restart sshd
 
 ```CODE
 ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
- 
 ```
 
 > -t ed25519(современный стандарт, быстрее и безопаснее RSA); -f(имя файла, по умолчанию id_ed25519)
@@ -125,7 +113,6 @@ ssh-keygen -t ed25519 -f ~/.ssh/srv_ssh_key
 
 ```CODE
 ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
- 
 ```
 
 > Публичный ключ добавляется в ~/.ssh/authorized_keys на сервере
@@ -136,11 +123,10 @@ ssh-copy-id -i ~/.ssh/srv_ssh_key.pub sshuser@192.168.11.67
 
 ```CODE
 Host srv-hq  
-      HostName 192.168.11.67                                                                  
-      User sshuser                                                                            
-      IdentityFile ~/.ssh/srv_ssh_key
-      Port 22                                                                                 
- 
+HostName 192.168.11.67                                                                  
+User sshuser                                                                            
+IdentityFile ~/.ssh/srv_ssh_key
+Port 22                                                                                 
 ```
 
 > Необязательно, упрощает подключение. Port(указывать только если не 22)
@@ -149,15 +135,13 @@ Host srv-hq
 
 ```CODE
 chmod 600 ~/.ssh/config                                                                  
-                                                                                              
- 
+
 ```
 
 #### Подключение к серверу по псевдониму <!-- NAME -->
 
 ```CODE
 ssh srv-hq                                                                               
- 
 ```
 
 > Работает только при настроенном ~/.ssh/config
@@ -166,7 +150,6 @@ ssh srv-hq
 
 ```CODE
 ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67                                          
- 
 ```
 
 > Стандартный способ подключения с указанием ключа, для нестандартного порта использовать -p {8022]
@@ -175,7 +158,6 @@ ssh -i ~/.ssh/srv_ssh_key sshuser@192.168.11.67
 
 ```CODE
 ssh sshuser@192.168.11.67                                                                
- 
 ```
 
 > Работает если PasswordAuthentication yes на сервере
@@ -186,7 +168,6 @@ ssh sshuser@192.168.11.67
 
 ```CODE
 useradd -u 2026 -m -g users -G wheel sshuser
- 
 ```
 
 > -u(UID, необязательно); -m(создать домашний каталог); -g(основная группа, обычно users); -G wheel(для sudo)
@@ -195,15 +176,13 @@ useradd -u 2026 -m -g users -G wheel sshuser
 
 ```CODE
 passwd sshuser
-                                                                                              
- 
+
 ```
 
 #### Настройка sudo без пароля <!-- NAME -->
 
 ```CODE
 visudo                                                                                   
- 
 ```
 
 > Добавить: %wheel ALL=(ALL:ALL) NOPASSWD: ALL. Необязательно, обычно sudo требует пароль
@@ -212,7 +191,6 @@ visudo
 
 ```CODE
 sudo whoami                                                                              
- 
 ```
 
 > Результат: root

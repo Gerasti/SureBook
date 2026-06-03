@@ -5,7 +5,6 @@
 
 <syntaxhighlight lang="bash">
 net.ipv4.ip_forward = 1                                                                  
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -16,19 +15,17 @@ net.ipv4.ip_forward = 1
 
 <syntaxhighlight lang="bash">
 sysctl -p                                                                                
- 
 </syntaxhighlight>
 
 ==== В /etc/nftables/nftables.nft добавить таблицу NAT ====
 
 <syntaxhighlight lang="bash">
 table ip nat {                                                                           
-      chain postrouting {                                                                     
-          type nat hook postrouting priority 100; policy accept;                              
-          oif "ens32" masquerade                                                              
-      }                                                                                       
-  }                                                                                           
- 
+chain postrouting {                                                                     
+type nat hook postrouting priority 100; policy accept;                              
+oif "ens32" masquerade                                                              
+}                                                                                       
+}                                                                                           
 </syntaxhighlight>
 
 <blockquote>
@@ -39,7 +36,6 @@ table ip nat (таблица NAT); chain postrouting (обработка пос�
 
 <syntaxhighlight lang="bash">
 nft -f /etc/nftables/nftables.nft                                                        
- 
 </syntaxhighlight>
 
 <blockquote>
@@ -50,5 +46,5 @@ nft -f /etc/nftables/nftables.nft
 
 <syntaxhighlight lang="bash">
 systemctl enable nftables                                                                
-  systemctl restart nftables         
+systemctl restart nftables         
 </syntaxhighlight>

@@ -5,21 +5,18 @@
 
 ```CODE
 apt-get update && apt-get install -y scsitarget-utils               
- 
 ```
 
 #### Включение службы tgt <!-- NAME -->
 
 ```CODE
 systemctl enable --now tgt                                          
- 
 ```
 
 #### Просмотр списка блочных устройств <!-- NAME -->
 
 ```CODE
 lsblk                                                               
- 
 ```
 
 > Определить диск для использования (в примере sda)
@@ -30,10 +27,9 @@ lsblk
 
 ```CODE
 <target iqn.2026-05.ru.example:storage.disk1>                       
-      backing-store /dev/sda                                             
-      initiator-address 192.168.20.0/24                                  
-  </target>                                                              
- 
+backing-store /dev/sda                                             
+initiator-address 192.168.20.0/24                                  
+</target>                                                              
 ```
 
 > iqn.2026-05.ru.example:storage.disk1 - уникальный идентификатор target; backing-store - путь к диску; initiator-address - разрешенная подсеть клиентов
@@ -42,8 +38,7 @@ lsblk
 
 ```CODE
 systemctl restart tgt                                               
-                                                                         
- 
+
 ```
 
 ### Проверка <!-- HEAD -->
@@ -52,7 +47,6 @@ systemctl restart tgt
 
 ```CODE
 tgtadm --lld iscsi --op show --mode target                          
- 
 ```
 
 > Показывает список доступных target-ов и их параметры
@@ -63,7 +57,6 @@ tgtadm --lld iscsi --op show --mode target
 
 ```CODE
 filter = [ "r|/dev/sd.*|" ]                                         
- 
 ```
 
 > Исключает iSCSI-диски из сканирования LVM
@@ -74,15 +67,13 @@ filter = [ "r|/dev/sd.*|" ]
 
 ```CODE
 apt-get update && apt-get install -y open-iscsi                     
- 
 ```
 
 #### Включение службы iscsid <!-- NAME -->
 
 ```CODE
 systemctl enable --now iscsid                                       
-                                                                         
- 
+
 ```
 
 ### Настройка на клиенте <!-- HEAD -->
@@ -91,7 +82,6 @@ systemctl enable --now iscsid
 
 ```CODE
 iscsiadm -m discovery -t sendtargets -p 192.168.20.2                
- 
 ```
 
 > 192.168.20.2 - IP-адрес сервера iSCSI
@@ -100,14 +90,12 @@ iscsiadm -m discovery -t sendtargets -p 192.168.20.2
 
 ```CODE
 iscsiadm -m node --login                                            
- 
 ```
 
 #### В /etc/iscsi/iscsid.conf <!-- NAME -->
 
 ```CODE
 node.startup = automatic                                            
- 
 ```
 
 > Закомментировать node.startup = manual, раскомментировать node.startup = automatic
@@ -116,7 +104,6 @@ node.startup = automatic
 
 ```CODE
 discovery.sendtargets.use_discoveryd = Yes                          
- 
 ```
 
 > Изменить с No на Yes
@@ -125,8 +112,7 @@ discovery.sendtargets.use_discoveryd = Yes
 
 ```CODE
 reboot                                                              
-                                                                         
- 
+
 ```
 
 ### Проверка на клиенте <!-- HEAD -->
@@ -135,7 +121,6 @@ reboot
 
 ```CODE
 lsblk                                                               
- 
 ```
 
 > Должен появиться новый блочный диск (в примере 5 ГБ)
