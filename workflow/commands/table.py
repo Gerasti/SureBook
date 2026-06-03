@@ -6,6 +6,7 @@ from typing import List, Dict, Any
 from .base import Command
 from repositories import TopicRepository, ConfigRepository
 from file_manager import FileManager
+from fileutils import denormalize_topic
 
 
 class TableCommand(Command):
@@ -61,6 +62,11 @@ Examples:
             return self.error("source_table_file not set")
 
         topics = self.topic_repo.get_all()
+
+        # Sort topics alphabetically if auto_sort is enabled
+        if settings.auto_alphabetic_sort:
+            topics = sorted(topics, key=lambda t: t.title.lower())
+
         topic_save = FileManager.expanduser(settings.topic_save) if settings.topic_save else ""
 
         lines = []
@@ -74,7 +80,7 @@ Examples:
             sources_parts = []
             for entry in topic.lists:
                 if entry.link:
-                    display = entry.link_look if entry.link_look else topic.title
+                    display = entry.link_look if entry.link_look else denormalize_topic(topic.title)
                     sources_parts.append(f"{entry.list_name} [{display}]({entry.link})")
                 else:
                     sources_parts.append(entry.list_name)
@@ -94,7 +100,7 @@ Examples:
 
             has_files = ", ".join(sorted(exts)) if exts else ""
 
-            lines.append(f"| {i} | {topic.title} | {sources} | {has_files} |")
+            lines.append(f"| {i} | {denormalize_topic(topic.title)} | {sources} | {has_files} |")
 
         action = "renewed" if FileManager.exists(FileManager.expanduser(settings.source_table_file)) else "created"
         source_table_file = FileManager.expanduser(settings.source_table_file)

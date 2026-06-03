@@ -44,6 +44,11 @@ def normalize_topic(name: str) -> str:
     return re.sub(r"\s+", "_", name.strip())
 
 
+def denormalize_topic(name: str) -> str:
+    """Convert topic_name to 'topic name' for display."""
+    return name.replace("_", " ")
+
+
 def normalize_for_compare(topic: str) -> str:
     """Normalize topic for comparisons (ignores links, case, spacing)."""
     return normalize_topic(strip_link(topic)).casefold()

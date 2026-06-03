@@ -3,7 +3,7 @@
 from typing import List, Dict, Any
 from .base import Command
 from repositories import InputRepository, ListRepository, TopicRepository
-from fileutils import normalize_for_compare, strip_link
+from fileutils import normalize_for_compare, strip_link, denormalize_topic
 
 
 class ShowCommand(Command):
@@ -136,18 +136,18 @@ Examples:
 
             if pure:
                 for t in topics:
-                    print(t.title)
+                    print(denormalize_topic(t.title))
             else:
                 for t in topics:
                     parts = []
                     for entry in t.lists:
                         if entry.link:
-                            display = entry.link_look if entry.link_look else t.title
+                            display = entry.link_look if entry.link_look else denormalize_topic(t.title)
                             parts.append(f"{entry.list_name} [{display}]({entry.link})")
                         else:
                             parts.append(entry.list_name)
                     lists_str = ", ".join(parts) if parts else "—"
-                    print(f"\n{t.title} [path: {t.path}]")
+                    print(f"\n{denormalize_topic(t.title)} [path: {t.path}]")
                     print(f"[lists: {lists_str}]")
             return 0
 

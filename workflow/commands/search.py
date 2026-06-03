@@ -3,6 +3,7 @@
 from typing import List, Dict, Any
 from .base import Command
 from repositories import InputRepository, ListRepository, TopicRepository
+from fileutils import denormalize_topic
 
 
 class SearchCommand(Command):
@@ -60,10 +61,10 @@ Examples:
                 if query in searchable:
                     found = True
                     if pure:
-                        print(t.title)
+                        print(denormalize_topic(t.title))
                     else:
                         lists_str = ", ".join(e.list_name for e in t.lists) if t.lists else "—"
-                        print(f"{t.title} [{lists_str}]")
+                        print(f"{denormalize_topic(t.title)} [{lists_str}]")
 
             if not found:
                 print(f"Not found: {args[1]}")
