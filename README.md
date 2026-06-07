@@ -1,164 +1,46 @@
 ### Содержание <!-- HEAD -->
 
-A) [alt_fail2ban](#alt_fail2ban-); [alt_samba_ADMC](#alt_samba_ADMC-); [ansible](#ansible-); [ansible_NextCloud](#ansible_NextCloud-); [ansible_OTRS](#ansible_OTRS-); [ansible_OwnCloud](#ansible_OwnCloud-); [apt](#apt-); [attach_samba_reserve_domain_controller](#attach_samba_reserve_domain_controller-); [auto_mounting_devices](#auto_mounting_devices-)
+A) [Ansible](#Ansible-); [apt](#apt-)
 
-B) [base_samba-command](#base_samba-command-); [bash_script_for_samba](#bash_script_for_samba-); [BIND9_DLZ_samba](#BIND9_DLZ_samba-); [bind_DNS](#bind_DNS-); [bind_slave_DNS](#bind_slave_DNS-)
+B) [bind_DNS](#bind_DNS-); [bind_slave_DNS](#bind_slave_DNS-)
 
-C) [chrony](#chrony-); [console-debian_samba](#console-debian_samba-); [cups-pdf](#cups-pdf-)
+C) [chrony](#chrony-); [CUPS_PDF](#CUPS_PDF-)
 
-D) [dhcpd](#dhcpd-); [dhcpd_failover](#dhcpd_failover-); [dnsmasq](#dnsmasq-); [docker_testapp_from_tar](#docker_testapp_from_tar-)
+D) [devices_automount](#devices_automount-); [devices_encryption](#devices_encryption-); [devices_mdadm](#devices_mdadm-); [devices_partitions](#devices_partitions-); [dhcpd](#dhcpd-); [dhcpd_failover](#dhcpd_failover-); [dnsmasq](#dnsmasq-); [Docker_load_from_tar](#Docker_load_from_tar-)
 
-E) [encryption_devices](#encryption_devices-); [etcnet_gre_tunnel](#etcnet_gre_tunnel-); [etcnet_ip](#etcnet_ip-); [etcnet_ip_forward](#etcnet_ip_forward-); [etcnet_vlan](#etcnet_vlan-)
+E) [etcnet_GRE_tunnel](#etcnet_GRE_tunnel-); [etcnet_IP](#etcnet_IP-); [etcnet_IP_forward](#etcnet_IP_forward-); [etcnet_VLAN](#etcnet_VLAN-)
 
-F) [FreeIPA](#FreeIPA-); [frr_and_quagga_OSPF](#frr_and_quagga_OSPF-)
-
-G) [GOST_OpenSSL](#GOST_OpenSSL-)
+F) [fail2ban_ALT](#fail2ban_ALT-); [FreeIPA](#FreeIPA-)
 
 H) [HAProxy_balance_of_servers](#HAProxy_balance_of_servers-); [hostname](#hostname-)
 
-I) [install_MariaDB_Zabbix](#install_MariaDB_Zabbix-); [install_PostgreSQL_Zabbix](#install_PostgreSQL_Zabbix-); [install_SSL_certificate_RedHat-like](#install_SSL_certificate_RedHat-like-); [iptables_NAT](#iptables_NAT-); [iptables_port_forwarding](#iptables_port_forwarding-); [iscsi](#iscsi-); [iscsi_attach](#iscsi_attach-)
+I) [IPsec_strongswan](#IPsec_strongswan-); [iptables_NAT](#iptables_NAT-); [iptables_port_forwarding](#iptables_port_forwarding-); [iSCSI](#iSCSI-); [iSCSI_attach](#iSCSI_attach-)
 
-L) [LAMP_Linux_Apache_MariaDB_PHP](#LAMP_Linux_Apache_MariaDB_PHP-); [logrotate](#logrotate-); [LVM](#LVM-)
+L) [logrotate](#logrotate-); [LVM](#LVM-)
 
-M) [mdadm_options](#mdadm_options-); [moodle](#moodle-)
+M) [MariaDB_install](#MariaDB_install-); [Moodle](#Moodle-); [MySQL_install](#MySQL_install-)
 
-N) [NextCloud](#NextCloud-); [NFS](#NFS-); [nftables_firewall](#nftables_firewall-); [nftables_NAT](#nftables_NAT-); [nftables_port_forwarding](#nftables_port_forwarding-); [nginx_reverse_proxy](#nginx_reverse_proxy-); [nginx_server_balance](#nginx_server_balance-); [nginx_Web-based_authentication](#nginx_Web-based_authentication-)
+N) [NextCloud](#NextCloud-); [NextCloud_Ansible](#NextCloud_Ansible-); [NFS](#NFS-); [nftables_firewall](#nftables_firewall-); [nftables_NAT](#nftables_NAT-); [nftables_port_forwarding](#nftables_port_forwarding-); [Nginx_reverse_proxy](#Nginx_reverse_proxy-); [Nginx_server_balance](#Nginx_server_balance-); [Nginx_Web-based_authentication](#Nginx_Web-based_authentication-)
 
-O) [open-vm-tools](#open-vm-tools-); [OpenSSL_certificate_center](#OpenSSL_certificate_center-); [OTRS](#OTRS-); [OwnCloud](#OwnCloud-)
+O) [OpenSSL_certificate_center](#OpenSSL_certificate_center-); [OpenSSL_certificate_install_RedHat-like](#OpenSSL_certificate_install_RedHat-like-); [OpenSSL_GOST](#OpenSSL_GOST-); [OSPF_frr_quagga](#OSPF_frr_quagga-); [OTRS](#OTRS-); [OTRS_Ansible](#OTRS_Ansible-); [OwnCloud](#OwnCloud-); [OwnCloud_Ansible](#OwnCloud_Ansible-)
 
-P) [partitions_of_devices](#partitions_of_devices-); [phpMyAdmin](#phpMyAdmin-); [PostgreSQL_base-command](#PostgreSQL_base-command-)
+P) [phpMyAdmin](#phpMyAdmin-); [PostgreSQL_base-command](#PostgreSQL_base-command-); [PostgreSQL_install](#PostgreSQL_install-); [PostgreSQL_replication_server](#PostgreSQL_replication_server-)
 
-R) [RADIUS](#RADIUS-); [replication_postgresql-server](#replication_postgresql-server-); [resolve_options](#resolve_options-); [rsyslog](#rsyslog-)
+R) [RADIUS](#RADIUS-); [resolve.conf](#resolve.conf-); [rsyslog](#rsyslog-)
 
-S) [Samba_attach_client](#Samba_attach_client-); [SAMBA_INTERNAL_samba](#SAMBA_INTERNAL_samba-); [samba_share_folder](#samba_share_folder-); [SQL_install_MariaDB](#SQL_install_MariaDB-); [SQL_install_MySQL](#SQL_install_MySQL-); [SQL_install_PostgreSQL](#SQL_install_PostgreSQL-); [squid_base_options](#squid_base_options-); [SSH](#SSH-); [strongswan_ipsec](#strongswan_ipsec-); [sudo](#sudo-); [sudo-schema-samba](#sudo-schema-samba-); [systemd-timesyncd](#systemd-timesyncd-); [systemd_backup](#systemd_backup-)
+S) [Samba_ALT_ADMC](#Samba_ALT_ADMC-); [Samba_attach_client](#Samba_attach_client-); [Samba_base_command](#Samba_base_command-); [Samba_controller_BIND9_DLZ](#Samba_controller_BIND9_DLZ-); [Samba_controller_SAMBA_INTERNAL](#Samba_controller_SAMBA_INTERNAL-); [Samba_Debian](#Samba_Debian-); [Samba_import_script](#Samba_import_script-); [Samba_reserve_controller](#Samba_reserve_controller-); [Samba_share_folder](#Samba_share_folder-); [Samba_sudo-schema](#Samba_sudo-schema-); [squid_base_options](#squid_base_options-); [SSH](#SSH-); [sudo](#sudo-); [systemd-timesyncd](#systemd-timesyncd-); [systemd_backup](#systemd_backup-)
 
 T) [timedatectl](#timedatectl-)
 
-W) [wireguard](#wireguard-)
+V) [VMware_open-vm-tools](#VMware_open-vm-tools-)
 
-Z) [Zabbix_agent](#Zabbix_agent-); [Zabbix_web-interface](#Zabbix_web-interface-)
+W) [WireGuard](#WireGuard-)
+
+Z) [Zabbix_agent](#Zabbix_agent-); [Zabbix_install_MariaDB](#Zabbix_install_MariaDB-); [Zabbix_install_PostgreSQL](#Zabbix_install_PostgreSQL-); [Zabbix_web-interface](#Zabbix_web-interface-)
 
 
 
-### alt_fail2ban <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
-
-#### Скачивание пакетов <!-- NAME -->
-
-```CODE
-apt-get install fail2ban
-```
-
-### Преднастройка ALT Linux <!-- HEAD -->
-
-#### Скачивание модуля python <!-- NAME -->
-
-```CODE
-apt-get install python3-module-systemd
-```
-
-#### В /etc/fail2ban/jail.conf в секции INCLUDES <!-- NAME -->
-
-```CODE
-before = paths-altlinux-systemd.conf
-```
-
-> Замена before = paths-altlinux.conf
-
-### Настройка <!-- HEAD -->
-
-#### Содержимое файла /etc/fail2ban/jail.d/sshd.conf <!-- NAME -->
-
-```CODE
-[sshd]
-enabled = true
-port = 22
-maxretry = 3
-bantime = 10
-findtime = 60
-```
-
-> enabled(отслеживание sshd); bantime(время бана); findtime(время запоминания)
-
-#### Запуск systemd-сервиса <!-- NAME -->
-
-```CODE
-systemctl enable --now fail2ban
-```
-
-### Проверка <!-- HEAD -->
-
-```CODE
-sudo fail2ban-client status sshd
-```
-
-> выводит забанненые адреса
-
-### alt_samba_ADMC <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
-
-```CODE
-apt-get install -y admc
-```
-
-### Запуск <!-- HEAD -->
-
-```CODE
-admc
-```
-
-> Перед запуском нужен билет Kerberos(kinit administrator); GUI-запуск(Системные -> ADMC)
-
-#### Настройка <!-- LIST -->
-- Создание подразделения
-    - нажать на домен -> папка сверху
-- Создание группы
-    - нажать на подразделение -> круглый значок сверху
-
-> Область группы: Глобальная
-- Создание пользователя
-    - нажать на подразделение -> значок человека сверху
-
-> Заполнить Имя, Полное имя, Имя для входа (до Windows 2000), пароль, подтвердите пароль. Параметры: Пользователь не может изменить пароль; Учётная запись отключена
-- Добавление пользователя в группу
-    - нажать на подразделение -> группа -> участники
-
-### Настройка групповых политик <!-- HEAD -->
-
-#### Установка на клиентах <!-- NAME -->
-
-```CODE
-apt-get install -y gpupdate
-```
-
-#### Включение модуля <!-- NAME -->
-
-```CODE
-gpupdate-setup enable
-```
-
-#### Установка для редактирования <!-- NAME -->
-
-```CODE
-apt-get install -y gpui
-```
-
-#### Создание политики <!-- LIST -->
-- Объекты групповой политики -> нажать на домен -> Создать политику и связать с этом подразделением
-    - Задать имя
-- нажать на политику
-- Изменить...
-    - Административные шаблоны -> Настройка GNOME -> Внешний вид -> Фон рабочего стола -> Включено
-    - Административные шаблоны -> Настройка GNOME -> Внешний вид -> Фон рабочего стола -> Подгонка изображения рабочего стола -> Включено
-    - Административные шаблоны -> Система ALT -> Правила Polkit -> Ограничения NetworkManager(все Включено, при варианте ограничений No выставить Блокировать)
-
-> Указать путь(локальный или сетевая папка), блокировать настройку изображения; Способ подгонки: Wallpaper
-
-### ansible <!-- HEAD -->
+### Ansible <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка пакетов <!-- HEAD -->
@@ -300,761 +182,6 @@ ls /etc/ansible/PC-INFO
 
 > Файлы содержат имя компьютера и IP-адрес каждого хоста
 
-### ansible_NextCloud <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка Ansible <!-- HEAD -->
-
-#### Обновление и установка пакетов <!-- NAME -->
-
-```CODE
-apt-get update && apt-get install -y ansible sshpass                                             
-                                                                                                      
- 
-```
-
-### Создание структуры проекта <!-- HEAD -->
-
-#### Создание директории проекта <!-- NAME -->
-
-```CODE
-mkdir ansible                                                                                    
-  cd ansible      
-                                                                                                      
- 
-```
-
-#### Создание инвентарного файла inventory <!-- NAME -->
-
-```CODE
-vim inventory                                                                                    
-                                                                                                      
- 
-```
-
-#### Содержимое inventory <!-- NAME -->
-
-```CODE
-all:                                                                                             
-    hosts:                                                                                            
-      localhost:                                                                                      
- 
-```
-
-> формат YAML; хост localhost
-
-#### Создание директории для переменных <!-- NAME -->
-
-```CODE
-mkdir host_vars                                                                                  
-                                                                                                      
- 
-```
-
-#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-vim host_vars/localhost.yml                                                                      
-                                                                                                      
- 
-```
-
-#### Содержимое host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-ansible_ssh_user: root                                                                           
-  ansible_ssh_pass: toor                                                                              
-  ansible_python_interpreter: /usr/bin/python3                                                        
- 
-```
-
-> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
-
-### Проверка работоспособности <!-- HEAD -->
-
-#### Проверка подключения к localhost <!-- NAME -->
-
-```CODE
-ansible -i inventory -m ping all                                                                 
- 
-```
-
-> -i(инвентарный файл); -m(модуль); all(все хосты)
-
-### Создание playbook для Nextcloud <!-- HEAD -->
-
-#### Создание файла playbook.yml <!-- NAME -->
-
-```CODE
-vim playbook.yml                                                                                 
-                                                                                                      
- 
-```
-
-#### Содержимое playbook.yml <!-- NAME -->
-
-```CODE
----                                                                                              
-  - name: Install Nextcloud on ALT Server 10.1 (10.2)                                                 
-    hosts: localhost                                                                                  
-    become: true
-                                                                                                      
-    vars:                                                                                             
-      mariadb_database: nextcloud                                                                     
-      mariadb_username: nextcloud                                                                     
-      mariadb_password: nextcloud                                                                     
-      url_download_nextcloud: https://download.nextcloud.com/server/releases/latest.zip               
-      dir_download_nextcloud: /tmp                                                                    
-      path_project_nextcloud: /var/www/html/                                                          
-      virtualhost_servername: nextcloud.test.local                                                    
-                                                                                                      
-    tasks:                                                                                            
-      - name: Install database MariaDB                                                                
-        apt_rpm:                                                                                      
-          name:
-            - mariadb-server                                                                          
-            - python3-module-mysqlclient                                                              
-          state: present                                                                              
-          update_cache: true                                                                          
-                                                                                                      
-      - name: Started and enabled mariadb-server                                                      
-        systemd:                                                                                      
-          name: mariadb                                                                               
-          state: started                                                                              
-          enabled: true                                                                               
-                                                                                                      
-      - name: "Creating a database {{ mariadb_database }} for Nextcloud"                              
-        mysql_db:                                                                                     
-          name: "{{ mariadb_database }}"                                                              
-          encoding: utf8                                                                              
-          collation: utf8_unicode_ci                                                                  
-          state: present                                                                              
-                  
-      - name: "Creating a database user {{ mariadb_username }} for Nextcloud"                         
-        mysql_user:
-          name: "{{ mariadb_username }}"                                                              
-          password: "{{ mariadb_password }}"                                                          
-          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                  
-          host: localhost                                                                             
-          state: present                                                                              
-                                                                                                      
-      - name: Install web-server Apache2 and modules                                                  
-        apt_rpm:                                                                                      
-          name:                                                                                       
-            - apache2                                                                                 
-            - apache2-mod_ssl                                                                         
-            - apache2-mod_php8.2                                                                      
-            - tzdata                                                                                  
-          state: present                                                                              
-                                                                                                      
-      - name: Install PHP8.2 and php modules                                                          
-        apt_rpm:  
-          name:                                                                                       
-            - php8.2
-            - php8.2-pdo_mysql                                                                        
-            - php8.2-curl                                                                             
-            - php8.2-dom                                                                              
-            - php8.2-ldap                                                                             
-            - php8.2-exif                                                                             
-            - php8.2-fileinfo                                                                         
-            - php8.2-gd2                                                                              
-            - php8.2-gmp                                                                              
-            - php8.2-imagick                                                                          
-            - php8.2-intl                                                                             
-            - php8.2-libs                                                                             
-            - php8.2-mbstring                                                                         
-            - php8.2-memcached                                                                        
-            - php8.2-opcache                                                                          
-            - php8.2-openssl                                                                          
-            - php8.2-pcntl                                                                            
-            - php8.2-pdo                                                                              
-            - php8.2-xmlreader                                                                        
-            - php8.2-zip                                                                              
-                                                                                                      
-      - name: Enable the Apache2 module                                                               
-        apache2_module:                                                                               
-          name: "{{ item }}"                                                                          
-          state: present                                                                              
-        with_items:                                                                                   
-          - dir                                                                                       
-          - env                                                                                       
-          - headers                                                                                   
-          - mime                                                                                      
-          - rewrite
-                                                                                                      
-      - name: Started and enabled Apache2                                                             
-        systemd:                                                                                      
-          name: httpd2                                                                                
-          state: started
-          enabled: true                                                                               
-                                                                                                      
-      - name: Download Nextcloud project                                                              
-        get_url:                                                                                      
-          url: "{{ url_download_nextcloud }}"                                                         
-          dest: "{{ dir_download_nextcloud }}"                                                        
-                                                                                                      
-      - name: Unarchive a file project Nextcloud                                                      
-        unarchive:                                                                                    
-          src: "{{ dir_download_nextcloud }}/latest.zip"                                              
-          dest: "{{ path_project_nextcloud }}"                                                        
-                                                                                                      
-      - name: Create directory "data" for Nextcloud                                                   
-        file:                                                                                         
-          path: "{{ path_project_nextcloud }}/nextcloud/data"                                         
-          state: directory                                                                            
-                                                                                                      
-      - name: Assigning rights to project Nextcloud                                                   
-        file:                                                                                         
-          path: "{{ path_project_nextcloud }}/nextcloud/"                                             
-          recurse: yes                                                                                
-          owner: root                                                                                 
-                                                                                                      
-      - name: Assigning rights to project Nextcloud                                                   
-        file:                                                                                         
-          path: "{{ path_project_nextcloud }}/nextcloud/{{ item }}"                                   
-          recurse: yes                                                                                
-          owner: apache2
-        with_items:                                                                                   
-          - apps                                                                                      
-          - config                                                                                    
-          - data                                                                                      
-                  
-      - name: Setting up a web server to work with Nextcloud                                          
-        copy:     
-          dest: /etc/httpd2/conf/sites-available/nextcloud.conf                                       
-          content: |                                                                                  
-            <VirtualHost *:80>                                                                        
-              DocumentRoot {{ path_project_nextcloud }}/nextcloud/                                    
-              ServerName {{ virtualhost_servername }}                                                 
-                                                                                                      
-              <Directory {{ path_project_nextcloud }}/nextcloud/>                                     
-                Require all granted                                                                   
-                AllowOverride All                                                                     
-                Options FollowSymLinks MultiViews                                                     
-                                                                                                      
-                <IfModule mod_dav.c>                                                                  
-                  Dav off
-                </IfModule>                                                                           
-              </Directory>                                                                            
-            </VirtualHost>                                                                            
-                                                                                                      
-      - name: Adding a symbolic link                                                                  
-        command:                                                                                      
-          cmd: ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-enabled/  
-                                                                                                      
-      - name: Restarted Apache2                                                                       
-        systemd:                                                                                      
-          name: httpd2                                                                                
-          state: restarted
- 
-```
-
-> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
-
-### Установка коллекций Ansible <!-- HEAD -->
-
-#### Установка community.general <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.general                                              
-                                                                                                      
- 
-```
-
-#### Установка community.mysql <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.mysql                                                
- 
-```
-
-> ansible-galaxy(менеджер коллекций)
-
-### Запуск playbook <!-- HEAD -->
-
-#### Выполнение playbook-сценария <!-- NAME -->
-
-```CODE
-ansible-playbook -i inventory playbook.yml
-```
-
-### ansible_OTRS <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка Ansible <!-- HEAD -->
-
-#### Обновление и установка пакетов <!-- NAME -->
-
-```CODE
-apt-get update && apt-get install -y ansible sshpass                                                  
-   
- 
-```
-
-### Создание структуры проекта <!-- HEAD -->
-
-#### Создание директории проекта <!-- NAME -->
-
-```CODE
-mkdir ansible                                                                                         
-  cd ansible                                                                                               
-  
- 
-```
-
-#### Создание инвентарного файла inventory <!-- NAME -->
-
-```CODE
-vim inventory
-                                                                                                           
- 
-```
-
-#### Содержимое inventory <!-- NAME -->
-
-```CODE
-all:
-    hosts:                                                                                                 
-      localhost:  
- 
-```
-
-> формат YAML; хост localhost
-
-#### Создание директории для переменных <!-- NAME -->
-
-```CODE
-mkdir host_vars                                                                                       
-                                                                                                           
- 
-```
-
-#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-vim host_vars/localhost.yml                                                                           
-                                                                                                           
- 
-```
-
-#### Содержимое host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-ansible_ssh_user: root                                                                                
-  ansible_ssh_pass: toor                                                                                   
-  ansible_python_interpreter: /usr/bin/python3                                                             
- 
-```
-
-> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
-
-### Проверка работоспособности <!-- HEAD -->
-
-#### Проверка подключения к localhost <!-- NAME -->
-
-```CODE
-ansible -i inventory -m ping all                                                                      
- 
-```
-
-> -i(инвентарный файл); -m(модуль); all(все хосты)
-
-### Создание playbook для OTRS <!-- HEAD -->
-
-#### Создание файла playbook.yml <!-- NAME -->
-
-```CODE
-vim playbook.yml                                                                                      
-                                                                                                           
- 
-```
-
-#### Содержимое playbook.yml <!-- NAME -->
-
-```CODE
----                                                                                                   
-  - name: Deploy Help Desk system 'OTRS' on Alt Server 10.1                                                
-    hosts: localhost                                                                                       
-    become: true                                                                                           
-                                                                                                           
-    vars:                                                                                                  
-      version_postgresql: '15'                                                                             
-      postgresql_init_path: /etc/init.d/postgresql                                                         
-      postgresql_data_dir: /var/lib/pgsql/data                                                             
-      db_name: 'otrs'                                                                                      
-      db_user: 'otrs'                                                                                      
-      db_pass: 'otrs'                                                                                      
-                                                                                                           
-    tasks:                                                                                                 
-      - name: Update the package database                                                                  
-        apt_rpm:                                                                                           
-          update_cache: true                                                                               
-                                                                                                           
-      - name: Installing the necessary packages                                                            
-        apt_rpm:                                                                                           
-          name:                                                                                            
-            - postgresql{{ version_postgresql }}-server
-            - otrs                                                                                         
-            - otrs-apache2
-            - python3-module-psycopg2                                                                      
-            - postgresql{{ version_postgresql }}-perl                                                      
-            - perl-DBD-Pg                                                                                  
-            - apache2-httpd-prefork                                                                        
-          state: present                                                                                   
-                                                                                                           
-      - name: Enable daemon 'httpd2'                                                                       
-        systemd:  
-          name: httpd2                                                                                     
-          enabled: yes                                                                                     
-                                                                                                           
-      - name: Check system database postgresql                                                             
-        stat:     
-          path: '{{ postgresql_data_dir }}/pg_hba.conf'                                                    
-        register: postgres_data                                                                            
-                                                                                                           
-      - name: Initialize system databases                                                                  
-        command:                                                                                           
-          cmd: '{{ postgresql_init_path }} initdb'                                                         
-        when: not postgres_data.stat.exists                                                                
-                                                                                                           
-      - name: Started and enabled postgresql                                                               
-        systemd:                                                                                           
-          name: postgresql                                                                                 
-          state: started                                                                                   
-          enabled: yes                                                                                     
-                                                                                                           
-      - name: Create PostgreSQL database                                                                   
-        postgresql_db:
-          name: "{{ db_name }}"                                                                            
-                                                                                                           
-      - name: Create PostgreSQL user                                                                       
-        postgresql_user:                                                                                   
-          db: "{{ db_name }}"                                                                              
-          name: "{{ db_user }}"                                                                            
-          password: "{{ db_pass }}"                                                                        
-          priv: ALL                                                                                        
-          state: present                                                                                   
-                                                                                                           
-      - name: Grant privileges to PostgreSQL user                                                          
-        postgresql_privs:                                                                                  
-          db: "{{ db_name }}"                                                                              
-          privs: ALL                                                                                       
-          type: database                                                                                   
-          role: "{{ db_user }}"                                                                            
-          state: present                                                                                   
-                                                                                                           
-      - name: Assign a database owner                                                                      
-        postgresql_db:                                                                                     
-          name: "{{ db_name }}"                                                                            
-          owner: "{{ db_user }}"                                                                           
-                                                                                                           
-      - name: Add httpd-addon.d=yes to 999-otrs.conf                                                       
-        lineinfile:                                                                                        
-          path: /etc/httpd2/conf/extra-start.d/999-otrs.conf                                               
-          line: 'httpd-addon.d=yes'                                                                        
-          create: yes                                                                                      
-                                                                                                           
-      - name: Configuration httpd2                                                                         
-        shell: |                                                                                           
-          alternatives-manual /usr/sbin/httpd2 /usr/sbin/httpd2.prefork                                    
-          alternatives-update                                                                              
-          a2enextra httpd-addon.d                                                                          
-                                                                                                           
-      - name: Restarted httpd2                                                                             
-        systemd:                                                                                           
-          name: httpd2                                                                                     
-          state: restarted                                                                                 
- 
-```
-
-> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); stat(проверка файла); register(сохранение результата); command(выполнение команды); when(условие); postgresql_db(модуль БД PostgreSQL); postgresql_user(модуль пользователя); postgresql_privs(модуль привилегий); lineinfile(добавление строки в файл); shell(выполнение shell команд)
-
-### Установка коллекций Ansible <!-- HEAD -->
-
-#### Установка community.general <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.general                                                   
-                                                                                                           
- 
-```
-
-#### Установка community.postgresql <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.postgresql                                                
- 
-```
-
-> ansible-galaxy(менеджер коллекций)
-
-### Запуск playbook <!-- HEAD -->
-
-#### Выполнение playbook-сценария <!-- NAME -->
-
-```CODE
-ansible-playbook -i inventory playbook.yml
-```
-
-### ansible_OwnCloud <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка Ansible <!-- HEAD -->
-
-#### Обновление и установка пакетов <!-- NAME -->
-
-```CODE
-apt-get update && apt-get install -y ansible sshpass                                                  
-                                                                                                           
- 
-```
-
-### Создание структуры проекта <!-- HEAD -->
-
-#### Создание директории проекта <!-- NAME -->
-
-```CODE
-mkdir ansible                                                                                         
-  cd ansible                                                                                               
-                                                                                                           
- 
-```
-
-#### Создание инвентарного файла inventory <!-- NAME -->
-
-```CODE
-vim inventory
-                                                                                                           
- 
-```
-
-#### Содержимое inventory <!-- NAME -->
-
-```CODE
-all:
-    hosts:                                                                                                 
-      localhost:  
- 
-```
-
-> формат YAML; хост localhost
-
-#### Создание директории для переменных <!-- NAME -->
-
-```CODE
-mkdir host_vars                                                                                       
-                                                                                                           
- 
-```
-
-#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-vim host_vars/localhost.yml                                                                           
-                                                                                                           
- 
-```
-
-#### Содержимое host_vars/localhost.yml <!-- NAME -->
-
-```CODE
-ansible_ssh_user: root                                                                                
-  ansible_ssh_pass: toor                                                                                   
-  ansible_python_interpreter: /usr/bin/python3                                                             
- 
-```
-
-> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
-
-### Проверка работоспособности <!-- HEAD -->
-
-#### Проверка подключения к localhost <!-- NAME -->
-
-```CODE
-ansible -i inventory -m ping all                                                                      
- 
-```
-
-> -i(инвентарный файл); -m(модуль); all(все хосты)
-
-### Создание playbook для OwnCloud <!-- HEAD -->
-
-#### Создание файла playbook.yml <!-- NAME -->
-
-```CODE
-vim playbook.yml                                                                                      
-                                                                                                           
- 
-```
-
-#### Содержимое playbook.yml <!-- NAME -->
-
-```CODE
----                                                                                                   
-  - name: Install OwnCloud on ALT Server 10.1 (10.2)                                                       
-    hosts: localhost                                                                                       
-    become: true                                                                                           
-                                                                                                           
-    vars:                                                                                                  
-      mariadb_database: owncloud                                                                           
-      mariadb_username: owncloud                                                                           
-      mariadb_password: owncloud                                                                           
-      url_download_owncloud: https://download.owncloud.com/server/stable/owncloud-complete-latest.tar.bz2  
-      dir_download_owncloud: /tmp                                                                          
-      path_project_owncloud: /var/www/html/                                                                
-      virtualhost_servername: owncloud.test.local                                                          
-                                                                                                           
-    tasks:                                                                                                 
-      - name: Install database Mariadb                                                                     
-        apt_rpm:                                                                                           
-          name:                                                                                            
-            - mariadb-server                                                                               
-            - python3-module-mysqlclient                                                                   
-          state: present                                                                                   
-          update_cache: true                                                                               
-                                                                                                           
-      - name: Started and enabled mariadb-server                                                           
-        systemd:                                                                                           
-          name: mariadb                                                                                    
-          state: started                                                                                   
-          enabled: true                                                                                    
-                                                                                                           
-      - name: "Create a database {{ mariadb_database }} for OwnCloud"                                      
-        mysql_db:                                                                                          
-          name: "{{ mariadb_database }}"                                                                   
-          encoding: utf8                                                                                   
-          collation: utf8_unicode_ci                                                                       
-          state: present                                                                                   
-                                                                                                           
-      - name: "Creating a database user {{ mariadb_username }} for OwnCloud"                               
-        mysql_user:                                                                                        
-          name: "{{ mariadb_username }}"                                                                   
-          password: "{{ mariadb_password }}"                                                               
-          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                       
-          host: localhost                                                                                  
-          state: present                                                                                   
-                                                                                                           
-      - name: Install web-server Apache2 and modules                                                       
-        apt_rpm:  
-          name:                                                                                            
-            - apache2
-            - apache2-base                                                                                 
-            - apache2-httpd-prefork                                                                        
-            - apache2-mod_php7                                                                             
-            - apache2-mod_ssl                                                                              
-          state: present                                                                                   
-                                                                                                           
-      - name: Install PHP7.4 and php modules                                                               
-        apt_rpm:                                                                                           
-          name:                                                                                            
-            - php7
-            - php7-curl                                                                                    
-            - php7-fileinfo                                                                                
-            - php7-gd                                                                                      
-            - php7-intl                                                                                    
-            - php7-libs                                                                                    
-            - php7-mbstring                                                                                
-            - php7-pdo                                                                                     
-            - php7-xmlreader                                                                               
-            - php7-zip                                                                                     
-            - php7-mysqli                                                                                  
-            - php7-pdo_mysql                                                                               
-          state: present                                                                                   
-                                                                                                           
-      - name: Enable the Apache2 module                                                                    
-        apache2_module:
-          name: "{{ item }}"                                                                               
-          state: present                                                                                   
-        with_items:
-          - rewrite                                                                                        
-          - headers                                                                                        
-          - env                                                                                            
-          - dir                                                                                            
-          - mime  
-          - unique_id                                                                                      
-                  
-      - name: Started and enabled Apache2                                                                  
-        systemd:  
-          name: httpd2                                                                                     
-          state: started                                                                                   
-          enabled: true                                                                                    
-                                                                                                           
-      - name: Download OwnCloud project                                                                    
-        get_url:  
-          url: "{{ url_download_owncloud }}"                                                               
-          dest: "{{ dir_download_owncloud }}"                                                              
-                                                                                                           
-      - name: Unarchive a file project OwnCloud                                                            
-        unarchive:                                                                                         
-          src: "{{ dir_download_owncloud }}/owncloud-complete-latest.tar.bz2"                              
-          dest: "{{ path_project_owncloud }}"                                                              
-                                                                                                           
-      - name: Assign rights to project OwnCloud                                                            
-        file:                                                                                              
-          path: "{{ path_project_owncloud }}/owncloud/"                                                    
-          recurse: yes                                                                                     
-          owner: apache2                                                                                   
-          group: apache2                                                                                   
-                                                                                                           
-      - name: Setting up a web server to work with OwnCloud                                                
-        copy:                                                                                              
-          dest: /etc/httpd2/conf/sites-available/owncloud.conf                                             
-          content: |                                                                                       
-            <VirtualHost *:80>                                                                             
-              DocumentRoot {{ path_project_owncloud }}/owncloud/                                           
-              ServerName {{ virtualhost_servername }}                                                      
-                                                                                                           
-              <Directory {{ path_project_owncloud }}/owncloud/>                                            
-                Require all granted                                                                        
-                AllowOverride All                                                                          
-                Options FollowSymLinks MultiViews                                                          
-                                                                                                           
-                <IfModule mod_dav.c>                                                                       
-                  Dav off                                                                                  
-                </IfModule>                                                                                
-              </Directory>                                                                                 
-            </VirtualHost>                                                                                 
-                                                                                                           
-      - name: Adding a symbolic link                                                                       
-        command:                                                                                           
-          cmd: ln -s /etc/httpd2/conf/sites-available/owncloud.conf /etc/httpd2/conf/sites-enabled/        
-                                                                                                           
-      - name: Restarted Apache2                                                                            
-        systemd:                                                                                           
-          name: httpd2                                                                                     
-          state: restarted                                                                                 
- 
-```
-
-> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
-
-### Установка коллекций Ansible <!-- HEAD -->
-
-#### Установка community.general <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.general                                                   
-                                                                                                           
- 
-```
-
-#### Установка community.mysql <!-- NAME -->
-
-```CODE
-ansible-galaxy collection install community.mysql                                                     
- 
-```
-
-> ansible-galaxy(менеджер коллекций)
-
-### Запуск playbook <!-- HEAD -->
-
-#### Выполнение playbook-сценария <!-- NAME -->
-
-```CODE
-ansible-playbook -i inventory playbook.yml
-```
-
 ### apt <!-- HEAD -->
 [Содержание](#Содержание-)
 
@@ -1077,613 +204,6 @@ apt-get update
 ```
 
 > Должен работать DNS и возможно Интернет, NAT
-
-### attach_samba_reserve_domain_controller <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка Samba DC <!-- HEAD -->
-
-#### Установка пакета task-samba-dc <!-- NAME -->
-
-```CODE
-apt-get install -y task-samba-dc                                                                      
-
-```
-
-### Настройка DNS <!-- HEAD -->
-
-#### В /etc/resolv.conf <!-- NAME -->
-
-```CODE
-search ad.team                                                                                        
-nameserver 192.168.11.67                                                                                 
-nameserver 192.168.33.67                                                                                 
-nameserver 8.8.8.8                                                                                       
-```
-
-> search(домен поиска); nameserver(DNS серверы)
-
-### Настройка Kerberos <!-- HEAD -->
-
-#### В /etc/krb5.conf <!-- NAME -->
-
-```CODE
-[libdefaults]                                                                                         
-default_realm = AD.TEAM                                                                                  
-dns_lookup_kdc = true                                                                                    
-dns_lookup_realm = false                                                                                 
-
-[realms]                                                                                                 
-AD.TEAM = {                                                                                              
-kdc = srv-hq.ad.team                                                                                     
-default_domain = ad.team                                                                                 
-}                                                                                                        
-
-[domain_realm]                                                                                           
-.ad.team = AD.TEAM
-ad.team = AD.TEAM                                                                                        
-```
-
-> default_realm(область по умолчанию); dns_lookup_kdc(поиск KDC через DNS); kdc(контроллер домена); domain_realm(сопоставление доменов)
-
-### Регистрация вторичного DC в DNS <!-- HEAD -->
-
-#### Добавление A-записи в BIND9_DLZ <!-- NAME -->
-
-```CODE
-samba-tool dns add srv-hq ad.team srv-dt A 192.168.33.67 -Uadministrator                              
-```
-
-> samba-tool dns add(добавление DNS записи); A(тип записи); -U(пользователь)
-
-### Проверка подключения <!-- HEAD -->
-
-#### Проверка разрешения имени <!-- NAME -->
-
-```CODE
-host srv-hq                                                                                           
-```
-
-> должен вернуть srv-hq.ad.team has address 192.168.11.67
-
-#### Получение Kerberos билета <!-- NAME -->
-
-```CODE
-kinit administrator                                                                                   
-```
-
-> вводится пароль administrator@AD.TEAM
-
-#### Проверка полученных билетов <!-- NAME -->
-
-```CODE
-klist                                                                                                 
-```
-
-> показывает кэш билетов и срок действия
-
-### Присоединение к домену <!-- HEAD -->
-
-#### Подключение как контроллер домена <!-- NAME -->
-
-```CODE
-samba-tool domain join ad.team DC -Uadministrator --realm=ad.team --workgroup=ad                      
-```
-
-> domain join(присоединение к домену); DC(режим контроллера домена); --realm(область Kerberos); --workgroup(рабочая группа)
-
-#### Запуск службы Samba <!-- NAME -->
-
-```CODE
-systemctl enable --now samba
-```
-
-### auto_mounting_devices <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Форматирование диска <!-- HEAD -->
-
-#### Создание файловой системы ext4 <!-- NAME -->
-
-```CODE
-mkfs.ext4 /dev/sda                                                                                    
-```
-
-> создает файловую систему ext4 на устройстве /dev/sda
-
-### Подготовка точки монтирования <!-- HEAD -->
-
-#### Создание директории <!-- NAME -->
-
-```CODE
-mkdir -p /opt/data                                                                                    
-```
-
-> -p(создание родительских директорий)
-
-### Монтирование <!-- HEAD -->
-
-#### Монтирование диска <!-- NAME -->
-
-```CODE
-mount /dev/sda /opt/data                                                                              
-```
-
-> временное монтирование до перезагрузки
-
-### Автоматическое монтирование <!-- HEAD -->
-
-#### Добавление записи в /etc/fstab <!-- NAME -->
-
-```CODE
-/dev/sda /opt/data ext4 defaults 0 2                                                                  
-```
-
-> /dev/sda(устройство); /opt/data(точка монтирования); ext4(тип ФС); defaults(опции монтирования); 0(резервное копирование dump); 2(порядок проверки fsck)
-
-### Параметры /etc/fstab <!-- HEAD -->
-
-#### Структура записи <!-- LIST -->
-- /dev/sda: устройство
-- /opt/data: точка монтирования
-- ext4: тип файловой системы
-- defaults: обобщенные опции
-    - rw(чтение-запись), suid(SUID биты), dev(файлы устройств), exec(выполнение), auto(автомонтирование), nouser(только root), async(асинхронная запись)
-- 0: управление резервным копированием (dump-flag)
-    - 0(не создавать резервные копии), 1(обычно root /), 2(другие разделы /home, /opt, /var)
-- 2: порядок проверки файловой системы (fsck)
-    - 0(не проверять), 1(первым, обычно root), 2(после root для /home, /opt, /var)
-
-#### Применение <!-- NAME -->
-
-```CODE
-mount -a
-```
-
-> -a(монтирование всего из fstab)
-
-### Проверка монтирования <!-- HEAD -->
-
-#### Просмотр смонтированных разделов <!-- NAME -->
-
-```CODE
-df -h                                                                                                 
-```
-
-> -h(человекочитаемый формат)
-
-### base_samba-command <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Управление пользователями и группами <!-- HEAD -->
-
-#### Создание группы <!-- NAME -->
-
-```CODE
-samba-tool group add <имя_группы>                                                                     
-
-```
-
-#### Создание пользователя <!-- NAME -->
-
-```CODE
-samba-tool user create <имя_пользователя>                                                             
-
-```
-
-#### Добавление пользователя в группу <!-- NAME -->
-
-```CODE
-samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
-
-```
-
-#### Список пользователей <!-- NAME -->
-
-```CODE
-samba-tool user list                                                                                  
-
-```
-
-#### Список участников группы <!-- NAME -->
-
-```CODE
-samba-tool group listmembers <имя_группы>                                                             
-
-```
-
-### Политика паролей <!-- HEAD -->
-
-#### Настройка сложности и длины пароля <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --complexity=off                                               
-samba-tool domain passwordsettings set --min-pwd-length=1                                                
-samba-tool domain passwordsettings set --max-pwd-age=0                                                   
-samba-tool domain passwordsettings set --min-pwd-age=0                                                   
-samba-tool domain passwordsettings set --pwd-history-length=0                                            
-```
-
-> --complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)
-
-### Политика блокировки <!-- HEAD -->
-
-#### Настройка блокировки учетных записей <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --lockout-threshold=0                                          
-samba-tool domain passwordsettings set --lockout-duration=30                                             
-samba-tool domain passwordsettings set --reset-count=30                                                  
-```
-
-> --lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки); --reset-count(интервал сброса счетчика)
-
-### Kerberos-политика <!-- HEAD -->
-
-#### Настройка времени жизни билетов <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
-samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
-```
-
-> --krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)
-
-### Параметры учетных записей <!-- HEAD -->
-
-#### Хранение паролей в открытом виде <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
-samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
-```
-
-> только для тестовых стендов; не рекомендуется в продакшене
-
-### Параметры безопасности домена <!-- HEAD -->
-
-#### Настройка криптографии <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
-samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
-```
-
-> снижает безопасность; для совместимости со старыми устройствами
-
-### Политика времени Kerberos <!-- HEAD -->
-
-#### Настройка флагов политики <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
-
-```
-
-### Аудит и логирование <!-- HEAD -->
-
-#### Просмотр уровня домена <!-- NAME -->
-
-```CODE
-samba-tool domain level show                                                                          
-
-```
-
-#### Увеличение детализации логов <!-- NAME -->
-
-```CODE
-smbcontrol all debug 3                                                                                
-smbcontrol all debug 10                                                                                  
-```
-
-> debug 3(средний уровень); debug 10(максимальная детализация)
-
-### Уровень функциональности домена <!-- HEAD -->
-
-#### Просмотр уровня домена <!-- NAME -->
-
-```CODE
-samba-tool domain level show                                                                          
-
-```
-
-#### Повышение уровня домена и леса <!-- NAME -->
-
-```CODE
-samba-tool domain level raise --domain-level=2008_R2                                                  
-samba-tool domain level raise --forest-level=2008_R2                                                     
-```
-
-> 2008_R2(Windows Server 2008 R2)
-
-### Проверка политики <!-- HEAD -->
-
-#### Просмотр всех настроек политики паролей <!-- NAME -->
-
-```CODE
-samba-tool domain passwordsettings show                                                               
-
-```
-
-### Управление DNS <!-- HEAD -->
-
-#### Добавление A-записи в DNS <!-- NAME -->
-
-```CODE
-samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
-```
-
-> пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator
-
-### Создание организационных единиц <!-- HEAD -->
-
-#### Создание OU <!-- NAME -->
-
-```CODE
-samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
-
-```
-
-### Массовое создание пользователей <!-- HEAD -->
-
-#### Создание нескольких пользователей циклом <!-- NAME -->
-
-```CODE
-for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
-
-```
-
-#### Создание группы <!-- NAME -->
-
-```CODE
-samba-tool group add hq                                                                               
-
-```
-
-#### Массовое добавление пользователей в группу <!-- NAME -->
-
-```CODE
-for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
-```
-
-> цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
-
-### bash_script_for_samba <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Массовый импорт пользователей в Samba AD <!-- HEAD -->
-
-#### Подготовка CSV-файла <!-- NAME -->
-
-```CODE
-First Name;Last Name;Role;Phone;OU;Street;ZIP;City;Country;Password                      
-  Ivan;Ivanov;Administrator;+79990000001;IT;Lenina 1;101000;Moscow;RU;P@ssw0rd1               
-  Petr;Petrov;Manager;+79990000002;Sales;Mira 10;101001;Moscow;RU;P@ssw0rd1                   
- 
-```
-
-> Разделитель - точка с запятой; First Name(имя); Last Name(фамилия); Role(должность); Phone(телефон); OU(подразделение); Street(улица); ZIP(индекс); City(город); Country(страна); Password(пароль)
-
-#### Создание скрипта импорта <!-- NAME -->
-
-```CODE
-vim import_user.sh
-                                                                                              
- 
-```
-
-#### Содержимое /root/import_user.sh <!-- NAME -->
-
-```CODE
-#!/bin/bash                                                                              
-                                                                                              
-  csv_file="$1"                                                                               
-                                                                                              
-  # Create OU                                                                                 
-  awk -F ';' 'NR>1 {print $5}' "$csv_file" | sort | uniq | while read ou;
-  do                                                                                          
-      samba-tool ou add OU="$ou",DC=domain,DC=example;                                          
-  done                                                                                        
-                                                                                              
-  # Create Users                                                                              
-  while IFS=";" read -r firstName lastName role phone ou street zip city country password;
-  do                                                                                          
-      if [ "$firstName" == "First Name" ];
-      then                                                                                    
-          continue
-      fi                                                                                      
-                  
-      username=$(echo $firstName | tr '[:upper:]' '[:lower:]' | tr -d ' '),$(echo $lastName | 
-  tr '[:upper:]' '[:lower:]' | tr -d ' ')
-                                                                                              
-      samba-tool user add "$username" P@ssw0rd1 \                                             
-      --given-name="$firstName" \
-      --surname="$lastName" \                                                                 
-      --telephone-number="$phone" \                                                           
-      --job-title="$role" \                                                                   
-      --ou="OU=$ou" \                                                                         
-      --userou="OU=$ou" --noexpiry                                                            
-  done < "$csv_file"                                                                          
- 
-```
-
-> Скрипт автоматически создаёт OU и пользователей; username формируется как ivan,ivanov; --noexpiry(пароль не истекает)
-
-#### Выдача прав на запуск <!-- NAME -->
-
-```CODE
-chmod +x import_user.sh
-                                                                                              
- 
-```
-
-### Запуск импорта <!-- HEAD -->
-
-#### Импорт пользователей из CSV <!-- NAME -->
-
-```CODE
-./import_user.sh /mnt/Users.csv                                                          
- 
-```
-
-> Запускать от root или администратора домена
-
-### Проверка <!-- HEAD -->
-
-#### Проверка созданных OU <!-- NAME -->
-
-```CODE
-samba-tool ou list                                                                       
-                                                                                              
- 
-```
-
-#### Проверка объектов внутри OU <!-- NAME -->
-
-```CODE
-samba-tool ou listobjects OU=IT                                                          
- 
-```
-
-> Можно проверять любые подразделения {OU=Sales, OU=IT}
-
-### BIND9_DLZ_samba <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка Samba AD DC с BIND9_DLZ <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install -y task-samba-dc bind                                                    
-
-```
-
-#### Отключение chroot для BIND <!-- NAME -->
-
-```CODE
-control bind-chroot disabled                                                             
-
-```
-
-#### Подключение конфигурации BIND9_DLZ <!-- NAME -->
-
-```CODE
-grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
-"/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
-
-```
-
-#### В /etc/bind/options.conf добавить <!-- NAME -->
-
-```CODE
-tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
-minimal-responses yes;                                                                      
-```
-
-> tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(минимальные ответы DNS)
-
-#### Остановка BIND перед настройкой <!-- NAME -->
-
-```CODE
-systemctl stop bind                                                                      
-
-```
-
-#### В /etc/sysconfig/network <!-- NAME -->
-
-```CODE
-NETWORKING=yes                                                                           
-CONFMETHOD=etcnet                                                                           
-HOSTNAME=srv-hq.ad.team                                                                     
-RESOLV_MODS=yes                                                                             
-```
-
-> HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(разрешить изменение resolv.conf)
-
-#### Установка hostname <!-- NAME -->
-
-```CODE
-hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
-domainname ad.team                                                                          
-```
-
-> exec bash перезагружает оболочку для применения изменений
-
-### Очистка старых конфигураций <!-- HEAD -->
-
-#### Удаление старых файлов Samba <!-- NAME -->
-
-```CODE
-rm -f /etc/samba/smb.conf                                                                
-rm -rf /var/lib/samba                                                                       
-rm -rf /var/cache/samba                                                                     
-mkdir -p /var/lib/samba/sysvol                                                              
-```
-
-> Конфликты зон возникают при одинаковых доменах в BIND и SAMBA BIND9_DLZ
-
-#### В /etc/resolv.conf указать локальный DNS <!-- NAME -->
-
-```CODE
-nameserver 127.0.0.1                                                                     
-```
-
-> Контроллер домена должен использовать себя как DNS-сервер
-
-### Создание домена <!-- HEAD -->
-
-#### Провижининг домена Samba AD <!-- NAME -->
-
-```CODE
-samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
---dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
-```
-
-> --realm(полное имя домена); --domain(NetBIOS имя); --dns-backend(BIND9_DLZ или SAMBA_INTERNAL); --server-role(dc - контроллер домена); --use-rfc2307(поддержка POSIX атрибутов)
-
-#### Запуск служб <!-- NAME -->
-
-```CODE
-systemctl enable --now samba
-systemctl enable --now bind                                                                 
-
-```
-
-#### Копирование конфигурации Kerberos <!-- NAME -->
-
-```CODE
-cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
-
-```
-
-### Проверка контроллера домена <!-- HEAD -->
-
-#### Проверка информации о домене <!-- NAME -->
-
-```CODE
-samba-tool domain info 127.0.0.1                                                         
-
-```
-
-#### Проверка DNS SRV-записей <!-- NAME -->
-
-```CODE
-host -t SRV _kerberos._udp.ad.team                                                       
-host -t SRV _ldap._tcp.ad.team                                                              
-host -t A srv-hq.ad.team                                                                    
-```
-
-> SRV-записи должны указывать на контроллер домена
-
-#### Проверка Kerberos <!-- NAME -->
-
-```CODE
-kinit administrator@AD.TEAM                                                              
-klist                                                                                       
-```
-
-> kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами
 
 ### bind_DNS <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -2126,10 +646,7 @@ chronyc makestep
 chronyc sourcestats
 ```
 
-### console-debian_samba <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### cups-pdf <!-- HEAD -->
+### CUPS_PDF <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка и настройка CUPS <!-- HEAD -->
@@ -2260,6 +777,848 @@ cancel ID_ЗАДАНИЯ
 ```CODE
 lpinfo -v
 ```
+
+### devices_automount <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Форматирование диска <!-- HEAD -->
+
+#### Создание файловой системы ext4 <!-- NAME -->
+
+```CODE
+mkfs.ext4 /dev/sda                                                                                    
+```
+
+> создает файловую систему ext4 на устройстве /dev/sda
+
+### Подготовка точки монтирования <!-- HEAD -->
+
+#### Создание директории <!-- NAME -->
+
+```CODE
+mkdir -p /opt/data                                                                                    
+```
+
+> -p(создание родительских директорий)
+
+### Монтирование <!-- HEAD -->
+
+#### Монтирование диска <!-- NAME -->
+
+```CODE
+mount /dev/sda /opt/data                                                                              
+```
+
+> временное монтирование до перезагрузки
+
+### Автоматическое монтирование <!-- HEAD -->
+
+#### Добавление записи в /etc/fstab <!-- NAME -->
+
+```CODE
+/dev/sda /opt/data ext4 defaults 0 2                                                                  
+```
+
+> /dev/sda(устройство); /opt/data(точка монтирования); ext4(тип ФС); defaults(опции монтирования); 0(резервное копирование dump); 2(порядок проверки fsck)
+
+### Параметры /etc/fstab <!-- HEAD -->
+
+#### Структура записи <!-- LIST -->
+- /dev/sda: устройство
+- /opt/data: точка монтирования
+- ext4: тип файловой системы
+- defaults: обобщенные опции
+    - rw(чтение-запись), suid(SUID биты), dev(файлы устройств), exec(выполнение), auto(автомонтирование), nouser(только root), async(асинхронная запись)
+- 0: управление резервным копированием (dump-flag)
+    - 0(не создавать резервные копии), 1(обычно root /), 2(другие разделы /home, /opt, /var)
+- 2: порядок проверки файловой системы (fsck)
+    - 0(не проверять), 1(первым, обычно root), 2(после root для /home, /opt, /var)
+
+#### Применение <!-- NAME -->
+
+```CODE
+mount -a
+```
+
+> -a(монтирование всего из fstab)
+
+### Проверка монтирования <!-- HEAD -->
+
+#### Просмотр смонтированных разделов <!-- NAME -->
+
+```CODE
+df -h                                                                                                 
+```
+
+> -h(человекочитаемый формат)
+
+### devices_encryption <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Шифрование раздела с LUKS <!-- HEAD -->
+
+#### Создание ключа шифрования <!-- NAME -->
+
+```CODE
+dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
+```
+
+> Генерация случайного ключа размером 4 КБ
+
+#### Шифрование раздела с указанным ключом <!-- NAME -->
+
+```CODE
+cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
+```
+
+> Инициализация LUKS-шифрования на разделе
+
+#### Открытие зашифрованного раздела <!-- NAME -->
+
+```CODE
+cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
+```
+
+> Открывает зашифрованный раздел как /dev/mapper/data_crypt
+
+#### Форматирование раздела <!-- NAME -->
+
+```CODE
+mkfs.ext4 /dev/mapper/data_crypt                                                         
+
+```
+
+### Автоматическая разблокировка при загрузке <!-- HEAD -->
+
+#### Настройка автоматической разблокировки в /etc/crypttab <!-- NAME -->
+
+```CODE
+data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
+```
+
+> Формат: имя устройство ключ тип
+
+#### Проверка синтаксиса <!-- NAME -->
+
+```CODE
+systemctl daemon-reexec                                                                  
+systemctl restart systemd-cryptsetup@data_crypt                                             
+
+```
+
+### Монтирование раздела <!-- HEAD -->
+
+#### Настройка автомонтирования в /etc/fstab <!-- NAME -->
+
+```CODE
+/dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
+```
+
+> Формат: устройство точка_монтирования файловая_система опции dump fsck
+
+### Защита ключа шифрования <!-- HEAD -->
+
+#### Установка прав доступа на ключ <!-- NAME -->
+
+```CODE
+chmod 600 /root/ext4.key                                                                 
+chown root:root /root/ext4.key                                                              
+```
+
+> Только root может читать и записывать ключ
+
+### Применение настроек <!-- HEAD -->
+
+#### Перезагрузка системы <!-- NAME -->
+
+```CODE
+reboot                                                                                   
+
+```
+
+#### Проверка монтирования <!-- NAME -->
+
+```CODE
+df -h                                                                                    
+```
+
+> Проверка, что зашифрованный раздел смонтирован
+
+### devices_mdadm <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Основные уровни RAID <!-- HEAD -->
+
+#### Сравнение уровней RAID <!-- NAME -->
+
+> RAID 0(striping, высокая скорость, нет отказоустойчивости, минимум 2 диска, объём = сумма дисков); RAID 1(mirroring, отказ 1 диска, минимум 2 диска, объём = размер 1 диска); RAID 5(striping+parity, отказ 1 диска, минимум 3 диска, объём = (N-1)×диск); RAID 6(double parity, отказ 2 диска, минимум 4 диска, объём = (N-2)×диск); RAID 10(mirror+stripe, высокая отказоустойчивость, минимум 4 диска, объём = 50%)
+
+> Программный RAID(реализован на уровне ОС, использует CPU) vs Аппаратный RAID(реализован контроллером, имеет собственный процессор)
+
+### Установка mdadm <!-- HEAD -->
+
+#### Установка утилиты mdadm <!-- NAME -->
+
+```CODE
+apt-get install -y mdadm                                                                 
+```
+
+> mdadm(Multiple Device Administration, утилита для управления программными RAID-массивами в Linux); -y(автоматическое подтверждение установки)
+
+### Создание RAID массивов <!-- HEAD -->
+
+#### Создание RAID 0 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc           
+```
+
+> --create(создать новый массив); --verbose(подробный вывод); /dev/md0(имя создаваемого RAID-устройства); --level(уровень RAID: {0, 1, 4, 5, 6, 10}); --raid-devices(количество активных дисков в массиве); /dev/sdb /dev/sdc(список физических дисков)
+
+#### Создание RAID 1 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+
+```
+
+#### Создание RAID 4 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
+```
+
+> RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели и не поддерживаются mdadm
+
+#### Создание RAID 5 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
+
+```
+
+#### Создание RAID 6 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
+```
+
+#### Создание RAID 10 массива <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
+/dev/sde                                                                                    
+
+```
+
+#### Создание массива с spare диском <!-- NAME -->
+
+```CODE
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb
+/dev/sdc /dev/sdd /dev/sde                                                                  
+```
+
+> --spare-devices(количество резервных дисков); spare(горячий резерв) - диск автоматически заменит отказавший и начнёт процесс rebuild
+
+### Настройка массива <!-- HEAD -->
+
+#### Создание файловой системы на массиве <!-- NAME -->
+
+```CODE
+mkfs.ext4 /dev/md0                                                                       
+```
+
+> mkfs(make filesystem, создание файловой системы); форматы: {ext4, xfs, btrfs}
+
+#### Создание точки монтирования <!-- NAME -->
+
+```CODE
+mkdir /mnt/raid                                                                          
+
+```
+
+#### Монтирование массива <!-- NAME -->
+
+```CODE
+mount /dev/md0 /mnt/raid                                                                 
+
+```
+
+#### Добавление в /etc/fstab для автомонтирования <!-- NAME -->
+
+```CODE
+/dev/md0   /mnt/raid   ext4   defaults   0 0                                             
+```
+
+> /dev/md0(устройство); /mnt/raid(точка монтирования); ext4(тип ФС); defaults(опции по умолчанию: rw,suid,dev,exec,auto,nouser,async); первый 0(dump, не создавать резервные копии); второй 0(fsck, не проверять ФС при загрузке)
+
+### Настройка mdadm.conf <!-- HEAD -->
+
+#### Сохранение конфигурации массива <!-- NAME -->
+
+```CODE
+mdadm --detail --scan >> /etc/mdadm.conf                                                 
+```
+
+> --detail(детальная информация о массиве); --scan(сканировать все массивы); >>(добавить в конец файла); создаёт строку ARRAY с UUID, уровнем и метаданными массива
+
+#### Пример строки ARRAY в mdadm.conf <!-- NAME -->
+
+```CODE
+ARRAY /dev/md0 metadata=1.2 name=hostname:0 UUID=12345678:abcdefgh:12345678:abcdefgh     
+```
+
+> ARRAY(определение массива); /dev/md0(имя устройства); metadata(версия метаданных: {0.90, 1.0, 1.1, 1.2}); name(имя массива hostname:номер); UUID(уникальный идентификатор массива)
+
+#### Добавление параметров устройств в mdadm.conf <!-- NAME -->
+
+```CODE
+DEVICE /dev/sdb /dev/sdc /dev/sdd /dev/sde
+```
+
+> DEVICE(список физических дисков для поиска массивов); можно использовать wildcards: /dev/sd*
+
+#### Настройка email-уведомлений в mdadm.conf <!-- NAME -->
+
+```CODE
+MAILADDR admin@example.com
+MAILFROM mdadm@server.local                                                                 
+```
+
+> MAILADDR(адрес для отправки уведомлений о проблемах с массивом); MAILFROM(адрес отправителя)
+
+#### Настройка программы мониторинга в mdadm.conf <!-- NAME -->
+
+```CODE
+PROGRAM /usr/local/bin/raid-notify.sh
+```
+
+> PROGRAM(скрипт, который будет выполнен при событии с массивом); получает параметры: событие и устройство
+
+#### Ручное редактирование mdadm.conf <!-- NAME -->
+
+```CODE
+nano /etc/mdadm.conf
+```
+
+> Файл можно редактировать вручную для тонкой настройки параметров
+
+#### Применение изменений из mdadm.conf <!-- NAME -->
+
+```CODE
+mdadm --assemble --scan                                                                  
+```
+
+> --assemble(собрать массивы); --scan(использовать конфигурацию из /etc/mdadm.conf)
+
+#### Обновление конфигурации после изменения массива <!-- NAME -->
+
+```CODE
+mdadm --detail --scan > /etc/mdadm.conf.new                                              
+mv /etc/mdadm.conf.new /etc/mdadm.conf                                                      
+```
+
+> Перезапись файла с актуальной конфигурацией всех массивов
+
+#### Резервное копирование mdadm.conf <!-- NAME -->
+
+```CODE
+cp /etc/mdadm.conf /etc/mdadm.conf.backup                                                
+```
+
+> Сохранение копии перед внесением изменений
+
+#### Добавление spare диска в существующий массив <!-- NAME -->
+
+```CODE
+mdadm --add /dev/md0 /dev/sde                                                            
+```
+
+> --add(добавить диск в массив как горячий резерв)
+
+### Управление массивом <!-- HEAD -->
+
+#### Остановка массива <!-- NAME -->
+
+```CODE
+mdadm --stop /dev/md0                                                                    
+```
+
+> --stop(остановить массив); необходимо размонтировать перед остановкой
+
+#### Запуск массива <!-- NAME -->
+
+```CODE
+mdadm --assemble /dev/md0 /dev/sdb /dev/sdc /dev/sdd                                     
+```
+
+> --assemble(собрать массив из указанных дисков)
+
+#### Автоматическая сборка всех массивов из mdadm.conf <!-- NAME -->
+
+```CODE
+mdadm --assemble --scan
+```
+
+> Собирает все массивы, описанные в /etc/mdadm.conf
+
+#### Пометка диска как отказавшего <!-- NAME -->
+
+```CODE
+mdadm --fail /dev/md0 /dev/sdc                                                           
+```
+
+> --fail(пометить диск как failed); для имитации отказа при тестировании
+
+#### Удаление диска из массива <!-- NAME -->
+
+```CODE
+mdadm --remove /dev/md0 /dev/sdc                                                         
+```
+
+> --remove(удалить диск из массива); диск должен быть помечен как failed
+
+#### Добавление нового диска взамен отказавшего <!-- NAME -->
+
+```CODE
+mdadm --add /dev/md0 /dev/sde                                                            
+```
+
+> Автоматически начнётся процесс rebuild (восстановление данных на новом диске)
+
+#### Увеличение количества дисков в массиве <!-- NAME -->
+
+```CODE
+mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sde                                    
+```
+
+> --grow(изменить параметры массива); расширение с пересчётом данных
+
+#### Изменение уровня RAID <!-- NAME -->
+
+```CODE
+mdadm --grow /dev/md0 --level=6                                                          
+```
+
+> Преобразование массива (например RAID 5 в RAID 6), требует времени на пересчёт
+
+### Проверка состояния <!-- HEAD -->
+
+#### Проверка состояния всех RAID массивов <!-- NAME -->
+
+```CODE
+cat /proc/mdstat                                                                         
+```
+
+> Краткая информация: состояние, прогресс rebuild/resync, активные/отказавшие диски
+
+#### Детальная информация о массиве <!-- NAME -->
+
+```CODE
+mdadm --detail /dev/md0                                                                  
+```
+
+> Показывает уровень RAID, состояние дисков, размер, UUID
+
+#### Проверка информации о диске в массиве <!-- NAME -->
+
+```CODE
+mdadm --examine /dev/sdb                                                                 
+```
+
+> --examine(прочитать метаданные RAID на диске); показывает UUID массива, уровень RAID, роль диска
+
+#### Мониторинг состояния массива <!-- NAME -->
+
+```CODE
+mdadm --monitor --scan --daemonise
+```
+
+> --monitor(режим мониторинга); --daemonise(запустить как демон); отправляет уведомления об ошибках
+
+#### Проверка скорости rebuild <!-- NAME -->
+
+```CODE
+cat /proc/sys/dev/raid/speed_limit_min
+cat /proc/sys/dev/raid/speed_limit_max                                                      
+```
+
+> Показывает минимальную и максимальную скорость восстановления в KB/s
+
+#### Изменение скорости rebuild <!-- NAME -->
+
+```CODE
+echo 50000 > /proc/sys/dev/raid/speed_limit_min                                          
+echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
+```
+
+> Значения в KB/s; низкая скорость снижает нагрузку, высокая ускоряет восстановление
+
+#### Проверка целостности массива <!-- NAME -->
+
+```CODE
+echo check > /sys/block/md0/md/sync_action                                               
+```
+
+> Запуск проверки целостности без исправления ошибок
+
+#### Восстановление с исправлением ошибок <!-- NAME -->
+
+```CODE
+echo repair > /sys/block/md0/md/sync_action                                              
+```
+
+> Проверка и автоматическое исправление несоответствий в данных
+
+#### Просмотр прогресса проверки <!-- NAME -->
+
+```CODE
+cat /proc/mdstat                                                                         
+```
+
+> Показывает прогресс операций check/repair/rebuild в процентах
+
+### Удаление массива <!-- HEAD -->
+
+#### Размонтирование массива <!-- NAME -->
+
+```CODE
+umount /mnt/raid                                                                         
+
+```
+
+#### Остановка массива <!-- NAME -->
+
+```CODE
+mdadm --stop /dev/md0                                                                    
+
+```
+
+#### Удаление метаданных RAID с дисков <!-- NAME -->
+
+```CODE
+mdadm --zero-superblock /dev/sdb /dev/sdc /dev/sdd                                       
+```
+
+> --zero-superblock(обнулить суперблок RAID); полное удаление информации о RAID с дисков
+
+#### Удаление записи из /etc/fstab <!-- NAME -->
+
+```CODE
+sed -i '/\/dev\/md0/d' /etc/fstab                                                        
+```
+
+> sed -i(редактировать файл на месте); /d(удалить строку)
+
+#### Удаление записи из /etc/mdadm.conf <!-- NAME -->
+
+```CODE
+sed -i '/\/dev\/md0/d' /etc/mdadm.conf                                                   
+```
+
+> Удаление конфигурации массива из файла
+
+### devices_partitions <!-- HEAD -->
+[Содержание](#Содержание-)
+
+#### Создание GPT разметки на диске /dev/sda <!-- NAME -->
+
+```CODE
+parted /dev/sda                                                                          
+mklabel gpt                                                                                 
+mkpart boot 0% 100%                                                                         
+```
+
+> mklabel(создание таблицы разделов) {gpt, msdos}
+
+> mkpart(создание раздела) boot(название раздела, любое)
+
+> 0% 100%(начало и конец раздела в процентах) {1MiB 100%, 0% 50GB}
+
+#### Создание раздела с указанием файловой системы <!-- NAME -->
+
+```CODE
+parted /dev/sdc                                                                          
+mklabel gpt                                                                                 
+mkpart root ext4 0% 100%                                                                    
+```
+
+> ext4(тип файловой системы) {ext4, xfs, btrfs, swap}
+
+> root(название раздела, может быть любым{A–Z, a–z}, {0–9}, {`-`, `_`})
+
+#### Создание нескольких разделов <!-- NAME -->
+
+```CODE
+parted /dev/sdd                                                                          
+mklabel gpt                                                                                 
+mkpart system 0% 50%                                                                        
+mkpart data 50% 100%                                                                        
+```
+
+> Создание двух разделов по 50% диска с названиями system и data
+
+#### Создание раздела с точным размером <!-- NAME -->
+
+```CODE
+parted /dev/sde                                                                          
+mklabel gpt                                                                                 
+mkpart root 1MiB 10GiB
+```
+
+> 1MiB(начало раздела, выравнивание) 10GiB(конец раздела)
+
+> Единицы измерения {MiB, GiB, TiB, MB, GB, TB}
+
+#### Создание swap раздела <!-- NAME -->
+
+```CODE
+parted /dev/sdf                                                                          
+mklabel gpt                                                                                 
+mkpart swap linux-swap 0% 4GiB
+mkpart root ext4 4GiB 100%                                                                  
+```
+
+> Первый раздел для swap, второй для системы
+
+#### Создание EFI раздела для UEFI систем <!-- NAME -->
+
+```CODE
+parted /dev/sdg                                                                          
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart root ext4 512MiB 100%                                                                
+```
+
+> EFI(название раздела) для загрузчика UEFI
+
+> esp(флаг для UEFI загрузки) обязателен для EFI раздела
+
+> Размер EFI раздела обычно 512MiB {256MiB, 512MiB, 1GiB}
+
+> GPT обязательна для UEFI систем
+
+#### Создание разметки для BIOS Legacy загрузки <!-- NAME -->
+
+```CODE
+parted /dev/sdh                                                                          
+mklabel msdos                                                                               
+mkpart primary ext4 1MiB 100%                                                               
+set 1 boot on                                                                               
+```
+
+> msdos(таблица разделов MBR) для BIOS Legacy систем
+
+> boot(флаг загрузочного раздела) для Legacy BIOS
+
+> Для BIOS Legacy лучше использовать msdos, не gpt
+
+#### Создание разметки BIOS Legacy с swap <!-- NAME -->
+
+```CODE
+parted /dev/sdi                                                                          
+mklabel msdos                                                                               
+mkpart primary linux-swap 1MiB 4GiB                                                         
+mkpart primary ext4 4GiB 100%                                                               
+set 2 boot on                                                                               
+```
+
+> msdos для совместимости со старыми BIOS
+
+> boot устанавливается на корневой раздел
+
+#### Создание полной разметки с boot разделом <!-- NAME -->
+
+```CODE
+parted /dev/sdj                                                                          
+mklabel gpt                                                                                 
+mkpart boot ext4 1MiB 512MiB                                                                
+set 1 boot on                                                                               
+mkpart swap linux-swap 512MiB 4GiB                                                          
+set 2 swap on                                                                               
+mkpart root ext4 4GiB 100%                                                                  
+```
+
+> boot(название и флаг загрузочного раздела) для /boot
+
+> swap(название и флаг раздела подкачки) для swap
+
+> Типичная схема: boot + swap + root
+
+#### Создание разметки для UEFI с boot и swap <!-- NAME -->
+
+```CODE
+parted /dev/sdk                                                                          
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart boot ext4 512MiB 1GiB                                                                
+set 2 boot on                                                                               
+mkpart swap linux-swap 1GiB 5GiB                                                            
+set 3 swap on                                                                               
+mkpart root ext4 5GiB 100%                                                                  
+```
+
+> esp(EFI раздел) + boot(/boot) + swap(подкачка) + root(корень)
+
+> Полная схема для UEFI системы
+
+#### Создание разметки с LVM <!-- NAME -->
+
+```CODE
+parted /dev/sdl                                                                          
+mklabel gpt                                                                                 
+mkpart EFI fat32 1MiB 512MiB                                                                
+set 1 esp on                                                                                
+mkpart lvm 512MiB 100%                                                                      
+set 2 lvm on                                                                                
+```
+
+> lvm(флаг для LVM) для физического тома LVM
+
+> LVM позволяет гибко управлять разделами: изменять размер, создавать снапшоты, объединять диски
+
+#### Пример использования LVM после создания раздела <!-- NAME -->
+
+```CODE
+pvcreate /dev/sdl2
+vgcreate vg0 /dev/sdl2                                                                      
+lvcreate -L 4G -n swap vg0                                                                  
+lvcreate -L 20G -n root vg0                                                                 
+lvcreate -l 100%FREE -n home vg0                                                            
+```
+
+> pvcreate(создание физического тома)
+
+> vgcreate(создание группы томов) vg0(название группы)
+
+> lvcreate(создание логического тома) -L(размер) -n(название) -l(процент свободного места)
+
+> LVM позволяет изменять размер разделов без перезагрузки
+
+#### Создание разметки с RAID <!-- NAME -->
+
+```CODE
+parted /dev/sdm                                                                          
+mklabel gpt                                                                                 
+mkpart raid1 1MiB 100%
+set 1 raid on                                                                               
+```
+
+> raid(флаг для RAID) для программного RAID массива
+
+> RAID объединяет несколько дисков для отказоустойчивости или производительности
+
+#### Неинтерактивное создание разметки <!-- NAME -->
+
+```CODE
+parted -s /dev/sdg mklabel gpt                                                           
+parted -s /dev/sdg mkpart root 0% 100%                                                      
+```
+
+> -s(неинтерактивный режим, без подтверждений)
+
+#### Удаление раздела <!-- NAME -->
+
+```CODE
+parted /dev/sdh                                                                          
+rm 1                                                                                        
+```
+
+> rm(удаление раздела) 1(номер раздела)
+
+#### Изменение размера раздела <!-- NAME -->
+
+```CODE
+parted /dev/sdi                                                                          
+resizepart 1 50GiB                                                                          
+```
+
+> resizepart(изменение размера) 1(номер раздела) 50GiB(новый размер)
+
+#### Установка и снятие флагов раздела <!-- NAME -->
+
+```CODE
+parted /dev/sdj                                                                          
+set 1 boot on                                                                               
+set 1 boot off                                                                              
+```
+
+> set(установка флага) 1(номер раздела) boot(тип флага) on/off(включить/выключить)
+
+> Типы флагов {boot, esp, swap, raid, lvm, bios_grub}
+
+#### Просмотр доступных флагов <!-- NAME -->
+
+```CODE
+parted /dev/sda                                                                          
+help set                                                                                    
+```
+
+> Показывает все доступные флаги для установки
+
+### Проверка <!-- HEAD -->
+
+#### Просмотр разделов дисков <!-- NAME -->
+
+```CODE
+lsblk                                                                                    
+```
+
+> Показывает все блочные устройства и разделы
+
+#### Просмотр информации о разделах диска <!-- NAME -->
+
+```CODE
+parted /dev/sda print                                                                    
+```
+
+> Показывает таблицу разделов конкретного диска с флагами
+
+#### Просмотр всех дисков <!-- NAME -->
+
+```CODE
+parted -l                                                                                
+```
+
+> Показывает информацию о всех дисках в системе
+
+#### Проверка выравнивания разделов <!-- NAME -->
+
+```CODE
+parted /dev/sda align-check optimal 1                                                    
+```
+
+> align-check(проверка выравнивания) optimal(тип) 1(номер раздела)
+
+#### Проверка активации swap <!-- NAME -->
+
+```CODE
+swapon --show                                                                            
+```
+
+> Показывает активные swap разделы
+
+#### Проверка монтирования EFI раздела <!-- NAME -->
+
+```CODE
+mount | grep efi                                                                         
+```
+
+> Показывает смонтированные EFI разделы
+
+#### Проверка LVM томов <!-- NAME -->
+
+```CODE
+pvdisplay                                                                                
+vgdisplay                                                                                   
+lvdisplay                                                                                   
+```
+
+> Показывает физические тома, группы томов и логические тома LVM Исправления: - primary заменено на осмысленные названия разделов (boot, root, swap, data) - Для BIOS Legacy использую msdos, не gpt - Добавлено объяснение LVM: технология для гибкого управления разделами (изменение размера, снапшоты, объединение дисков) - Добавлен пример создания LVM томов после разметки
 
 ### dhcpd <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -2985,7 +2344,7 @@ systemctl restart dnsmasq
 systemctl status dnsmasq
 ```
 
-### docker_testapp_from_tar <!-- HEAD -->
+### Docker_load_from_tar <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Импорт Docker-образов <!-- HEAD -->
@@ -3257,99 +2616,7 @@ docker system prune -a
 
 > prune(удалить неиспользуемые данные); -a(all, включая неиспользуемые образы)
 
-### encryption_devices <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Шифрование раздела с LUKS <!-- HEAD -->
-
-#### Создание ключа шифрования <!-- NAME -->
-
-```CODE
-dd if=/dev/urandom of=/root/ext4.key bs=1024 count=4                                     
-```
-
-> Генерация случайного ключа размером 4 КБ
-
-#### Шифрование раздела с указанным ключом <!-- NAME -->
-
-```CODE
-cryptsetup luksFormat /dev/data_striped/lv_data /root/ext4.key                           
-```
-
-> Инициализация LUKS-шифрования на разделе
-
-#### Открытие зашифрованного раздела <!-- NAME -->
-
-```CODE
-cryptsetup luksOpen /dev/data_striped/lv_data data_crypt --key-file /root/ext4.key       
-```
-
-> Открывает зашифрованный раздел как /dev/mapper/data_crypt
-
-#### Форматирование раздела <!-- NAME -->
-
-```CODE
-mkfs.ext4 /dev/mapper/data_crypt                                                         
-
-```
-
-### Автоматическая разблокировка при загрузке <!-- HEAD -->
-
-#### Настройка автоматической разблокировки в /etc/crypttab <!-- NAME -->
-
-```CODE
-data_crypt /dev/data_striped/lv_data /root/ext4.key luks                                 
-```
-
-> Формат: имя устройство ключ тип
-
-#### Проверка синтаксиса <!-- NAME -->
-
-```CODE
-systemctl daemon-reexec                                                                  
-systemctl restart systemd-cryptsetup@data_crypt                                             
-
-```
-
-### Монтирование раздела <!-- HEAD -->
-
-#### Настройка автомонтирования в /etc/fstab <!-- NAME -->
-
-```CODE
-/dev/mapper/data_crypt /opt/data ext4 defaults 0 2                                       
-```
-
-> Формат: устройство точка_монтирования файловая_система опции dump fsck
-
-### Защита ключа шифрования <!-- HEAD -->
-
-#### Установка прав доступа на ключ <!-- NAME -->
-
-```CODE
-chmod 600 /root/ext4.key                                                                 
-chown root:root /root/ext4.key                                                              
-```
-
-> Только root может читать и записывать ключ
-
-### Применение настроек <!-- HEAD -->
-
-#### Перезагрузка системы <!-- NAME -->
-
-```CODE
-reboot                                                                                   
-
-```
-
-#### Проверка монтирования <!-- NAME -->
-
-```CODE
-df -h                                                                                    
-```
-
-> Проверка, что зашифрованный раздел смонтирован
-
-### etcnet_gre_tunnel <!-- HEAD -->
+### etcnet_GRE_tunnel <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка GRE-туннеля <!-- HEAD -->
@@ -3407,7 +2674,7 @@ systemctl restart network
 
 > Аналогичную настройку необходимо выполнить на втором роутере с зеркальными параметрами TUNLOCAL и TUNREMOTE
 
-### etcnet_ip <!-- HEAD -->
+### etcnet_IP <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка сетевых интерфейсов в ALT Linux <!-- HEAD -->
@@ -3516,7 +2783,7 @@ ip route
 ip a
 ```
 
-### etcnet_ip_forward <!-- HEAD -->
+### etcnet_IP_forward <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
@@ -3560,7 +2827,7 @@ sysctl net.ipv4.ip_forward
 
 > Должно вернуть 1 если включено, 0 если выключено
 
-### etcnet_vlan <!-- HEAD -->
+### etcnet_VLAN <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка VLAN-интерфейсов <!-- HEAD -->
@@ -3624,6 +2891,62 @@ ifdown ens32.100
 ```CODE
 ip a
 ```
+
+### fail2ban_ALT <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+#### Скачивание пакетов <!-- NAME -->
+
+```CODE
+apt-get install fail2ban
+```
+
+### Преднастройка ALT Linux <!-- HEAD -->
+
+#### Скачивание модуля python <!-- NAME -->
+
+```CODE
+apt-get install python3-module-systemd
+```
+
+#### В /etc/fail2ban/jail.conf в секции INCLUDES <!-- NAME -->
+
+```CODE
+before = paths-altlinux-systemd.conf
+```
+
+> Замена before = paths-altlinux.conf
+
+### Настройка <!-- HEAD -->
+
+#### Содержимое файла /etc/fail2ban/jail.d/sshd.conf <!-- NAME -->
+
+```CODE
+[sshd]
+enabled = true
+port = 22
+maxretry = 3
+bantime = 10
+findtime = 60
+```
+
+> enabled(отслеживание sshd); bantime(время бана); findtime(время запоминания)
+
+#### Запуск systemd-сервиса <!-- NAME -->
+
+```CODE
+systemctl enable --now fail2ban
+```
+
+### Проверка <!-- HEAD -->
+
+```CODE
+sudo fail2ban-client status sshd
+```
+
+> выводит забанненые адреса
 
 ### FreeIPA <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -3781,246 +3104,6 @@ curl https://srv-hq.your.domain
 
 ```CODE
 ipactl status
-```
-
-### frr_and_quagga_OSPF <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка FRR <!-- HEAD -->
-
-#### Установка пакета <!-- NAME -->
-
-```CODE
-apt-get install frr                                                                      
-   
- 
-```
-
-#### Включение OSPF в /etc/frr/daemons <!-- NAME -->
-
-```CODE
-ospfd=yes    
-
- 
-```
-
-#### Добавление в автозагрузку и запуск <!-- NAME -->
-
-```CODE
-systemctl enable --now frr
- 
-```
-
-> FRR (Free Range Routing) - пакет протоколов маршрутизации; необходимо включить только нужные протоколы маршрутизации
-
-### Установка Quagga (старая версия для ALT Linux) <!-- HEAD -->
-
-#### Установка пакета <!-- NAME -->
-
-```CODE
-apt-get install quagga                                                                   
-                                                                                              
- 
-```
-
-#### Назначение прав <!-- NAME -->
-
-```CODE
-chown -R quagga:quagga /etc/quagga                                                       
-                                                                                              
- 
-```
-
-#### Включение и запуск служб <!-- NAME -->
-
-```CODE
-systemctl enable zebra ospfd                                                             
-  systemctl start zebra ospfd                                                                 
- 
-```
-
-> Важно включать и запускать службы отдельно
-
-### Настройка OSPF <!-- HEAD -->
-
-> Перед настройкой OSPF маршрутизаторы должны иметь IP-связность через GRE-туннели, VLAN, выделенные каналы или VPN
-
-#### Полная конфигурация OSPF в vtysh <!-- NAME -->
-
-```CODE
-vtysh
-  conf t       
-  ip forwarding                                                                               
-  router ospf     
-      ospf router-id 1.1.1.1                                                                  
-      network 10.10.10.0/30 area 0                                                            
-      network 192.168.11.0/26 area 0                                                          
-      network 192.168.11.65/28 area 0                                                         
-      network 192.168.11.81/29 area 0                                                         
-      passive-interface default                                                               
-      area 0 authentication message-digest                                                    
-  int tun                                                                                     
-      no ip ospf passive                                                                      
-      ip ospf message-digest-key 1 md5 P@ssw0rd                                               
-      ip ospf network point-to-point                                                          
-  do wr mem                                                                                   
- 
-```
-
-> router ospf(включение процесса OSPF); ospf router-id(уникальный идентификатор маршрутизатора); network(сети участвующие в OSPF); area 0(backbone area, центральная область OSPF); passive-interface default(все интерфейсы пассивны по умолчанию); no ip ospf passive(отключить пассивный режим); area 0 authentication message-digest(MD5-аутентификация для area); ip ospf message-digest-key(номер ключа, тип хеширования, пароль); ip ospf network(тип сети OSPF); do wr mem(сохранение конфигурации); пароли на обеих сторонах должны совпадать
-
-### Типы сетей OSPF <!-- HEAD -->
-
-> point-to-point(для 2 узлов, экономит трафик, multicast 224.0.0.5)
-
-> broadcast(для >2 узлов, поддерживает DR/BDR, multicast 224.0.0.5 и 224.0.0.6)
-
-### Проверка OSPF <!-- HEAD -->
-
-#### Проверка соседей <!-- NAME -->
-
-```CODE
-show ip ospf neighbor                                                                    
- 
-```
-
-> Показывает соседние маршрутизаторы, состояние соседства, Router ID
-
-#### Проверка маршрутов <!-- NAME -->
-
-```CODE
-ip route show                                                                            
- 
-```
-
-> Маршруты OSPF помечаются буквой O
-
-#### Просмотр интерфейсов OSPF <!-- NAME -->
-
-```CODE
-show ip ospf interface                                                                   
-                                                                                              
- 
-```
-
-#### Просмотр конфигурации <!-- NAME -->
-
-```CODE
-show running-config
-```
-
-### GOST_OpenSSL <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Настройка HTTPS с ГОСТ-сертификатами <!-- HEAD -->
-
-> Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для веб-ресурсов, настройка доверия
-
-### Установка поддержки ГОСТ <!-- HEAD -->
-
-#### Установка пакета <!-- NAME -->
-
-```CODE
-apt-get install -y openssl-gost-engine                                                   
-
-```
-
-#### Включение поддержки ГОСТ <!-- NAME -->
-
-```CODE
-control openssl-gost enabled                                                             
-
-```
-
-#### Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf <!-- NAME -->
-
-```CODE
-openssl_conf = openssl_def                                                               
-
-[openssl_def]                                                                               
-engines = engine_section                                                                    
-
-[engine_section]                                                                            
-gost = gost_section                                                                         
-
-[gost_section]  
-engine_id = gost                                                                            
-dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
-default_algorithms = ALL                                                                    
-```
-
-> Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, корректной работы Nginx с ГОСТ-криптографией
-
-### Создание корневого сертификата УЦ <!-- HEAD -->
-
-#### Создание закрытого ключа УЦ <!-- NAME -->
-
-```CODE
-openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
-
-```
-
-#### Создание самоподписанного сертификата УЦ <!-- NAME -->
-
-```CODE
-openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
-```
-
-> В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ); ca.cer(корневой сертификат УЦ)
-
-### Создание сертификатов для доменов <!-- HEAD -->
-
-#### Создание закрытого ключа для домена <!-- NAME -->
-
-```CODE
-openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
-openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
-
-```
-
-#### Создание запроса на подпись (CSR) <!-- NAME -->
-
-```CODE
-openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
--md_gost12_256                                                                              
-openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
--md_gost12_256                                                                              
-```
-
-> В Common Name указать IP или домен(ы), например *.some.domain
-
-#### Подпись сертификатов УЦ <!-- NAME -->
-
-```CODE
-openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
-web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
-openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
-docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
-
-```
-
-#### Проверка сертификата <!-- NAME -->
-
-```CODE
-openssl x509 -in web.some.domain.cer -text -noout
-
-```
-
-### Установка сертификатов в систему <!-- HEAD -->
-
-#### Копирование сертификатов в доверенные <!-- NAME -->
-
-```CODE
-cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
-cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
-cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
-
-```
-
-#### Обновление доверенных сертификатов <!-- NAME -->
-
-```CODE
-update-ca-trust
 ```
 
 ### HAProxy_balance_of_servers <!-- HEAD -->
@@ -4223,344 +3306,122 @@ hostnamectl status
 
 > Показывает Static hostname, Icon name, Chassis, Machine ID, Boot ID, Operating System, Kernel, Architecture
 
-### install_MariaDB_Zabbix <!-- HEAD -->
+### IPsec_strongswan <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
-#### Установка пакетов <!-- NAME -->
+#### Установка StrongSwan <!-- NAME -->
 
 ```CODE
-apt-get install mariadb-server zabbix-server-mysql fping                                 
+apt-get install strongswan
 
 ```
 
-#### Включение и запуск службы <!-- NAME -->
+### Настройка первого маршрутизатора <!-- HEAD -->
+
+#### Основной конфигурационный файл <!-- NAME -->
 
 ```CODE
-systemctl enable --now mysqld
+/etc/strongswan/ipsec.conf
 
 ```
 
-### Настройка БД <!-- HEAD -->
-
-#### Создание базы данных и пользователя <!-- NAME -->
+#### Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.1 <!-- NAME -->
 
 ```CODE
-mysql -uroot -p
-CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin;
-GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'P@ssw0rd';              
-QUIT;                                                                                       
+config setup                                                                             
+
+conn nameConnect                                                                            
+authby=psk                                                                              
+keyexchange=ikev2                                                                       
+
+leftid=10.10.10.1                                                                           
+left=10.10.10.1                                                                             
+leftsubnet=10.10.10.0/30                                                                    
+
+rightid=10.10.10.2                                                                          
+right=10.10.10.2                                                                            
+rightsubnet=10.10.10.0/30                                                                   
+
+auto=start                                                                                  
 ```
 
-> Пароль можно пропустить при первом входе
+> authby=psk(аутентификация по общему ключу); keyexchange=ikev2(протокол обмена ключами); leftid(публичный идентификатор локального узла); left(локальный IP-адрес); leftsubnet(локальная подсеть); rightid(публичный идентификатор удалённого узла); right(удалённый IP-адрес); rightsubnet(удалённая подсеть); auto=start(автоматический запуск туннеля)
 
-#### Импорт данных в БД <!-- NAME -->
-
-```CODE
-mysql -uzabbix -pP@ssw0rd zabbix <                                                       
-/usr/share/doc/zabbix-common-database-mysql-*/schema.sql                                    
-mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/images.sql
-mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/data.sql   
-```
-
-> Важно соблюдать порядок ввода команд
-
-### Установка веб-сервера <!-- HEAD -->
-
-#### Установка Apache и PHP <!-- NAME -->
+#### Файл с общими ключами <!-- NAME -->
 
 ```CODE
-apt-get install apache2 apache2-mod_php8.2                                               
-systemctl enable --now httpd2                                                               
-apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
-php8.2-mysqlnd-mysqli php8.2-ldap php8.2-openssl                                            
+/etc/strongswan/ipsec.secrets                                                            
 
 ```
 
-#### Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini <!-- NAME -->
+#### Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.1 <!-- NAME -->
 
 ```CODE
-memory_limit = 256M
-post_max_size = 32M                                                                         
-max_execution_time = 600                                                                    
-max_input_time = 600                                                                        
-date.timezone = Europe/Moscow                                                               
-always_populate_raw_post_data = -1                                                          
+10.10.10.1 10.10.10.2 : PSK "P@ssw0rd"                                                   
 ```
 
-> date.timezone указать свой регион
+> Формат: локальный_IP удалённый_IP : PSK "пароль"
 
-#### Перезапуск веб-сервера <!-- NAME -->
+### Настройка второго маршрутизатора <!-- HEAD -->
+
+#### Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.2 <!-- NAME -->
 
 ```CODE
-systemctl restart httpd2                                                                 
+config setup 
 
+conn nameConnect                                                                            
+authby=psk
+keyexchange=ikev2                                                                       
+
+leftid=10.10.10.2                                                                           
+left=10.10.10.2                                                                             
+leftsubnet=10.10.10.0/30                                                                    
+
+rightid=10.10.10.1                                                                          
+right=10.10.10.1                                                                            
+rightsubnet=10.10.10.0/30                                                                   
+
+auto=start                                                                                  
 ```
 
-### Настройка сервера <!-- HEAD -->
+> Зеркальная конфигурация: left и right меняются местами
 
-#### В /etc/zabbix/zabbix_server.conf <!-- NAME -->
+#### Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.2 <!-- NAME -->
 
 ```CODE
-DBHost=localhost                                                                         
-DBName=zabbix                                                                               
-DBUser=zabbix                                                                               
-DBPassword=P@ssw0rd                                                                         
-
+10.10.10.2 10.10.10.1 : PSK "P@ssw0rd"                                                   
 ```
 
-#### Включение и запуск службы <!-- NAME -->
+> Тот же пароль, адреса в обратном порядке
+
+### Запуск <!-- HEAD -->
+
+#### Запуск и автозагрузка службы на обоих маршрутизаторах <!-- NAME -->
 
 ```CODE
-systemctl enable --now zabbix_mysql                                                      
-
-```
-
-### Установка веб-интерфейса <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
-
-```
-
-#### Создание символической ссылки <!-- NAME -->
-
-```CODE
-ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+systemctl enable --now strongswan-starter ipsec
 
 ```
 
-#### Перезапуск веб-сервера <!-- NAME -->
+### Проверка <!-- HEAD -->
+
+#### Проверка статуса туннеля <!-- NAME -->
 
 ```CODE
-systemctl restart httpd2                                                                 
-
+ipsec status
 ```
 
-#### Назначение прав <!-- NAME -->
+> Показывает состояние IPsec соединений
+
+#### Проверка связности через туннель <!-- NAME -->
 
 ```CODE
-chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
-
+ping 10.10.10.2                                                                          
 ```
 
-### Доступ к веб-интерфейсу <!-- HEAD -->
-
-#### Открыть в браузере <!-- NAME -->
-
-```CODE
-http://IP_СЕРВЕРА/zabbix                                                                 
-```
-
-> Подключиться к БД, ввести пароль от БД
-
-#### Вход по умолчанию <!-- NAME -->
-
-> Логин: Admin; Пароль: zabbix
-
-### install_PostgreSQL_Zabbix <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install postgresql16-server zabbix-server-pgsql fping                            
-
-```
-
-#### Создание системных БД и включение в автозапуск <!-- NAME -->
-
-```CODE
-/etc/init.d/postgresql initdb
-systemctl enable --now postgresql
-
-```
-
-### Настройка БД <!-- HEAD -->
-
-#### Создание пользователя <!-- NAME -->
-
-```CODE
-su - postgres -s /bin/sh -c 'createuser --no-superuser --no-createdb --no-createrole
---encrypted --pwprompt zabbix'                                                              
-```
-
-> Ввести пароль для новой роли и повторить его
-
-#### Создание базы данных <!-- NAME -->
-
-```CODE
-su - postgres -s /bin/sh -c 'createdb -O zabbix zabbix'                                  
-
-```
-
-#### Импорт данных в БД <!-- NAME -->
-
-```CODE
-su - postgres -s /bin/sh -c 'psql -U zabbix -f                                           
-/usr/share/doc/zabbix-common-database-pgsql-*/schema.sql zabbix'                            
-su - postgres -s /bin/sh -c 'psql -U zabbix -f
-/usr/share/doc/zabbix-common-database-pgsql-*/images.sql zabbix'                            
-su - postgres -s /bin/sh -c 'psql -U zabbix -f
-/usr/share/doc/zabbix-common-database-pgsql-*/data.sql zabbix'                              
-```
-
-> Важно соблюдать порядок ввода команд
-
-### Установка веб-сервера <!-- HEAD -->
-
-#### Установка Apache и PHP <!-- NAME -->
-
-```CODE
-apt-get install apache2 apache2-mod_php8.2                                               
-systemctl enable --now httpd2                                                               
-apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
-php8.2-pgsql php8.2-ldap php8.2-openssl                                                     
-
-```
-
-#### Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini <!-- NAME -->
-
-```CODE
-memory_limit = 256M
-post_max_size = 32M                                                                         
-max_execution_time = 600                                                                    
-max_input_time = 600                                                                        
-date.timezone = Europe/Moscow                                                               
-always_populate_raw_post_data = -1                                                          
-```
-
-> date.timezone указать свой регион
-
-#### Перезапуск веб-сервера <!-- NAME -->
-
-```CODE
-systemctl restart httpd2                                                                 
-
-```
-
-### Настройка сервера <!-- HEAD -->
-
-#### В /etc/zabbix/zabbix_server.conf <!-- NAME -->
-
-```CODE
-DBHost=localhost                                                                         
-DBName=zabbix                                                                               
-DBUser=zabbix                                                                               
-DBPassword=P@ssw0rd                                                                         
-
-```
-
-#### Включение и запуск службы <!-- NAME -->
-
-```CODE
-systemctl enable --now zabbix_pgsql                                                      
-
-```
-
-### Установка веб-интерфейса <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
-
-```
-
-#### Создание символической ссылки <!-- NAME -->
-
-```CODE
-ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
-
-```
-
-#### Перезапуск веб-сервера <!-- NAME -->
-
-```CODE
-systemctl restart httpd2                                                                 
-
-```
-
-#### Назначение прав <!-- NAME -->
-
-```CODE
-chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
-
-```
-
-### Доступ к веб-интерфейсу <!-- HEAD -->
-
-#### Открыть в браузере <!-- NAME -->
-
-```CODE
-http://IP_СЕРВЕРА/zabbix                                                                 
-```
-
-> Подключиться к БД, ввести пароль от БД
-
-#### Вход по умолчанию <!-- NAME -->
-
-> Логин: Admin; Пароль: zabbix
-
-### install_SSL_certificate_RedHat-like <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Передача сертификатов на удаленный сервер <!-- HEAD -->
-
-#### Передача через rsync <!-- NAME -->
-
-```CODE
-rsync -avz ./ca.crt ./router.crt ./router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/    
-```
-
-> -a(архивный режим); -v(подробный вывод); -z(сжатие при передаче)
-
-#### Передача через scp <!-- NAME -->
-
-```CODE
-scp -P 2222 ca.crt router.crt router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/         
-```
-
-> -P(указание порта SSH)
-
-#### Передача через sftp <!-- NAME -->
-
-```CODE
-sftp USERNAME@IP_RTR                                                                     
-put ca.crt /etc/nginx/ssl/WEB.com/                                                          
-put router.crt /etc/nginx/ssl/WEB.com/                                                      
-put router.key /etc/nginx/ssl/WEB.com/                                                      
-exit                                                                                        
-```
-
-> Интерактивная передача файлов
-
-### Установка сертификатов в систему <!-- HEAD -->
-
-#### Переход в каталог <!-- NAME -->
-
-```CODE
-cd /etc/nginx/ssl/WEB.com/                                                               
-
-```
-
-#### Копирование в доверенные сертификаты <!-- NAME -->
-
-```CODE
-cp ./* /etc/pki/ca-trust/source/anchors/                                                 
-
-```
-
-#### Обновление доверенных сертификатов <!-- NAME -->
-
-```CODE
-update-ca-trust
-```
+> С первого маршрутизатора, с второго ping 10.10.10.1
 
 ### iptables_NAT <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -4685,7 +3546,7 @@ iptables -t nat -A PREROUTING -p tcp -i ens33 --dport 80 -j DNAT --to-destinatio
 iptables -A FORWARD -p tcp -d 192.168.1.20 --dport 80 -j ACCEPT
 ```
 
-### iscsi <!-- HEAD -->
+### iSCSI <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
@@ -4814,7 +3675,7 @@ lsblk
 
 > Должен появиться новый блочный диск (в примере 5 ГБ)
 
-### iscsi_attach <!-- HEAD -->
+### iSCSI_attach <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка LVM <!-- HEAD -->
@@ -4900,238 +3761,6 @@ lsblk
 ```
 
 > Или команда df -h для просмотра смонтированных файловых систем
-
-### LAMP_Linux_Apache_MariaDB_PHP <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка LAMP-сервера <!-- HEAD -->
-
-#### Что такое LAMP <!-- NAME -->
-
-```CODE
-LAMP = Linux + Apache + MariaDB + PHP
-```
-
-> Linux(операционная система); Apache(веб-сервер); MariaDB(система управления базами данных); PHP(язык серверной веб-разработки)
-
-#### Установка готового набора пакетов <!-- NAME -->
-
-```CODE
-apt-get install lamp-server
-```
-
-> Устанавливает все компоненты LAMP одной командой
-
-### Подготовка файлов сайта <!-- HEAD -->
-
-#### Копирование файлов в директорию Apache <!-- NAME -->
-
-```CODE
-cp /mnt/web/index.php /var/www/html/
-cp /mnt/web/logo.png /var/www/html/
-```
-
-> /var/www/html/(стандартная директория для файлов веб-сервера Apache)
-
-### Настройка PHP-приложения <!-- HEAD -->
-
-#### Редактирование файла index.php <!-- NAME -->
-
-```CODE
-nano /var/www/html/index.php
-
-```
-
-#### Параметры подключения к базе данных <!-- NAME -->
-
-```CODE
-$servername = "localhost";
-$username = "webc";
-$password = "P@ssw0rd";
-$dbname = "webdb";
-```
-
-> $servername(адрес сервера базы данных); $username(пользователь MariaDB); $password(пароль пользователя); $dbname(имя базы данных)
-
-### Настройка MariaDB <!-- HEAD -->
-
-#### Запуск и добавление в автозагрузку <!-- NAME -->
-
-```CODE
-systemctl enable --now mariadb
-```
-
-> enable(добавить в автозагрузку); --now(запустить немедленно)
-
-#### Подключение к MariaDB <!-- NAME -->
-
-```CODE
-mariadb -u root
-```
-
-> -u(user, указание пользователя для подключения); root(административный пользователь по умолчанию)
-
-#### Создание базы данных <!-- NAME -->
-
-```CODE
-create database webdb;
-```
-
-> create database(создание новой базы данных); webdb(имя базы данных)
-
-#### Создание пользователя <!-- NAME -->
-
-```CODE
-create user 'webc'@'localhost' identified by 'P@ssw0rd';
-```
-
-> create user(создание нового пользователя); 'webc'@'localhost'(имя пользователя и хост, с которого разрешено подключение); identified by(установка пароля)
-
-#### Выдача прав пользователю <!-- NAME -->
-
-```CODE
-grant all privileges on webdb.* to 'webc'@'localhost' with grant option;
-```
-
-> grant all privileges(выдать все права); webdb.*(база данных и все её таблицы); with grant option(право передавать свои привилегии другим пользователям)
-
-#### Выход из MariaDB <!-- NAME -->
-
-```CODE
-exit;
-```
-
-> Завершает сеанс работы с MariaDB
-
-### Импорт базы данных <!-- HEAD -->
-
-#### Загрузка дамп-файла в базу данных <!-- NAME -->
-
-```CODE
-mariadb -u webc -p -D webdb < /mnt/web/dump.sql
-```
-
-> -u(указание пользователя); -p(запрос пароля); -D(указание базы данных для импорта); <(перенаправление содержимого файла в команду)
-
-### Запуск Apache <!-- HEAD -->
-
-#### Включение автозапуска и запуск веб-сервера <!-- NAME -->
-
-```CODE
-systemctl enable --now httpd2.service
-```
-
-> httpd2.service(имя службы веб-сервера Apache в ALT Linux)
-
-### Проверка работы <!-- HEAD -->
-
-#### Проверка статуса MariaDB <!-- NAME -->
-
-```CODE
-systemctl status mariadb
-```
-
-> Показывает состояние службы и последние записи логов
-
-#### Проверка статуса Apache <!-- NAME -->
-
-```CODE
-systemctl status httpd2
-```
-
-> Показывает состояние веб-сервера
-
-#### Проверка открытых портов <!-- NAME -->
-
-```CODE
-ss -tulpn | grep -E '80|443'
-```
-
-> ss(socket statistics, утилита для просмотра сетевых соединений); -t(показать TCP-сокеты); -u(показать UDP-сокеты); -l(показать слушающие сокеты); -p(показать процессы); -n(не разрешать имена портов и адресов); grep -E '80|443'(фильтр по портам HTTP и HTTPS)
-
-#### Проверка сайта в браузере <!-- NAME -->
-
-```CODE
-http://<IP_СЕРВЕРА>
-```
-
-> Открыть в браузере для проверки работы веб-приложения
-
-### Управление службами <!-- HEAD -->
-
-#### Перезапуск Apache <!-- NAME -->
-
-```CODE
-systemctl restart httpd2
-```
-
-> Применяет изменения конфигурации без перезагрузки системы
-
-#### Перезапуск MariaDB <!-- NAME -->
-
-```CODE
-systemctl restart mariadb
-```
-
-> Перезапускает службу базы данных
-
-#### Просмотр логов Apache <!-- NAME -->
-
-```CODE
-journalctl -u httpd2
-```
-
-> -u(фильтр по юниту службы); показывает все записи журнала для Apache
-
-#### Просмотр логов MariaDB <!-- NAME -->
-
-```CODE
-journalctl -u mariadb
-```
-
-> Показывает журнал работы службы базы данных
-
-#### Просмотр логов Apache в реальном времени <!-- NAME -->
-
-```CODE
-journalctl -u httpd2 -f
-```
-
-> -f(follow, следить за новыми записями)
-
-### Устранение типичных проблем <!-- HEAD -->
-
-#### Проблема: Apache не запускается <!-- NAME -->
-
-```CODE
-apachectl configtest
-```
-
-> Проверяет синтаксис конфигурационных файлов Apache на ошибки
-
-#### Проблема: ошибка подключения к БД <!-- NAME -->
-
-```CODE
-mariadb -u webc -p
-```
-
-> Проверка подключения к базе данных вручную для диагностики проблем с логином, паролем или правами пользователя
-
-#### Проверка существования базы данных <!-- NAME -->
-
-```CODE
-mariadb -u root -e "show databases;"
-```
-
-> -e(execute, выполнить SQL-команду); show databases(показать список всех баз данных)
-
-#### Проверка прав пользователя <!-- NAME -->
-
-```CODE
-mariadb -u root -e "show grants for 'webc'@'localhost';"
-```
-
-> show grants(показать привилегии пользователя)
 
 ### logrotate <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -5584,532 +4213,469 @@ lvs -a -o +snap_percent
 
 > Показывает процент использования снапшота
 
-### mdadm_options <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Основные уровни RAID <!-- HEAD -->
-
-#### Сравнение уровней RAID <!-- NAME -->
-
-> RAID 0(striping, высокая скорость, нет отказоустойчивости, минимум 2 диска, объём = сумма дисков); RAID 1(mirroring, отказ 1 диска, минимум 2 диска, объём = размер 1 диска); RAID 5(striping+parity, отказ 1 диска, минимум 3 диска, объём = (N-1)×диск); RAID 6(double parity, отказ 2 диска, минимум 4 диска, объём = (N-2)×диск); RAID 10(mirror+stripe, высокая отказоустойчивость, минимум 4 диска, объём = 50%)
-
-> Программный RAID(реализован на уровне ОС, использует CPU) vs Аппаратный RAID(реализован контроллером, имеет собственный процессор)
-
-### Установка mdadm <!-- HEAD -->
-
-#### Установка утилиты mdadm <!-- NAME -->
-
-```CODE
-apt-get install -y mdadm                                                                 
-```
-
-> mdadm(Multiple Device Administration, утилита для управления программными RAID-массивами в Linux); -y(автоматическое подтверждение установки)
-
-### Создание RAID массивов <!-- HEAD -->
-
-#### Создание RAID 0 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=0 --raid-devices=2 /dev/sdb /dev/sdc           
-```
-
-> --create(создать новый массив); --verbose(подробный вывод); /dev/md0(имя создаваемого RAID-устройства); --level(уровень RAID: {0, 1, 4, 5, 6, 10}); --raid-devices(количество активных дисков в массиве); /dev/sdb /dev/sdc(список физических дисков)
-
-#### Создание RAID 1 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
-
-```
-
-#### Создание RAID 4 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=4 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
-```
-
-> RAID 2(bit-level striping with Hamming code) и RAID 3(byte-level striping) устарели и не поддерживаются mdadm
-
-#### Создание RAID 5 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sdb /dev/sdc /dev/sdd
-
-```
-
-#### Создание RAID 6 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=6 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
-/dev/sde                                                                                    
-
-```
-
-#### Создание RAID 10 массива <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=10 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd
-/dev/sde                                                                                    
-
-```
-
-#### Создание массива с spare диском <!-- NAME -->
-
-```CODE
-mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 --spare-devices=1 /dev/sdb
-/dev/sdc /dev/sdd /dev/sde                                                                  
-```
-
-> --spare-devices(количество резервных дисков); spare(горячий резерв) - диск автоматически заменит отказавший и начнёт процесс rebuild
-
-### Настройка массива <!-- HEAD -->
-
-#### Создание файловой системы на массиве <!-- NAME -->
-
-```CODE
-mkfs.ext4 /dev/md0                                                                       
-```
-
-> mkfs(make filesystem, создание файловой системы); форматы: {ext4, xfs, btrfs}
-
-#### Создание точки монтирования <!-- NAME -->
-
-```CODE
-mkdir /mnt/raid                                                                          
-
-```
-
-#### Монтирование массива <!-- NAME -->
-
-```CODE
-mount /dev/md0 /mnt/raid                                                                 
-
-```
-
-#### Добавление в /etc/fstab для автомонтирования <!-- NAME -->
-
-```CODE
-/dev/md0   /mnt/raid   ext4   defaults   0 0                                             
-```
-
-> /dev/md0(устройство); /mnt/raid(точка монтирования); ext4(тип ФС); defaults(опции по умолчанию: rw,suid,dev,exec,auto,nouser,async); первый 0(dump, не создавать резервные копии); второй 0(fsck, не проверять ФС при загрузке)
-
-### Настройка mdadm.conf <!-- HEAD -->
-
-#### Сохранение конфигурации массива <!-- NAME -->
-
-```CODE
-mdadm --detail --scan >> /etc/mdadm.conf                                                 
-```
-
-> --detail(детальная информация о массиве); --scan(сканировать все массивы); >>(добавить в конец файла); создаёт строку ARRAY с UUID, уровнем и метаданными массива
-
-#### Пример строки ARRAY в mdadm.conf <!-- NAME -->
-
-```CODE
-ARRAY /dev/md0 metadata=1.2 name=hostname:0 UUID=12345678:abcdefgh:12345678:abcdefgh     
-```
-
-> ARRAY(определение массива); /dev/md0(имя устройства); metadata(версия метаданных: {0.90, 1.0, 1.1, 1.2}); name(имя массива hostname:номер); UUID(уникальный идентификатор массива)
-
-#### Добавление параметров устройств в mdadm.conf <!-- NAME -->
-
-```CODE
-DEVICE /dev/sdb /dev/sdc /dev/sdd /dev/sde
-```
-
-> DEVICE(список физических дисков для поиска массивов); можно использовать wildcards: /dev/sd*
-
-#### Настройка email-уведомлений в mdadm.conf <!-- NAME -->
-
-```CODE
-MAILADDR admin@example.com
-MAILFROM mdadm@server.local                                                                 
-```
-
-> MAILADDR(адрес для отправки уведомлений о проблемах с массивом); MAILFROM(адрес отправителя)
-
-#### Настройка программы мониторинга в mdadm.conf <!-- NAME -->
-
-```CODE
-PROGRAM /usr/local/bin/raid-notify.sh
-```
-
-> PROGRAM(скрипт, который будет выполнен при событии с массивом); получает параметры: событие и устройство
-
-#### Ручное редактирование mdadm.conf <!-- NAME -->
-
-```CODE
-nano /etc/mdadm.conf
-```
-
-> Файл можно редактировать вручную для тонкой настройки параметров
-
-#### Применение изменений из mdadm.conf <!-- NAME -->
-
-```CODE
-mdadm --assemble --scan                                                                  
-```
-
-> --assemble(собрать массивы); --scan(использовать конфигурацию из /etc/mdadm.conf)
-
-#### Обновление конфигурации после изменения массива <!-- NAME -->
-
-```CODE
-mdadm --detail --scan > /etc/mdadm.conf.new                                              
-mv /etc/mdadm.conf.new /etc/mdadm.conf                                                      
-```
-
-> Перезапись файла с актуальной конфигурацией всех массивов
-
-#### Резервное копирование mdadm.conf <!-- NAME -->
-
-```CODE
-cp /etc/mdadm.conf /etc/mdadm.conf.backup                                                
-```
-
-> Сохранение копии перед внесением изменений
-
-#### Добавление spare диска в существующий массив <!-- NAME -->
-
-```CODE
-mdadm --add /dev/md0 /dev/sde                                                            
-```
-
-> --add(добавить диск в массив как горячий резерв)
-
-### Управление массивом <!-- HEAD -->
-
-#### Остановка массива <!-- NAME -->
-
-```CODE
-mdadm --stop /dev/md0                                                                    
-```
-
-> --stop(остановить массив); необходимо размонтировать перед остановкой
-
-#### Запуск массива <!-- NAME -->
-
-```CODE
-mdadm --assemble /dev/md0 /dev/sdb /dev/sdc /dev/sdd                                     
-```
-
-> --assemble(собрать массив из указанных дисков)
-
-#### Автоматическая сборка всех массивов из mdadm.conf <!-- NAME -->
-
-```CODE
-mdadm --assemble --scan
-```
-
-> Собирает все массивы, описанные в /etc/mdadm.conf
-
-#### Пометка диска как отказавшего <!-- NAME -->
-
-```CODE
-mdadm --fail /dev/md0 /dev/sdc                                                           
-```
-
-> --fail(пометить диск как failed); для имитации отказа при тестировании
-
-#### Удаление диска из массива <!-- NAME -->
-
-```CODE
-mdadm --remove /dev/md0 /dev/sdc                                                         
-```
-
-> --remove(удалить диск из массива); диск должен быть помечен как failed
-
-#### Добавление нового диска взамен отказавшего <!-- NAME -->
-
-```CODE
-mdadm --add /dev/md0 /dev/sde                                                            
-```
-
-> Автоматически начнётся процесс rebuild (восстановление данных на новом диске)
-
-#### Увеличение количества дисков в массиве <!-- NAME -->
-
-```CODE
-mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sde                                    
-```
-
-> --grow(изменить параметры массива); расширение с пересчётом данных
-
-#### Изменение уровня RAID <!-- NAME -->
-
-```CODE
-mdadm --grow /dev/md0 --level=6                                                          
-```
-
-> Преобразование массива (например RAID 5 в RAID 6), требует времени на пересчёт
-
-### Проверка состояния <!-- HEAD -->
-
-#### Проверка состояния всех RAID массивов <!-- NAME -->
-
-```CODE
-cat /proc/mdstat                                                                         
-```
-
-> Краткая информация: состояние, прогресс rebuild/resync, активные/отказавшие диски
-
-#### Детальная информация о массиве <!-- NAME -->
-
-```CODE
-mdadm --detail /dev/md0                                                                  
-```
-
-> Показывает уровень RAID, состояние дисков, размер, UUID
-
-#### Проверка информации о диске в массиве <!-- NAME -->
-
-```CODE
-mdadm --examine /dev/sdb                                                                 
-```
-
-> --examine(прочитать метаданные RAID на диске); показывает UUID массива, уровень RAID, роль диска
-
-#### Мониторинг состояния массива <!-- NAME -->
-
-```CODE
-mdadm --monitor --scan --daemonise
-```
-
-> --monitor(режим мониторинга); --daemonise(запустить как демон); отправляет уведомления об ошибках
-
-#### Проверка скорости rebuild <!-- NAME -->
-
-```CODE
-cat /proc/sys/dev/raid/speed_limit_min
-cat /proc/sys/dev/raid/speed_limit_max                                                      
-```
-
-> Показывает минимальную и максимальную скорость восстановления в KB/s
-
-#### Изменение скорости rebuild <!-- NAME -->
-
-```CODE
-echo 50000 > /proc/sys/dev/raid/speed_limit_min                                          
-echo 200000 > /proc/sys/dev/raid/speed_limit_max                                            
-```
-
-> Значения в KB/s; низкая скорость снижает нагрузку, высокая ускоряет восстановление
-
-#### Проверка целостности массива <!-- NAME -->
-
-```CODE
-echo check > /sys/block/md0/md/sync_action                                               
-```
-
-> Запуск проверки целостности без исправления ошибок
-
-#### Восстановление с исправлением ошибок <!-- NAME -->
-
-```CODE
-echo repair > /sys/block/md0/md/sync_action                                              
-```
-
-> Проверка и автоматическое исправление несоответствий в данных
-
-#### Просмотр прогресса проверки <!-- NAME -->
-
-```CODE
-cat /proc/mdstat                                                                         
-```
-
-> Показывает прогресс операций check/repair/rebuild в процентах
-
-### Удаление массива <!-- HEAD -->
-
-#### Размонтирование массива <!-- NAME -->
-
-```CODE
-umount /mnt/raid                                                                         
-
-```
-
-#### Остановка массива <!-- NAME -->
-
-```CODE
-mdadm --stop /dev/md0                                                                    
-
-```
-
-#### Удаление метаданных RAID с дисков <!-- NAME -->
-
-```CODE
-mdadm --zero-superblock /dev/sdb /dev/sdc /dev/sdd                                       
-```
-
-> --zero-superblock(обнулить суперблок RAID); полное удаление информации о RAID с дисков
-
-#### Удаление записи из /etc/fstab <!-- NAME -->
-
-```CODE
-sed -i '/\/dev\/md0/d' /etc/fstab                                                        
-```
-
-> sed -i(редактировать файл на месте); /d(удалить строку)
-
-#### Удаление записи из /etc/mdadm.conf <!-- NAME -->
-
-```CODE
-sed -i '/\/dev\/md0/d' /etc/mdadm.conf                                                   
-```
-
-> Удаление конфигурации массива из файла
-
-### moodle <!-- HEAD -->
+### MariaDB_install <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
 
-#### Установка MariaDB <!-- NAME -->
+#### Установка пакета <!-- NAME -->
 
 ```CODE
-apt-get update && apt-get install -y mariadb-server                               
-```
-
-#### Включение службы MariaDB <!-- NAME -->
-
-```CODE
-systemctl enable --now mariadb                                                    
-```
-
-#### Создание базы данных и пользователя <!-- NAME -->
-
-```CODE
-mariadb                                                                           
-CREATE DATABASE moodle;                                                              
-CREATE USER 'moodle'@'localhost' IDENTIFIED BY 'moodle';                             
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON 
-moodle.* TO 'moodle'@'localhost';                                                    
-```
-
-> Создание БД moodle, пользователя moodle с паролем moodle и выдача необходимых прав
-
-#### Установка Apache2 <!-- NAME -->
-
-```CODE
-apt-get install -y apache2 apache2-{base,httpd-prefork,mod_php8.0,mods}           
-```
-
-#### Установка PHP и модулей <!-- NAME -->
-
-```CODE
-apt-get install -y php8.0 php8.0-{curl,fileinfo,fpm-fcgi,gd,intl,ldap,mbstring,mys
-qlnd,mysqlnd-mysqli,opcache,soap,sodium,xmlreader,xmlrpc,zip,openssl}                
-```
-
-#### Запуск веб-сервера <!-- NAME -->
-
-```CODE
-systemctl enable --now httpd2                                                     
-```
-
-#### Установка git <!-- NAME -->
-
-```CODE
-apt-get install -y git                                                            
-```
-
-#### Загрузка Moodle <!-- NAME -->
-
-```CODE
-git clone git://git.moodle.org/moodle.git                                         
-cd moodle                                                                            
-```
-
-#### Просмотр доступных веток <!-- NAME -->
-
-```CODE
-git branch -a                                                                     
-```
-
-#### Выбор версии Moodle <!-- NAME -->
-
-```CODE
-git branch --track MOODLE_403_STABLE origin/MOODLE_403_STABLE                     
-git checkout MOODLE_403_STABLE                                                       
-```
-
-> Переключение на стабильную ветку 4.03
-
-#### Копирование в веб-каталог <!-- NAME -->
-
-```CODE
-cd ../                                                                            
-cp -R moodle /var/www/html/                                                          
-```
-
-#### Создание каталога данных <!-- NAME -->
-
-```CODE
-mkdir /var/moodledata                                                             
-chown -R apache2 /var/moodledata                                                     
-chmod -R 777 /var/moodledata                                                         
-chmod -R 0755 /var/www/html/moodle                                                   
-chown -R apache2:apache2 /var/www/html/moodle                                        
+apt-get install -y mariadb-server                                                        
 
 ```
 
-### Настройка <!-- HEAD -->
-
-#### Содержимое файла /etc/httpd2/conf/sites-available/moodle.conf <!-- NAME -->
+#### Включение и запуск службы <!-- NAME -->
 
 ```CODE
-<VirtualHost *:80>                                                                
-ServerName moodle.champ.first                                                    
-DocumentRoot /var/www/html/moodle                                                
-<Directory "/var/www/html/moodle">                                               
-AllowOverride All                                                            
-Options -Indexes +FollowSymLinks                                             
-</Directory>                                                                     
-</VirtualHost>                                                                       
+systemctl enable --now mariadb
+
 ```
 
-> ServerName (доменное имя); DocumentRoot (путь к Moodle)
+### Настройка MariaDB <!-- HEAD -->
 
-#### Активация конфигурации <!-- NAME -->
+#### Установка пароля root <!-- NAME -->
 
 ```CODE
-ln -s /etc/httpd2/conf/sites-available/moodle.conf /etc/httpd2/conf/sites-enabled/
+mariadb -u root
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+EXIT;
+
 ```
 
-#### Настройка PHP <!-- NAME -->
+#### Разрешение доступа из сети в /etc/my.cnf.d/server.cnf <!-- NAME -->
 
 ```CODE
-sed -i "s/; max_input_vars = 1000/max_input_vars = 5000/g"                        
-/etc/php/8.0/apache2-mod_php/php.ini                                                 
+sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
+
 ```
 
-> Увеличение max_input_vars до 5000
+#### Перезапуск службы <!-- NAME -->
+
+```CODE
+systemctl restart mariadb                                                                
+
+```
+
+#### Разрешение доступа для root по сети <!-- NAME -->
+
+```CODE
+mariadb -u root -p                                                                       
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
+UPDATE mysql.user SET host='%' WHERE user='root';                                           
+FLUSH PRIVILEGES;                                                                           
+EXIT;                                                                                       
+```
+
+> host='%' разрешает подключение с любого узла
+
+#### Перезапуск службы <!-- NAME -->
+
+```CODE
+systemctl restart mariadb                                                                
+
+```
+
+### Проверка MariaDB <!-- HEAD -->
+
+#### Проверка пользователей на сервере <!-- NAME -->
+
+```CODE
+mariadb -u root -p                                                                       
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;                                                                                       
+
+```
+
+#### Удаленное подключение с клиента <!-- NAME -->
+
+```CODE
+mariadb -h IP_СЕРВЕРА -u root -p
+
+```
+
+### Создание БД и пользователей <!-- HEAD -->
+
+#### Создание базы данных <!-- NAME -->
+
+```CODE
+mariadb -u root -p                                                                       
+CREATE DATABASE db01;                                                                       
+```
+
+> db01 - имя создаваемой БД
+
+#### Создание пользователя <!-- NAME -->
+
+```CODE
+CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
+```
+
+> '%' означает подключение с любого хоста
+
+#### Предоставление прав пользователю <!-- NAME -->
+
+```CODE
+GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
+FLUSH PRIVILEGES;                                                                           
+
+```
+
+#### Проверка существования БД и пользователей <!-- NAME -->
+
+```CODE
+SHOW DATABASES;                                                                          
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;
+```
+
+### Moodle <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка LAMP-сервера <!-- HEAD -->
+
+#### Что такое LAMP <!-- NAME -->
+
+```CODE
+LAMP = Linux + Apache + MariaDB + PHP
+```
+
+> Linux(операционная система); Apache(веб-сервер); MariaDB(система управления базами данных); PHP(язык серверной веб-разработки)
+
+#### Установка готового набора пакетов <!-- NAME -->
+
+```CODE
+apt-get install lamp-server
+```
+
+> Устанавливает все компоненты LAMP одной командой
+
+### Подготовка файлов сайта <!-- HEAD -->
+
+#### Копирование файлов в директорию Apache <!-- NAME -->
+
+```CODE
+cp /mnt/web/index.php /var/www/html/
+cp /mnt/web/logo.png /var/www/html/
+```
+
+> /var/www/html/(стандартная директория для файлов веб-сервера Apache)
+
+### Настройка PHP-приложения <!-- HEAD -->
+
+#### Редактирование файла index.php <!-- NAME -->
+
+```CODE
+nano /var/www/html/index.php
+
+```
+
+#### Параметры подключения к базе данных <!-- NAME -->
+
+```CODE
+$servername = "localhost";
+$username = "webc";
+$password = "P@ssw0rd";
+$dbname = "webdb";
+```
+
+> $servername(адрес сервера базы данных); $username(пользователь MariaDB); $password(пароль пользователя); $dbname(имя базы данных)
+
+### Настройка MariaDB <!-- HEAD -->
+
+#### Запуск и добавление в автозагрузку <!-- NAME -->
+
+```CODE
+systemctl enable --now mariadb
+```
+
+> enable(добавить в автозагрузку); --now(запустить немедленно)
+
+#### Подключение к MariaDB <!-- NAME -->
+
+```CODE
+mariadb -u root
+```
+
+> -u(user, указание пользователя для подключения); root(административный пользователь по умолчанию)
+
+#### Создание базы данных <!-- NAME -->
+
+```CODE
+create database webdb;
+```
+
+> create database(создание новой базы данных); webdb(имя базы данных)
+
+#### Создание пользователя <!-- NAME -->
+
+```CODE
+create user 'webc'@'localhost' identified by 'P@ssw0rd';
+```
+
+> create user(создание нового пользователя); 'webc'@'localhost'(имя пользователя и хост, с которого разрешено подключение); identified by(установка пароля)
+
+#### Выдача прав пользователю <!-- NAME -->
+
+```CODE
+grant all privileges on webdb.* to 'webc'@'localhost' with grant option;
+```
+
+> grant all privileges(выдать все права); webdb.*(база данных и все её таблицы); with grant option(право передавать свои привилегии другим пользователям)
+
+#### Выход из MariaDB <!-- NAME -->
+
+```CODE
+exit;
+```
+
+> Завершает сеанс работы с MariaDB
+
+### Импорт базы данных <!-- HEAD -->
+
+#### Загрузка дамп-файла в базу данных <!-- NAME -->
+
+```CODE
+mariadb -u webc -p -D webdb < /mnt/web/dump.sql
+```
+
+> -u(указание пользователя); -p(запрос пароля); -D(указание базы данных для импорта); <(перенаправление содержимого файла в команду)
+
+### Запуск Apache <!-- HEAD -->
+
+#### Включение автозапуска и запуск веб-сервера <!-- NAME -->
+
+```CODE
+systemctl enable --now httpd2.service
+```
+
+> httpd2.service(имя службы веб-сервера Apache в ALT Linux)
+
+### Проверка работы <!-- HEAD -->
+
+#### Проверка статуса MariaDB <!-- NAME -->
+
+```CODE
+systemctl status mariadb
+```
+
+> Показывает состояние службы и последние записи логов
+
+#### Проверка статуса Apache <!-- NAME -->
+
+```CODE
+systemctl status httpd2
+```
+
+> Показывает состояние веб-сервера
+
+#### Проверка открытых портов <!-- NAME -->
+
+```CODE
+ss -tulpn | grep -E '80|443'
+```
+
+> ss(socket statistics, утилита для просмотра сетевых соединений); -t(показать TCP-сокеты); -u(показать UDP-сокеты); -l(показать слушающие сокеты); -p(показать процессы); -n(не разрешать имена портов и адресов); grep -E '80|443'(фильтр по портам HTTP и HTTPS)
+
+#### Проверка сайта в браузере <!-- NAME -->
+
+```CODE
+http://<IP_СЕРВЕРА>
+```
+
+> Открыть в браузере для проверки работы веб-приложения
+
+### Управление службами <!-- HEAD -->
 
 #### Перезапуск Apache <!-- NAME -->
 
 ```CODE
-systemctl restart httpd2                                                          
+systemctl restart httpd2
+```
+
+> Применяет изменения конфигурации без перезагрузки системы
+
+#### Перезапуск MariaDB <!-- NAME -->
+
+```CODE
+systemctl restart mariadb
+```
+
+> Перезапускает службу базы данных
+
+#### Просмотр логов Apache <!-- NAME -->
+
+```CODE
+journalctl -u httpd2
+```
+
+> -u(фильтр по юниту службы); показывает все записи журнала для Apache
+
+#### Просмотр логов MariaDB <!-- NAME -->
+
+```CODE
+journalctl -u mariadb
+```
+
+> Показывает журнал работы службы базы данных
+
+#### Просмотр логов Apache в реальном времени <!-- NAME -->
+
+```CODE
+journalctl -u httpd2 -f
+```
+
+> -f(follow, следить за новыми записями)
+
+### Устранение типичных проблем <!-- HEAD -->
+
+#### Проблема: Apache не запускается <!-- NAME -->
+
+```CODE
+apachectl configtest
+```
+
+> Проверяет синтаксис конфигурационных файлов Apache на ошибки
+
+#### Проблема: ошибка подключения к БД <!-- NAME -->
+
+```CODE
+mariadb -u webc -p
+```
+
+> Проверка подключения к базе данных вручную для диагностики проблем с логином, паролем или правами пользователя
+
+#### Проверка существования базы данных <!-- NAME -->
+
+```CODE
+mariadb -u root -e "show databases;"
+```
+
+> -e(execute, выполнить SQL-команду); show databases(показать список всех баз данных)
+
+#### Проверка прав пользователя <!-- NAME -->
+
+```CODE
+mariadb -u root -e "show grants for 'webc'@'localhost';"
+```
+
+> show grants(показать привилегии пользователя)
+
+### MySQL_install <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+#### Установка пакета <!-- NAME -->
+
+```CODE
+apt-get install -y MySQL-server                                                          
 
 ```
 
-### Веб-установщик <!-- HEAD -->
+#### Включение и запуск службы <!-- NAME -->
 
-#### Параметры установки <!-- LIST -->
-- Язык: Русский
-- Каталог данных: /var/moodledata
-- Тип БД: MariaDB (родной/mariadb)
-- Сервер БД: localhost
-- Название БД: moodle
-- Пользователь БД: moodle
-- Пароль БД: moodle
-- Префикс таблиц: mdl_
-- Порт БД: 3306
-- Логин администратора: admin
-- Пароль, имя, фамилия: указать свои
-- Электронная почта: любая
-- Страна: выбрать
-- Самостоятельная регистрация: Отключить
+```CODE
+systemctl enable --now mysqld
+
+```
+
+### Настройка MySQL <!-- HEAD -->
+
+#### Установка пароля root <!-- NAME -->
+
+```CODE
+mysql -u root
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+EXIT;
+
+```
+
+#### Разрешение доступа из сети в /etc/my.cnf.d/server.cnf <!-- NAME -->
+
+```CODE
+sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
+
+```
+
+#### Перезапуск службы <!-- NAME -->
+
+```CODE
+systemctl restart mysqld                                                                 
+
+```
+
+#### Разрешение доступа для root по сети <!-- NAME -->
+
+```CODE
+mysql -u root -p                                                                         
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
+UPDATE mysql.user SET host='%' WHERE user='root';                                           
+FLUSH PRIVILEGES;                                                                           
+EXIT;                                                                                       
+```
+
+> host='%' разрешает подключение с любого узла
+
+#### Перезапуск службы <!-- NAME -->
+
+```CODE
+systemctl restart mysqld                                                                 
+
+```
+
+### Проверка MySQL <!-- HEAD -->
+
+#### Проверка пользователей на сервере <!-- NAME -->
+
+```CODE
+mysql -u root -p                                                                         
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;                                                                                       
+
+```
+
+#### Удаленное подключение с клиента <!-- NAME -->
+
+```CODE
+mysql -h IP_СЕРВЕРА -u root -p                                                           
+
+```
+
+### Создание БД и пользователей <!-- HEAD -->
+
+#### Создание базы данных <!-- NAME -->
+
+```CODE
+mysql -u root -p                                                                         
+CREATE DATABASE db01;                                                                       
+```
+
+> db01 - имя создаваемой БД
+
+#### Создание пользователя <!-- NAME -->
+
+```CODE
+CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
+```
+
+> '%' означает подключение с любого хоста
+
+#### Предоставление прав пользователю <!-- NAME -->
+
+```CODE
+GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
+FLUSH PRIVILEGES;                                                                           
+
+```
+
+#### Проверка существования БД и пользователей <!-- NAME -->
+
+```CODE
+SHOW DATABASES;                                                                          
+SELECT user, HOST FROM mysql.user;                                                          
+EXIT;
+```
 
 ### NextCloud <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -6232,6 +4798,284 @@ systemctl restart httpd2
 - Пароль БД: P@ssw0rd
 - Название БД: nextcloud
 - Сервер БД: localhost
+
+### NextCloud_Ansible <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка Ansible <!-- HEAD -->
+
+#### Обновление и установка пакетов <!-- NAME -->
+
+```CODE
+apt-get update && apt-get install -y ansible sshpass                                             
+                                                                                                      
+ 
+```
+
+### Создание структуры проекта <!-- HEAD -->
+
+#### Создание директории проекта <!-- NAME -->
+
+```CODE
+mkdir ansible                                                                                    
+  cd ansible      
+                                                                                                      
+ 
+```
+
+#### Создание инвентарного файла inventory <!-- NAME -->
+
+```CODE
+vim inventory                                                                                    
+                                                                                                      
+ 
+```
+
+#### Содержимое inventory <!-- NAME -->
+
+```CODE
+all:                                                                                             
+    hosts:                                                                                            
+      localhost:                                                                                      
+ 
+```
+
+> формат YAML; хост localhost
+
+#### Создание директории для переменных <!-- NAME -->
+
+```CODE
+mkdir host_vars                                                                                  
+                                                                                                      
+ 
+```
+
+#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
+
+```CODE
+vim host_vars/localhost.yml                                                                      
+                                                                                                      
+ 
+```
+
+#### Содержимое host_vars/localhost.yml <!-- NAME -->
+
+```CODE
+ansible_ssh_user: root                                                                           
+  ansible_ssh_pass: toor                                                                              
+  ansible_python_interpreter: /usr/bin/python3                                                        
+ 
+```
+
+> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
+
+### Проверка работоспособности <!-- HEAD -->
+
+#### Проверка подключения к localhost <!-- NAME -->
+
+```CODE
+ansible -i inventory -m ping all                                                                 
+ 
+```
+
+> -i(инвентарный файл); -m(модуль); all(все хосты)
+
+### Создание playbook для Nextcloud <!-- HEAD -->
+
+#### Создание файла playbook.yml <!-- NAME -->
+
+```CODE
+vim playbook.yml                                                                                 
+                                                                                                      
+ 
+```
+
+#### Содержимое playbook.yml <!-- NAME -->
+
+```CODE
+---                                                                                              
+  - name: Install Nextcloud on ALT Server 10.1 (10.2)                                                 
+    hosts: localhost                                                                                  
+    become: true
+                                                                                                      
+    vars:                                                                                             
+      mariadb_database: nextcloud                                                                     
+      mariadb_username: nextcloud                                                                     
+      mariadb_password: nextcloud                                                                     
+      url_download_nextcloud: https://download.nextcloud.com/server/releases/latest.zip               
+      dir_download_nextcloud: /tmp                                                                    
+      path_project_nextcloud: /var/www/html/                                                          
+      virtualhost_servername: nextcloud.test.local                                                    
+                                                                                                      
+    tasks:                                                                                            
+      - name: Install database MariaDB                                                                
+        apt_rpm:                                                                                      
+          name:
+            - mariadb-server                                                                          
+            - python3-module-mysqlclient                                                              
+          state: present                                                                              
+          update_cache: true                                                                          
+                                                                                                      
+      - name: Started and enabled mariadb-server                                                      
+        systemd:                                                                                      
+          name: mariadb                                                                               
+          state: started                                                                              
+          enabled: true                                                                               
+                                                                                                      
+      - name: "Creating a database {{ mariadb_database }} for Nextcloud"                              
+        mysql_db:                                                                                     
+          name: "{{ mariadb_database }}"                                                              
+          encoding: utf8                                                                              
+          collation: utf8_unicode_ci                                                                  
+          state: present                                                                              
+                  
+      - name: "Creating a database user {{ mariadb_username }} for Nextcloud"                         
+        mysql_user:
+          name: "{{ mariadb_username }}"                                                              
+          password: "{{ mariadb_password }}"                                                          
+          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                  
+          host: localhost                                                                             
+          state: present                                                                              
+                                                                                                      
+      - name: Install web-server Apache2 and modules                                                  
+        apt_rpm:                                                                                      
+          name:                                                                                       
+            - apache2                                                                                 
+            - apache2-mod_ssl                                                                         
+            - apache2-mod_php8.2                                                                      
+            - tzdata                                                                                  
+          state: present                                                                              
+                                                                                                      
+      - name: Install PHP8.2 and php modules                                                          
+        apt_rpm:  
+          name:                                                                                       
+            - php8.2
+            - php8.2-pdo_mysql                                                                        
+            - php8.2-curl                                                                             
+            - php8.2-dom                                                                              
+            - php8.2-ldap                                                                             
+            - php8.2-exif                                                                             
+            - php8.2-fileinfo                                                                         
+            - php8.2-gd2                                                                              
+            - php8.2-gmp                                                                              
+            - php8.2-imagick                                                                          
+            - php8.2-intl                                                                             
+            - php8.2-libs                                                                             
+            - php8.2-mbstring                                                                         
+            - php8.2-memcached                                                                        
+            - php8.2-opcache                                                                          
+            - php8.2-openssl                                                                          
+            - php8.2-pcntl                                                                            
+            - php8.2-pdo                                                                              
+            - php8.2-xmlreader                                                                        
+            - php8.2-zip                                                                              
+                                                                                                      
+      - name: Enable the Apache2 module                                                               
+        apache2_module:                                                                               
+          name: "{{ item }}"                                                                          
+          state: present                                                                              
+        with_items:                                                                                   
+          - dir                                                                                       
+          - env                                                                                       
+          - headers                                                                                   
+          - mime                                                                                      
+          - rewrite
+                                                                                                      
+      - name: Started and enabled Apache2                                                             
+        systemd:                                                                                      
+          name: httpd2                                                                                
+          state: started
+          enabled: true                                                                               
+                                                                                                      
+      - name: Download Nextcloud project                                                              
+        get_url:                                                                                      
+          url: "{{ url_download_nextcloud }}"                                                         
+          dest: "{{ dir_download_nextcloud }}"                                                        
+                                                                                                      
+      - name: Unarchive a file project Nextcloud                                                      
+        unarchive:                                                                                    
+          src: "{{ dir_download_nextcloud }}/latest.zip"                                              
+          dest: "{{ path_project_nextcloud }}"                                                        
+                                                                                                      
+      - name: Create directory "data" for Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/data"                                         
+          state: directory                                                                            
+                                                                                                      
+      - name: Assigning rights to project Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/"                                             
+          recurse: yes                                                                                
+          owner: root                                                                                 
+                                                                                                      
+      - name: Assigning rights to project Nextcloud                                                   
+        file:                                                                                         
+          path: "{{ path_project_nextcloud }}/nextcloud/{{ item }}"                                   
+          recurse: yes                                                                                
+          owner: apache2
+        with_items:                                                                                   
+          - apps                                                                                      
+          - config                                                                                    
+          - data                                                                                      
+                  
+      - name: Setting up a web server to work with Nextcloud                                          
+        copy:     
+          dest: /etc/httpd2/conf/sites-available/nextcloud.conf                                       
+          content: |                                                                                  
+            <VirtualHost *:80>                                                                        
+              DocumentRoot {{ path_project_nextcloud }}/nextcloud/                                    
+              ServerName {{ virtualhost_servername }}                                                 
+                                                                                                      
+              <Directory {{ path_project_nextcloud }}/nextcloud/>                                     
+                Require all granted                                                                   
+                AllowOverride All                                                                     
+                Options FollowSymLinks MultiViews                                                     
+                                                                                                      
+                <IfModule mod_dav.c>                                                                  
+                  Dav off
+                </IfModule>                                                                           
+              </Directory>                                                                            
+            </VirtualHost>                                                                            
+                                                                                                      
+      - name: Adding a symbolic link                                                                  
+        command:                                                                                      
+          cmd: ln -s /etc/httpd2/conf/sites-available/nextcloud.conf /etc/httpd2/conf/sites-enabled/  
+                                                                                                      
+      - name: Restarted Apache2                                                                       
+        systemd:                                                                                      
+          name: httpd2                                                                                
+          state: restarted
+ 
+```
+
+> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
+
+### Установка коллекций Ansible <!-- HEAD -->
+
+#### Установка community.general <!-- NAME -->
+
+```CODE
+ansible-galaxy collection install community.general                                              
+                                                                                                      
+ 
+```
+
+#### Установка community.mysql <!-- NAME -->
+
+```CODE
+ansible-galaxy collection install community.mysql                                                
+ 
+```
+
+> ansible-galaxy(менеджер коллекций)
+
+### Запуск playbook <!-- HEAD -->
+
+#### Выполнение playbook-сценария <!-- NAME -->
+
+```CODE
+ansible-playbook -i inventory playbook.yml
+```
 
 ### NFS <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -6490,7 +5334,7 @@ nft add rule ip nat PREROUTING iifname "ens33" tcp dport 80 dnat to 192.168.1.20
 nft add rule ip filter FORWARD ip daddr 192.168.1.20 tcp dport 80 accept
 ```
 
-### nginx_reverse_proxy <!-- HEAD -->
+### Nginx_reverse_proxy <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка <!-- HEAD -->
@@ -6693,7 +5537,7 @@ curl -I http://10.0.0.10:8080
 journalctl -u nginx --no-pager
 ```
 
-### nginx_server_balance <!-- HEAD -->
+### Nginx_server_balance <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Балансировка нагрузки <!-- HEAD -->
@@ -6815,7 +5659,7 @@ upstream backend_site1 {
 
 > least_conn с весами и проверкой доступности; proxy_http_version 1.1 и Connection "" для keepalive
 
-### nginx_Web-based_authentication <!-- HEAD -->
+### Nginx_Web-based_authentication <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка базовой HTTP-аутентификации <!-- HEAD -->
@@ -6875,93 +5719,6 @@ nginx -t
 
 ```CODE
 systemctl reload nginx
-```
-
-### open-vm-tools <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка VMware Tools <!-- HEAD -->
-
-#### Установка пакетов open-vm-tools <!-- NAME -->
-
-```CODE
-apt-get install open-vm-tools open-vm-tools-desktop xrandr
-```
-
-> open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция мыши, графика); xrandr(утилита для управления разрешением экрана)
-
-#### Включение службы в автозагрузку <!-- NAME -->
-
-```CODE
-systemctl enable vmtoolsd
-
-```
-
-#### Запуск службы <!-- NAME -->
-
-```CODE
-systemctl start vmtoolsd                                                     
-
-```
-
-### Проверка <!-- HEAD -->
-
-#### Проверка статуса службы <!-- NAME -->
-
-```CODE
-systemctl status vmtoolsd
-
-```
-
-#### Проверка версии VMware Tools <!-- NAME -->
-
-```CODE
-vmware-toolbox-cmd -v                                                        
-
-```
-
-#### Проверка работы буфера обмена <!-- NAME -->
-
-```CODE
-vmware-toolbox-cmd stat clipboard                                            
-
-```
-
-#### Проверка синхронизации времени <!-- NAME -->
-
-```CODE
-vmware-toolbox-cmd timesync status                                           
-
-```
-
-### Настройка <!-- HEAD -->
-
-#### Включение синхронизации времени с хостом <!-- NAME -->
-
-```CODE
-vmware-toolbox-cmd timesync enable
-
-```
-
-#### Отключение синхронизации времени с хостом <!-- NAME -->
-
-```CODE
-vmware-toolbox-cmd timesync disable                                          
-
-```
-
-#### Ручная настройка разрешения экрана <!-- NAME -->
-
-```CODE
-xrandr --output Virtual1 --mode 1920x1080                                    
-```
-
-> Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение экрана)
-
-#### Просмотр доступных разрешений <!-- NAME -->
-
-```CODE
-xrandr
 ```
 
 ### OpenSSL_certificate_center <!-- HEAD -->
@@ -7115,6 +5872,301 @@ openssl verify cacert.crt
 
 > Должен вывести: cacert.crt: OK
 
+### OpenSSL_certificate_install_RedHat-like <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Передача сертификатов на удаленный сервер <!-- HEAD -->
+
+#### Передача через rsync <!-- NAME -->
+
+```CODE
+rsync -avz ./ca.crt ./router.crt ./router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/    
+```
+
+> -a(архивный режим); -v(подробный вывод); -z(сжатие при передаче)
+
+#### Передача через scp <!-- NAME -->
+
+```CODE
+scp -P 2222 ca.crt router.crt router.key USERNAME@IP_RTR:/etc/nginx/ssl/WEB.com/         
+```
+
+> -P(указание порта SSH)
+
+#### Передача через sftp <!-- NAME -->
+
+```CODE
+sftp USERNAME@IP_RTR                                                                     
+put ca.crt /etc/nginx/ssl/WEB.com/                                                          
+put router.crt /etc/nginx/ssl/WEB.com/                                                      
+put router.key /etc/nginx/ssl/WEB.com/                                                      
+exit                                                                                        
+```
+
+> Интерактивная передача файлов
+
+### Установка сертификатов в систему <!-- HEAD -->
+
+#### Переход в каталог <!-- NAME -->
+
+```CODE
+cd /etc/nginx/ssl/WEB.com/                                                               
+
+```
+
+#### Копирование в доверенные сертификаты <!-- NAME -->
+
+```CODE
+cp ./* /etc/pki/ca-trust/source/anchors/                                                 
+
+```
+
+#### Обновление доверенных сертификатов <!-- NAME -->
+
+```CODE
+update-ca-trust
+```
+
+### OpenSSL_GOST <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Настройка HTTPS с ГОСТ-сертификатами <!-- HEAD -->
+
+> Создание собственного удостоверяющего центра (УЦ), выпуск ГОСТ-сертификатов для веб-ресурсов, настройка доверия
+
+### Установка поддержки ГОСТ <!-- HEAD -->
+
+#### Установка пакета <!-- NAME -->
+
+```CODE
+apt-get install -y openssl-gost-engine                                                   
+
+```
+
+#### Включение поддержки ГОСТ <!-- NAME -->
+
+```CODE
+control openssl-gost enabled                                                             
+
+```
+
+#### Подключение GOST к OpenSSL в /etc/openssl/openssl.cnf <!-- NAME -->
+
+```CODE
+openssl_conf = openssl_def                                                               
+
+[openssl_def]                                                                               
+engines = engine_section                                                                    
+
+[engine_section]                                                                            
+gost = gost_section                                                                         
+
+[gost_section]  
+engine_id = gost                                                                            
+dynamic_path = /usr/lib64/openssl/engines-1.1/gost.so                                       
+default_algorithms = ALL                                                                    
+```
+
+> Необходимо для создания ключей по алгоритмам ГОСТ, выпуска сертификатов с ГОСТ-подписью, корректной работы Nginx с ГОСТ-криптографией
+
+### Создание корневого сертификата УЦ <!-- HEAD -->
+
+#### Создание закрытого ключа УЦ <!-- NAME -->
+
+```CODE
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out ca.key                  
+
+```
+
+#### Создание самоподписанного сертификата УЦ <!-- NAME -->
+
+```CODE
+openssl req -x509 -new -key ca.key -days 365 -out ca.cer -engine gost -md_gost12_256     
+```
+
+> В Common Name указать IP сервера или имя корневого сервера; ca.key(закрытый ключ УЦ); ca.cer(корневой сертификат УЦ)
+
+### Создание сертификатов для доменов <!-- HEAD -->
+
+#### Создание закрытого ключа для домена <!-- NAME -->
+
+```CODE
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out web.some.domain.key     
+openssl genpkey -algorithm gost2012_256 -pkeyopt paramset:A -out docker.some.domain.key     
+
+```
+
+#### Создание запроса на подпись (CSR) <!-- NAME -->
+
+```CODE
+openssl req -new -key web.some.domain.key -out web.some.domain.csr -engine gost          
+-md_gost12_256                                                                              
+openssl req -new -key docker.some.domain.key -out docker.some.domain.csr -engine gost
+-md_gost12_256                                                                              
+```
+
+> В Common Name указать IP или домен(ы), например *.some.domain
+
+#### Подпись сертификатов УЦ <!-- NAME -->
+
+```CODE
+openssl x509 -req -in web.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out  
+web.some.domain.cer -days 365 -engine gost -md_gost12_256                                   
+openssl x509 -req -in docker.some.domain.csr -CA ca.cer -CAkey ca.key -CAcreateserial -out
+docker.some.domain.cer -days 365 -engine gost -md_gost12_256                                
+
+```
+
+#### Проверка сертификата <!-- NAME -->
+
+```CODE
+openssl x509 -in web.some.domain.cer -text -noout
+
+```
+
+### Установка сертификатов в систему <!-- HEAD -->
+
+#### Копирование сертификатов в доверенные <!-- NAME -->
+
+```CODE
+cp ca.cer /etc/pki/ca-trust/source/anchors/                                              
+cp web.some.domain.cer /etc/pki/ca-trust/source/anchors/                                    
+cp docker.some.domain.cer /etc/pki/ca-trust/source/anchors/                                 
+
+```
+
+#### Обновление доверенных сертификатов <!-- NAME -->
+
+```CODE
+update-ca-trust
+```
+
+### OSPF_frr_quagga <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка FRR <!-- HEAD -->
+
+#### Установка пакета <!-- NAME -->
+
+```CODE
+apt-get install frr                                                                      
+   
+ 
+```
+
+#### Включение OSPF в /etc/frr/daemons <!-- NAME -->
+
+```CODE
+ospfd=yes    
+
+ 
+```
+
+#### Добавление в автозагрузку и запуск <!-- NAME -->
+
+```CODE
+systemctl enable --now frr
+ 
+```
+
+> FRR (Free Range Routing) - пакет протоколов маршрутизации; необходимо включить только нужные протоколы маршрутизации
+
+### Установка Quagga (старая версия для ALT Linux) <!-- HEAD -->
+
+#### Установка пакета <!-- NAME -->
+
+```CODE
+apt-get install quagga                                                                   
+                                                                                              
+ 
+```
+
+#### Назначение прав <!-- NAME -->
+
+```CODE
+chown -R quagga:quagga /etc/quagga                                                       
+                                                                                              
+ 
+```
+
+#### Включение и запуск служб <!-- NAME -->
+
+```CODE
+systemctl enable zebra ospfd                                                             
+  systemctl start zebra ospfd                                                                 
+ 
+```
+
+> Важно включать и запускать службы отдельно
+
+### Настройка OSPF <!-- HEAD -->
+
+> Перед настройкой OSPF маршрутизаторы должны иметь IP-связность через GRE-туннели, VLAN, выделенные каналы или VPN
+
+#### Полная конфигурация OSPF в vtysh <!-- NAME -->
+
+```CODE
+vtysh
+  conf t       
+  ip forwarding                                                                               
+  router ospf     
+      ospf router-id 1.1.1.1                                                                  
+      network 10.10.10.0/30 area 0                                                            
+      network 192.168.11.0/26 area 0                                                          
+      network 192.168.11.65/28 area 0                                                         
+      network 192.168.11.81/29 area 0                                                         
+      passive-interface default                                                               
+      area 0 authentication message-digest                                                    
+  int tun                                                                                     
+      no ip ospf passive                                                                      
+      ip ospf message-digest-key 1 md5 P@ssw0rd                                               
+      ip ospf network point-to-point                                                          
+  do wr mem                                                                                   
+ 
+```
+
+> router ospf(включение процесса OSPF); ospf router-id(уникальный идентификатор маршрутизатора); network(сети участвующие в OSPF); area 0(backbone area, центральная область OSPF); passive-interface default(все интерфейсы пассивны по умолчанию); no ip ospf passive(отключить пассивный режим); area 0 authentication message-digest(MD5-аутентификация для area); ip ospf message-digest-key(номер ключа, тип хеширования, пароль); ip ospf network(тип сети OSPF); do wr mem(сохранение конфигурации); пароли на обеих сторонах должны совпадать
+
+### Типы сетей OSPF <!-- HEAD -->
+
+> point-to-point(для 2 узлов, экономит трафик, multicast 224.0.0.5)
+
+> broadcast(для >2 узлов, поддерживает DR/BDR, multicast 224.0.0.5 и 224.0.0.6)
+
+### Проверка OSPF <!-- HEAD -->
+
+#### Проверка соседей <!-- NAME -->
+
+```CODE
+show ip ospf neighbor                                                                    
+ 
+```
+
+> Показывает соседние маршрутизаторы, состояние соседства, Router ID
+
+#### Проверка маршрутов <!-- NAME -->
+
+```CODE
+ip route show                                                                            
+ 
+```
+
+> Маршруты OSPF помечаются буквой O
+
+#### Просмотр интерфейсов OSPF <!-- NAME -->
+
+```CODE
+show ip ospf interface                                                                   
+                                                                                              
+ 
+```
+
+#### Просмотр конфигурации <!-- NAME -->
+
+```CODE
+show running-config
+```
+
 ### OTRS <!-- HEAD -->
 [Содержание](#Содержание-)
 
@@ -7214,6 +6266,224 @@ rm /var/www/webapps/otrs/var/cron/otrs_daemin dist
 > Доступ администратора: http://IP_адрес_сервера/otrs/index.pl
 
 > Доступ пользователей: http://IP_адрес_сервера/otrs/customer.pl
+
+### OTRS_Ansible <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка Ansible <!-- HEAD -->
+
+#### Обновление и установка пакетов <!-- NAME -->
+
+```CODE
+apt-get update && apt-get install -y ansible sshpass                                                  
+   
+ 
+```
+
+### Создание структуры проекта <!-- HEAD -->
+
+#### Создание директории проекта <!-- NAME -->
+
+```CODE
+mkdir ansible                                                                                         
+  cd ansible                                                                                               
+  
+ 
+```
+
+#### Создание инвентарного файла inventory <!-- NAME -->
+
+```CODE
+vim inventory
+                                                                                                           
+ 
+```
+
+#### Содержимое inventory <!-- NAME -->
+
+```CODE
+all:
+    hosts:                                                                                                 
+      localhost:  
+ 
+```
+
+> формат YAML; хост localhost
+
+#### Создание директории для переменных <!-- NAME -->
+
+```CODE
+mkdir host_vars                                                                                       
+                                                                                                           
+ 
+```
+
+#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
+
+```CODE
+vim host_vars/localhost.yml                                                                           
+                                                                                                           
+ 
+```
+
+#### Содержимое host_vars/localhost.yml <!-- NAME -->
+
+```CODE
+ansible_ssh_user: root                                                                                
+  ansible_ssh_pass: toor                                                                                   
+  ansible_python_interpreter: /usr/bin/python3                                                             
+ 
+```
+
+> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
+
+### Проверка работоспособности <!-- HEAD -->
+
+#### Проверка подключения к localhost <!-- NAME -->
+
+```CODE
+ansible -i inventory -m ping all                                                                      
+ 
+```
+
+> -i(инвентарный файл); -m(модуль); all(все хосты)
+
+### Создание playbook для OTRS <!-- HEAD -->
+
+#### Создание файла playbook.yml <!-- NAME -->
+
+```CODE
+vim playbook.yml                                                                                      
+                                                                                                           
+ 
+```
+
+#### Содержимое playbook.yml <!-- NAME -->
+
+```CODE
+---                                                                                                   
+  - name: Deploy Help Desk system 'OTRS' on Alt Server 10.1                                                
+    hosts: localhost                                                                                       
+    become: true                                                                                           
+                                                                                                           
+    vars:                                                                                                  
+      version_postgresql: '15'                                                                             
+      postgresql_init_path: /etc/init.d/postgresql                                                         
+      postgresql_data_dir: /var/lib/pgsql/data                                                             
+      db_name: 'otrs'                                                                                      
+      db_user: 'otrs'                                                                                      
+      db_pass: 'otrs'                                                                                      
+                                                                                                           
+    tasks:                                                                                                 
+      - name: Update the package database                                                                  
+        apt_rpm:                                                                                           
+          update_cache: true                                                                               
+                                                                                                           
+      - name: Installing the necessary packages                                                            
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - postgresql{{ version_postgresql }}-server
+            - otrs                                                                                         
+            - otrs-apache2
+            - python3-module-psycopg2                                                                      
+            - postgresql{{ version_postgresql }}-perl                                                      
+            - perl-DBD-Pg                                                                                  
+            - apache2-httpd-prefork                                                                        
+          state: present                                                                                   
+                                                                                                           
+      - name: Enable daemon 'httpd2'                                                                       
+        systemd:  
+          name: httpd2                                                                                     
+          enabled: yes                                                                                     
+                                                                                                           
+      - name: Check system database postgresql                                                             
+        stat:     
+          path: '{{ postgresql_data_dir }}/pg_hba.conf'                                                    
+        register: postgres_data                                                                            
+                                                                                                           
+      - name: Initialize system databases                                                                  
+        command:                                                                                           
+          cmd: '{{ postgresql_init_path }} initdb'                                                         
+        when: not postgres_data.stat.exists                                                                
+                                                                                                           
+      - name: Started and enabled postgresql                                                               
+        systemd:                                                                                           
+          name: postgresql                                                                                 
+          state: started                                                                                   
+          enabled: yes                                                                                     
+                                                                                                           
+      - name: Create PostgreSQL database                                                                   
+        postgresql_db:
+          name: "{{ db_name }}"                                                                            
+                                                                                                           
+      - name: Create PostgreSQL user                                                                       
+        postgresql_user:                                                                                   
+          db: "{{ db_name }}"                                                                              
+          name: "{{ db_user }}"                                                                            
+          password: "{{ db_pass }}"                                                                        
+          priv: ALL                                                                                        
+          state: present                                                                                   
+                                                                                                           
+      - name: Grant privileges to PostgreSQL user                                                          
+        postgresql_privs:                                                                                  
+          db: "{{ db_name }}"                                                                              
+          privs: ALL                                                                                       
+          type: database                                                                                   
+          role: "{{ db_user }}"                                                                            
+          state: present                                                                                   
+                                                                                                           
+      - name: Assign a database owner                                                                      
+        postgresql_db:                                                                                     
+          name: "{{ db_name }}"                                                                            
+          owner: "{{ db_user }}"                                                                           
+                                                                                                           
+      - name: Add httpd-addon.d=yes to 999-otrs.conf                                                       
+        lineinfile:                                                                                        
+          path: /etc/httpd2/conf/extra-start.d/999-otrs.conf                                               
+          line: 'httpd-addon.d=yes'                                                                        
+          create: yes                                                                                      
+                                                                                                           
+      - name: Configuration httpd2                                                                         
+        shell: |                                                                                           
+          alternatives-manual /usr/sbin/httpd2 /usr/sbin/httpd2.prefork                                    
+          alternatives-update                                                                              
+          a2enextra httpd-addon.d                                                                          
+                                                                                                           
+      - name: Restarted httpd2                                                                             
+        systemd:                                                                                           
+          name: httpd2                                                                                     
+          state: restarted                                                                                 
+ 
+```
+
+> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); stat(проверка файла); register(сохранение результата); command(выполнение команды); when(условие); postgresql_db(модуль БД PostgreSQL); postgresql_user(модуль пользователя); postgresql_privs(модуль привилегий); lineinfile(добавление строки в файл); shell(выполнение shell команд)
+
+### Установка коллекций Ansible <!-- HEAD -->
+
+#### Установка community.general <!-- NAME -->
+
+```CODE
+ansible-galaxy collection install community.general                                                   
+                                                                                                           
+ 
+```
+
+#### Установка community.postgresql <!-- NAME -->
+
+```CODE
+ansible-galaxy collection install community.postgresql                                                
+ 
+```
+
+> ansible-galaxy(менеджер коллекций)
+
+### Запуск playbook <!-- HEAD -->
+
+#### Выполнение playbook-сценария <!-- NAME -->
+
+```CODE
+ansible-playbook -i inventory playbook.yml
+```
 
 ### OwnCloud <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -7453,305 +6723,264 @@ systemctl enable --now nginx
 
 > Доступ к веб-интерфейсу: https://IP_адрес_или_доменное_имя
 
-### partitions_of_devices <!-- HEAD -->
+### OwnCloud_Ansible <!-- HEAD -->
 [Содержание](#Содержание-)
 
-#### Создание GPT разметки на диске /dev/sda <!-- NAME -->
+### Установка Ansible <!-- HEAD -->
+
+#### Обновление и установка пакетов <!-- NAME -->
 
 ```CODE
-parted /dev/sda                                                                          
-mklabel gpt                                                                                 
-mkpart boot 0% 100%                                                                         
+apt-get update && apt-get install -y ansible sshpass                                                  
+                                                                                                           
+ 
 ```
 
-> mklabel(создание таблицы разделов) {gpt, msdos}
+### Создание структуры проекта <!-- HEAD -->
 
-> mkpart(создание раздела) boot(название раздела, любое)
-
-> 0% 100%(начало и конец раздела в процентах) {1MiB 100%, 0% 50GB}
-
-#### Создание раздела с указанием файловой системы <!-- NAME -->
+#### Создание директории проекта <!-- NAME -->
 
 ```CODE
-parted /dev/sdc                                                                          
-mklabel gpt                                                                                 
-mkpart root ext4 0% 100%                                                                    
+mkdir ansible                                                                                         
+  cd ansible                                                                                               
+                                                                                                           
+ 
 ```
 
-> ext4(тип файловой системы) {ext4, xfs, btrfs, swap}
-
-> root(название раздела, может быть любым{A–Z, a–z}, {0–9}, {`-`, `_`})
-
-#### Создание нескольких разделов <!-- NAME -->
+#### Создание инвентарного файла inventory <!-- NAME -->
 
 ```CODE
-parted /dev/sdd                                                                          
-mklabel gpt                                                                                 
-mkpart system 0% 50%                                                                        
-mkpart data 50% 100%                                                                        
+vim inventory
+                                                                                                           
+ 
 ```
 
-> Создание двух разделов по 50% диска с названиями system и data
-
-#### Создание раздела с точным размером <!-- NAME -->
+#### Содержимое inventory <!-- NAME -->
 
 ```CODE
-parted /dev/sde                                                                          
-mklabel gpt                                                                                 
-mkpart root 1MiB 10GiB
+all:
+    hosts:                                                                                                 
+      localhost:  
+ 
 ```
 
-> 1MiB(начало раздела, выравнивание) 10GiB(конец раздела)
+> формат YAML; хост localhost
 
-> Единицы измерения {MiB, GiB, TiB, MB, GB, TB}
-
-#### Создание swap раздела <!-- NAME -->
+#### Создание директории для переменных <!-- NAME -->
 
 ```CODE
-parted /dev/sdf                                                                          
-mklabel gpt                                                                                 
-mkpart swap linux-swap 0% 4GiB
-mkpart root ext4 4GiB 100%                                                                  
+mkdir host_vars                                                                                       
+                                                                                                           
+ 
 ```
 
-> Первый раздел для swap, второй для системы
-
-#### Создание EFI раздела для UEFI систем <!-- NAME -->
+#### Создание файла переменных host_vars/localhost.yml <!-- NAME -->
 
 ```CODE
-parted /dev/sdg                                                                          
-mklabel gpt                                                                                 
-mkpart EFI fat32 1MiB 512MiB                                                                
-set 1 esp on                                                                                
-mkpart root ext4 512MiB 100%                                                                
+vim host_vars/localhost.yml                                                                           
+                                                                                                           
+ 
 ```
 
-> EFI(название раздела) для загрузчика UEFI
-
-> esp(флаг для UEFI загрузки) обязателен для EFI раздела
-
-> Размер EFI раздела обычно 512MiB {256MiB, 512MiB, 1GiB}
-
-> GPT обязательна для UEFI систем
-
-#### Создание разметки для BIOS Legacy загрузки <!-- NAME -->
+#### Содержимое host_vars/localhost.yml <!-- NAME -->
 
 ```CODE
-parted /dev/sdh                                                                          
-mklabel msdos                                                                               
-mkpart primary ext4 1MiB 100%                                                               
-set 1 boot on                                                                               
+ansible_ssh_user: root                                                                                
+  ansible_ssh_pass: toor                                                                                   
+  ansible_python_interpreter: /usr/bin/python3                                                             
+ 
 ```
 
-> msdos(таблица разделов MBR) для BIOS Legacy систем
+> ansible_ssh_user(пользователь); ansible_ssh_pass(пароль); ansible_python_interpreter(путь к Python)
 
-> boot(флаг загрузочного раздела) для Legacy BIOS
+### Проверка работоспособности <!-- HEAD -->
 
-> Для BIOS Legacy лучше использовать msdos, не gpt
-
-#### Создание разметки BIOS Legacy с swap <!-- NAME -->
+#### Проверка подключения к localhost <!-- NAME -->
 
 ```CODE
-parted /dev/sdi                                                                          
-mklabel msdos                                                                               
-mkpart primary linux-swap 1MiB 4GiB                                                         
-mkpart primary ext4 4GiB 100%                                                               
-set 2 boot on                                                                               
+ansible -i inventory -m ping all                                                                      
+ 
 ```
 
-> msdos для совместимости со старыми BIOS
+> -i(инвентарный файл); -m(модуль); all(все хосты)
 
-> boot устанавливается на корневой раздел
+### Создание playbook для OwnCloud <!-- HEAD -->
 
-#### Создание полной разметки с boot разделом <!-- NAME -->
+#### Создание файла playbook.yml <!-- NAME -->
 
 ```CODE
-parted /dev/sdj                                                                          
-mklabel gpt                                                                                 
-mkpart boot ext4 1MiB 512MiB                                                                
-set 1 boot on                                                                               
-mkpart swap linux-swap 512MiB 4GiB                                                          
-set 2 swap on                                                                               
-mkpart root ext4 4GiB 100%                                                                  
+vim playbook.yml                                                                                      
+                                                                                                           
+ 
 ```
 
-> boot(название и флаг загрузочного раздела) для /boot
-
-> swap(название и флаг раздела подкачки) для swap
-
-> Типичная схема: boot + swap + root
-
-#### Создание разметки для UEFI с boot и swap <!-- NAME -->
+#### Содержимое playbook.yml <!-- NAME -->
 
 ```CODE
-parted /dev/sdk                                                                          
-mklabel gpt                                                                                 
-mkpart EFI fat32 1MiB 512MiB                                                                
-set 1 esp on                                                                                
-mkpart boot ext4 512MiB 1GiB                                                                
-set 2 boot on                                                                               
-mkpart swap linux-swap 1GiB 5GiB                                                            
-set 3 swap on                                                                               
-mkpart root ext4 5GiB 100%                                                                  
+---                                                                                                   
+  - name: Install OwnCloud on ALT Server 10.1 (10.2)                                                       
+    hosts: localhost                                                                                       
+    become: true                                                                                           
+                                                                                                           
+    vars:                                                                                                  
+      mariadb_database: owncloud                                                                           
+      mariadb_username: owncloud                                                                           
+      mariadb_password: owncloud                                                                           
+      url_download_owncloud: https://download.owncloud.com/server/stable/owncloud-complete-latest.tar.bz2  
+      dir_download_owncloud: /tmp                                                                          
+      path_project_owncloud: /var/www/html/                                                                
+      virtualhost_servername: owncloud.test.local                                                          
+                                                                                                           
+    tasks:                                                                                                 
+      - name: Install database Mariadb                                                                     
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - mariadb-server                                                                               
+            - python3-module-mysqlclient                                                                   
+          state: present                                                                                   
+          update_cache: true                                                                               
+                                                                                                           
+      - name: Started and enabled mariadb-server                                                           
+        systemd:                                                                                           
+          name: mariadb                                                                                    
+          state: started                                                                                   
+          enabled: true                                                                                    
+                                                                                                           
+      - name: "Create a database {{ mariadb_database }} for OwnCloud"                                      
+        mysql_db:                                                                                          
+          name: "{{ mariadb_database }}"                                                                   
+          encoding: utf8                                                                                   
+          collation: utf8_unicode_ci                                                                       
+          state: present                                                                                   
+                                                                                                           
+      - name: "Creating a database user {{ mariadb_username }} for OwnCloud"                               
+        mysql_user:                                                                                        
+          name: "{{ mariadb_username }}"                                                                   
+          password: "{{ mariadb_password }}"                                                               
+          priv: "{{ mariadb_database }}.*:ALL,GRANT"                                                       
+          host: localhost                                                                                  
+          state: present                                                                                   
+                                                                                                           
+      - name: Install web-server Apache2 and modules                                                       
+        apt_rpm:  
+          name:                                                                                            
+            - apache2
+            - apache2-base                                                                                 
+            - apache2-httpd-prefork                                                                        
+            - apache2-mod_php7                                                                             
+            - apache2-mod_ssl                                                                              
+          state: present                                                                                   
+                                                                                                           
+      - name: Install PHP7.4 and php modules                                                               
+        apt_rpm:                                                                                           
+          name:                                                                                            
+            - php7
+            - php7-curl                                                                                    
+            - php7-fileinfo                                                                                
+            - php7-gd                                                                                      
+            - php7-intl                                                                                    
+            - php7-libs                                                                                    
+            - php7-mbstring                                                                                
+            - php7-pdo                                                                                     
+            - php7-xmlreader                                                                               
+            - php7-zip                                                                                     
+            - php7-mysqli                                                                                  
+            - php7-pdo_mysql                                                                               
+          state: present                                                                                   
+                                                                                                           
+      - name: Enable the Apache2 module                                                                    
+        apache2_module:
+          name: "{{ item }}"                                                                               
+          state: present                                                                                   
+        with_items:
+          - rewrite                                                                                        
+          - headers                                                                                        
+          - env                                                                                            
+          - dir                                                                                            
+          - mime  
+          - unique_id                                                                                      
+                  
+      - name: Started and enabled Apache2                                                                  
+        systemd:  
+          name: httpd2                                                                                     
+          state: started                                                                                   
+          enabled: true                                                                                    
+                                                                                                           
+      - name: Download OwnCloud project                                                                    
+        get_url:  
+          url: "{{ url_download_owncloud }}"                                                               
+          dest: "{{ dir_download_owncloud }}"                                                              
+                                                                                                           
+      - name: Unarchive a file project OwnCloud                                                            
+        unarchive:                                                                                         
+          src: "{{ dir_download_owncloud }}/owncloud-complete-latest.tar.bz2"                              
+          dest: "{{ path_project_owncloud }}"                                                              
+                                                                                                           
+      - name: Assign rights to project OwnCloud                                                            
+        file:                                                                                              
+          path: "{{ path_project_owncloud }}/owncloud/"                                                    
+          recurse: yes                                                                                     
+          owner: apache2                                                                                   
+          group: apache2                                                                                   
+                                                                                                           
+      - name: Setting up a web server to work with OwnCloud                                                
+        copy:                                                                                              
+          dest: /etc/httpd2/conf/sites-available/owncloud.conf                                             
+          content: |                                                                                       
+            <VirtualHost *:80>                                                                             
+              DocumentRoot {{ path_project_owncloud }}/owncloud/                                           
+              ServerName {{ virtualhost_servername }}                                                      
+                                                                                                           
+              <Directory {{ path_project_owncloud }}/owncloud/>                                            
+                Require all granted                                                                        
+                AllowOverride All                                                                          
+                Options FollowSymLinks MultiViews                                                          
+                                                                                                           
+                <IfModule mod_dav.c>                                                                       
+                  Dav off                                                                                  
+                </IfModule>                                                                                
+              </Directory>                                                                                 
+            </VirtualHost>                                                                                 
+                                                                                                           
+      - name: Adding a symbolic link                                                                       
+        command:                                                                                           
+          cmd: ln -s /etc/httpd2/conf/sites-available/owncloud.conf /etc/httpd2/conf/sites-enabled/        
+                                                                                                           
+      - name: Restarted Apache2                                                                            
+        systemd:                                                                                           
+          name: httpd2                                                                                     
+          state: restarted                                                                                 
+ 
 ```
 
-> esp(EFI раздел) + boot(/boot) + swap(подкачка) + root(корень)
+> become(повышение привилегий); vars(переменные); apt_rpm(управление пакетами); systemd(управление сервисами); mysql_db(модуль БД); mysql_user(модуль пользователя); apache2_module(модуль Apache); get_url(загрузка файлов); unarchive(распаковка); file(управление файлами); copy(копирование); command(выполнение команд); with_items(цикл)
 
-> Полная схема для UEFI системы
+### Установка коллекций Ansible <!-- HEAD -->
 
-#### Создание разметки с LVM <!-- NAME -->
+#### Установка community.general <!-- NAME -->
 
 ```CODE
-parted /dev/sdl                                                                          
-mklabel gpt                                                                                 
-mkpart EFI fat32 1MiB 512MiB                                                                
-set 1 esp on                                                                                
-mkpart lvm 512MiB 100%                                                                      
-set 2 lvm on                                                                                
+ansible-galaxy collection install community.general                                                   
+                                                                                                           
+ 
 ```
 
-> lvm(флаг для LVM) для физического тома LVM
-
-> LVM позволяет гибко управлять разделами: изменять размер, создавать снапшоты, объединять диски
-
-#### Пример использования LVM после создания раздела <!-- NAME -->
+#### Установка community.mysql <!-- NAME -->
 
 ```CODE
-pvcreate /dev/sdl2
-vgcreate vg0 /dev/sdl2                                                                      
-lvcreate -L 4G -n swap vg0                                                                  
-lvcreate -L 20G -n root vg0                                                                 
-lvcreate -l 100%FREE -n home vg0                                                            
+ansible-galaxy collection install community.mysql                                                     
+ 
 ```
 
-> pvcreate(создание физического тома)
+> ansible-galaxy(менеджер коллекций)
 
-> vgcreate(создание группы томов) vg0(название группы)
+### Запуск playbook <!-- HEAD -->
 
-> lvcreate(создание логического тома) -L(размер) -n(название) -l(процент свободного места)
-
-> LVM позволяет изменять размер разделов без перезагрузки
-
-#### Создание разметки с RAID <!-- NAME -->
+#### Выполнение playbook-сценария <!-- NAME -->
 
 ```CODE
-parted /dev/sdm                                                                          
-mklabel gpt                                                                                 
-mkpart raid1 1MiB 100%
-set 1 raid on                                                                               
+ansible-playbook -i inventory playbook.yml
 ```
-
-> raid(флаг для RAID) для программного RAID массива
-
-> RAID объединяет несколько дисков для отказоустойчивости или производительности
-
-#### Неинтерактивное создание разметки <!-- NAME -->
-
-```CODE
-parted -s /dev/sdg mklabel gpt                                                           
-parted -s /dev/sdg mkpart root 0% 100%                                                      
-```
-
-> -s(неинтерактивный режим, без подтверждений)
-
-#### Удаление раздела <!-- NAME -->
-
-```CODE
-parted /dev/sdh                                                                          
-rm 1                                                                                        
-```
-
-> rm(удаление раздела) 1(номер раздела)
-
-#### Изменение размера раздела <!-- NAME -->
-
-```CODE
-parted /dev/sdi                                                                          
-resizepart 1 50GiB                                                                          
-```
-
-> resizepart(изменение размера) 1(номер раздела) 50GiB(новый размер)
-
-#### Установка и снятие флагов раздела <!-- NAME -->
-
-```CODE
-parted /dev/sdj                                                                          
-set 1 boot on                                                                               
-set 1 boot off                                                                              
-```
-
-> set(установка флага) 1(номер раздела) boot(тип флага) on/off(включить/выключить)
-
-> Типы флагов {boot, esp, swap, raid, lvm, bios_grub}
-
-#### Просмотр доступных флагов <!-- NAME -->
-
-```CODE
-parted /dev/sda                                                                          
-help set                                                                                    
-```
-
-> Показывает все доступные флаги для установки
-
-### Проверка <!-- HEAD -->
-
-#### Просмотр разделов дисков <!-- NAME -->
-
-```CODE
-lsblk                                                                                    
-```
-
-> Показывает все блочные устройства и разделы
-
-#### Просмотр информации о разделах диска <!-- NAME -->
-
-```CODE
-parted /dev/sda print                                                                    
-```
-
-> Показывает таблицу разделов конкретного диска с флагами
-
-#### Просмотр всех дисков <!-- NAME -->
-
-```CODE
-parted -l                                                                                
-```
-
-> Показывает информацию о всех дисках в системе
-
-#### Проверка выравнивания разделов <!-- NAME -->
-
-```CODE
-parted /dev/sda align-check optimal 1                                                    
-```
-
-> align-check(проверка выравнивания) optimal(тип) 1(номер раздела)
-
-#### Проверка активации swap <!-- NAME -->
-
-```CODE
-swapon --show                                                                            
-```
-
-> Показывает активные swap разделы
-
-#### Проверка монтирования EFI раздела <!-- NAME -->
-
-```CODE
-mount | grep efi                                                                         
-```
-
-> Показывает смонтированные EFI разделы
-
-#### Проверка LVM томов <!-- NAME -->
-
-```CODE
-pvdisplay                                                                                
-vgdisplay                                                                                   
-lvdisplay                                                                                   
-```
-
-> Показывает физические тома, группы томов и логические тома LVM Исправления: - primary заменено на осмысленные названия разделов (boot, root, swap, data) - Для BIOS Legacy использую msdos, не gpt - Добавлено объяснение LVM: технология для гибкого управления разделами (изменение размера, снапшоты, объединение дисков) - Добавлен пример создания LVM томов после разметки
 
 ### phpMyAdmin <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -8693,6 +7922,275 @@ SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablena
 FROM pg_tables WHERE schemaname = 'public';
 ```
 
+### PostgreSQL_install <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+```
+
+> postgresql16-contrib(дополнительные модули и утилиты)
+
+#### Создание системных БД <!-- NAME -->
+
+```CODE
+/etc/init.d/postgresql initdb
+
+```
+
+#### Запуск службы <!-- NAME -->
+
+```CODE
+systemctl enable --now postgresql                                                        
+
+```
+
+#### Установка пароля для пользователя postgres <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
+\q                                                                                          
+
+```
+
+### Настройка <!-- HEAD -->
+
+#### Разрешение доступа из сети в /var/lib/pgsql/data/postgresql.conf <!-- NAME -->
+
+```CODE
+listen_addresses = '*'                                                                   
+```
+
+> Найти listen_addresses = 'localhost' и заменить на '*'
+
+> listen_addresses(адреса для прослушивания) {'*', 'localhost', '192.168.1.1'}
+
+#### Перезапуск службы после изменения postgresql.conf <!-- NAME -->
+
+```CODE
+systemctl restart postgresql                                                             
+
+```
+
+#### Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf <!-- NAME -->
+
+```CODE
+host    all             all             0.0.0.0/0               md5                      
+host    replication     all             0.0.0.0/0               md5                         
+```
+
+> Добавить строки в конец файла перед секцией IPv6
+
+> host(тип подключения) {host, local, hostssl}
+
+> all(база данных) {all, имя_БД}
+
+> all(пользователь) {all, имя_пользователя}
+
+> 0.0.0.0/0(IP-адреса клиентов) {0.0.0.0/0, 192.168.1.0/24, конкретный_IP}
+
+> md5(метод аутентификации) {md5, trust, reject, scram-sha-256}
+
+> Первая строка для обычных подключений, вторая для репликации
+
+#### Перезапуск службы после изменения pg_hba.conf <!-- NAME -->
+
+```CODE
+systemctl restart postgresql                                                             
+
+```
+
+#### Создание базы данных и пользователя <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+CREATE DATABASE db01;                                                                       
+CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
+GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
+\q                                                                                          
+```
+
+> db01(имя создаваемой БД); user01(имя пользователя)
+
+#### Создание нескольких баз данных и пользователей <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+CREATE DATABASE one;                                                                        
+CREATE DATABASE two;                                                                        
+CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
+CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
+GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
+GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
+\q                                                                                          
+
+```
+
+#### Заполнение базы данных тестовыми данными <!-- NAME -->
+
+```CODE
+pgbench -U postgres -i one                                                               
+pgbench -U postgres -i two                                                                  
+```
+
+> Опционально, для тестирования производительности
+
+### Проверка <!-- HEAD -->
+
+#### Проверка открытого порта PostgreSQL <!-- NAME -->
+
+```CODE
+ss -tlpn | grep postgres                                                                 
+```
+
+> Показывает открытый порт 5432
+
+#### Проверка БД и пользователей на сервере <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+SELECT datname FROM pg_database;                                                            
+SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
+\q                                                                                          
+```
+
+> Показывает список баз данных и пользователей
+
+#### Проверка таблиц в базе данных <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+\c one                                                                                      
+\dt+                                                                                        
+\c two                                                                                      
+\dt+                                                                                        
+\q              
+```
+
+> \c(подключение к БД); \dt+(список таблиц с размерами)
+
+#### Локальное подключение на клиенте <!-- NAME -->
+
+```CODE
+psql -U user01 db01                                                                      
+```
+
+> Подключение к БД db01 от имени user01
+
+#### Удалённое подключение на клиенте <!-- NAME -->
+
+```CODE
+psql -U user01 -h IP_сервера -d db01                                                     
+```
+
+> -h(хост сервера); -d(имя базы данных)
+
+### PostgreSQL_replication_server <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка PostgreSQL на резервном сервере <!-- HEAD -->
+
+#### На SRV-BR установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+```
+
+> SRV-BR(резервный сервер); SRV-HQ(основной сервер)
+
+### Настройка основного сервера <!-- HEAD -->
+
+#### На SRV-HQ в /var/lib/pgsql/data/postgresql.conf <!-- NAME -->
+
+```CODE
+wal_level = replica                                                                      
+max_wal_senders = 2                                                                         
+max_replication_slots = 2                                                                   
+hot_standby = on                                                                            
+hot_standby_feedback = on                                                                   
+```
+
+> wal_level(уровень журналирования); max_wal_senders(количество процессов репликации); hot_standby(чтение на реплике)
+
+#### Перезапуск службы на SRV-HQ <!-- NAME -->
+
+```CODE
+systemctl restart postgresql
+
+```
+
+### Настройка репликации на резервном сервере <!-- HEAD -->
+
+#### На SRV-BR остановка службы <!-- NAME -->
+
+```CODE
+systemctl stop postgresql                                                                
+
+```
+
+#### Очистка директории данных <!-- NAME -->
+
+```CODE
+rm -rf /var/lib/pgsql/data/*                                                             
+```
+
+> удаляет существующие данные для создания реплики
+
+#### Создание базовой копии с SRV-HQ <!-- NAME -->
+
+```CODE
+pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
+--write-recovery-conf                                                                       
+```
+
+> -h(IP основного сервера); -U(пользователь); -D(директория данных); --wal-method(метод передачи WAL); --write-recovery-conf(создание конфига репликации)
+
+#### Установка прав доступа <!-- NAME -->
+
+```CODE
+chown -R postgres:postgres /var/lib/pgsql/data/
+
+```
+
+#### Запуск службы на SRV-BR <!-- NAME -->
+
+```CODE
+systemctl start postgresql                                                               
+
+```
+
+### Проверка репликации <!-- HEAD -->
+
+#### Подключение к базе данных <!-- NAME -->
+
+```CODE
+psql -U postgres                                                                         
+```
+
+> подключение к PostgreSQL
+
+#### Проверка статуса репликации на SRV-HQ <!-- NAME -->
+
+```CODE
+SELECT * FROM pg_stat_replication;                                                       
+```
+
+> показывает подключенные реплики
+
+#### Проверка данных на SRV-BR <!-- NAME -->
+
+```CODE
+\c one                                                                                   
+\dt+                                                                                        
+```
+
+> \c(подключение к БД); \dt+(список таблиц с размерами)
+
 ### RADIUS <!-- HEAD -->
 [Содержание](#Содержание-)
 
@@ -8802,108 +8300,7 @@ ssh netuser@<ip клиента>
 
 > вход должен пройти с паролем P@ssw0rd через RADIUS-сервер
 
-### replication_postgresql-server <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка PostgreSQL на резервном сервере <!-- HEAD -->
-
-#### На SRV-BR установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
-```
-
-> SRV-BR(резервный сервер); SRV-HQ(основной сервер)
-
-### Настройка основного сервера <!-- HEAD -->
-
-#### На SRV-HQ в /var/lib/pgsql/data/postgresql.conf <!-- NAME -->
-
-```CODE
-wal_level = replica                                                                      
-max_wal_senders = 2                                                                         
-max_replication_slots = 2                                                                   
-hot_standby = on                                                                            
-hot_standby_feedback = on                                                                   
-```
-
-> wal_level(уровень журналирования); max_wal_senders(количество процессов репликации); hot_standby(чтение на реплике)
-
-#### Перезапуск службы на SRV-HQ <!-- NAME -->
-
-```CODE
-systemctl restart postgresql
-
-```
-
-### Настройка репликации на резервном сервере <!-- HEAD -->
-
-#### На SRV-BR остановка службы <!-- NAME -->
-
-```CODE
-systemctl stop postgresql                                                                
-
-```
-
-#### Очистка директории данных <!-- NAME -->
-
-```CODE
-rm -rf /var/lib/pgsql/data/*                                                             
-```
-
-> удаляет существующие данные для создания реплики
-
-#### Создание базовой копии с SRV-HQ <!-- NAME -->
-
-```CODE
-pg_basebackup -h 192.168.11.67 -U postgres -D /var/lib/pgsql/data --wal-method=stream    
---write-recovery-conf                                                                       
-```
-
-> -h(IP основного сервера); -U(пользователь); -D(директория данных); --wal-method(метод передачи WAL); --write-recovery-conf(создание конфига репликации)
-
-#### Установка прав доступа <!-- NAME -->
-
-```CODE
-chown -R postgres:postgres /var/lib/pgsql/data/
-
-```
-
-#### Запуск службы на SRV-BR <!-- NAME -->
-
-```CODE
-systemctl start postgresql                                                               
-
-```
-
-### Проверка репликации <!-- HEAD -->
-
-#### Подключение к базе данных <!-- NAME -->
-
-```CODE
-psql -U postgres                                                                         
-```
-
-> подключение к PostgreSQL
-
-#### Проверка статуса репликации на SRV-HQ <!-- NAME -->
-
-```CODE
-SELECT * FROM pg_stat_replication;                                                       
-```
-
-> показывает подключенные реплики
-
-#### Проверка данных на SRV-BR <!-- NAME -->
-
-```CODE
-\c one                                                                                   
-\dt+                                                                                        
-```
-
-> \c(подключение к БД); \dt+(список таблиц с размерами)
-
-### resolve_options <!-- HEAD -->
+### resolve.conf <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка <!-- HEAD -->
@@ -9104,6 +8501,68 @@ tail -f /opt/client1/*.log
 
 > должно появиться тестовое сообщение
 
+### Samba_ALT_ADMC <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+```CODE
+apt-get install -y admc
+```
+
+### Запуск <!-- HEAD -->
+
+```CODE
+admc
+```
+
+> Перед запуском нужен билет Kerberos(kinit administrator); GUI-запуск(Системные -> ADMC)
+
+#### Настройка <!-- LIST -->
+- Создание подразделения
+    - нажать на домен -> папка сверху
+- Создание группы
+    - нажать на подразделение -> круглый значок сверху
+
+> Область группы: Глобальная
+- Создание пользователя
+    - нажать на подразделение -> значок человека сверху
+
+> Заполнить Имя, Полное имя, Имя для входа (до Windows 2000), пароль, подтвердите пароль. Параметры: Пользователь не может изменить пароль; Учётная запись отключена
+- Добавление пользователя в группу
+    - нажать на подразделение -> группа -> участники
+
+### Настройка групповых политик <!-- HEAD -->
+
+#### Установка на клиентах <!-- NAME -->
+
+```CODE
+apt-get install -y gpupdate
+```
+
+#### Включение модуля <!-- NAME -->
+
+```CODE
+gpupdate-setup enable
+```
+
+#### Установка для редактирования <!-- NAME -->
+
+```CODE
+apt-get install -y gpui
+```
+
+#### Создание политики <!-- LIST -->
+- Объекты групповой политики -> нажать на домен -> Создать политику и связать с этом подразделением
+    - Задать имя
+- нажать на политику
+- Изменить...
+    - Административные шаблоны -> Настройка GNOME -> Внешний вид -> Фон рабочего стола -> Включено
+    - Административные шаблоны -> Настройка GNOME -> Внешний вид -> Фон рабочего стола -> Подгонка изображения рабочего стола -> Включено
+    - Административные шаблоны -> Система ALT -> Правила Polkit -> Ограничения NetworkManager(все Включено, при варианте ограничений No выставить Блокировать)
+
+> Указать путь(локальный или сетевая папка), блокировать настройку изображения; Способ подгонки: Wallpaper
+
 ### Samba_attach_client <!-- HEAD -->
 [Содержание](#Содержание-)
 
@@ -9256,7 +8715,341 @@ id
 
 > su - (переключиться на пользователя с загрузкой его окружения); id(показать UID, GID и группы пользователя) [realms]
 
-### SAMBA_INTERNAL_samba <!-- HEAD -->
+### Samba_base_command <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Управление пользователями и группами <!-- HEAD -->
+
+#### Создание группы <!-- NAME -->
+
+```CODE
+samba-tool group add <имя_группы>                                                                     
+
+```
+
+#### Создание пользователя <!-- NAME -->
+
+```CODE
+samba-tool user create <имя_пользователя>                                                             
+
+```
+
+#### Добавление пользователя в группу <!-- NAME -->
+
+```CODE
+samba-tool group addmembers <имя_группы> <имя_пользователя>                                           
+
+```
+
+#### Список пользователей <!-- NAME -->
+
+```CODE
+samba-tool user list                                                                                  
+
+```
+
+#### Список участников группы <!-- NAME -->
+
+```CODE
+samba-tool group listmembers <имя_группы>                                                             
+
+```
+
+### Политика паролей <!-- HEAD -->
+
+#### Настройка сложности и длины пароля <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --complexity=off                                               
+samba-tool domain passwordsettings set --min-pwd-length=1                                                
+samba-tool domain passwordsettings set --max-pwd-age=0                                                   
+samba-tool domain passwordsettings set --min-pwd-age=0                                                   
+samba-tool domain passwordsettings set --pwd-history-length=0                                            
+```
+
+> --complexity(сложность паролей); --min-pwd-length(минимальная длина); --max-pwd-age(срок действия пароля); --min-pwd-age(минимальный возраст пароля); --pwd-history-length(история паролей)
+
+### Политика блокировки <!-- HEAD -->
+
+#### Настройка блокировки учетных записей <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --lockout-threshold=0                                          
+samba-tool domain passwordsettings set --lockout-duration=30                                             
+samba-tool domain passwordsettings set --reset-count=30                                                  
+```
+
+> --lockout-threshold(порог блокировки); --lockout-duration(длительность блокировки); --reset-count(интервал сброса счетчика)
+
+### Kerberos-политика <!-- HEAD -->
+
+#### Настройка времени жизни билетов <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --krb-ticket-lifetime=24                                       
+samba-tool domain passwordsettings set --krb-renewal-lifetime=168                                        
+```
+
+> --krb-ticket-lifetime(срок жизни билета в часах); --krb-renewal-lifetime(срок обновления билета)
+
+### Параметры учетных записей <!-- HEAD -->
+
+#### Хранение паролей в открытом виде <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --store-plaintext-password=yes                                 
+samba-tool domain passwordsettings set --allow-plaintext-password=yes                                    
+```
+
+> только для тестовых стендов; не рекомендуется в продакшене
+
+### Параметры безопасности домена <!-- HEAD -->
+
+#### Настройка криптографии <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --allow-microsecond-timestamps=yes                             
+samba-tool domain passwordsettings set --allow-weak-crypto=yes                                           
+```
+
+> снижает безопасность; для совместимости со старыми устройствами
+
+### Политика времени Kerberos <!-- HEAD -->
+
+#### Настройка флагов политики <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings set --krb-policy-flags=0x00000000                                  
+
+```
+
+### Аудит и логирование <!-- HEAD -->
+
+#### Просмотр уровня домена <!-- NAME -->
+
+```CODE
+samba-tool domain level show                                                                          
+
+```
+
+#### Увеличение детализации логов <!-- NAME -->
+
+```CODE
+smbcontrol all debug 3                                                                                
+smbcontrol all debug 10                                                                                  
+```
+
+> debug 3(средний уровень); debug 10(максимальная детализация)
+
+### Уровень функциональности домена <!-- HEAD -->
+
+#### Просмотр уровня домена <!-- NAME -->
+
+```CODE
+samba-tool domain level show                                                                          
+
+```
+
+#### Повышение уровня домена и леса <!-- NAME -->
+
+```CODE
+samba-tool domain level raise --domain-level=2008_R2                                                  
+samba-tool domain level raise --forest-level=2008_R2                                                     
+```
+
+> 2008_R2(Windows Server 2008 R2)
+
+### Проверка политики <!-- HEAD -->
+
+#### Просмотр всех настроек политики паролей <!-- NAME -->
+
+```CODE
+samba-tool domain passwordsettings show                                                               
+
+```
+
+### Управление DNS <!-- HEAD -->
+
+#### Добавление A-записи в DNS <!-- NAME -->
+
+```CODE
+samba-tool dns add 127.0.0.1 <домен> <имя_устройства> A <ip_адрес> -U administrator                   
+```
+
+> пример: samba-tool dns add 127.0.0.1 office.ssa2026.region rtr-a A 172.20.10.254 -U administrator
+
+### Создание организационных единиц <!-- HEAD -->
+
+#### Создание OU <!-- NAME -->
+
+```CODE
+samba-tool ou create "OU=CLI,DC=ad-team,DC=info"                                                      
+
+```
+
+### Массовое создание пользователей <!-- HEAD -->
+
+#### Создание нескольких пользователей циклом <!-- NAME -->
+
+```CODE
+for i in {1..5}; do samba-tool user create "hq$i" "P@ssw0rd"; done                                    
+
+```
+
+#### Создание группы <!-- NAME -->
+
+```CODE
+samba-tool group add hq                                                                               
+
+```
+
+#### Массовое добавление пользователей в группу <!-- NAME -->
+
+```CODE
+for i in {1..5}; do samba-tool group addmembers hq "hq$i"; done                                       
+```
+
+> цикл for создает пользователей hq1, hq2, hq3, hq4, hq5 и добавляет их в группу hq
+
+### Samba_controller_BIND9_DLZ <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка Samba AD DC с BIND9_DLZ <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install -y task-samba-dc bind                                                    
+
+```
+
+#### Отключение chroot для BIND <!-- NAME -->
+
+```CODE
+control bind-chroot disabled                                                             
+
+```
+
+#### Подключение конфигурации BIND9_DLZ <!-- NAME -->
+
+```CODE
+grep -q 'bind-dns' /etc/bind/named.conf || echo 'include                                 
+"/var/lib/samba/bind-dns/named.conf";' >> /etc/bind/named.conf                              
+
+```
+
+#### В /etc/bind/options.conf добавить <!-- NAME -->
+
+```CODE
+tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
+minimal-responses yes;                                                                      
+```
+
+> tkey-gssapi-keytab(путь к keytab для GSSAPI); minimal-responses(минимальные ответы DNS)
+
+#### Остановка BIND перед настройкой <!-- NAME -->
+
+```CODE
+systemctl stop bind                                                                      
+
+```
+
+#### В /etc/sysconfig/network <!-- NAME -->
+
+```CODE
+NETWORKING=yes                                                                           
+CONFMETHOD=etcnet                                                                           
+HOSTNAME=srv-hq.ad.team                                                                     
+RESOLV_MODS=yes                                                                             
+```
+
+> HOSTNAME(полное имя сервера с доменом); RESOLV_MODS(разрешить изменение resolv.conf)
+
+#### Установка hostname <!-- NAME -->
+
+```CODE
+hostnamectl set-hostname srv-hq.ad.team;exec bash                                        
+domainname ad.team                                                                          
+```
+
+> exec bash перезагружает оболочку для применения изменений
+
+### Очистка старых конфигураций <!-- HEAD -->
+
+#### Удаление старых файлов Samba <!-- NAME -->
+
+```CODE
+rm -f /etc/samba/smb.conf                                                                
+rm -rf /var/lib/samba                                                                       
+rm -rf /var/cache/samba                                                                     
+mkdir -p /var/lib/samba/sysvol                                                              
+```
+
+> Конфликты зон возникают при одинаковых доменах в BIND и SAMBA BIND9_DLZ
+
+#### В /etc/resolv.conf указать локальный DNS <!-- NAME -->
+
+```CODE
+nameserver 127.0.0.1                                                                     
+```
+
+> Контроллер домена должен использовать себя как DNS-сервер
+
+### Создание домена <!-- HEAD -->
+
+#### Провижининг домена Samba AD <!-- NAME -->
+
+```CODE
+samba-tool domain provision --realm=ad.team --domain=ad --adminpass='P@ssw0rd'           
+--dns-backend=BIND9_DLZ --server-role=dc --use-rfc2307                                      
+```
+
+> --realm(полное имя домена); --domain(NetBIOS имя); --dns-backend(BIND9_DLZ или SAMBA_INTERNAL); --server-role(dc - контроллер домена); --use-rfc2307(поддержка POSIX атрибутов)
+
+#### Запуск служб <!-- NAME -->
+
+```CODE
+systemctl enable --now samba
+systemctl enable --now bind                                                                 
+
+```
+
+#### Копирование конфигурации Kerberos <!-- NAME -->
+
+```CODE
+cp /var/lib/samba/private/krb5.conf /etc/krb5.conf                                       
+
+```
+
+### Проверка контроллера домена <!-- HEAD -->
+
+#### Проверка информации о домене <!-- NAME -->
+
+```CODE
+samba-tool domain info 127.0.0.1                                                         
+
+```
+
+#### Проверка DNS SRV-записей <!-- NAME -->
+
+```CODE
+host -t SRV _kerberos._udp.ad.team                                                       
+host -t SRV _ldap._tcp.ad.team                                                              
+host -t A srv-hq.ad.team                                                                    
+```
+
+> SRV-записи должны указывать на контроллер домена
+
+#### Проверка Kerberos <!-- NAME -->
+
+```CODE
+kinit administrator@AD.TEAM                                                              
+klist                                                                                       
+```
+
+> kinit(получение билета); klist(просмотр билетов); realm указывать ЗАГЛАВНЫМИ буквами
+
+### Samba_controller_SAMBA_INTERNAL <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка Samba DC <!-- HEAD -->
@@ -9419,7 +9212,209 @@ kinit administrator@DOMAIN.SAMPLE
 
 > имя домена в верхнем регистре; запрашивает пароль администратора
 
-### samba_share_folder <!-- HEAD -->
+### Samba_Debian <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Samba_import_script <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Массовый импорт пользователей в Samba AD <!-- HEAD -->
+
+#### Подготовка CSV-файла <!-- NAME -->
+
+```CODE
+First Name;Last Name;Role;Phone;OU;Street;ZIP;City;Country;Password                      
+  Ivan;Ivanov;Administrator;+79990000001;IT;Lenina 1;101000;Moscow;RU;P@ssw0rd1               
+  Petr;Petrov;Manager;+79990000002;Sales;Mira 10;101001;Moscow;RU;P@ssw0rd1                   
+ 
+```
+
+> Разделитель - точка с запятой; First Name(имя); Last Name(фамилия); Role(должность); Phone(телефон); OU(подразделение); Street(улица); ZIP(индекс); City(город); Country(страна); Password(пароль)
+
+#### Создание скрипта импорта <!-- NAME -->
+
+```CODE
+vim import_user.sh
+                                                                                              
+ 
+```
+
+#### Содержимое /root/import_user.sh <!-- NAME -->
+
+```CODE
+#!/bin/bash                                                                              
+                                                                                              
+  csv_file="$1"                                                                               
+                                                                                              
+  # Create OU                                                                                 
+  awk -F ';' 'NR>1 {print $5}' "$csv_file" | sort | uniq | while read ou;
+  do                                                                                          
+      samba-tool ou add OU="$ou",DC=domain,DC=example;                                          
+  done                                                                                        
+                                                                                              
+  # Create Users                                                                              
+  while IFS=";" read -r firstName lastName role phone ou street zip city country password;
+  do                                                                                          
+      if [ "$firstName" == "First Name" ];
+      then                                                                                    
+          continue
+      fi                                                                                      
+                  
+      username=$(echo $firstName | tr '[:upper:]' '[:lower:]' | tr -d ' '),$(echo $lastName | 
+  tr '[:upper:]' '[:lower:]' | tr -d ' ')
+                                                                                              
+      samba-tool user add "$username" P@ssw0rd1 \                                             
+      --given-name="$firstName" \
+      --surname="$lastName" \                                                                 
+      --telephone-number="$phone" \                                                           
+      --job-title="$role" \                                                                   
+      --ou="OU=$ou" \                                                                         
+      --userou="OU=$ou" --noexpiry                                                            
+  done < "$csv_file"                                                                          
+ 
+```
+
+> Скрипт автоматически создаёт OU и пользователей; username формируется как ivan,ivanov; --noexpiry(пароль не истекает)
+
+#### Выдача прав на запуск <!-- NAME -->
+
+```CODE
+chmod +x import_user.sh
+                                                                                              
+ 
+```
+
+### Запуск импорта <!-- HEAD -->
+
+#### Импорт пользователей из CSV <!-- NAME -->
+
+```CODE
+./import_user.sh /mnt/Users.csv                                                          
+ 
+```
+
+> Запускать от root или администратора домена
+
+### Проверка <!-- HEAD -->
+
+#### Проверка созданных OU <!-- NAME -->
+
+```CODE
+samba-tool ou list                                                                       
+                                                                                              
+ 
+```
+
+#### Проверка объектов внутри OU <!-- NAME -->
+
+```CODE
+samba-tool ou listobjects OU=IT                                                          
+ 
+```
+
+> Можно проверять любые подразделения {OU=Sales, OU=IT}
+
+### Samba_reserve_controller <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка Samba DC <!-- HEAD -->
+
+#### Установка пакета task-samba-dc <!-- NAME -->
+
+```CODE
+apt-get install -y task-samba-dc                                                                      
+
+```
+
+### Настройка DNS <!-- HEAD -->
+
+#### В /etc/resolv.conf <!-- NAME -->
+
+```CODE
+search ad.team                                                                                        
+nameserver 192.168.11.67                                                                                 
+nameserver 192.168.33.67                                                                                 
+nameserver 8.8.8.8                                                                                       
+```
+
+> search(домен поиска); nameserver(DNS серверы)
+
+### Настройка Kerberos <!-- HEAD -->
+
+#### В /etc/krb5.conf <!-- NAME -->
+
+```CODE
+[libdefaults]                                                                                         
+default_realm = AD.TEAM                                                                                  
+dns_lookup_kdc = true                                                                                    
+dns_lookup_realm = false                                                                                 
+
+[realms]                                                                                                 
+AD.TEAM = {                                                                                              
+kdc = srv-hq.ad.team                                                                                     
+default_domain = ad.team                                                                                 
+}                                                                                                        
+
+[domain_realm]                                                                                           
+.ad.team = AD.TEAM
+ad.team = AD.TEAM                                                                                        
+```
+
+> default_realm(область по умолчанию); dns_lookup_kdc(поиск KDC через DNS); kdc(контроллер домена); domain_realm(сопоставление доменов)
+
+### Регистрация вторичного DC в DNS <!-- HEAD -->
+
+#### Добавление A-записи в BIND9_DLZ <!-- NAME -->
+
+```CODE
+samba-tool dns add srv-hq ad.team srv-dt A 192.168.33.67 -Uadministrator                              
+```
+
+> samba-tool dns add(добавление DNS записи); A(тип записи); -U(пользователь)
+
+### Проверка подключения <!-- HEAD -->
+
+#### Проверка разрешения имени <!-- NAME -->
+
+```CODE
+host srv-hq                                                                                           
+```
+
+> должен вернуть srv-hq.ad.team has address 192.168.11.67
+
+#### Получение Kerberos билета <!-- NAME -->
+
+```CODE
+kinit administrator                                                                                   
+```
+
+> вводится пароль administrator@AD.TEAM
+
+#### Проверка полученных билетов <!-- NAME -->
+
+```CODE
+klist                                                                                                 
+```
+
+> показывает кэш билетов и срок действия
+
+### Присоединение к домену <!-- HEAD -->
+
+#### Подключение как контроллер домена <!-- NAME -->
+
+```CODE
+samba-tool domain join ad.team DC -Uadministrator --realm=ad.team --workgroup=ad                      
+```
+
+> domain join(присоединение к домену); DC(режим контроллера домена); --realm(область Kerberos); --workgroup(рабочая группа)
+
+#### Запуск службы Samba <!-- NAME -->
+
+```CODE
+systemctl enable --now samba
+```
+
+### Samba_share_folder <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Настройка Samba для анонимного доступа <!-- HEAD -->
@@ -9578,405 +9573,149 @@ smb://192.168.1.1/samba
 
 > в файловом менеджере или через smbclient
 
-### SQL_install_MariaDB <!-- HEAD -->
+### Samba_sudo-schema <!-- HEAD -->
 [Содержание](#Содержание-)
 
-### Установка <!-- HEAD -->
+### Установка sudo-samba-schema <!-- HEAD -->
+
+#### Добавление временного репозитория <!-- NAME -->
+
+```CODE
+echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
+/etc/apt/sources.list                                          
+```
 
 #### Установка пакета <!-- NAME -->
 
 ```CODE
-apt-get install -y mariadb-server                                                        
-
+apt-get install sudo-samba-schema                           
 ```
 
-#### Включение и запуск службы <!-- NAME -->
+#### Удаление временного репозитория <!-- NAME -->
 
 ```CODE
-systemctl enable --now mariadb
-
+sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
 ```
 
-### Настройка MariaDB <!-- HEAD -->
-
-#### Установка пароля root <!-- NAME -->
+#### Настройка DNS в /etc/resolv.conf <!-- NAME -->
 
 ```CODE
-mariadb -u root
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-EXIT;
-
+nameserver <ip_локального_сервера>                                   
 ```
 
-#### Разрешение доступа из сети в /etc/my.cnf.d/server.cnf <!-- NAME -->
+> Оставляем только локальный DNS
+
+#### Перезапуск Samba <!-- NAME -->
 
 ```CODE
-sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
-
+systemctl restart samba                                     
 ```
 
-#### Перезапуск службы <!-- NAME -->
+### Настройка схемы sudo в AD <!-- HEAD -->
+
+#### Применение схемы sudo <!-- NAME -->
 
 ```CODE
-systemctl restart mariadb                                                                
-
+sudo-schema-apply                                           
 ```
 
-#### Разрешение доступа для root по сети <!-- NAME -->
+> Ответить Yes, ввести Administrator и пароль, подтвердить Ok
+
+#### Создание роли sudo <!-- NAME -->
 
 ```CODE
-mariadb -u root -p                                                                       
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
-UPDATE mysql.user SET host='%' WHERE user='root';                                           
-FLUSH PRIVILEGES;                                                                           
-EXIT;                                                                                       
+create-sudo-role                                            
 ```
 
-> host='%' разрешает подключение с любого узла
+> Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE
 
-#### Перезапуск службы <!-- NAME -->
+> Имя роли: pravila_hq
+
+> sudoHost: ALL
+
+> sudoCommand: /bin/cat
+
+> sudoUser: %hq
+
+### Настройка через ADMC <!-- HEAD -->
+
+#### Установка ADMC на клиенте <!-- NAME -->
 
 ```CODE
-systemctl restart mariadb                                                                
-
+apt-get install admc                                        
 ```
 
-### Проверка MariaDB <!-- HEAD -->
-
-#### Проверка пользователей на сервере <!-- NAME -->
+#### Аутентификация <!-- NAME -->
 
 ```CODE
-mariadb -u root -p                                                                       
-SELECT user, HOST FROM mysql.user;                                                          
-EXIT;                                                                                       
-
+kinit administrator                                         
 ```
 
-#### Удаленное подключение с клиента <!-- NAME -->
+#### Запуск ADMC <!-- NAME -->
 
 ```CODE
-mariadb -h IP_СЕРВЕРА -u root -p
-
+sudo admc                                                   
 ```
 
-### Создание БД и пользователей <!-- HEAD -->
+#### Включение дополнительных возможностей <!-- NAME -->
 
-#### Создание базы данных <!-- NAME -->
+#### Настройка правила pravila_hq <!-- LIST -->
+- Настройки → Включить Дополнительные возможности
+- domain.sample → sudoers → pravila_hq → Правой кнопкой мыши → Свойства
+- Атрибуты → sudoOption → Изменить → Добавить параметр !authenticate → Apply
+- Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и /usr/bin/id → Apply
 
-```CODE
-mariadb -u root -p                                                                       
-CREATE DATABASE db01;                                                                       
-```
-
-> db01 - имя создаваемой БД
-
-#### Создание пользователя <!-- NAME -->
-
-```CODE
-CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
-```
-
-> '%' означает подключение с любого хоста
-
-#### Предоставление прав пользователю <!-- NAME -->
-
-```CODE
-GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
-FLUSH PRIVILEGES;                                                                           
-
-```
-
-#### Проверка существования БД и пользователей <!-- NAME -->
-
-```CODE
-SHOW DATABASES;                                                                          
-SELECT user, HOST FROM mysql.user;                                                          
-EXIT;
-```
-
-### SQL_install_MySQL <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
-
-#### Установка пакета <!-- NAME -->
-
-```CODE
-apt-get install -y MySQL-server                                                          
-
-```
-
-#### Включение и запуск службы <!-- NAME -->
-
-```CODE
-systemctl enable --now mysqld
-
-```
-
-### Настройка MySQL <!-- HEAD -->
-
-#### Установка пароля root <!-- NAME -->
-
-```CODE
-mysql -u root
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-EXIT;
-
-```
-
-#### Разрешение доступа из сети в /etc/my.cnf.d/server.cnf <!-- NAME -->
-
-```CODE
-sed -i "s/skip-networking/#skip-networking/g" /etc/my.cnf.d/server.cnf
-
-```
-
-#### Перезапуск службы <!-- NAME -->
-
-```CODE
-systemctl restart mysqld                                                                 
-
-```
-
-#### Разрешение доступа для root по сети <!-- NAME -->
-
-```CODE
-mysql -u root -p                                                                         
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';                                          
-UPDATE mysql.user SET host='%' WHERE user='root';                                           
-FLUSH PRIVILEGES;                                                                           
-EXIT;                                                                                       
-```
-
-> host='%' разрешает подключение с любого узла
-
-#### Перезапуск службы <!-- NAME -->
-
-```CODE
-systemctl restart mysqld                                                                 
-
-```
-
-### Проверка MySQL <!-- HEAD -->
-
-#### Проверка пользователей на сервере <!-- NAME -->
-
-```CODE
-mysql -u root -p                                                                         
-SELECT user, HOST FROM mysql.user;                                                          
-EXIT;                                                                                       
-
-```
-
-#### Удаленное подключение с клиента <!-- NAME -->
-
-```CODE
-mysql -h IP_СЕРВЕРА -u root -p                                                           
-
-```
-
-### Создание БД и пользователей <!-- HEAD -->
-
-#### Создание базы данных <!-- NAME -->
-
-```CODE
-mysql -u root -p                                                                         
-CREATE DATABASE db01;                                                                       
-```
-
-> db01 - имя создаваемой БД
-
-#### Создание пользователя <!-- NAME -->
-
-```CODE
-CREATE USER 'user01'@'%' IDENTIFIED BY 'P@ssw0rd';                                       
-```
-
-> '%' означает подключение с любого хоста
-
-#### Предоставление прав пользователю <!-- NAME -->
-
-```CODE
-GRANT ALL PRIVILEGES ON db01.* TO 'user01'@'%';                                          
-FLUSH PRIVILEGES;                                                                           
-
-```
-
-#### Проверка существования БД и пользователей <!-- NAME -->
-
-```CODE
-SHOW DATABASES;                                                                          
-SELECT user, HOST FROM mysql.user;                                                          
-EXIT;
-```
-
-### SQL_install_PostgreSQL <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
+### Настройка клиента <!-- HEAD -->
 
 #### Установка пакетов <!-- NAME -->
 
 ```CODE
-apt-get install -y postgresql16 postgresql16-server postgresql16-contrib                 
+apt-get install sudo libsss_sudo                            
 ```
 
-> postgresql16-contrib(дополнительные модули и утилиты)
-
-#### Создание системных БД <!-- NAME -->
+#### Настройка прав sudo <!-- NAME -->
 
 ```CODE
-/etc/init.d/postgresql initdb
-
+control sudo public                                         
 ```
 
-#### Запуск службы <!-- NAME -->
+#### Настройка SSSD в /etc/sssd/sssd.conf <!-- NAME -->
 
 ```CODE
-systemctl enable --now postgresql                                                        
+[sssd]                                                      
+services = nss, pam, sudo                                      
 
+[pam]                                                          
+
+[domain/DOMAIN.SAMPLE]                                          
+sudo_provider = ad
 ```
 
-#### Установка пароля для пользователя postgres <!-- NAME -->
+#### Настройка NSS в /etc/nsswitch.conf <!-- NAME -->
 
 ```CODE
-psql -U postgres                                                                         
-ALTER USER postgres WITH PASSWORD 'P@ssw0rd';                                               
-\q                                                                                          
-
+sudoers: files sss                                          
 ```
 
-### Настройка <!-- HEAD -->
-
-#### Разрешение доступа из сети в /var/lib/pgsql/data/postgresql.conf <!-- NAME -->
+#### Очистка кэша и перезапуск <!-- NAME -->
 
 ```CODE
-listen_addresses = '*'                                                                   
+rm -rf /var/lib/sss/db/*                                    
+sss_cache -E                                                   
+systemctl restart sssd                                         
 ```
 
-> Найти listen_addresses = 'localhost' и заменить на '*'
-
-> listen_addresses(адреса для прослушивания) {'*', 'localhost', '192.168.1.1'}
-
-#### Перезапуск службы после изменения postgresql.conf <!-- NAME -->
-
-```CODE
-systemctl restart postgresql                                                             
-
-```
-
-#### Настройка парольной аутентификации в /var/lib/pgsql/data/pg_hba.conf <!-- NAME -->
-
-```CODE
-host    all             all             0.0.0.0/0               md5                      
-host    replication     all             0.0.0.0/0               md5                         
-```
-
-> Добавить строки в конец файла перед секцией IPv6
-
-> host(тип подключения) {host, local, hostssl}
-
-> all(база данных) {all, имя_БД}
-
-> all(пользователь) {all, имя_пользователя}
-
-> 0.0.0.0/0(IP-адреса клиентов) {0.0.0.0/0, 192.168.1.0/24, конкретный_IP}
-
-> md5(метод аутентификации) {md5, trust, reject, scram-sha-256}
-
-> Первая строка для обычных подключений, вторая для репликации
-
-#### Перезапуск службы после изменения pg_hba.conf <!-- NAME -->
-
-```CODE
-systemctl restart postgresql                                                             
-
-```
-
-#### Создание базы данных и пользователя <!-- NAME -->
-
-```CODE
-psql -U postgres                                                                         
-CREATE DATABASE db01;                                                                       
-CREATE USER user01 WITH PASSWORD 'P@ssw0rd';
-GRANT ALL PRIVILEGES ON DATABASE db01 TO user01;                                            
-\q                                                                                          
-```
-
-> db01(имя создаваемой БД); user01(имя пользователя)
-
-#### Создание нескольких баз данных и пользователей <!-- NAME -->
-
-```CODE
-psql -U postgres                                                                         
-CREATE DATABASE one;                                                                        
-CREATE DATABASE two;                                                                        
-CREATE USER oneuser WITH PASSWORD 'P@ssw0rd';                                               
-CREATE USER twouser WITH PASSWORD 'P@ssw0rd';                                               
-GRANT ALL PRIVILEGES ON DATABASE one TO oneuser;                                            
-GRANT ALL PRIVILEGES ON DATABASE two TO twouser;                                            
-\q                                                                                          
-
-```
-
-#### Заполнение базы данных тестовыми данными <!-- NAME -->
-
-```CODE
-pgbench -U postgres -i one                                                               
-pgbench -U postgres -i two                                                                  
-```
-
-> Опционально, для тестирования производительности
+> Можно выполнить reboot вместо очистки кэша
 
 ### Проверка <!-- HEAD -->
 
-#### Проверка открытого порта PostgreSQL <!-- NAME -->
+#### Вход за пользователя hquser1 <!-- NAME -->
 
 ```CODE
-ss -tlpn | grep postgres                                                                 
+sudo cat /etc/passwd | sudo grep root && sudo id root       
 ```
 
-> Показывает открытый порт 5432
-
-#### Проверка БД и пользователей на сервере <!-- NAME -->
-
-```CODE
-psql -U postgres                                                                         
-SELECT datname FROM pg_database;                                                            
-SELECT usename, usesuper, usecreatedb FROM pg_catalog.pg_user;                              
-\q                                                                                          
-```
-
-> Показывает список баз данных и пользователей
-
-#### Проверка таблиц в базе данных <!-- NAME -->
-
-```CODE
-psql -U postgres                                                                         
-\c one                                                                                      
-\dt+                                                                                        
-\c two                                                                                      
-\dt+                                                                                        
-\q              
-```
-
-> \c(подключение к БД); \dt+(список таблиц с размерами)
-
-#### Локальное подключение на клиенте <!-- NAME -->
-
-```CODE
-psql -U user01 db01                                                                      
-```
-
-> Подключение к БД db01 от имени user01
-
-#### Удалённое подключение на клиенте <!-- NAME -->
-
-```CODE
-psql -U user01 -h IP_сервера -d db01                                                     
-```
-
-> -h(хост сервера); -d(имя базы данных)
+> Должны выполниться команды без запроса пароля благодаря !authenticate
 
 ### squid_base_options <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -10273,123 +10012,6 @@ sudo whoami
 
 > Результат: root
 
-### strongswan_ipsec <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка <!-- HEAD -->
-
-#### Установка StrongSwan <!-- NAME -->
-
-```CODE
-apt-get install strongswan
-
-```
-
-### Настройка первого маршрутизатора <!-- HEAD -->
-
-#### Основной конфигурационный файл <!-- NAME -->
-
-```CODE
-/etc/strongswan/ipsec.conf
-
-```
-
-#### Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.1 <!-- NAME -->
-
-```CODE
-config setup                                                                             
-
-conn nameConnect                                                                            
-authby=psk                                                                              
-keyexchange=ikev2                                                                       
-
-leftid=10.10.10.1                                                                           
-left=10.10.10.1                                                                             
-leftsubnet=10.10.10.0/30                                                                    
-
-rightid=10.10.10.2                                                                          
-right=10.10.10.2                                                                            
-rightsubnet=10.10.10.0/30                                                                   
-
-auto=start                                                                                  
-```
-
-> authby=psk(аутентификация по общему ключу); keyexchange=ikev2(протокол обмена ключами); leftid(публичный идентификатор локального узла); left(локальный IP-адрес); leftsubnet(локальная подсеть); rightid(публичный идентификатор удалённого узла); right(удалённый IP-адрес); rightsubnet(удалённая подсеть); auto=start(автоматический запуск туннеля)
-
-#### Файл с общими ключами <!-- NAME -->
-
-```CODE
-/etc/strongswan/ipsec.secrets                                                            
-
-```
-
-#### Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.1 <!-- NAME -->
-
-```CODE
-10.10.10.1 10.10.10.2 : PSK "P@ssw0rd"                                                   
-```
-
-> Формат: локальный_IP удалённый_IP : PSK "пароль"
-
-### Настройка второго маршрутизатора <!-- HEAD -->
-
-#### Настройка /etc/strongswan/ipsec.conf на маршрутизаторе 10.10.10.2 <!-- NAME -->
-
-```CODE
-config setup 
-
-conn nameConnect                                                                            
-authby=psk
-keyexchange=ikev2                                                                       
-
-leftid=10.10.10.2                                                                           
-left=10.10.10.2                                                                             
-leftsubnet=10.10.10.0/30                                                                    
-
-rightid=10.10.10.1                                                                          
-right=10.10.10.1                                                                            
-rightsubnet=10.10.10.0/30                                                                   
-
-auto=start                                                                                  
-```
-
-> Зеркальная конфигурация: left и right меняются местами
-
-#### Настройка /etc/strongswan/ipsec.secrets на маршрутизаторе 10.10.10.2 <!-- NAME -->
-
-```CODE
-10.10.10.2 10.10.10.1 : PSK "P@ssw0rd"                                                   
-```
-
-> Тот же пароль, адреса в обратном порядке
-
-### Запуск <!-- HEAD -->
-
-#### Запуск и автозагрузка службы на обоих маршрутизаторах <!-- NAME -->
-
-```CODE
-systemctl enable --now strongswan-starter ipsec
-
-```
-
-### Проверка <!-- HEAD -->
-
-#### Проверка статуса туннеля <!-- NAME -->
-
-```CODE
-ipsec status
-```
-
-> Показывает состояние IPsec соединений
-
-#### Проверка связности через туннель <!-- NAME -->
-
-```CODE
-ping 10.10.10.2                                                                          
-```
-
-> С первого маршрутизатора, с второго ping 10.10.10.1
-
 ### sudo <!-- HEAD -->
 [Содержание](#Содержание-)
 
@@ -10608,150 +10230,6 @@ cat /etc/group
 ```
 
 > Список всех групп и их членов
-
-### sudo-schema-samba <!-- HEAD -->
-[Содержание](#Содержание-)
-
-### Установка sudo-samba-schema <!-- HEAD -->
-
-#### Добавление временного репозитория <!-- NAME -->
-
-```CODE
-echo "rpm http://altrepo.ru/local-p10 noarch local-p10" >>  
-/etc/apt/sources.list                                          
-```
-
-#### Установка пакета <!-- NAME -->
-
-```CODE
-apt-get install sudo-samba-schema                           
-```
-
-#### Удаление временного репозитория <!-- NAME -->
-
-```CODE
-sed -i '/altrepo.ru\/local-p10/d' /etc/apt/sources.list     
-```
-
-#### Настройка DNS в /etc/resolv.conf <!-- NAME -->
-
-```CODE
-nameserver <ip_локального_сервера>                                   
-```
-
-> Оставляем только локальный DNS
-
-#### Перезапуск Samba <!-- NAME -->
-
-```CODE
-systemctl restart samba                                     
-```
-
-### Настройка схемы sudo в AD <!-- HEAD -->
-
-#### Применение схемы sudo <!-- NAME -->
-
-```CODE
-sudo-schema-apply                                           
-```
-
-> Ответить Yes, ввести Administrator и пароль, подтвердить Ok
-
-#### Создание роли sudo <!-- NAME -->
-
-```CODE
-create-sudo-role                                            
-```
-
-> Вводим: OU=sudoers,dc=DOMAIN,dc=SAMPLE
-
-> Имя роли: pravila_hq
-
-> sudoHost: ALL
-
-> sudoCommand: /bin/cat
-
-> sudoUser: %hq
-
-### Настройка через ADMC <!-- HEAD -->
-
-#### Установка ADMC на клиенте <!-- NAME -->
-
-```CODE
-apt-get install admc                                        
-```
-
-#### Аутентификация <!-- NAME -->
-
-```CODE
-kinit administrator                                         
-```
-
-#### Запуск ADMC <!-- NAME -->
-
-```CODE
-sudo admc                                                   
-```
-
-#### Включение дополнительных возможностей <!-- NAME -->
-
-#### Настройка правила pravila_hq <!-- LIST -->
-- Настройки → Включить Дополнительные возможности
-- domain.sample → sudoers → pravila_hq → Правой кнопкой мыши → Свойства
-- Атрибуты → sudoOption → Изменить → Добавить параметр !authenticate → Apply
-- Атрибуты → sudoCommand → Изменить → Добавить /bin/grep и /usr/bin/id → Apply
-
-### Настройка клиента <!-- HEAD -->
-
-#### Установка пакетов <!-- NAME -->
-
-```CODE
-apt-get install sudo libsss_sudo                            
-```
-
-#### Настройка прав sudo <!-- NAME -->
-
-```CODE
-control sudo public                                         
-```
-
-#### Настройка SSSD в /etc/sssd/sssd.conf <!-- NAME -->
-
-```CODE
-[sssd]                                                      
-services = nss, pam, sudo                                      
-
-[pam]                                                          
-
-[domain/DOMAIN.SAMPLE]                                          
-sudo_provider = ad
-```
-
-#### Настройка NSS в /etc/nsswitch.conf <!-- NAME -->
-
-```CODE
-sudoers: files sss                                          
-```
-
-#### Очистка кэша и перезапуск <!-- NAME -->
-
-```CODE
-rm -rf /var/lib/sss/db/*                                    
-sss_cache -E                                                   
-systemctl restart sssd                                         
-```
-
-> Можно выполнить reboot вместо очистки кэша
-
-### Проверка <!-- HEAD -->
-
-#### Вход за пользователя hquser1 <!-- NAME -->
-
-```CODE
-sudo cat /etc/passwd | sudo grep root && sudo id root       
-```
-
-> Должны выполниться команды без запроса пароля благодаря !authenticate
 
 ### systemd-timesyncd <!-- HEAD -->
 [Содержание](#Содержание-)
@@ -11232,7 +10710,94 @@ journalctl -u systemd-timesyncd
 - Asia/Vladivostok (Владивосток, UTC+10)
 - UTC (Всемирное координированное время)
 
-### wireguard <!-- HEAD -->
+### VMware_open-vm-tools <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка VMware Tools <!-- HEAD -->
+
+#### Установка пакетов open-vm-tools <!-- NAME -->
+
+```CODE
+apt-get install open-vm-tools open-vm-tools-desktop xrandr
+```
+
+> open-vm-tools(базовые функции: общая папка, синхронизация времени, буфер обмена); open-vm-tools-desktop(автоматическое разрешение экрана, интеграция мыши, графика); xrandr(утилита для управления разрешением экрана)
+
+#### Включение службы в автозагрузку <!-- NAME -->
+
+```CODE
+systemctl enable vmtoolsd
+
+```
+
+#### Запуск службы <!-- NAME -->
+
+```CODE
+systemctl start vmtoolsd                                                     
+
+```
+
+### Проверка <!-- HEAD -->
+
+#### Проверка статуса службы <!-- NAME -->
+
+```CODE
+systemctl status vmtoolsd
+
+```
+
+#### Проверка версии VMware Tools <!-- NAME -->
+
+```CODE
+vmware-toolbox-cmd -v                                                        
+
+```
+
+#### Проверка работы буфера обмена <!-- NAME -->
+
+```CODE
+vmware-toolbox-cmd stat clipboard                                            
+
+```
+
+#### Проверка синхронизации времени <!-- NAME -->
+
+```CODE
+vmware-toolbox-cmd timesync status                                           
+
+```
+
+### Настройка <!-- HEAD -->
+
+#### Включение синхронизации времени с хостом <!-- NAME -->
+
+```CODE
+vmware-toolbox-cmd timesync enable
+
+```
+
+#### Отключение синхронизации времени с хостом <!-- NAME -->
+
+```CODE
+vmware-toolbox-cmd timesync disable                                          
+
+```
+
+#### Ручная настройка разрешения экрана <!-- NAME -->
+
+```CODE
+xrandr --output Virtual1 --mode 1920x1080                                    
+```
+
+> Virtual1(имя дисплея, может быть Virtual-1, HDMI-1); --mode(разрешение экрана)
+
+#### Просмотр доступных разрешений <!-- NAME -->
+
+```CODE
+xrandr
+```
+
+### WireGuard <!-- HEAD -->
 [Содержание](#Содержание-)
 
 ### Установка WireGuard <!-- HEAD -->
@@ -11604,6 +11169,290 @@ systemctl enable zabbix-agentd
 - Сохранить
 
 > После добавления хост можно добавить в Dashboards для мониторинга
+
+### Zabbix_install_MariaDB <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install mariadb-server zabbix-server-mysql fping                                 
+
+```
+
+#### Включение и запуск службы <!-- NAME -->
+
+```CODE
+systemctl enable --now mysqld
+
+```
+
+### Настройка БД <!-- HEAD -->
+
+#### Создание базы данных и пользователя <!-- NAME -->
+
+```CODE
+mysql -uroot -p
+CREATE DATABASE zabbix CHARACTER SET utf8 COLLATE utf8_bin;
+GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@localhost IDENTIFIED BY 'P@ssw0rd';              
+QUIT;                                                                                       
+```
+
+> Пароль можно пропустить при первом входе
+
+#### Импорт данных в БД <!-- NAME -->
+
+```CODE
+mysql -uzabbix -pP@ssw0rd zabbix <                                                       
+/usr/share/doc/zabbix-common-database-mysql-*/schema.sql                                    
+mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/images.sql
+mysql -uzabbix -pP@ssw0rd zabbix < /usr/share/doc/zabbix-common-database-mysql-*/data.sql   
+```
+
+> Важно соблюдать порядок ввода команд
+
+### Установка веб-сервера <!-- HEAD -->
+
+#### Установка Apache и PHP <!-- NAME -->
+
+```CODE
+apt-get install apache2 apache2-mod_php8.2                                               
+systemctl enable --now httpd2                                                               
+apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
+php8.2-mysqlnd-mysqli php8.2-ldap php8.2-openssl                                            
+
+```
+
+#### Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini <!-- NAME -->
+
+```CODE
+memory_limit = 256M
+post_max_size = 32M                                                                         
+max_execution_time = 600                                                                    
+max_input_time = 600                                                                        
+date.timezone = Europe/Moscow                                                               
+always_populate_raw_post_data = -1                                                          
+```
+
+> date.timezone указать свой регион
+
+#### Перезапуск веб-сервера <!-- NAME -->
+
+```CODE
+systemctl restart httpd2                                                                 
+
+```
+
+### Настройка сервера <!-- HEAD -->
+
+#### В /etc/zabbix/zabbix_server.conf <!-- NAME -->
+
+```CODE
+DBHost=localhost                                                                         
+DBName=zabbix                                                                               
+DBUser=zabbix                                                                               
+DBPassword=P@ssw0rd                                                                         
+
+```
+
+#### Включение и запуск службы <!-- NAME -->
+
+```CODE
+systemctl enable --now zabbix_mysql                                                      
+
+```
+
+### Установка веб-интерфейса <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+
+```
+
+#### Создание символической ссылки <!-- NAME -->
+
+```CODE
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+
+```
+
+#### Перезапуск веб-сервера <!-- NAME -->
+
+```CODE
+systemctl restart httpd2                                                                 
+
+```
+
+#### Назначение прав <!-- NAME -->
+
+```CODE
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+
+```
+
+### Доступ к веб-интерфейсу <!-- HEAD -->
+
+#### Открыть в браузере <!-- NAME -->
+
+```CODE
+http://IP_СЕРВЕРА/zabbix                                                                 
+```
+
+> Подключиться к БД, ввести пароль от БД
+
+#### Вход по умолчанию <!-- NAME -->
+
+> Логин: Admin; Пароль: zabbix
+
+### Zabbix_install_PostgreSQL <!-- HEAD -->
+[Содержание](#Содержание-)
+
+### Установка <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install postgresql16-server zabbix-server-pgsql fping                            
+
+```
+
+#### Создание системных БД и включение в автозапуск <!-- NAME -->
+
+```CODE
+/etc/init.d/postgresql initdb
+systemctl enable --now postgresql
+
+```
+
+### Настройка БД <!-- HEAD -->
+
+#### Создание пользователя <!-- NAME -->
+
+```CODE
+su - postgres -s /bin/sh -c 'createuser --no-superuser --no-createdb --no-createrole
+--encrypted --pwprompt zabbix'                                                              
+```
+
+> Ввести пароль для новой роли и повторить его
+
+#### Создание базы данных <!-- NAME -->
+
+```CODE
+su - postgres -s /bin/sh -c 'createdb -O zabbix zabbix'                                  
+
+```
+
+#### Импорт данных в БД <!-- NAME -->
+
+```CODE
+su - postgres -s /bin/sh -c 'psql -U zabbix -f                                           
+/usr/share/doc/zabbix-common-database-pgsql-*/schema.sql zabbix'                            
+su - postgres -s /bin/sh -c 'psql -U zabbix -f
+/usr/share/doc/zabbix-common-database-pgsql-*/images.sql zabbix'                            
+su - postgres -s /bin/sh -c 'psql -U zabbix -f
+/usr/share/doc/zabbix-common-database-pgsql-*/data.sql zabbix'                              
+```
+
+> Важно соблюдать порядок ввода команд
+
+### Установка веб-сервера <!-- HEAD -->
+
+#### Установка Apache и PHP <!-- NAME -->
+
+```CODE
+apt-get install apache2 apache2-mod_php8.2                                               
+systemctl enable --now httpd2                                                               
+apt-get install php8.2 php8.2-mbstring php8.2-sockets php8.2-gd php8.2-xmlreader            
+php8.2-pgsql php8.2-ldap php8.2-openssl                                                     
+
+```
+
+#### Настройка PHP в /etc/php/8.2/apache2-mod_php/php.ini <!-- NAME -->
+
+```CODE
+memory_limit = 256M
+post_max_size = 32M                                                                         
+max_execution_time = 600                                                                    
+max_input_time = 600                                                                        
+date.timezone = Europe/Moscow                                                               
+always_populate_raw_post_data = -1                                                          
+```
+
+> date.timezone указать свой регион
+
+#### Перезапуск веб-сервера <!-- NAME -->
+
+```CODE
+systemctl restart httpd2                                                                 
+
+```
+
+### Настройка сервера <!-- HEAD -->
+
+#### В /etc/zabbix/zabbix_server.conf <!-- NAME -->
+
+```CODE
+DBHost=localhost                                                                         
+DBName=zabbix                                                                               
+DBUser=zabbix                                                                               
+DBPassword=P@ssw0rd                                                                         
+
+```
+
+#### Включение и запуск службы <!-- NAME -->
+
+```CODE
+systemctl enable --now zabbix_pgsql                                                      
+
+```
+
+### Установка веб-интерфейса <!-- HEAD -->
+
+#### Установка пакетов <!-- NAME -->
+
+```CODE
+apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.2                     
+
+```
+
+#### Создание символической ссылки <!-- NAME -->
+
+```CODE
+ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/             
+
+```
+
+#### Перезапуск веб-сервера <!-- NAME -->
+
+```CODE
+systemctl restart httpd2                                                                 
+
+```
+
+#### Назначение прав <!-- NAME -->
+
+```CODE
+chown apache2:apache2 /var/www/webapps/zabbix/ui/conf                                    
+
+```
+
+### Доступ к веб-интерфейсу <!-- HEAD -->
+
+#### Открыть в браузере <!-- NAME -->
+
+```CODE
+http://IP_СЕРВЕРА/zabbix                                                                 
+```
+
+> Подключиться к БД, ввести пароль от БД
+
+#### Вход по умолчанию <!-- NAME -->
+
+> Логин: Admin; Пароль: zabbix
 
 ### Zabbix_web-interface <!-- HEAD -->
 [Содержание](#Содержание-)
